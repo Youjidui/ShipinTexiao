@@ -1,0 +1,13 @@
+sampler2D  AlphaTexture    :register (s0);
+float      cComponent      :register (c0);
+float4 main( float2 texUV0: TEXCOORD0 ): COLOR
+{  
+  float4 retColor = 0.0;
+  float4  sMarsk    = tex2D( AlphaTexture,texUV0 );
+       if(cComponent == 0.0)  retColor.a = sMarsk.a;
+  else if(cComponent == 1.0)  retColor.a = sMarsk.r;
+  else if(cComponent == 2.0)  retColor.a = sMarsk.g;
+  else if(cComponent == 3.0)  retColor.a = sMarsk.b;
+
+  return retColor;
+}

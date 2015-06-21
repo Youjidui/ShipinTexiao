@@ -1,0 +1,8 @@
+sampler2D g_texSource;
+void main( float2 texUV  : TEXCOORD0 ,
+	out float4 color:COLOR0,
+	out float4 alpha:COLOR1 )
+{
+  color =1.0;// tex2D( g_texSource,texUV );  
+  alpha=1.0f;
+}

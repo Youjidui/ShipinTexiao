@@ -1,0 +1,15 @@
+sampler2D Texture0:register (s0);
+int choise        :register (c0);
+
+#include "colorspacefunc.inc"
+float4 main( float2 texUV: TEXCOORD0 ):COLOR
+{    
+   float4 srcColor  = tex2D( Texture0,texUV );       
+   srcColor.xyz = mul(matRGBA2YUVA,srcColor.xyz);
+   srcColor.xyz+= float3(0.062, 0.5,0.5);
+   float4 alpha[3];   
+   alpha[0] = srcColor.rrrr;//Y
+   alpha[1] = srcColor.gggg;//U
+   alpha[2] = srcColor.bbbb;//V
+   return alpha[choise-4];   
+}

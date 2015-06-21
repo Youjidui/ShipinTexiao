@@ -1,0 +1,8 @@
+*.obj
+*.pch
+*.user
+*.aps
+*.ncb
+*.suo
+Debug/
+Release/

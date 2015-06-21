@@ -1,0 +1,52 @@
+sampler texSamples[8] :register(s0);//在下面的到上
+float4  cMode         :register(c0);
+float4  cbAlphaOK     :register(c1); 
+float4  cAlphaValue   :register(c2);
+float4  bIsBlended    :register(c3); 
+bool4   pBlendMode      :register(c4); 
+struct P_OUT
+{
+   float4 oColor : COLOR0;//Color
+   float4 oAlpha : COLOR1;//Alpha 
+};
+#include "VComposeFunc.INC"
+P_OUT main( float2 texUV0: TEXCOORD0  )
+{     
+   P_OUT ret;   
+  //float4  sAlpha0T = cbAlphaOK[0]?tex2D( texSamples[1], texUV0 ):1.0; 
+  // float4  sAlpha0A = sAlpha0T * cAlphaValue[0];
+   //float4  sColor0  = tex2D( texSamples[0], texUV0 )-cMode;
+   //sColor0  =  pBlendMode[0]?sColor0:sign(sAlpha0T)*sColor0;
+   float4  sAlpha0A = cbAlphaOK[0]?tex2D( texSamples[1], texUV0 )*cAlphaValue[0]:cAlphaValue[0];
+   float4  sColor0  = tex2D( texSamples[0], texUV0 )-cMode;
+   sColor0  =  (pBlendMode[0]||bIsBlended[0])?sColor0:sAlpha0A*sColor0;
+   
+   float4  sAlpha1T = cbAlphaOK[1]?tex2D( texSamples[3], texUV0 ):1.0; 
+   float4  sAlpha1A = sAlpha1T * cAlphaValue[1];
+   float4  sColor1  = tex2D( texSamples[2], texUV0 )-cMode;
+   float4  sColor1T = sColor1;
+   sColor1  =  pBlendMode[1]?sColor1:sign(sAlpha1T)*sColor1;   
+   sColor1  =  bIsBlended[1]?sColor1*cAlphaValue[1]:sColor1*sAlpha1A;
+   
+   float4  sAlpha2T = cbAlphaOK[2]?tex2D( texSamples[5], texUV0 ):1.0; 
+   float4  sAlpha2A = sAlpha2T * cAlphaValue[2];
+   float4  sColor2  = tex2D( texSamples[4], texUV0 )-cMode;
+   float4  sColor2T = sColor2;
+   sColor2  =  pBlendMode[2]?sColor2:sign(sAlpha2T)*sColor2;   
+   sColor2  =  bIsBlended[2]?sColor2*cAlphaValue[2]:sColor2*sAlpha2A;
+   
+   
+   float4  sAlpha3T = cbAlphaOK[3]?tex2D( texSamples[7], texUV0 ):1.0; 
+   float4  sAlpha3A = sAlpha3T * cAlphaValue[3];
+   float4  sColor3  = tex2D( texSamples[6], texUV0 )-cMode;
+   float4  sColor3T = sColor3;   
+   sColor3  =  pBlendMode[3]?sColor3:sign(sAlpha3T)*sColor3;   
+   sColor3  =  bIsBlended[3]?sColor3*cAlphaValue[3]:sColor3*sAlpha3A;
+   
+   T_Color rColor  = Color_BlendA(sColor0,sAlpha0A, sColor1,sAlpha1A,pBlendMode[1],sColor1T); 
+           rColor  = Color_BlendA(rColor.tColor,rColor.tAlpha, sColor2,sAlpha2A,pBlendMode[2],sColor2T); 
+           rColor  = Color_BlendA(rColor.tColor,rColor.tAlpha, sColor3,sAlpha3A,pBlendMode[3],sColor3T); 
+   
+    ret.oColor     = rColor.tColor+cMode;   ret.oAlpha      = rColor.tAlpha;    
+   return ret;
+}

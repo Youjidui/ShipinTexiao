@@ -1,0 +1,34 @@
+//!!!!!!!!!!!!!!!!!!!!!!!!!!
+//将伪1６的YUYV的纹理转换成32位的YUVA
+sampler    tx_YUYV       :register (s0);
+sampler    tx_Key        :register (s1);
+float4     vSizeTex      :register (c0);//xy为纹理的物理宽高zw:z:虚拟宽 w:0.5/物理宽
+float4 main(float2 texUV: TEXCOORD0,float2 texUVKey : TEXCOORD1 ): COLOR
+{
+   float3x3 matYUV2RGB = 
+   { 
+      1.164383,    0.0,       1.596027, 
+      1.164383,   -0.391762, -0.812968,     
+      1.164383,    2.017232,  0.0f,            
+   };    
+  float2 fUV= texUV; 
+  int x  = texUV.x * vSizeTex.x -1.0;    
+  fUV.x= texUV.x/2.0;   
+  float4 sColor_YUYV  = tex2D( tx_YUYV, fUV ); 
+  float  sAlpha       = tex2D( tx_Key , texUVKey ).a; 
+  float4 retColor     = sAlpha;
+  if(x%2)
+  {
+    retColor.xyz = float3(sColor_YUYV.z,sColor_YUYV.y,sColor_YUYV.w);
+  }
+  else
+  {
+    retColor.xyz = float3(sColor_YUYV.x,sColor_YUYV.y,sColor_YUYV.w);
+  } 
+  retColor.x   = retColor.x - 0.0627;//Y分量
+  retColor.y   = retColor.y - 0.5;
+  retColor.z   = retColor.z - 0.5; 
+  retColor.xyz = mul(matYUV2RGB,retColor.xyz);
+  retColor.xyz = clamp(retColor.xyz, 0.0f, 1.0f);
+  return retColor;
+}

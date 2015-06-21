@@ -1,0 +1,69 @@
+
+sampler2D  Texture_YV     :register (s0);
+float4     vSizeTexture   :register (c0);
+float4     vMisc		  :register (c1);
+
+#define CGBLEND			vMisc.x
+#define PARTICLEBLEND	vMisc.y
+#define GALPHA			vMisc.z
+
+void main( float2 texUV0: TEXCOORD0,
+		   out float4 oColor:COLOR0)
+{	
+	float4 fColor=tex2D(Texture_YV,texUV0);		
+	if(CGBLEND)
+	{
+		if(any(fColor.a))		
+			fColor.rgb/=fColor.a;		
+	}
+	fColor.a*=GALPHA;	
+	if(PARTICLEBLEND)
+	{
+		if(any(fColor.rgb)&&!any(fColor.a))
+			fColor.a=1.0f;	
+	}
+	
+	oColor=fColor; 
+}
+
+
+/*
+// x:  SourceBuffer第一行的Y坐标
+// y:  最终位置Y的奇偶，0－偶数，1－奇数
+// z:  奇偶场选择 0- 要奇场信息 1－ 要偶场信息
+// 1.0 /texture height
+float4     Argus         :register (c0);   
+float2     TexSize       :register (c1); //纹理的大小
+float4     auxValues     :register (c2);
+// x:0.5/texturewidth
+// y:0.5/texturheight
+// z:2.0 /texturewidth
+// w:1.0 /texturewidth
+sampler2D  Texture_S     :register (s0); 
+struct P_OUT
+{
+   float4 oColor : COLOR0;//Color 
+};
+P_OUT main( float2 texUV: TEXCOORD0 ):COLOR
+{
+    P_OUT retColor;  
+    float DivV       = Argus.w;  
+    int   iy         = texUV.y * TexSize.y  - Argus.x;
+    int   fetchy     = 0;    
+    
+     if(Argus.z == 0)//最终位置是偶数，源Buffer的奇偶关系不变
+     {
+       fetchy = 2*iy;
+     }
+     else
+     {
+       fetchy = 2*iy+1;
+     }
+
+   float2  uv = texUV;            
+   uv.y = (fetchy + Argus.x) / TexSize.y + auxValues.y;    
+   float4 s1  = tex2D( Texture_S,uv );   
+   retColor.oColor  = s1;
+   return retColor;
+}
+*/

@@ -1,0 +1,19 @@
+sampler2D g_texSource:register(s0); 
+float     g_alpha    :register(c0);
+struct P_OUT
+{
+   float4 oColor : COLOR0;//Color
+   float4 oAlpha : COLOR1;//Alpha
+};
+P_OUT main( float2 texUV0  : TEXCOORD0,
+            float2 texUV1  : TEXCOORD1 ) 
+{
+  P_OUT ret;
+  const float4 cMode = float4(0.5,0.0,0.5,0.0);
+  float4 sColor = tex2D( g_texSource,texUV0 );  
+  float4 sAlpha = float4(g_alpha,g_alpha,g_alpha,g_alpha);  
+  sColor = sColor * sAlpha + cMode - sAlpha*cMode;  
+  ret.oColor = sColor;
+  ret.oAlpha = sAlpha;
+  return ret;
+}

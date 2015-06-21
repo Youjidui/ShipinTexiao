@@ -1,0 +1,75 @@
+#include "ColorSpaceFunc.INC"
+
+sampler2D g_texSource:register(s0);
+
+float4 g_vSrc:register(c0);//xy 图片左上角 zw 纹理宽高
+float4 g_vDest:register(c1);//xy 图片左上角 zw xy放大比例
+float4 main(float2 vPos:VPOS):COLOR0
+{	
+	float4 vColor[8];
+	float4 fMode=CS_YUYV_OFFSET;
+	int i=0;
+	
+	for(int y=0;y<2;y++)
+	{
+		for(int x=0;x<2;x++)
+		{	
+			float2 fTex=float2(g_vSrc.x+0.5f+floor((vPos.x-g_vDest.x)/g_vDest.z)+x,
+					g_vSrc.y+0.5f+floor((vPos.y-g_vDest.y)/g_vDest.w)+y)/
+					g_vSrc.zw;
+
+			float4 fColor=tex2Dbias(g_texSource,float4(fTex,0.0f,-3.0f))-fMode;
+		
+			vColor[i++]=float4(fColor.bga,1.0f);
+			vColor[i++]=float4(fColor.rga,1.0f);
+		}
+	}
+	
+
+	float4 mColor[8];	
+	//第一行
+	mColor[0]=vColor[0];
+	mColor[1]=lerp(vColor[0],vColor[1],0.5f);
+	mColor[2]=vColor[1];
+	mColor[3]=lerp(vColor[1],vColor[2],0.5f);
+	//
+	mColor[4]=vColor[4];
+	mColor[5]=lerp(vColor[4],vColor[5],0.5f);
+	mColor[6]=vColor[5];
+	mColor[7]=lerp(vColor[5],vColor[6],0.5f);
+	
+	float4 retColor=0;
+	if(vPos.y%2==0)
+	{
+		if(vPos.x%2==0)
+		{
+			retColor=float4(mColor[1].r,mColor[0].g,mColor[0].r,mColor[0].b);
+		}
+		else
+		{
+			retColor=float4(mColor[3].r,mColor[2].g,mColor[2].r,mColor[2].b);	
+		}
+	}
+	else
+	{
+		if(vPos.x%2==0)
+		{
+			float4 fColor[2];
+			fColor[0]=lerp(mColor[0],mColor[4],0.5f);
+			fColor[1]=lerp(mColor[1],mColor[5],0.5f);
+			float2 fUV=lerp(fColor[0].gb,fColor[1].gb,0.5f);
+			
+			retColor=float4(fColor[1].r,fUV.r,fColor[0].r,fUV.g);
+		}
+		else
+		{
+			float4 fColor[2];
+			fColor[0]=lerp(mColor[2],mColor[6],0.5f);
+			fColor[1]=lerp(mColor[3],mColor[7],0.5f);
+			float2 fUV=lerp(fColor[0].gb,fColor[1].gb,0.5f);
+			
+			retColor=float4(fColor[1].r,fUV.r,fColor[0].r,fUV.g);
+		}
+	}
+	return retColor+fMode;
+}

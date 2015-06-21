@@ -1,0 +1,24 @@
+sampler2D  STexture  :register (s0); 
+float      vApha     :register (c0); 
+float4     cMode     :register (c1); 
+float3     cBack     :register (c2); //background color
+float4     vMisc     :register (c3);
+
+#define CGBLEND vMisc.x
+
+//x - fade alpha
+float4 main( float2 texUV: TEXCOORD0 ): COLOR
+{  
+  float4 sColor  = tex2D(STexture,texUV);// - cMode;
+  //float alpha    = sColor.a * vApha; 
+  //只处理图形的有效区域
+  //sColor.rgb =  alpha?cBack*(1-alpha) + sColor.rgb*alpha:cBack;
+  if(sign(sColor.a)==0)   
+	clip(-1);
+  else if(CGBLEND)
+	sColor.rgb/=sColor.a;
+	
+	//sColor.rgb =  cBack*(1-alpha) + sColor.rgb*alpha;   
+	sColor.rgb=lerp(cBack.rgb,sColor.rgb,vApha);
+  return sColor;
+}

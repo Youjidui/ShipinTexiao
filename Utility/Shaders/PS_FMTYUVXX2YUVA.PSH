@@ -1,0 +1,9 @@
+//将YUXX,YVXX纹理拼接成YUVA纹理(伪１６位)
+sampler2D  Texture_YV     :register (s0);
+sampler2D  Texture_YU     :register (s1);
+float4 main( float2 texUV0: TEXCOORD0 ): COLOR
+{
+  float2 YU = tex2D( Texture_YV,texUV0 ).xy;
+  float2 YV = tex2D( Texture_YU,texUV0 ).xy;
+  return float4(YU.xy,YV.y,1.0); 
+}

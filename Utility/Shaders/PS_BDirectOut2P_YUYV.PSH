@@ -1,0 +1,23 @@
+#include "ColorSpaceFunc.INC"
+
+sampler2D g_texSource:register(s0);
+sampler2D g_texAlpha :register(s1);
+float     g_alpha    :register(c0);
+bool      g_bZeroDirty:register(c1);
+struct P_OUT
+{
+   float4 oColor : COLOR0;//Color
+   float4 oAlpha : COLOR1;//Alpha
+};
+P_OUT main( float2 texUV0  : TEXCOORD0,
+            float2 texUV1  : TEXCOORD1 ) 
+{
+  P_OUT ret;
+  const float4 cMode = CS_YUYV_OFFSET;
+  float4 sColor = tex2D( g_texSource,texUV0 )- cMode;  
+  float4 sAlpha = tex2D( g_texAlpha,texUV0 )*g_alpha;    
+  float4 retColor0 = sColor * sAlpha;       
+  ret.oColor = retColor0 + cMode;
+  ret.oAlpha = sAlpha;
+  return ret;
+}

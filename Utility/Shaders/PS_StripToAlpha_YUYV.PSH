@@ -1,0 +1,19 @@
+sampler2D Texture0:register (s0);
+sampler2D Texture1:register (s1);
+int choise        :register (c0);
+bool bTex2        :register (c1);
+float4 fAlpha	  :register (c2);
+float4 main( float2 texUV: TEXCOORD0 ):COLOR
+{       
+   float4 srcAlpha  = bTex2?tex2D( Texture1,texUV ):1.0;   
+   srcAlpha*=fAlpha.x;   
+   float4 srcColor  = srcAlpha * (tex2D( Texture0,texUV )-float4(0,0.5,0,0.5));      
+   
+   float4 alpha[3];
+   alpha[0] = srcColor.xxzz;//Y
+   alpha[1] = srcColor.yyyy+float4(0.5,0.5,0.5,0.5);//U
+   alpha[2] = srcColor.wwww+float4(0.5,0.5,0.5,0.5);//V
+   //alpha[1] =float4(0.5,0.5,0.5,0.5);
+   //alpha[2] =float4(0.5,0.5,0.5,0.5);
+   return alpha[choise-4];   
+}

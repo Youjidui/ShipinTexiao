@@ -1,0 +1,21 @@
+sampler    tx_YUYV       :register (s0);
+sampler    tx_Key        :register (s1);
+float2     vSizeTex      :register (c0);//ÎªÎÆÀíµÄ¿í*2,H
+float4 main( float2 sUV:TEXCOORD0): COLOR
+{
+  //float2 sUV    = (vPos+float2(0.5f,0.5f))/vSizeTex.xy;
+  float4 sColor = tex2D(tx_YUYV,sUV);
+  float4 sAlpha = tex2D(tx_Key,sUV);
+  float4 retColor = 0;
+  float x=frac(sUV.x*vSizeTex.x+0.1f-vSizeTex.y);
+  if( x>0.5f )
+  {
+    retColor = float4(sColor.x,sColor.y,sColor.w,sAlpha.x);  
+  }
+  else
+  {
+    
+    retColor = float4(sColor.z,sColor.y,sColor.w,sAlpha.z); 
+  }  
+  return retColor;
+}

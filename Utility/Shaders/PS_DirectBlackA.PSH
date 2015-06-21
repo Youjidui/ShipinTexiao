@@ -1,0 +1,11 @@
+sampler2D g_texSource;
+void main( float2 texUV  : TEXCOORD0,
+	out float4 oColor:COLOR0,
+	out float  oDepth:DEPTH )
+{
+  float4 sColor = tex2D( g_texSource,texUV );  
+  oDepth = 0.0f;
+  if(any(sColor.a))
+	oDepth = 0.90f;
+  oColor = float4(sColor.rgb,0.0);
+}

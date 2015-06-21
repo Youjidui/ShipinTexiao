@@ -1,0 +1,45 @@
+sampler    tx_YUVA       :register (s0);
+
+float4     vBlend        :register (c1); 
+float4	   vMisc		 :register (c2);
+
+#define BPATICLEBLEND   vBlend.x
+#define BCGBLEND        vBlend.y
+#define GALPHA			vBlend.z
+#define SRCALPHAEXIT	vBlend.w
+
+#include   "ColorSpaceFunc.INC"
+
+float4 main(float2 texUV: TEXCOORD0 ): COLOR
+{   
+  float4 retColor  = tex2D( tx_YUVA, texUV ); 
+	     
+  retColor.xyz = ColorSpace_YUVToRGB(retColor.xyz - CS_YUVA_OFFSET); 
+  
+#ifdef _NeedBlend 
+
+	retColor.a *= GALPHA;
+  
+	if(BPATICLEBLEND && !any(retColor.a))
+		retColor.a=1.0;
+	
+	if(BCGBLEND && any(retColor.a) )
+		retColor.xyz /= retColor.a;
+	
+#else //Not Need Blend 
+	 
+	 retColor.xyz *= GALPHA ;
+  
+	if(BPATICLEBLEND&&!any(retColor.a))
+		retColor.a=1.0;
+	
+	if(BCGBLEND)
+		retColor.xyz *= sign(retColor.a);
+	else
+		retColor.xyz *= retColor.a;  
+	
+	retColor.a = 1.0f;		
+#endif
+
+  return retColor;
+}

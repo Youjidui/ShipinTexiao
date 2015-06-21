@@ -1,0 +1,10 @@
+sampler2D Texture0;
+sampler2D Texture1;
+
+float4 main( float2 texCoord  : TEXCOORD0 ) : COLOR
+{
+   float4 src1 = tex2D( Texture0, texCoord );
+   float4 src2 = tex2D( Texture1, texCoord );
+   
+   return src1*(1-src2.w) + src2*src2.w;
+}

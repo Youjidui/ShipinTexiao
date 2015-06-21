@@ -1,0 +1,100 @@
+sampler    tx_YUYV       :register (s0);
+sampler    tx_Key        :register (s1);
+
+float4     vSizeTex      :register (c0);//xy为纹理的物理宽高zw:z:虚拟宽 w:0.5/物理宽
+float4     vBlend        :register (c1); 
+float4	   vMisc		 :register (c2);
+
+#define BPATICLEBLEND   vBlend.x
+#define BCGBLEND        vBlend.y
+#define GALPHA			vBlend.z
+#define SRCALPHAEXIT	vBlend.w
+#define NeedBlend		vMisc.x
+
+#include   "ColorSpaceFunc.INC"
+
+float4 main(float2 texUV: TEXCOORD0 ): COLOR
+{   
+  float x  = frac(texUV.x * vSizeTex.x+0.1f-0.5f) ;    
+  
+  float4 sColor_YUYV  = tex2D( tx_YUYV, texUV );  
+  float4 sAlpha       = SRCALPHAEXIT>0?tex2D( tx_Key , texUV ):1.0f; 
+  
+  float4 sColor_YUYV1  = tex2D( tx_YUYV, texUV + float2(1.0f / vSizeTex.x,0.0f));  
+  float4 sAlpha1       = SRCALPHAEXIT>0?tex2D( tx_Key , texUV + float2(1.0f / vSizeTex.x,0.0f)):1.0f; 
+     
+	float4 retColor   = 1.0;
+	
+	if(x>=0.5f)	   
+	{
+		float2 uv = lerp(sColor_YUYV.ga,sColor_YUYV1.ga,0.5f);
+		 retColor= float4(sColor_YUYV.r,uv,sAlpha.x);
+	}
+	else
+		 retColor= float4(sColor_YUYV.bga,sAlpha.z);        
+  retColor.xyz = ColorSpace_YUVToRGB(retColor.xyz - CS_YUVA_OFFSET); 
+  
+#ifdef _NeedBlend 
+//  if(NeedBlend)
+//  {
+	retColor.xyz*=GALPHA;
+  
+	if(BPATICLEBLEND&&!any(retColor.a))
+		retColor.a=1.0;
+	
+	if(BCGBLEND)
+		retColor.xyz*=sign(retColor.a);
+	else
+		retColor.xyz*=retColor.a; 
+  
+	//retColor.a=sign(retColor.a);
+ // }  
+#endif
+
+  return retColor;
+}
+
+/*
+//!!!!!!!!!!!!!!!!!!!!!!!!!!
+//将伪1６的YUYV的纹理转换成32位的YUVA
+sampler    tx_YUYV       :register (s0);
+sampler    tx_Key        :register (s1);
+float4     vSizeTex      :register (c0);//xy为纹理的物理宽高zw:z:虚拟宽 w:0.5/物理宽
+float      fAlpha        :register (c1);
+bool2      vBlend        :register (c2); 
+#define bPaticleBlend   vBlend.x
+#define bCGBlend        vBlend.y
+#include   "ColorSpaceFunc.INC"
+
+float4 main(float2 texUV: TEXCOORD0 ): COLOR
+{ 
+ float2 fUV= texUV; 
+  fUV.x/=2.0f;
+  
+  int x  = fUV.x * vSizeTex.x;    
+  //fUV.x  = (texUV.x - vSizeTex.y)/2.0 + vSizeTex.y;   
+  
+  float4 sColor_YUYV  = tex2D( tx_YUYV, fUV );  
+  float4 sAlpha       = tex2D( tx_Key , fUV );
+  
+  if(!any(sAlpha))
+     clip(-1);
+     
+	float4 retColor   = 1.0;
+	if(x%2)
+	{    
+		 retColor= float4(sColor_YUYV.rga,sAlpha.x);       
+	}
+	else
+	{
+		 retColor= float4(sColor_YUYV.bga,sAlpha.z);        
+	}  
+	float3 iColor = retColor.xyz - float3(0,0.5,0.5);  
+  
+  retColor.xyz = ColorSpace_YUVToRGB(iColor);  
+  retColor.xyz = (bPaticleBlend||bCGBlend)? retColor.xyz  * fAlpha:retColor.xyz *retColor.a*fAlpha; 
+  retColor.a=1.0f;    
+  
+  return retColor;
+}
+*/

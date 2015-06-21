@@ -1,0 +1,63 @@
+sampler texSamples[4]   :register(s0);//在下面的到上
+float4  cMode           :register(c0);
+float4  cbAlphaOK       :register(c1); 
+float4  cAlphaValue     :register(c2); 
+float4  bIsBlended      :register(c3); 
+bool4   pBlendMode      :register(c4); 
+struct P_OUT
+{
+   float4 oColor : COLOR0;//Color
+};
+#include "VComposeFunc.INC"
+
+P_OUT main( float2 texUV0: TEXCOORD0 )
+{     
+   P_OUT ret;
+   float4  sAlpha0 = cbAlphaOK[0]?tex2D( texSamples[1], texUV0 ):1.f;
+   float4  sColor0 = (tex2D( texSamples[0], texUV0 )-cMode)*cAlphaValue[0];
+   sColor0  =   (pBlendMode[0]||bIsBlended[0])?sColor0:sAlpha0*sColor0;
+   sAlpha0 *= cAlphaValue[0];
+   
+   float4  sAlpha1 = cbAlphaOK[1]?tex2D( texSamples[3], texUV0 ):1.f;        
+   float4  sColor1 = (tex2D( texSamples[2], texUV0 )-cMode)*cAlphaValue[1];
+   sColor1 = bIsBlended[1]?sColor1:sColor1*sAlpha1;  
+   sAlpha1 *= cAlphaValue[1];
+   
+   T_Color rColor  = Color_Blend(sColor0, sAlpha0 ,sColor1,sAlpha1,pBlendMode[1]);
+   ret.oColor     =  rColor.tColor + cMode;
+   return ret;
+}
+
+//--zms-- 以上是修改全局alpha值的影响
+//--ZMS-- 以下是原始代码
+
+
+
+/*
+sampler texSamples[4]   :register(s0);//在下面的到上
+float4  cMode           :register(c0);
+float4  cbAlphaOK       :register(c1); 
+float4  cAlphaValue     :register(c2); 
+float4  bIsBlended      :register(c3); 
+bool4   pBlendMode      :register(c4); 
+struct P_OUT
+{
+   float4 oColor : COLOR0;//Color
+};
+#include "VComposeFunc.INC"
+
+P_OUT main( float2 texUV0: TEXCOORD0 )
+{     
+   P_OUT ret;
+   float4  sAlpha0 = cbAlphaOK[0]?tex2D( texSamples[1], texUV0 )*cAlphaValue[0]:cAlphaValue[0];
+   float4  sColor0 = tex2D( texSamples[0], texUV0 )-cMode;
+   sColor0  =   (pBlendMode[0]||bIsBlended[0])?sColor0:sAlpha0*sColor0;
+   
+   float4  sAlpha1 = cbAlphaOK[1]?tex2D( texSamples[3], texUV0 )*cAlphaValue[1]:cAlphaValue[1];        
+   float4  sColor1 = tex2D( texSamples[2], texUV0 )-cMode;
+           sColor1 = bIsBlended[1]?sColor1*cAlphaValue[1]:sColor1*sAlpha1;          
+   T_Color rColor  = Color_Blend(sColor0, sAlpha0 ,sColor1,sAlpha1,pBlendMode[1]);
+   ret.oColor     =  rColor.tColor + cMode;
+   return ret;
+}
+*/

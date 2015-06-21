@@ -1,0 +1,25 @@
+sampler2D  Texture_YV     :register (s0);
+float4     vSizeTexture   :register (c0);
+void  main( float2 vTex:TEXCOORD0,out float4 oColor0:COLOR0,out float4 oColor1:COLOR1) 
+{  
+  float4 sColor0 = tex2D(Texture_YV,vTex);
+  float4 sColor1 = tex2D(Texture_YV,vTex + float2(vSizeTexture.x,0.0f));  
+  oColor0 = float4(sColor1.x,sColor0.y,sColor0.x,sColor0.z); 
+  oColor1 = float4(sColor1.a,sColor1.a,sColor0.a,sColor0.a);
+}
+
+/*
+sampler2D  Texture_YV     :register (s0);
+float4     vSizeTexture   :register (c0);
+void  main( int2 vPos:VPOS,out float4 oColor0:COLOR0,out float4 oColor1:COLOR1) 
+{
+  vPos.xy -= vSizeTexture.zw;
+  
+  float2 sUV0   = ( vPos * float2(2.0,1.0)+float2(0.5,0.5) )/vSizeTexture.xy;
+  float2 sUV1   = ( vPos * float2(2.0,1.0) +float2(1.5,0.5))/vSizeTexture.xy;
+  float4 sColor0 = tex2D(Texture_YV,sUV0);
+  float4 sColor1 = tex2D(Texture_YV,sUV1);  
+  oColor0 = float4(sColor1.x,sColor0.y,sColor0.x,sColor0.z); 
+  oColor1 = float4(sColor1.a,sColor0.a,sColor0.a,sColor1.a);
+}
+*/
