@@ -44,6 +44,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
+				AdditionalIncludeDirectories="..\DXSDK\Include"
 				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG;_AFXEXT"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -67,6 +68,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				LinkIncremental="2"
+				AdditionalLibraryDirectories="..\DXSDK\Lib\x86"
 				ModuleDefinitionFile=".\D3D9Render.def"
 				GenerateDebugInformation="true"
 				SubSystem="2"
@@ -124,6 +126,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
+				AdditionalIncludeDirectories="..\DXSDK\Include"
 				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;_AFXEXT"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -146,6 +149,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				LinkIncremental="1"
+				AdditionalLibraryDirectories="..\DXSDK\Lib\x86"
 				ModuleDefinitionFile=".\D3D9Render.def"
 				GenerateDebugInformation="true"
 				SubSystem="2"
