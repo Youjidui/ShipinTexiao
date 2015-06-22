@@ -4,6 +4,9 @@
 
 #pragma once
 
+#include "EffectSettingsPane.h"
+#include "BufferSettingsPane.h"
+
 class CMainFrame : public CFrameWndEx
 {
 	
@@ -35,6 +38,9 @@ protected:  // 控件条嵌入成员
 	CMFCToolBar       m_wndToolBar;
 	CMFCStatusBar     m_wndStatusBar;
 	CMFCToolBarImages m_UserImages;
+
+	CBufferSettingsPane m_wndBufferBar;
+	CEffectSettingsPane m_wndEffectBar;
 
 // 生成的消息映射函数
 protected:

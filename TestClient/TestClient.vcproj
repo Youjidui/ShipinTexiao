@@ -186,7 +186,19 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath=".\BufferBar.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\BufferSettingsPane.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\EffectBar.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\EffectSettingsPane.cpp"
 				>
 			</File>
 			<File
@@ -232,7 +244,19 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
+				RelativePath=".\BufferBar.h"
+				>
+			</File>
+			<File
+				RelativePath=".\BufferSettingsPane.h"
+				>
+			</File>
+			<File
 				RelativePath=".\EffectBar.h"
+				>
+			</File>
+			<File
+				RelativePath=".\EffectSettingsPane.h"
 				>
 			</File>
 			<File

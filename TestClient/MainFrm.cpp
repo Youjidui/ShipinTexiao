@@ -136,6 +136,32 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	CMFCToolBar::SetBasicCommands(lstBasicCommands);
 
+
+	if (!m_wndBufferBar.Create(_T("Buffer Settings"), this, CRect(0, 0, 200, 100), TRUE, 1000,
+		WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS |
+		WS_CLIPCHILDREN | CBRS_TOP | CBRS_FLOAT_MULTI))
+	{
+		TRACE0( "Failed to create buffer dialog bar ");
+		return -1;
+	}
+	m_wndBufferBar.EnableDocking(CBRS_ALIGN_TOP|CBRS_ALIGN_BOTTOM);
+	DockPane(&m_wndBufferBar);
+
+	if (!m_wndEffectBar.Create(_T("Effect Settings"), this, CRect(0, 0, 200, 100), TRUE, 1001,
+		WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS |
+		WS_CLIPCHILDREN | CBRS_TOP | CBRS_FLOAT_MULTI))
+	{
+		TRACE0( "Failed to create effect dialog bar ");
+		return -1;
+	}
+	m_wndEffectBar.EnableDocking(CBRS_ALIGN_TOP|CBRS_ALIGN_BOTTOM);
+	DockPane(&m_wndEffectBar);
+
+	CDockablePane* pTabbedBar = NULL;
+	m_wndBufferBar.AttachToTabWnd(&m_wndEffectBar, DM_SHOW, TRUE, &pTabbedBar);
+
+	RecalcLayout();
+
 	return 0;
 }
 
