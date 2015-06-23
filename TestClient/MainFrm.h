@@ -19,6 +19,8 @@ public:
 
 // ²Ù×÷
 public:
+	bool InitDoc();
+	void UninitDoc();
 
 // ÖØÐ´
 public:
@@ -47,8 +49,11 @@ protected:
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg void OnViewCustomize();
 	afx_msg LRESULT OnToolbarCreateNew(WPARAM wp, LPARAM lp);
+	afx_msg LRESULT OnSetImage(WPARAM w, LPARAM l);
 	DECLARE_MESSAGE_MAP()
 
+public:
+	afx_msg void OnDestroy();
 };
 
 

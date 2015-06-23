@@ -6,6 +6,8 @@
 #include "TestClient.h"
 
 #include "MainFrm.h"
+#include "TestClientDoc.h"
+#include "CommonMessage.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -23,6 +25,8 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWndEx)
 	ON_WM_CREATE()
 	ON_COMMAND(ID_VIEW_CUSTOMIZE, &CMainFrame::OnViewCustomize)
 	ON_REGISTERED_MESSAGE(AFX_WM_CREATETOOLBAR, &CMainFrame::OnToolbarCreateNew)
+	ON_MESSAGE(UM_SET_IMAGE, &CMainFrame::OnSetImage)
+	ON_WM_DESTROY()
 END_MESSAGE_MAP()
 
 static UINT indicators[] =
@@ -162,6 +166,8 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	RecalcLayout();
 
+	InitDoc();
+
 	return 0;
 }
 
@@ -247,3 +253,30 @@ BOOL CMainFrame::LoadFrame(UINT nIDResource, DWORD dwDefaultStyle, CWnd* pParent
 	return TRUE;
 }
 
+LRESULT CMainFrame::OnSetImage( WPARAM w, LPARAM l )
+{
+	CTestClientDoc* pDoc = (CTestClientDoc*)GetActiveDocument();
+	pDoc->SetImage(w, (LPCTSTR)l);
+	pDoc->UpdateBuffer(w);
+	return 0;
+}
+
+bool CMainFrame::InitDoc()
+{
+	CTestClientDoc* pDoc = (CTestClientDoc*)GetActiveDocument();
+	return pDoc->InitEffect();
+}
+
+void CMainFrame::UninitDoc()
+{
+	CTestClientDoc* pDoc = (CTestClientDoc*)GetActiveDocument();
+	pDoc->UninitEffect();
+}
+
+
+void CMainFrame::OnDestroy()
+{
+	CFrameWndEx::OnDestroy();
+
+	UninitDoc();
+}

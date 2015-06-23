@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include "TestClient.h"
 #include "BufferBar.h"
+#include "CommonMessage.h"
 
 
 // CBufferBar 对话框
@@ -14,8 +15,8 @@ CBufferBar::CBufferBar(CWnd* pParent /*=NULL*/)
 	: CDialog(CBufferBar::IDD, pParent)
 	, m_strFirstLevelFileName(_T(""))
 	, m_strSecondLevelFileName(_T(""))
-	, m_uWidth(0)
-	, m_uHeight(0)
+	, m_uWidth(1920)
+	, m_uHeight(1080)
 {
 
 }
@@ -46,7 +47,7 @@ void CBufferBar::OnBnClickedSelectImage1()
 {
 	m_strFirstLevelFileName = GetFilePath();
 	UpdateData(FALSE);
-	AfxGetMainWnd()->PostMessage(UM_SET_IMAGE, 0, (LPCTSTR)m_strFirstLevelFileName);
+	AfxGetMainWnd()->PostMessage(UM_SET_IMAGE, 0, (LPARAM)(LPCTSTR)m_strFirstLevelFileName);
 	//TODO: UM_SET_IMAGE
 	//UM_SET_IMAGE把图像消息通知给Document类，然后再把图像提取成Buffer传递给VideoEffect
 	//再从VideoEffect取得Buffer，显示到View中
@@ -56,7 +57,7 @@ void CBufferBar::OnBnClickedSelectImage2()
 {
 	m_strSecondLevelFileName = GetFilePath();
 	UpdateData(FALSE);
-	AfxGetMainWnd()->PostMessage(UM_SET_IMAGE, 1, (LPCTSTR)m_strSecondLevelFileName);
+	AfxGetMainWnd()->PostMessage(UM_SET_IMAGE, 1, (LPARAM)(LPCTSTR)m_strSecondLevelFileName);
 	//过渡特技需要2层图像
 }
 

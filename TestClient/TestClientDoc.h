@@ -1,7 +1,8 @@
 
 // TestClientDoc.h : CTestClientDoc 类的接口
 //
-
+#include <vector>
+#include "../VideoBuffer.h"
 
 #pragma once
 
@@ -14,9 +15,14 @@ protected: // 仅从序列化创建
 
 // 属性
 public:
+	void SetImage(UINT level, LPCTSTR pszFilename);
 
 // 操作
 public:
+	bool InitEffect();
+	void UninitEffect();
+	bool UpdateBuffer(UINT level);
+	bool UpdateBuffer(UINT level, const BYTE* pBits, int w, int h, int pitch);
 
 // 重写
 public:
@@ -32,6 +38,14 @@ public:
 #endif
 
 protected:
+	std::vector<CString> m_ImageFiles;
+	std::vector<IVideoBuffer*> m_SrcImages;
+	IVideoBuffer* m_pDestImage;
+
+	IVideoBufferManager* m_pBufferMgr;
+
+	IEffect* m_pEffect;
+	ITransEffect* m_pTransEffect;
 
 // 生成的消息映射函数
 protected:

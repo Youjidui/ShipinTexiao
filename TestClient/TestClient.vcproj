@@ -67,7 +67,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="FreeImage.lib"
 				LinkIncremental="2"
+				AdditionalLibraryDirectories="../FreeImage"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				TargetMachine="1"
@@ -147,7 +149,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="FreeImage.lib"
 				LinkIncremental="1"
+				AdditionalLibraryDirectories="../FreeImage"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="2"
@@ -178,6 +182,10 @@
 		</Configuration>
 	</Configurations>
 	<References>
+		<ProjectReference
+			ReferencedProjectIdentifier="{E740E006-6110-43A0-B557-028DEE6BA19D}"
+			RelativePathToProject=".\VideoEffect.vcproj"
+		/>
 	</References>
 	<Files>
 		<Filter
@@ -249,6 +257,10 @@
 			</File>
 			<File
 				RelativePath=".\BufferSettingsPane.h"
+				>
+			</File>
+			<File
+				RelativePath=".\CommonMessage.h"
 				>
 			</File>
 			<File
