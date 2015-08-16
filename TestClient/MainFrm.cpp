@@ -166,8 +166,6 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	RecalcLayout();
 
-	InitDoc();
-
 	return 0;
 }
 
@@ -261,22 +259,14 @@ LRESULT CMainFrame::OnSetImage( WPARAM w, LPARAM l )
 	return 0;
 }
 
-bool CMainFrame::InitDoc()
-{
-	CTestClientDoc* pDoc = (CTestClientDoc*)GetActiveDocument();
-	return pDoc->InitEffect();
-}
-
-void CMainFrame::UninitDoc()
-{
-	CTestClientDoc* pDoc = (CTestClientDoc*)GetActiveDocument();
-	pDoc->UninitEffect();
-}
-
-
 void CMainFrame::OnDestroy()
 {
 	CFrameWndEx::OnDestroy();
+}
 
-	UninitDoc();
+LRESULT CMainFrame::OnSetTargetBufferSize( WPARAM w, LPARAM l )
+{
+	CTestClientDoc* pDoc = (CTestClientDoc*)GetActiveDocument();
+	pDoc->SetBackBufferSize(w, l);
+	return 0;
 }

@@ -3,29 +3,45 @@
 
 #include "stdafx.h"
 #include "../D3D9Render/VideoBufferManager.h"
+#include "../D3D9Render/RenderEngine.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
 
-CVideoBufferManager g_pVideoBufferManager;
+CRenderEngine* g_pRenderEngine = NULL;
+CVideoBufferManager* g_pVideoBufferManager = NULL;
 
 IVideoBufferManager* CreateVideoBufferManager()
 {
-	g_pVideoBufferManager = new CVideoBufferManager;
+	if(!g_pVideoBufferManager && g_pRenderEngine && g_pRenderEngine->GetDevice())
+		g_pVideoBufferManager = new CVideoBufferManager(g_pRenderEngine->GetDevice());
 	return g_pVideoBufferManager;
 }
 
 void ReleaseVideoBufferManager(IVideoBufferManager* p)
 {
+	delete p;
 }
 
-bool InitEffects(IEffect*& pEffect, ITransEffect*& pTransEffect)
+bool InitEffectModule(HWND hDeviceWnd, UINT nBackBufferWidth, UINT nBackBufferHeight )
 {
-	return true;
+	bool bOK = false;
+	if(!g_pRenderEngine)
+	{
+		g_pRenderEngine = new CRenderEngine;
+		HRESULT hr = E_FAIL;
+		if(g_pRenderEngine)
+			hr = g_pRenderEngine->Create(hDeviceWnd, nBackBufferWidth, nBackBufferHeight);
+		bOK = SUCCEEDED(hr);
+	}
+	return bOK;
 }
 
-void UninitEffects()
+void UninitEffectModule()
 {
-
+	if(g_pRenderEngine)
+	{
+		delete g_pRenderEngine;
+	}
 }

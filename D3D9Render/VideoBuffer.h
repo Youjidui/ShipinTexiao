@@ -12,7 +12,7 @@ public:
 	bool Delete(IDirect3DDevice9* pDevice);
 
 public:
-	virtual VideoBufferInfo* GetVideoBufferInfo();
+	virtual const VideoBufferInfo& GetVideoBufferInfo() const;
 
 	virtual void* LockBuffer(int &Pitch);
 	virtual BOOL UnLockBuffer();

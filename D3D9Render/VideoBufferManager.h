@@ -3,8 +3,9 @@
 #include "../VideoBuffer.h"
 #include <set>
 #include "../Utility/CriticalSection.h"
+#include <d3d9.h>
 
-class CVideoBufferManager : public IVideoBufferManager
+class AFX_EXT_CLASS CVideoBufferManager : public IVideoBufferManager
 {
 public:
 	CVideoBufferManager(IDirect3DDevice9* pDevice);

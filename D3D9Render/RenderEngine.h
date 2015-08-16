@@ -12,7 +12,7 @@ struct D3DDeviceSettings
 };
 
 
-class CRenderEngine
+class AFX_EXT_CLASS CRenderEngine
 {
 public:
 	CRenderEngine(void);

@@ -1,5 +1,10 @@
 #pragma once
 
+enum RenderEngineType
+{
+	RET_D3D9 = 0
+};
+
 enum VideoBufferType
 {
 	VBT_SYSTEM_MEM = 0x00,
@@ -18,7 +23,7 @@ struct VideoBufferInfo
 class IVideoBuffer
 {
 public:
-	virtual VideoBufferInfo* GetVideoBufferInfo() = 0;
+	virtual const VideoBufferInfo& GetVideoBufferInfo() const = 0;
 
 	virtual void* LockBuffer(int &Pitch) = 0;
 	virtual BOOL UnLockBuffer() = 0;
@@ -44,17 +49,17 @@ struct tagFxParamBase
 class ITransEffect
 {
 public:
-	 virtual int Process(IVideoBuffer* pSrcA, IVideoBuffer* pSrcB, IVideoBuffer* pDst, tagFxParamBase* pParam) = 0;
+	 virtual int Render(IVideoBuffer* pSrcA, IVideoBuffer* pSrcB, IVideoBuffer* pDst, tagFxParamBase* pParam) = 0;
 };
 //内部特技
 class IEffect
 {
 public:
-	virtual int Process(IVideoBuffer* pSrc,IVideoBuffer* pDst,tagFxParamBase* pParam) = 0;
+	virtual int Render(IVideoBuffer* pSrc,IVideoBuffer* pDst,tagFxParamBase* pParam) = 0;
 };
 
 AFX_EXT_API IVideoBufferManager* CreateVideoBufferManager();
 AFX_EXT_API void ReleaseVideoBufferManager(IVideoBufferManager* p);
 
-AFX_EXT_API bool InitEffects(IEffect*& pEffect, ITransEffect*& pTransEffect);
-AFX_EXT_API void UninitEffects();
+AFX_EXT_API bool InitEffectModule(HWND hDeviceWnd, UINT nBackBufferWidth, UINT nBackBufferHeight );
+AFX_EXT_API void UninitEffectModule();

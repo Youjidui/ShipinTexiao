@@ -27,8 +27,11 @@ END_MESSAGE_MAP()
 
 CTestClientDoc::CTestClientDoc()
 {
-	// TODO: 在此添加一次性构造代码
-
+	memset(&m_DestVideoBufferInfo, 0, sizeof(VideoBufferInfo));
+	m_DestVideoBufferInfo.eType = VBT_D3D9_MEM;
+	m_DestVideoBufferInfo.format = D3DFMT_A8B8G8R8;
+	m_DestVideoBufferInfo.nWidth = 1920;
+	m_DestVideoBufferInfo.nHeight = 1080;
 }
 
 CTestClientDoc::~CTestClientDoc()
@@ -42,8 +45,23 @@ BOOL CTestClientDoc::OnNewDocument()
 
 	// TODO: 在此添加重新初始化代码
 	// (SDI 文档将重用该文档)
+	BOOL bOK = FALSE;
+	//AfxGetMainWnd()->
+	POSITION pos = GetFirstViewPosition();
+	if(pos)
+	{
+		CView* pView = GetNextView(pos);
+		if(pView)
+		{
+			HWND hWnd = (pView->GetSafeHwnd());
+			if(hWnd)
+			{
+				bOK = InitEffect(hWnd, 1920, 1080);
+			}
+		}
+	}
 
-	return TRUE;
+	return bOK;
 }
 
 
@@ -117,8 +135,8 @@ bool CTestClientDoc::UpdateBuffer( UINT level, const BYTE* pBits, int w, int h, 
 	IVideoBuffer*& pBuf = m_SrcImages[level];
 	if(pBuf)
 	{
-		VideoBufferInfo* pbi = pBuf->GetVideoBufferInfo();
-		if(pbi->nHeight != h || pbi->nWidth != w)
+		const VideoBufferInfo& bi = pBuf->GetVideoBufferInfo();
+		if(bi.nHeight != h || bi.nWidth != w)
 		{
 			m_pBufferMgr->ReleaseVideoBuffer(pBuf);
 			pBuf = NULL;
@@ -146,19 +164,43 @@ bool CTestClientDoc::UpdateBuffer( UINT level, const BYTE* pBits, int w, int h, 
 	return false;
 }
 
-bool CTestClientDoc::InitEffect()
+bool CTestClientDoc::InitEffect(HWND hDeviceWnd, int nBackBufferWidth, int nBackBufferHeight)
 {
-	m_pBufferMgr = CreateVideoBufferManager();
-	return InitEffects(m_pEffect, m_pTransEffect);
+	bool bOK = InitEffectModule(hDeviceWnd, nBackBufferWidth, nBackBufferHeight);
+	if(bOK)
+		m_pBufferMgr = CreateVideoBufferManager();
+	return !!m_pBufferMgr;
 }
 
 void CTestClientDoc::UninitEffect()
 {
-	UninitEffects();
 	ReleaseVideoBufferManager(m_pBufferMgr);
+}
+
+bool CTestClientDoc::SetBackBufferSize( UINT w, UINT h )
+{
+	if(m_pBufferMgr)
+	{
+		if(m_pDestImage)
+		{
+			m_pBufferMgr->ReleaseVideoBuffer(m_pDestImage);
+			m_pDestImage = NULL;
+		}
+		m_DestVideoBufferInfo.nWidth = w;
+		m_DestVideoBufferInfo.nHeight = h;
+		m_pDestImage = m_pBufferMgr->CreateVideoBuffer(m_DestVideoBufferInfo);
+	}
+	return !!m_pDestImage;
 }
 
 #endif //_DEBUG
 
 
 // CTestClientDoc 命令
+
+void CTestClientDoc::OnCloseDocument()
+{
+	UninitEffect();
+
+	CDocument::OnCloseDocument();
+}

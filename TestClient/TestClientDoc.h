@@ -19,10 +19,11 @@ public:
 
 // 操作
 public:
-	bool InitEffect();
+	bool InitEffect(HWND hDeviceWnd, int nBackBufferWidth, int nBackBufferHeight);
 	void UninitEffect();
 	bool UpdateBuffer(UINT level);
 	bool UpdateBuffer(UINT level, const BYTE* pBits, int w, int h, int pitch);
+	bool SetBackBufferSize(UINT w, UINT h);
 
 // 重写
 public:
@@ -44,12 +45,13 @@ protected:
 
 	IVideoBufferManager* m_pBufferMgr;
 
-	IEffect* m_pEffect;
-	ITransEffect* m_pTransEffect;
+	VideoBufferInfo m_DestVideoBufferInfo;
 
 // 生成的消息映射函数
 protected:
 	DECLARE_MESSAGE_MAP()
+public:
+	virtual void OnCloseDocument();
 };
 
 

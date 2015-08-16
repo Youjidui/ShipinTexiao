@@ -32,18 +32,18 @@ bool CNegativeRender::Render( CVideoBuffer* pSrc, CVideoBuffer* pDest, NegativeF
 {
 	if(SetRenderTarget(pDest))
 	{
-		VideoBufferInfo* lpSrcBuffInfo = pSrc->GetVideoBufferInfo();
+		const VideoBufferInfo& srcBuffInfo = pSrc->GetVideoBufferInfo();
 		D3DXMATRIX	matImage;
 		D3DXMatrixIdentity(&matImage);
-		float m_fu =  0.5f/(float)(lpSrcBuffInfo->nWidth);
-		float m_fv =  0.5f/(float)(lpSrcBuffInfo->nHeight);
+		float m_fu =  0.5f/(float)(srcBuffInfo.nWidth);
+		float m_fv =  0.5f/(float)(srcBuffInfo.nHeight);
 
 		D3DXMATRIX  *pMatWorld, *pMatView, *pMatProj;
 		GetQuadMatrix(&pMatWorld, &pMatView, &pMatProj);
 		D3DXMATRIX matWVP = *pMatWorld * (*pMatView)* (*pMatProj);
 
 		LPDIRECT3DTEXTURE9 lpTex = NULL;
-		if(SUCCEEDED(m_pDevice->CreateTexture(lpSrcBuffInfo->nWidth, lpSrcBuffInfo->nHeight, 1, 0, D3DFMT_A8R8G8B8, D3DPOOL_DEFAULT, &lpTex, NULL)))
+		if(SUCCEEDED(m_pDevice->CreateTexture(srcBuffInfo.nWidth, srcBuffInfo.nHeight, 1, 0, D3DFMT_A8R8G8B8, D3DPOOL_DEFAULT, &lpTex, NULL)))
 		{
 			LPDIRECT3DSURFACE9 lpTexSurf = NULL;
 			if(SUCCEEDED(lpTex->GetSurfaceLevel(0, &lpTexSurf)))
@@ -56,7 +56,7 @@ bool CNegativeRender::Render( CVideoBuffer* pSrc, CVideoBuffer* pDest, NegativeF
 					m_pNegativeEffect->SetTechnique("Picture");	
 
 					UINT cPass,uPass;
-					switch(lpSrcBuffInfo->format)
+					switch(srcBuffInfo.format)
 					{
 					case FMT_RGBA32:uPass = 0;break;
 					case FMT_YUVA32:uPass = 1;break;
@@ -87,15 +87,15 @@ bool CNegativeRender::SetRenderTarget( CVideoBuffer* pDest )
 	m_pDevice->SetRenderTarget(0, pRTSurface);
 	SAFE_RELEASE(pRTSurface);
 
-	VideoBufferInfo* lpBuffInfo = pDest->GetVideoBufferInfo();
+	const VideoBufferInfo& buffInfo = pDest->GetVideoBufferInfo();
 	// set view port
 	D3DVIEWPORT9 vp;
 	vp.MaxZ = 1.0f;
 	vp.MinZ = 0.0f;
 		vp.X        = 0;
 		vp.Y        = 0;
-		vp.Width    = lpBuffInfo->nWidth;
-		vp.Height   = lpBuffInfo->nHeight;
+		vp.Width    = buffInfo.nWidth;
+		vp.Height   = buffInfo.nHeight;
 	m_pDevice->SetViewport(&vp);
 
 	m_pDevice->Clear(0, NULL, D3DCLEAR_TARGET|D3DCLEAR_ZBUFFER, 0, 1.0f, 0);

@@ -26,4 +26,6 @@ public:
 	UINT m_uHeight;
 	afx_msg void OnBnClickedSelectImage1();
 	afx_msg void OnBnClickedSelectImage2();
+	afx_msg void OnEnKillfocusHeight();
+	afx_msg void OnEnKillfocusWidth();
 };

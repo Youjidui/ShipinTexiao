@@ -15,9 +15,9 @@ CVideoBuffer::~CVideoBuffer(void)
 	Delete(m_pDevice);
 }
 
-VideoBufferInfo* CVideoBuffer::GetVideoBufferInfo()
+const VideoBufferInfo& CVideoBuffer::GetVideoBufferInfo() const
 {
-	return &m_BufferInfo;
+	return m_BufferInfo;
 }
 
 void* CVideoBuffer::LockBuffer( int &Pitch )
