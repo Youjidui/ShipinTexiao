@@ -44,7 +44,8 @@ public:
 #endif
 
 protected:
-	CRenderEngine* m_pRenderEngine;	
+	CRenderEngine* m_pRenderEngine;
+	//CResourceManager* m_pResourceManager;
 	CVideoBufferManager* m_pBufferMgr;
 	CVideoBuffer* m_pDestImage;
 

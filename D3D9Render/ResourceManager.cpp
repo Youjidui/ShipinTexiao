@@ -11,6 +11,7 @@ typedef struct _QuadVec2UV
 
 
 CResourceManager::CResourceManager(void)
+: m_pQuadMesh(NULL)
 {
 }
 
@@ -72,7 +73,7 @@ CBaseMesh* CResourceManager::CreateQuadMesh(LPDIRECT3DDEVICE9 lpDevice)
 				_VertexElemShader,
 				NULL,
 				0,0,
-				NULL );
+				_T("QuadMesh") );
 			if(FAILED(hr))
 			{
 				//m_pQuadMesh->Destroy();

@@ -28,7 +28,15 @@ CRenderEngine* InitEffectModule(HWND hDeviceWnd, UINT nBackBufferWidth, UINT nBa
 	if(p)
 	{
 		hr = p->Create(hDeviceWnd, nBackBufferWidth, nBackBufferHeight);
-		if(FAILED(hr))
+		if(SUCCEEDED(hr))
+		{
+			CResourceManager* pRM = new CResourceManager;
+			if(pRM)
+			{
+				p->SetResourceManager(pRM);
+			}
+		}
+		else
 		{
 			delete p;
 			p = NULL;
@@ -39,5 +47,11 @@ CRenderEngine* InitEffectModule(HWND hDeviceWnd, UINT nBackBufferWidth, UINT nBa
 
 void UninitEffectModule(CRenderEngine* pEngine)
 {
+	if(pEngine)
+	{
+		CResourceManager* pRM = pEngine->GetResourceManager();
+		pEngine->SetResourceManager(NULL);
+		delete pRM;
+	}
 	delete pEngine;
 }

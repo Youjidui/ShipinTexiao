@@ -30,6 +30,7 @@ END_MESSAGE_MAP()
 
 CTestClientDoc::CTestClientDoc()
 : m_pRenderEngine(NULL)
+//, m_pResourceManager(NULL)
 , m_pBufferMgr(NULL)
 , m_pDestImage(NULL)
 {
