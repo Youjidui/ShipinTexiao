@@ -26,6 +26,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWndEx)
 	ON_COMMAND(ID_VIEW_CUSTOMIZE, &CMainFrame::OnViewCustomize)
 	ON_REGISTERED_MESSAGE(AFX_WM_CREATETOOLBAR, &CMainFrame::OnToolbarCreateNew)
 	ON_MESSAGE(UM_SET_IMAGE, &CMainFrame::OnSetImage)
+	ON_MESSAGE(UM_SET_TARGET_BUFFER_SIZE, &CMainFrame::OnSetTargetBufferSize)
 	ON_WM_DESTROY()
 END_MESSAGE_MAP()
 
@@ -256,6 +257,7 @@ LRESULT CMainFrame::OnSetImage( WPARAM w, LPARAM l )
 	CTestClientDoc* pDoc = (CTestClientDoc*)GetActiveDocument();
 	pDoc->SetImage(w, (LPCTSTR)l);
 	pDoc->UpdateBuffer(w);
+	pDoc->UpdateAllViews(NULL);
 	return 0;
 }
 

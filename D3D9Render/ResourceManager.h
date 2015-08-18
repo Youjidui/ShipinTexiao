@@ -12,7 +12,7 @@ public:
 	~CResourceManager(void);
 
 public:
-	CBaseMesh* CreateQuadMesh();
+	CBaseMesh* CreateQuadMesh(LPDIRECT3DDEVICE9 lpDevice);
 	CBaseFx* CreateEffect(LPDIRECT3DDEVICE9 lpDevice, LPCTSTR lpszEffectName);
 	CVertexShader* CreateVertexShader(LPDIRECT3DDEVICE9 lpDevice, LPCTSTR lpszShaderName);
 	CPixelShader* CreatePixelShader(LPDIRECT3DDEVICE9 lpDevice, LPCTSTR lpszShaderName);

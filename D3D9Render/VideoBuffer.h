@@ -1,13 +1,15 @@
 #pragma once
 
 #include "../VideoBuffer.h"
+#include <d3d9.h>
 
-class CVideoBuffer : public IVideoBuffer
+class CVideoBuffer
 {
 public:
 	CVideoBuffer(IDirect3DDevice9* pDevice, const VideoBufferInfo& info);
 	~CVideoBuffer(void);
 
+private:
 	bool Create(IDirect3DDevice9* pDevice, const VideoBufferInfo& info);
 	bool Delete(IDirect3DDevice9* pDevice);
 

@@ -149,7 +149,11 @@
 	<References>
 		<ProjectReference
 			ReferencedProjectIdentifier="{93AD0DE0-6F9D-4976-BB07-99B3C1463333}"
-			RelativePathToProject="..\D3D9Render\D3D9Render.vcproj"
+			RelativePathToProject=".\D3D9Render\D3D9Render.vcproj"
+		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{739DB65F-C89F-45FF-9690-AB025CA7DBF9}"
+			RelativePathToProject=".\Utility\Utility.vcproj"
 		/>
 	</References>
 	<Files>

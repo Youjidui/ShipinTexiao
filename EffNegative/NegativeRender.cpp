@@ -4,6 +4,13 @@
 //#include "../D3D9Render/BaseFx.h"
 
 CNegativeRender::CNegativeRender(void)
+: m_pDevice(NULL)
+, m_pResMan(NULL)
+, m_pQuadMesh(NULL)
+, m_pNegativeEffect(NULL)
+, m_matWorld(NULL)
+, m_matPrj(NULL)
+, m_matView(NULL)
 {
 	m_matWorld    = new D3DXMATRIXA16;
 	m_matView     = new D3DXMATRIXA16;
@@ -21,7 +28,7 @@ bool CNegativeRender::Init( LPDIRECT3DDEVICE9 pDevice, CResourceManager* pResMan
 {
 	m_pDevice = pDevice;
 	m_pResMan = pResMan;
-	m_pQuadMesh = m_pResMan->CreateQuadMesh();
+	m_pQuadMesh = m_pResMan->CreateQuadMesh(pDevice);
 	//m_pProcessMaskEffect = m_pResMan->CreateEffect(_T("GProcessMask.fxo"));
 	//m_pDirectOutEffect = m_pResMan->CreateEffect(_T("fx_GDirectOut.fxo"));
 	m_pNegativeEffect = pResMan->CreateEffect(pDevice, _T("fx_GNegative.fxo"));

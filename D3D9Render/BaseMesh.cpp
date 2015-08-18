@@ -26,7 +26,7 @@ CBaseMesh::CBaseMesh(void)
 
 CBaseMesh::~CBaseMesh(void)
 {
-
+	Destroy();
 }
 
 HRESULT  CBaseMesh::Destroy()

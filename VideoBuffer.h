@@ -20,21 +20,8 @@ struct VideoBufferInfo
 	DWORD format;
 };
 
-class IVideoBuffer
-{
-public:
-	virtual const VideoBufferInfo& GetVideoBufferInfo() const = 0;
-
-	virtual void* LockBuffer(int &Pitch) = 0;
-	virtual BOOL UnLockBuffer() = 0;
-};
-
-class IVideoBufferManager
-{
-public:
-	virtual IVideoBuffer* CreateVideoBuffer(const VideoBufferInfo &info) = 0;
-	virtual BOOL ReleaseVideoBuffer(IVideoBuffer*& pBuffer) = 0;
-};
+class CVideoBuffer;
+class CVideoBufferManager;
 
 
 //特技参数，每个特技有自己的参数
@@ -49,17 +36,19 @@ struct tagFxParamBase
 class ITransEffect
 {
 public:
-	 virtual int Render(IVideoBuffer* pSrcA, IVideoBuffer* pSrcB, IVideoBuffer* pDst, tagFxParamBase* pParam) = 0;
+	 virtual int Render(CVideoBuffer* pSrcA, CVideoBuffer* pSrcB, CVideoBuffer* pDst, tagFxParamBase* pParam) = 0;
 };
 //内部特技
 class IEffect
 {
 public:
-	virtual int Render(IVideoBuffer* pSrc,IVideoBuffer* pDst,tagFxParamBase* pParam) = 0;
+	virtual int Render(CVideoBuffer* pSrc,CVideoBuffer* pDst,tagFxParamBase* pParam) = 0;
 };
 
-AFX_EXT_API IVideoBufferManager* CreateVideoBufferManager();
-AFX_EXT_API void ReleaseVideoBufferManager(IVideoBufferManager* p);
+class CRenderEngine;
 
-AFX_EXT_API bool InitEffectModule(HWND hDeviceWnd, UINT nBackBufferWidth, UINT nBackBufferHeight );
-AFX_EXT_API void UninitEffectModule();
+AFX_EXT_API CVideoBufferManager* CreateVideoBufferManager(CRenderEngine* pEngine);
+AFX_EXT_API void ReleaseVideoBufferManager(CVideoBufferManager* p);
+
+AFX_EXT_API CRenderEngine* InitEffectModule(HWND hDeviceWnd, UINT nBackBufferWidth, UINT nBackBufferHeight );
+AFX_EXT_API void UninitEffectModule(CRenderEngine* pEngine);

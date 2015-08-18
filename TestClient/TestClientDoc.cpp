@@ -9,6 +9,9 @@
 //#include "CommonMessage.h"
 #include "../FreeImage/FreeImage.h"
 #include <d3dx9.h>
+#include "../D3D9Render/VideoBuffer.h"
+#include "../D3D9Render/VideoBufferManager.h"
+#include "../EffNegative/NegativeRender.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -26,6 +29,9 @@ END_MESSAGE_MAP()
 // CTestClientDoc ¹¹Ôì/Îö¹¹
 
 CTestClientDoc::CTestClientDoc()
+: m_pRenderEngine(NULL)
+, m_pBufferMgr(NULL)
+, m_pDestImage(NULL)
 {
 	memset(&m_DestVideoBufferInfo, 0, sizeof(VideoBufferInfo));
 	m_DestVideoBufferInfo.eType = VBT_D3D9_MEM;
@@ -106,6 +112,7 @@ void CTestClientDoc::SetImage( UINT level, LPCTSTR pszFilename )
 
 bool CTestClientDoc::UpdateBuffer( UINT level )
 {
+	bool bOK = false;
 	if(m_ImageFiles.size() > level)
 	{
 		FIBITMAP* pBmp = FreeImage_LoadU(FIF_BMP, CT2CW(m_ImageFiles[level]));
@@ -119,20 +126,21 @@ bool CTestClientDoc::UpdateBuffer( UINT level )
 				int p = FreeImage_GetPitch(p32Bmp);
 				BYTE* pBits = FreeImage_GetBits(p32Bmp);
 
-				return UpdateBuffer(level, pBits, w, h, p);
+				 bOK = UpdateBuffer(level, pBits, w, h, p);
 			}
 		}
 	}
-	return false;
+	return bOK;
 }
 
 bool CTestClientDoc::UpdateBuffer( UINT level, const BYTE* pBits, int w, int h, int pitch )
 {
+	bool bOK = false;
 	if(m_SrcImages.size() <= level)
 	{
 		m_SrcImages.resize(level + 1);
 	}
-	IVideoBuffer*& pBuf = m_SrcImages[level];
+	CVideoBuffer*& pBuf = m_SrcImages[level];
 	if(pBuf)
 	{
 		const VideoBufferInfo& bi = pBuf->GetVideoBufferInfo();
@@ -154,27 +162,35 @@ bool CTestClientDoc::UpdateBuffer( UINT level, const BYTE* pBits, int w, int h, 
 		const BYTE* ps = pBits;
 		for(int i = 0; i < h; ++i)
 		{
-			memcpy(pd, ps, vbpitch);
+			int copysize = min(pitch, vbpitch);
+			int zerosize = max(pitch, vbpitch) - copysize;
+			memcpy(pd, ps, copysize);
+			memset(pd + copysize, 0, zerosize);
 			pd += vbpitch;
 			ps += pitch;
 		}
 		pBuf->UnLockBuffer();
-		return true;
+		bOK = true;
 	}
-	return false;
+	return bOK;
 }
 
 bool CTestClientDoc::InitEffect(HWND hDeviceWnd, int nBackBufferWidth, int nBackBufferHeight)
 {
-	bool bOK = InitEffectModule(hDeviceWnd, nBackBufferWidth, nBackBufferHeight);
-	if(bOK)
-		m_pBufferMgr = CreateVideoBufferManager();
+	m_pRenderEngine = InitEffectModule(hDeviceWnd, nBackBufferWidth, nBackBufferHeight);
+	if(m_pRenderEngine)
+		m_pBufferMgr = CreateVideoBufferManager(m_pRenderEngine);
+	if(m_pBufferMgr)
+		SetBackBufferSize(nBackBufferWidth, nBackBufferHeight);
 	return !!m_pBufferMgr;
 }
 
 void CTestClientDoc::UninitEffect()
 {
 	ReleaseVideoBufferManager(m_pBufferMgr);
+	m_pBufferMgr = NULL;
+	UninitEffectModule(m_pRenderEngine);
+	m_pRenderEngine = NULL;
 }
 
 bool CTestClientDoc::SetBackBufferSize( UINT w, UINT h )
@@ -189,6 +205,8 @@ bool CTestClientDoc::SetBackBufferSize( UINT w, UINT h )
 		m_DestVideoBufferInfo.nWidth = w;
 		m_DestVideoBufferInfo.nHeight = h;
 		m_pDestImage = m_pBufferMgr->CreateVideoBuffer(m_DestVideoBufferInfo);
+
+		UpdateAllViews(NULL);
 	}
 	return !!m_pDestImage;
 }
@@ -203,4 +221,61 @@ void CTestClientDoc::OnCloseDocument()
 	UninitEffect();
 
 	CDocument::OnCloseDocument();
+}
+
+bool CTestClientDoc::Render()
+{
+	bool bOK = false;
+	if(m_pRenderEngine)
+	{
+		if(m_pDestImage)
+		{
+			if(!m_SrcImages.empty())
+			{
+				if(m_SrcImages[0])
+				{
+					CVideoBuffer* pSrc = m_SrcImages[0];
+					CVideoBuffer* pDest = m_pDestImage;
+					const VideoBufferInfo& destBufferInfo = pDest->GetVideoBufferInfo();
+					const VideoBufferInfo& srcBufferInfo = pSrc->GetVideoBufferInfo();
+					//CopyBuffer(m_pDestImage, m_SrcImages[0]);
+
+					CNegativeRender eff;
+					if(eff.Init(m_pRenderEngine->GetDevice(), m_pRenderEngine->GetResourceManager()))
+					{
+						NegativeFxParam param;
+						bOK = eff.Render(pSrc, pDest, &param);
+					}
+				}
+			}
+		}
+	}
+	return bOK;
+}
+
+bool CTestClientDoc::CopyBuffer( CVideoBuffer* pDest, CVideoBuffer* pSrc )
+{
+	if(pSrc && pDest)
+	{
+		const VideoBufferInfo& destBufferInfo = pDest->GetVideoBufferInfo();
+		const VideoBufferInfo& srcBufferInfo = pSrc->GetVideoBufferInfo();
+		int pitch = 0;
+		const BYTE* ps = (const BYTE*)pSrc->LockBuffer(pitch);
+		int vbpitch = 0;
+		BYTE* pd = (BYTE*)pDest->LockBuffer(vbpitch);
+		int h = min(destBufferInfo.nHeight, srcBufferInfo.nHeight);
+		for(int i = 0; i < h; ++i)
+		{
+			int copysize = min(pitch, vbpitch);
+			int zerosize = max(pitch, vbpitch) - copysize;
+			memcpy(pd, ps, copysize);
+			memset(pd + copysize, 0, zerosize);
+			pd += vbpitch;
+			ps += pitch;
+		}
+		pSrc->UnLockBuffer();
+		pDest->UnLockBuffer();
+		return true;
+	}
+	return false;
 }

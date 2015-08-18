@@ -3,6 +3,8 @@
 //
 #include <vector>
 #include "../VideoBuffer.h"
+#include "../D3D9Render/RenderEngine.h"
+#include "../D3D9Render/ResourceManager.h"
 
 #pragma once
 
@@ -16,6 +18,8 @@ protected: // 仅从序列化创建
 // 属性
 public:
 	void SetImage(UINT level, LPCTSTR pszFilename);
+	bool SetBackBufferSize(UINT w, UINT h);
+	bool SetEffect(LPCTSTR pszEffectName);
 
 // 操作
 public:
@@ -23,7 +27,8 @@ public:
 	void UninitEffect();
 	bool UpdateBuffer(UINT level);
 	bool UpdateBuffer(UINT level, const BYTE* pBits, int w, int h, int pitch);
-	bool SetBackBufferSize(UINT w, UINT h);
+	bool Render();
+	bool CopyBuffer(CVideoBuffer* pDest, CVideoBuffer* pSrc);
 
 // 重写
 public:
@@ -39,11 +44,12 @@ public:
 #endif
 
 protected:
-	std::vector<CString> m_ImageFiles;
-	std::vector<IVideoBuffer*> m_SrcImages;
-	IVideoBuffer* m_pDestImage;
+	CRenderEngine* m_pRenderEngine;	
+	CVideoBufferManager* m_pBufferMgr;
+	CVideoBuffer* m_pDestImage;
 
-	IVideoBufferManager* m_pBufferMgr;
+	std::vector<CString> m_ImageFiles;
+	std::vector<CVideoBuffer*> m_SrcImages;
 
 	VideoBufferInfo m_DestVideoBufferInfo;
 

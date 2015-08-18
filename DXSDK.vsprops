@@ -10,6 +10,6 @@
 	/>
 	<Tool
 		Name="VCLinkerTool"
-		AdditionalLibraryDirectories="../DXSDK/Lib"
+		AdditionalLibraryDirectories="../DXSDK/Lib/x86"
 	/>
 </VisualStudioPropertySheet>
