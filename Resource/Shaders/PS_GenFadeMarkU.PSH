@@ -1,0 +1,8 @@
+//生成滚屏用的MarskU
+float2     vParmas      :register (c0);
+float4 main( float2 texUV: TEXCOORD0 ): COLOR
+{
+  float x1 = smoothstep(0.0,vParmas.x,texUV.x);
+  float x2 = 1.0 - smoothstep(vParmas.y,1.0,texUV.x);             
+  return float4(0,0,0,x1*x2);
+}

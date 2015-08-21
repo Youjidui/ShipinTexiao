@@ -1,0 +1,23 @@
+sampler texSamples[6] :register(s0);//在下面的到上
+float4  cMode         :register(c0);
+float4  cAlphas       :register(c1);
+float4  cMAlpha       :register(c2);
+ 
+struct P_OUT
+{
+   float4 oColor : COLOR0;//Color
+};
+
+P_OUT main( float2 texUV0: TEXCOORD0 )
+{     
+   P_OUT ret;   
+   float4  sColor0 = tex2D( texSamples[0], texUV0 )-cMode;
+   float4  sColor1 = tex2D( texSamples[1], texUV0 )-cMode;
+   float4  sColor2 = tex2D( texSamples[2], texUV0 )-cMode;
+
+   float4 mAlpha   =  cMAlpha[1];              
+   float4 mColor   =  sColor0 + ( sColor1-sColor0 )*mAlpha;   
+   mAlpha          =  cMAlpha[2];               
+   ret.oColor      =  mColor + ( sColor2-mColor )*mAlpha+cMode;      
+   return ret;
+}

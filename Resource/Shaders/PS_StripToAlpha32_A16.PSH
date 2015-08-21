@@ -1,0 +1,24 @@
+sampler    texSource0    :register (s0);
+float4     vSizeTex      :register (c0);//xy为纹理的物理宽高zw:z:虚拟宽 w:0.5/物理宽
+void main( float2 texUV  : TEXCOORD0,
+	out float4 oColor:COLOR0,
+	out float  oDepth:DEPTH )
+{
+  
+  float4 retColor = 1.0;
+  float2 fUV= texUV; 
+  int x  = texUV.x * vSizeTex.x -1.0;    
+  fUV.x= texUV.x/2.0;   
+  float4 sAlpha  = tex2D( texSource0, fUV );    
+  if(x%2)
+  { 
+    retColor.xyzw   = sAlpha.wwww;
+  }
+  else
+  {
+    retColor.xyzw   = sAlpha.xxxx;
+  } 
+  retColor.a   = sAlpha.x;
+  oColor = retColor;
+  oDepth = 0.5f;
+}

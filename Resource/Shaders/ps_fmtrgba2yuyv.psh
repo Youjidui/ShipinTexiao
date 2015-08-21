@@ -1,0 +1,50 @@
+//!!!!!!!!!!!!!!!!!!!!!
+//将YUVA 纹理拼接成 YUYV伪１６纹理
+sampler2D  Texture_YV     :register (s0);
+float4     vSizeTexture   :register (c0);
+float4     vMisc		  :register (c1);
+
+#define CGBLEND	vMisc.x
+#define GALPHA	vMisc.y
+//x:纹理宽  
+//y:1/vSize.x z:0.5/vSize.x w:2/vSize.x
+#include "ColorSpaceFunc.INC"
+float4 main( float2 texUV0: TEXCOORD0): COLOR
+{	
+	float4 fColor1=tex2D(Texture_YV,texUV0);	
+	float4 fColor2=tex2D(Texture_YV,float2(texUV0.x+vSizeTexture.x,texUV0.y));
+	if(CGBLEND)
+	{
+		fColor1.a=sign(fColor1.a);
+		fColor2.a=sign(fColor2.a);
+//		if(any(fColor1.a))		
+//			fColor1.rgb/=fColor1.a;
+//		if(any(fColor2.a))		
+//			fColor2.rgb/=fColor2.a;
+	}
+	fColor1.a*=GALPHA;
+	fColor2.a*=GALPHA;
+	fColor1.rgb*=fColor1.a;
+	fColor2.rgb*=fColor2.a;
+	
+	float3 YUV1 = ColorSpace_RGBToYUV(fColor1.rgb);
+	float3 YUV2 = ColorSpace_RGBToYUV(fColor2.rgb);  
+	//float2 UV=lerp(YUV1.gb,YUV2.gb,0.5f);
+	float2 UV = YUV1.gb;
+	return float4(YUV2.r,UV.r,YUV1.r,UV.g)+CS_YUYV_OFFSET;
+	//return float4(1.0f,0.5f,1.0f,0.5f);
+	
+//  float2 uv_YU = texUV0;  float2 uv_YV = texUV0; 
+//  int  x  = floor(vSizeTexture.x * texUV0.x);  
+//  uv_YU.x   =  x * vSizeTexture.w + vSizeTexture.z;
+//  uv_YV.x   = x * vSizeTexture.w + vSizeTexture.z+vSizeTexture.y;    
+//  float t;
+//  float4 s1 = tex2D( Texture_YV,uv_YU );
+//  float4 s2 = tex2D( Texture_YV,uv_YV );
+//  float3 YU = ColorSpace_RGBToYUV(s1.rgb);
+//  float3 YV = ColorSpace_RGBToYUV(s2.rgb);  
+//  YU.xyz    += float3(0.0, 0.5,0.5);
+//  YV.xyz    += float3(0.0, 0.5,0.5);   
+//  return float4(YV.x,YU.y,YU.x,YU.z);  
+  
+}

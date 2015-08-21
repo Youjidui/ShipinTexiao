@@ -1,0 +1,23 @@
+sampler2D  Texture0     :register (s0);
+float      OffsetY      :register (c0);   // Buffer在Target上的Y坐标 - Buffer在Source上的Y坐标
+float2     TextureSize  :register (c1); //纹理的大小
+struct P_OUT
+{
+   float4 oColor0: COLOR0;//奇场
+   float4 oColor1: COLOR1;//偶场
+};
+
+P_OUT main( float2 texUV: TEXCOORD0 )
+{
+  P_OUT oRet;
+  float DivV = 1.0/TextureSize.y ;
+  float4 retColor  = tex2D( Texture0,texUV );     
+  int     iy       = int( texUV.y * TextureSize.y ) + OffsetY;    
+  oRet.oColor0     = oRet.oColor1 = float4(0.0,0.0,0.0,0.0);       
+  if( iy % 2 == 0 )
+      oRet.oColor0 = retColor; //偶数行，奇场信息
+   else  
+      oRet.oColor1 = retColor; //奇数行，偶场信息  
+      
+  return oRet;
+}

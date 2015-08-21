@@ -1,0 +1,14 @@
+sampler2D  Texture_YV     :register (s0);
+float4     vSizeTexture   :register (c0);
+//x:ÎÆÀí¿í  
+//y:1/vSize.x z:0.5/vSize.x w:2/vSize.x
+float4 main( float2 texUV0: TEXCOORD0 ): COLOR
+{ 
+  float2 uv_YU = texUV0;  float2 uv_YV = texUV0; 
+  int  x  = floor(vSizeTexture.x * texUV0.x);  
+  uv_YU.x   =  x * vSizeTexture.w + vSizeTexture.z;
+  uv_YV.x   = x * vSizeTexture.w  + vSizeTexture.z+vSizeTexture.y;      
+  float4 s1 = tex2D( Texture_YV,uv_YU );
+  float4 s2 = tex2D( Texture_YV,uv_YV );   
+  return  float4( s2.a,s2.a,s1.a,s1.a );    
+}

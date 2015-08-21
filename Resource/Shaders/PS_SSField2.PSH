@@ -1,0 +1,38 @@
+sampler2D  Texture0     :register (s0);
+// x:  SourceBuffer第一行的Y坐标
+// y:  最终位置Y的奇偶，0－偶数，1－奇数
+// z:  奇偶场选择 0- 要奇场信息 1－ 要偶场信息
+float3     Argus         :register (c0);   
+float2     TextureSize   :register (c1); //纹理的大小
+float4 main( float2 texUV: TEXCOORD0 ):COLOR
+{
+    float DivV       = 1.0/TextureSize.y ;  
+    int   iy         = texUV.y * TextureSize.y - Argus.x;
+    int   fetchy     = 0;    
+   if(Argus.y == 0)
+   {
+     if(Argus.z == 0)//最终位置是偶数，源Buffer的奇偶关系不变
+     {
+       fetchy = 2*iy;
+     }
+     else
+     {
+       fetchy = 2*iy +1;
+     }
+   }
+   else // Argus.y == 1
+   {
+       if(Argus.z == 0) 
+     {
+       fetchy = 2*iy +1;
+     }
+     else
+     {
+        fetchy = 2*iy;
+     }
+   }   
+   float2  fetchUV  = texUV;   
+   fetchUV.y  = (fetchy + Argus.x) * DivV + 0.5/ TextureSize.y;
+   float4 srcColor  = tex2D( Texture0,fetchUV );   
+   return srcColor;
+}

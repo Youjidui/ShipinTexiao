@@ -1,0 +1,66 @@
+
+/*
+//!!!!!!!!!!!!!!!!!!!!
+//!将伪1６的YUYV的纹理转换成32位的RGBX
+sampler    tx_YUYV       :register (s0);
+float4     vSizeTex      :register (c0);//x纹理的物理宽,Y纹理的左上角U值
+float      fAlpha        :register (c1); 
+#include   "ColorSpaceFunc.INC"
+float4 main( float2 texUV: TEXCOORD0 ): COLOR
+{    
+  float2 fUV= texUV; 
+  fUV.x/=2.0f;
+  
+  int x  = fUV.x * vSizeTex.x;    
+  //fUV.x  = (texUV.x - vSizeTex.y)/2.0 + vSizeTex.y;   
+  
+  float4 sColor_YUYV  = tex2D( tx_YUYV, fUV ); 
+  float4 retColor   = 1.0;
+  
+  if(x%2)
+  {    
+    retColor.xyz = float3(sColor_YUYV.r,sColor_YUYV.g,sColor_YUYV.a);       
+ }
+ else
+  {
+    retColor.xyz = float3(sColor_YUYV.b,sColor_YUYV.g,sColor_YUYV.a);        
+ }  
+  float3 iColor = retColor.xyz - float3(0,0.5,0.5);
+  
+  retColor.xyz = ColorSpace_YUVToRGB(iColor);  
+  
+  
+  return float4(retColor.xyz,fAlpha);
+}
+*/
+//!!!!!!!!!!!!!!!!!!!!
+//!将伪1６的YUYV的纹理转换成32位的RGBX
+sampler    tx_YUYV       :register (s0);
+float4     vSizeTex      :register (c0);//x纹理的物理宽,Y纹理的左上角U值
+float      fAlpha        :register (c1); 
+#include   "ColorSpaceFunc.INC"
+float4 main( float2 texUV: TEXCOORD0 ): COLOR
+{
+    
+  float2 fUV= texUV; 
+  int x  = texUV.x * vSizeTex.x;    
+  fUV.x  = (texUV.x - vSizeTex.y)/2.0 + vSizeTex.y;   
+  float4 sColor_YUYV  = tex2D( tx_YUYV, fUV ); 
+  float4 retColor   = 1.0;
+  //if(x%2)
+  //{
+    
+    //retColor.xyz = float3(sColor_YUYV.b,sColor_YUYV.g,sColor_YUYV.a);   
+ ///}
+  //else
+  //{
+    retColor.xyz = float3(sColor_YUYV.r,sColor_YUYV.g,sColor_YUYV.a);    
+  //}
+  
+  float3 iColor = retColor.xyz - CS_YUVA_OFFSET;
+  
+  retColor.xyz = ColorSpace_YUVToRGB(iColor)*fAlpha;
+
+  
+  return float4(retColor.xyz,fAlpha);
+}

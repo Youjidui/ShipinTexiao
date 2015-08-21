@@ -1,0 +1,21 @@
+sampler texSamples[3] :register(s0);//在下面的到上
+float4  cMode         :register(c0);
+float4  cAlphaValue   :register(c1); 
+float4 main( float2 texUV0: TEXCOORD0, 
+             float2 texUV1: TEXCOORD1,
+             float2 texUV2: TEXCOORD2 ): COLOR
+{     
+   float4 retColor;   
+   float4  sColor0 = tex2D( texSamples[0], texUV0 )-cMode;
+    sColor0.a *= cAlphaValue[0];
+   float4  sColor1 = tex2D( texSamples[1], texUV1 )-cMode;
+    sColor1.a *= cAlphaValue[1];
+   float4  sColor2 = tex2D( texSamples[2], texUV2 )-cMode;
+   sColor2.a *= cAlphaValue[2];   
+   float4  tColor  = 0.0;
+   tColor.a        =  sColor0.a + sColor1.a- sColor0.a * sColor1.a;              
+   tColor.rgb      =  sColor0.rgb + ( sColor1.rgb-sColor0.rgb )*sColor1.a/tColor.a;  
+   retColor.a      =  tColor.a + sColor2.a- tColor.a * sColor2.a;
+   retColor.rgb    =  tColor.rgb + ( sColor2.rgb - tColor.rgb )*sColor2.a/retColor.a+cMode;      
+   return float4(retColor.rgb,1.0);
+}

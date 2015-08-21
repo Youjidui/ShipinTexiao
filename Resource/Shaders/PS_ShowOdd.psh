@@ -1,0 +1,13 @@
+//提取奇场信息(纹理偶数行)
+//texUV.v- 0.0~0.5
+sampler2D  Texture0     :register (s0);
+float2     TextureSize  :register (c0);
+float4 main( float2 texUV: TEXCOORD0 ): COLOR
+{
+  float2 fetchUV = texUV;float fv = 0.5f/TextureSize.y;
+  float  DivV = 1.0/TextureSize.y ;
+  int    iy = int( texUV.y * TextureSize.y );   
+  fetchUV.y = iy * 2.0  * DivV + fv;//取纹理偶数行
+  float4 sColor  = tex2D( Texture0,fetchUV );                
+  return sColor;
+}

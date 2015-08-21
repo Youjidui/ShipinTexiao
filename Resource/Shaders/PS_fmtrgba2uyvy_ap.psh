@@ -1,0 +1,30 @@
+//!!!!!!!!!!!!!!!!!!!!!!!!!
+//将YUVA 纹理拼接成 YUYV伪１６纹理
+sampler2D  Texture_YV     :register (s0);
+float4     vSizeTexture   :register (c0);
+//x:纹理宽  
+//y:1/vSize.x z:0.5/vSize.x w:2/vSize.x
+struct P_OUT
+{
+   float4 oColor0: COLOR0;//Color
+   float4 oColor1: COLOR1;//Alpha 
+};
+#include "colorspacefunc.inc"
+P_OUT main( float2 texUV0: TEXCOORD0 )
+{
+  P_OUT retColor; 
+  float2 uv_YU = texUV0;  float2 uv_YV = texUV0; 
+  int  x  = floor(vSizeTexture.x * texUV0.x);    
+  uv_YU.x   =  x * vSizeTexture.w + vSizeTexture.z;
+  uv_YV.x   = x * vSizeTexture.w + vSizeTexture.z+vSizeTexture.y;    
+  float t;
+  float4 s1 = tex2D( Texture_YV,uv_YU );
+  float4 s2 = tex2D( Texture_YV,uv_YV );  
+  float3 YU = mul( matRGBA2YUVA, s1); 
+  float3 YV = mul( matRGBA2YUVA, s2); 
+  YU.xyz    += float3(0.062, 0.5,0.5);
+  YV.xyz    += float3(0.062, 0.5,0.5);    
+  retColor.oColor0 =  float4(YU.y,YV.x,YU.z,YU.x); 
+  retColor.oColor1 =  float4( s1.a,s1.a,s2.a,s2.a);  
+  return retColor; 
+}

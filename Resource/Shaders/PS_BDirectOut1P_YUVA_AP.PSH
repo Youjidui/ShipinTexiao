@@ -1,0 +1,15 @@
+#include "ColorSpaceFunc.INC"
+
+sampler2D g_texSource:register(s0);
+sampler2D g_texAlpha :register(s1);
+float     g_alpha    :register(c0);
+float4 main( float2 texUV0  : TEXCOORD0,
+             float2 texUV1  : TEXCOORD1 ): COLOR
+{
+  const float3 cMode = CS_YUVA_OFFSET;
+  float4 sColor = tex2D( g_texSource,texUV0 );
+  float4 sAlpha = tex2D( g_texAlpha ,texUV1 ) * g_alpha;  
+  sColor.a     = sAlpha.a;
+  sColor.rgb   = sColor.rgb * sColor.a - sColor.a * cMode;
+  return sColor;
+}

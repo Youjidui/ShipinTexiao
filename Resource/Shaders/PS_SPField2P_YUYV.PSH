@@ -1,0 +1,93 @@
+
+sampler2D  Texture_YV     :register (s0);
+float4     vSizeTexture   :register (c0);
+float4     vMisc		  :register (c1);
+
+#define CGBLEND			vMisc.x
+#define PARTICLEBLEND	vMisc.y
+#define GALPHA			vMisc.z
+
+#include "ColorSpaceFunc.INC"
+void main( float2 texUV0: TEXCOORD0,
+		   out float4 oColor:COLOR0,
+		   out float4 oAlpha:COLOR1)
+{	
+	float4 fColor1=tex2D(Texture_YV,texUV0);	
+	float4 fColor2=tex2D(Texture_YV,float2(texUV0.x+vSizeTexture.x,texUV0.y));
+	if(CGBLEND)
+	{
+		if(any(fColor1.a))		
+			fColor1.rgb/=fColor1.a;
+		if(any(fColor2.a))		
+			fColor2.rgb/=fColor2.a;
+	}
+	fColor1.a*=GALPHA;
+	fColor2.a*=GALPHA;
+	if(PARTICLEBLEND)
+	{
+		if(any(fColor1.rgb)&&!any(fColor1.a))
+			fColor1.a=1.0f;
+		if(any(fColor2.rgb)&&!any(fColor2.a))
+			fColor2.a=1.0f;
+	}
+	
+	float3 YUV1 = ColorSpace_RGBToYUV(fColor1.rgb);
+	float3 YUV2 = ColorSpace_RGBToYUV(fColor2.rgb);  
+	float2 UV= YUV1.gb;
+	
+	oColor = float4(YUV2.r,UV.r,YUV1.r,UV.g)+CS_YUYV_OFFSET;
+	//oColor=float4(1.0f,0.5f,1.0f,0.5f);
+	oAlpha = float4(fColor2.a,fColor2.a,fColor1.a,fColor1.a);
+	//return float4(1.0f,0.5f,1.0f,0.5f); 
+}
+
+/*
+// x:  SourceBuffer第一行的Y坐标
+// y:  最终位置Y的奇偶，0－偶数，1－奇数
+// z:  奇偶场选择 0- 要奇场信息 1－ 要偶场信息
+// 1.0 /texture height
+float4     Argus         :register (c0);   
+float4     TexSize       :register (c1); //纹理的大小
+float4     auxValues     :register (c2);
+// x:0.5/texturewidth
+// y:0.5/texturheight
+// z:2.0 /texturewidth
+// w:1.0 /texturewidth
+sampler2D  Texture_S     :register (s0); 
+struct P_OUT
+{
+   float4 oColor : COLOR0;//Color
+   float4 oAlpha : COLOR1;//Alpha
+};
+#include "ColorSpaceFunc.INC"
+P_OUT main( float2 texUV: TEXCOORD0 ):COLOR
+{
+    P_OUT retColor;  
+    const float4 coloff =  float4(0.0,0.5,0.0,0.5);//YUYV
+    float DivV       = Argus.w;  
+    int   iy         = texUV.y * TexSize.y - Argus.x;
+    int   fetchy     = 0;     
+     if(Argus.z == 0) 
+     {
+       fetchy = 2*iy;
+     }
+     else
+     {
+       fetchy = 2*iy +1;
+     }   
+   float2  uv_YU,uv_YV;            
+   int  x    = TexSize.x* (texUV.x - TexSize.z );  
+   //计算出正确的U坐标
+   uv_YU.x   =  x * auxValues.z  + auxValues.x + TexSize.z;
+   uv_YV.x   =  x * auxValues.z  + auxValues.w + auxValues.x+ TexSize.z;   
+   //计算出正确的V坐标
+   uv_YV.y   = uv_YU.y  = (fetchy + Argus.x) / TexSize.y + auxValues.y; 
+   
+   float4 s1  = tex2D( Texture_S,uv_YU );
+   float4 s2  = tex2D( Texture_S,uv_YV );  
+   
+   ColorSpace_RGBAToYUYU_AAAA( s1, s2, retColor.oColor, retColor.oAlpha ); 
+   retColor.oColor +=  float4(0.0f,0.5f,0.0f,0.5f);   
+   return retColor;
+}
+*/

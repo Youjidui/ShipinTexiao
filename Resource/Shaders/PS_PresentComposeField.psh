@@ -1,0 +1,19 @@
+//!!!!!!!!!!!!!!!!!!!!
+//两场合一场
+sampler    tx_Odd       :register (s0);
+sampler    tx_Even      :register (s1);
+
+float4     vSizeTex      :register (c0);
+
+float4 main( float2 tex: TEXCOORD0): COLOR
+{    
+  float y  = frac(tex.y*vSizeTex.y-vSizeTex.z+0.1f);
+  
+  float4 retColor  = 0;
+  if(y>0.5f)
+	retColor  = tex2D( tx_Even,float2(tex.x,tex.y-vSizeTex.w) ); 
+  else
+	retColor  = tex2D( tx_Odd, tex ); 
+  
+  return retColor;
+}

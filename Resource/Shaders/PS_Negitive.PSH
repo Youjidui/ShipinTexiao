@@ -1,0 +1,20 @@
+sampler2D g_texSource;
+float2 vSrcTextureSize:register(c0);
+
+float2 vBlur[] =
+{
+	-1,0,
+	1,0,
+	0,-1,
+	0,1,
+};
+float4 main( float2 texUV  : TEXCOORD0  ): COLOR
+{
+  float4 sColor = (1.0f-tex2D( g_texSource,texUV ))*0.2f;  
+  for(int i = 0;i < 4;i ++)
+  {
+	sColor +=  (1.0f-tex2D( g_texSource,texUV +vBlur[i]*vSrcTextureSize ))*0.2f;  
+  }
+  
+  return sColor;
+}

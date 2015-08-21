@@ -1,0 +1,43 @@
+sampler2D g_texSource : register(s0);
+
+float3 Argus         : register(c0);
+float2 TextureSize   : register(c10);
+float  g_needStrip   : register(c20);
+
+float4 main( float2 texUV : TEXCOORD0 ) : COLOR
+{
+    float2 fetchUV = texUV;
+    
+    // splite field if needed
+    if ( (bool)g_needStrip )
+    {
+        float DivV       = 1.0/TextureSize.y ;  
+        int   iy         = texUV.y * TextureSize.y - Argus.x;
+        int   fetchy     = 0;
+        if(Argus.y == 0)
+        {
+            if(Argus.z == 0)//最终位置是偶数，源Buffer的奇偶关系不变
+            {
+            fetchy = 2*iy;
+            }
+            else
+            {
+            fetchy = 2*iy +1;
+            }
+        }
+        else // arg.y == 1
+        {
+            if(Argus.z == 0) 
+            {
+            fetchy = 2*iy +1;
+            }
+            else
+            {
+                fetchy = 2*iy;
+            }
+        }
+        fetchUV.y  = (fetchy + Argus.x) * DivV + 0.5/ TextureSize.y;
+   }
+
+	return tex2D( g_texSource, fetchUV );
+}

@@ -1,0 +1,44 @@
+// 8个文理
+sampler2D g_texSource[8] : register(s0);
+
+float3 Argus[8]         : register(c0);
+float2 TextureSize[8]   : register(c10);
+
+struct VS_OUTPUT
+{
+    float2 UV0        : TEXCOORD0;
+    float2 UV1        : TEXCOORD1;
+    float2 UV2        : TEXCOORD2;
+    float2 UV3        : TEXCOORD3;
+    float2 UV4        : TEXCOORD4;
+    float2 UV5        : TEXCOORD5;
+    float2 UV6        : TEXCOORD6;
+    float2 UV7        : TEXCOORD7;
+};
+
+float4 main( VS_OUTPUT output ) : COLOR
+{
+    float2 fetchUV[8];
+	fetchUV[0] = output.UV0;
+	fetchUV[1] = output.UV1;
+	fetchUV[2] = output.UV2;
+	fetchUV[3] = output.UV3;
+	fetchUV[4] = output.UV4;
+	fetchUV[5] = output.UV5;
+	fetchUV[6] = output.UV6;
+	fetchUV[7] = output.UV7;
+    
+	// 每个纹理采样两两AlphaBlend
+    float4 color[8];
+    for(int i=0; i<8; i++)
+    {
+		if(fetchUV[i].x < 0.0f || fetchUV[i].x > 1.0f || fetchUV[i].y < 0.0f || fetchUV[i].y > 1.0f)
+			color[i] = 0.0f;
+		else
+			color[i] = tex2D( g_texSource[i], fetchUV[i] );
+	}
+	float4 retColor = color[0];
+	for(int i=1; i<8; i++)
+		retColor = color[i] * color[i].a + retColor * (1.0f - color[i].a); // src*src.a+dst*(1-src.a)
+    return retColor;
+}

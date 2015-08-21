@@ -1,0 +1,14 @@
+sampler2D g_texSource[8] : register(s0);
+
+float3 Argus[8]         : register(c0);
+float2 TextureSize[8]   : register(c10);
+
+float4 main( float2 texUV : TEXCOORD0,
+             int    index : TEXCOORD1 ) : COLOR
+{
+    float2 fetchUV = texUV; 
+    // sampling
+   float4 retColor =0;//tex2D( g_texSource[index], fetchUV );
+  
+    return retColor;
+}

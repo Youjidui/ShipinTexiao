@@ -1,0 +1,66 @@
+sampler2D  sColor     :register (s0); 
+float      RTWidth    :register (c0);
+float2    sTexle     :register (c1);
+float     vSTexture  :register (c2);//SReal texture w* 2 
+float     STexture   :register (c3);//SReal texture w
+float2    vLeftCord  :register (c4);
+void main(   in float2 texCoord: TEXCOORD0,
+             in float2 dvPos   : VPOS,
+             out float4 oColor0       : COLOR0 )
+{     
+  
+   
+   const  float3 wt = float3(0.2,0.6,0.2);
+   int    dPos    = dvPos.x-vLeftCord.x;
+   float  sScale  = STexture/RTWidth;
+   int    s0_X    = sScale* ( 2 * dPos );
+   int    s1_X    = sScale* ( 2 * dPos + 1 );
+   
+   float2  og_0   = float2((s0_X+0.5)/vSTexture,texCoord.y);
+   float2  og_1   = float2((s1_X+0.5)/vSTexture,texCoord.y);
+   float2  fc0    = (s0_X % 2) ?float2(1,0):float2(-1,0);     
+   float2  fc1    = (s1_X % 2) ?float2(1,0):float2(-1,0);        
+   float3  ref0   = 0,ref1 = 0;   
+   
+   for(int i = -1;i< 2; i++ )
+   {
+      float2  t0     = float2(0,i)     * sTexle   + og_0;
+      float2  t1     = float2(fc0.x,i) * sTexle   + og_0;        
+      float4  s0_0   = tex2D( sColor , t0);
+      float4  s0_1   = tex2D( sColor , t1);
+      float3  Col0,Col1,Col2,fCol;
+      if(s0_X % 2)
+      {
+        Col0 = s0_0.rga;
+        Col1 = s0_0.bga;
+        Col2 = s0_1.rga;     
+      }
+      else
+     {
+        Col0 = s0_1.bga;
+        Col1 = s0_0.rga;      
+        Col2 = s0_0.bga;     
+     }
+     ref0 += (Col0*wt.x+Col1*wt.y+Col2*wt.z)*wt[i+1];
+   
+     t0     =     float2(0,i) * sTexle + og_1;
+     t1     = float2(fc1.x,i) * sTexle + og_1;           
+     float4  s1_0   = tex2D( sColor , t0);
+     float4  s1_1   = tex2D( sColor , t1);
+   
+     if(s1_X % 2)
+     {
+        Col0 = s1_0.rga;
+        Col1 = s1_0.bga;
+        Col2 = s1_1.rga;     
+     }
+     else
+     {
+        Col0 = s1_1.bga;
+        Col1 = s1_0.rga;      
+        Col2 = s1_0.bga;     
+     }     
+     ref1 += (Col0*wt.x+Col1*wt.y+Col2*wt.z)*wt[i+1];
+   }        
+   oColor0   = float4(ref1.r,ref0.g,ref0.r,ref0.b);     
+}

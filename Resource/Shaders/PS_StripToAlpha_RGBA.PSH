@@ -1,0 +1,11 @@
+sampler2D Texture0:register (s0);
+int choise        :register (c0);
+float4 main( float2 texUV: TEXCOORD0 ):COLOR
+{    
+   float4 srcColor  = tex2D( Texture0,texUV );    
+   float4 alpha[3];
+   alpha[0] = srcColor.rrrr;//R
+   alpha[1] = srcColor.gggg;//G
+   alpha[2] = srcColor.bbbb;//B
+   return alpha[choise-1];   
+}

@@ -1,0 +1,10 @@
+#include "ColorSpaceFunc.INC"
+
+sampler2D  Texture0      :register (s0);
+float4 main( float2 texUVCol: TEXCOORD0 ):COLOR
+{    
+   const float4 coloff =  CS_YUVA_OFFSET;//YUVA
+   float4 srcColor  = tex2D( Texture0,texUVCol ) - coloff;    
+   srcColor.rgb =  srcColor.rbg * srcColor.a + coloff.rgb;
+   return float4(srcColor.rgb,1.0);   
+}

@@ -1,0 +1,31 @@
+//还未改
+sampler2D  Texture0     :register (s0);
+float2     ImageSize    :register (c0);
+float2     TextureSize  :register (c1);
+int2       vLineArgs    :register (c2);
+//vLineArgs.x ( 0.0 偶数第一行,1.0 奇数第一行 )
+//vLineArgs.y 上下移动多少行
+float4 main( float2 texUV: TEXCOORD0): COLOR
+{
+  float2 fetchUV = texUV; 
+  float2 fUV = 0.5f / TextureSize;  float DivV = 1.0/TextureSize.y ;
+  int    iy = int( texUV.y * TextureSize.y ) -vLineArgs.y;
+  float  halfImageV = ImageSize.y/TextureSize.y*0.5;
+    
+  float4 sColor = float4(0.0,0.0,0.0,1.0);
+  //if( vLineArgs.x && iy == (ImageSize.y-1) )  
+  //{
+  //   vLineArgs.x = 0;
+  //}   
+  if( (iy + vLineArgs.x) % 2 )//奇行
+  {
+    fetchUV.y = iy/2 * DivV+fUV.y;      
+  }
+  else //if( iy < ImageSize.y && ((iy + vLineArgs.x) % 2==0 ))//偶行
+  {
+    fetchUV.y = (iy/2+vLineArgs.x) * DivV+ halfImageV+fUV.y;     
+  }
+   sColor    = tex2D( Texture0,fetchUV );
+        
+  return sColor;//float4(sColor.rgb,1.0);
+}
