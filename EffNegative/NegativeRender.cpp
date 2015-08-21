@@ -31,7 +31,7 @@ bool CNegativeRender::Init( LPDIRECT3DDEVICE9 pDevice, CResourceManager* pResMan
 	m_pQuadMesh = m_pResMan->CreateQuadMesh(pDevice);
 	//m_pProcessMaskEffect = m_pResMan->CreateEffect(_T("GProcessMask.fxo"));
 	//m_pDirectOutEffect = m_pResMan->CreateEffect(_T("fx_GDirectOut.fxo"));
-	m_pNegativeEffect = pResMan->CreateEffect(pDevice, _T("fx_GNegative.fxo"));
+	m_pNegativeEffect = pResMan->CreateEffect(pDevice, _T("NewEffects/fx_GNegative.fx"));
 	return true;
 }
 
@@ -62,7 +62,7 @@ bool CNegativeRender::Render( CVideoBuffer* pSrc, CVideoBuffer* pDest, NegativeF
 					m_pNegativeEffect->SetMatrix("g_matTexture",&matImage);
 					m_pNegativeEffect->SetTechnique("Picture");	
 
-					UINT cPass,uPass;
+					UINT cPass = 0,uPass = 0;
 					switch(srcBuffInfo.format)
 					{
 					case FMT_RGBA32:uPass = 0;break;
@@ -72,13 +72,17 @@ bool CNegativeRender::Render( CVideoBuffer* pSrc, CVideoBuffer* pDest, NegativeF
 
 					if ( SUCCEEDED(m_pDevice->BeginScene()) )
 					{
-						m_pNegativeEffect->Begin(&cPass,0);
+						m_pNegativeEffect->Begin(&cPass, 0);
 						m_pNegativeEffect->BeginPass(uPass);
 						m_pQuadMesh->DrawMeshFx();
 						m_pNegativeEffect->EndPass();
 						m_pNegativeEffect->End();
 						m_pDevice->EndScene();
 					}
+				}
+				else
+				{
+					//error info
 				}
 			}
 		}

@@ -28,6 +28,7 @@ public:
 	bool UpdateBuffer(UINT level);
 	bool UpdateBuffer(UINT level, const BYTE* pBits, int w, int h, int pitch);
 	bool Render();
+	bool Draw(HWND hWnd);
 	bool CopyBuffer(CVideoBuffer* pDest, CVideoBuffer* pSrc);
 
 // ÖØÐ´

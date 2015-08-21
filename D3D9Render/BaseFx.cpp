@@ -17,67 +17,81 @@ CBaseFx::~CBaseFx()
 }
 HRESULT CBaseFx::Create ( LPDIRECT3DDEVICE9 pDevice,const TCHAR* szFxName)
 {
-
 	m_pDevice		  = pDevice;
-
-
 	m_strResID          = szFxName;
 
 	//wcscpy(m_szShaderFile,szFxName);
 	HRESULT hr = S_OK;
 
+	TCHAR szExeFilePath[MAX_PATH];
+	GetModuleFileName(NULL, szExeFilePath, MAX_PATH);
+	LPTSTR p = szExeFilePath + lstrlen(szExeFilePath) - 1;
+	while(*p != '/' && *p != '\\') p--;
+	p++;
+	lstrcpy(p, szFxName);
+
 	LPD3DXEFFECT pEffect = NULL;
 	ID3DXBuffer* pBuffer = NULL;	
-	HANDLE hFile = INVALID_HANDLE_VALUE;  
-	for(int i = 0;i < 3;i ++)
+	//HANDLE hFile = INVALID_HANDLE_VALUE;
+	//for(int i = 0;i < 3;i ++)
 	{
 		try
-		{		
-			hFile = CreateFile( szFxName, 
-				GENERIC_READ,              // open for reading 
-				FILE_SHARE_READ,
-				NULL,                      // no security 
-				OPEN_EXISTING,
-				FILE_ATTRIBUTE_NORMAL,     // normal file 
-				NULL );                     // no attr. template 
-
-			if (hFile == INVALID_HANDLE_VALUE) 
-			{ 
-				return E_FAIL;//Shader不存在
-			} 
-			DWORD dwFileSize = GetFileSize( hFile, NULL);
-			static byte sBuffer[500 * 1024]; 
-			DWORD dwReaded;
-			ReadFile(hFile, sBuffer, dwFileSize, &dwReaded,NULL);   
-			sBuffer[dwReaded + 1] = L'\0';
-			CloseHandle(hFile);
-
-			if(FAILED(hr = D3DXCreateEffect(m_pDevice,sBuffer,dwReaded,
-				NULL,
-				NULL,
-				/*D3DXSHADER_FORCE_PS_SOFTWARE_NOOPT|D3DXSHADER_FORCE_VS_SOFTWARE_NOOPT*/
-				/*D3DXFX_NOT_CLONEABLE*/(1 << 11),
-				NULL,
-				&pEffect,&pBuffer)))
+		{
+			hr = D3DXCreateEffectFromFile(pDevice, szExeFilePath, NULL, NULL, 0, NULL, &pEffect, &pBuffer);
+			if(SUCCEEDED(hr))
 			{
-				/*
-				if(pBuffer)
-				{
-					TCHAR buffer[1024];
-					LPVOID p=pBuffer->GetBufferPointer();
-					swprintf(buffer,L"%s",(LPTSTR)p);
-					SAFE_RELEASE(pBuffer);
-				}
-				*/
-				assert(0);
+				m_pEffect = pEffect;
 			}
 			else
 			{
-				m_pEffect = pEffect;
-				//SetYUVA2RGBAMatrix();
+				pBuffer;
+			}
+			//hFile = CreateFile( szExeFilePath, 
+			//	GENERIC_READ,              // open for reading 
+			//	FILE_SHARE_READ,
+			//	NULL,                      // no security 
+			//	OPEN_EXISTING,
+			//	FILE_ATTRIBUTE_NORMAL,     // normal file 
+			//	NULL );                     // no attr. template 
 
-				return hr;
-			}						
+			//if (hFile == INVALID_HANDLE_VALUE) 
+			//{ 
+			//	return E_FAIL;//Shader不存在
+			//} 
+			//DWORD dwFileSize = GetFileSize( hFile, NULL);
+			//static byte sBuffer[500 * 1024]; 
+			//DWORD dwReaded;
+			//ReadFile(hFile, sBuffer, dwFileSize, &dwReaded,NULL);   
+			//sBuffer[dwReaded + 1] = L'\0';
+			//CloseHandle(hFile);
+
+			//if(FAILED(hr = D3DXCreateEffect(m_pDevice,sBuffer,dwReaded,
+			//	NULL,
+			//	NULL,
+			//	/*D3DXSHADER_FORCE_PS_SOFTWARE_NOOPT|D3DXSHADER_FORCE_VS_SOFTWARE_NOOPT*/
+			//	/*D3DXFX_NOT_CLONEABLE*/(1 << 11),
+			//	NULL,
+			//	&pEffect,&pBuffer)))
+			//{
+			//	/*
+			//	if(pBuffer)
+			//	{
+			//		TCHAR buffer[1024];
+			//		LPVOID p=pBuffer->GetBufferPointer();
+			//		swprintf(buffer,L"%s",(LPTSTR)p);
+			//		SAFE_RELEASE(pBuffer);
+			//	}
+			//	*/
+			//	assert(0);
+			//}
+			//else
+			//{
+			//	m_pEffect = pEffect;
+			//	//SetYUVA2RGBAMatrix();
+
+			//	return hr;
+			//}	
+			SAFE_RELEASE(pBuffer);
 		}
 		catch (...)
 		{

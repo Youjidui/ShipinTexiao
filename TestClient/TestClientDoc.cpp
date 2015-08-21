@@ -116,7 +116,18 @@ bool CTestClientDoc::UpdateBuffer( UINT level )
 	bool bOK = false;
 	if(m_ImageFiles.size() > level)
 	{
-		FIBITMAP* pBmp = FreeImage_LoadU(FIF_BMP, CT2CW(m_ImageFiles[level]));
+		USES_CONVERSION;
+		LPCTSTR filename = CT2CW(m_ImageFiles[level]);
+		FREE_IMAGE_FORMAT fif = FIF_UNKNOWN;
+		fif = FreeImage_GetFileTypeU(filename, 0);
+		if(fif == FIF_UNKNOWN) 
+			fif = FreeImage_GetFIFFromFilenameU(filename);
+		if(fif == FIF_UNKNOWN)
+			return false;
+
+		FIBITMAP* pBmp = NULL;
+		if(FreeImage_FIFSupportsReading(fif))
+			pBmp = FreeImage_LoadU(fif, filename);
 		if(pBmp)
 		{
 			FIBITMAP* p32Bmp = FreeImage_ConvertTo32Bits(pBmp);
@@ -153,7 +164,7 @@ bool CTestClientDoc::UpdateBuffer( UINT level, const BYTE* pBits, int w, int h, 
 	}
 	if(!pBuf)
 	{
-		VideoBufferInfo bi = {VBT_D3D9_MEM, w, h, D3DFMT_A8B8G8R8};
+		VideoBufferInfo bi = {VBT_SYSTEM_MEM, w, h, D3DFMT_A8B8G8R8};
 		pBuf = m_pBufferMgr->CreateVideoBuffer(bi);
 	}
 	if(pBuf)
@@ -279,4 +290,47 @@ bool CTestClientDoc::CopyBuffer( CVideoBuffer* pDest, CVideoBuffer* pSrc )
 		return true;
 	}
 	return false;
+}
+
+bool CTestClientDoc::Draw( HWND hWnd )
+{
+	bool bOK = false;
+	if(m_pRenderEngine)
+	{
+		if(m_pDestImage)
+		{
+			IDirect3DDevice9 *pDevice = m_pRenderEngine->GetDevice();
+			if(pDevice)
+			{
+				IDirect3DSurface9 *pBackSurface;
+				pDevice->GetBackBuffer(0,
+					0,
+					D3DBACKBUFFER_TYPE_MONO,
+					&pBackSurface
+					);
+
+				if(pBackSurface)
+				{
+					IDirect3DSurface9* pSrc = m_pDestImage->GetSurface();
+					if(pSrc)
+					{
+						pDevice->StretchRect(pSrc,
+							NULL,
+							pBackSurface,
+							NULL,
+							D3DTEXF_POINT 
+							);
+						//D3DXSaveSurfaceToFile(_T("c:\\DisplaySurface-Result.dds"), D3DXIFF_DDS, m_pDisplaySurface, NULL, NULL);
+
+						HRESULT hr = pDevice->Present(NULL,NULL,hWnd,NULL);
+						//D3DXSaveSurfaceToFile(_T("c:\\BackSurface.dds"), D3DXIFF_DDS, pBackSurface, NULL, NULL);
+						bOK = SUCCEEDED(hr);
+					}
+
+					pBackSurface->Release();
+				}		
+			}		
+		}
+	}
+	return bOK;
 }
