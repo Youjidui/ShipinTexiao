@@ -1,0 +1,69 @@
+sampler2D map_src   : register(s0);
+
+float4x4 matRGB2YUV : register(c0);
+float4   detector   : register(c4); // start length, end length,hi hue, low hue, 
+float4   refcolor   : register(c5);
+float4   lo_bound   : register(c6);
+float4   hi_bound   : register(c7);
+float2   gray_bound : register(c8);
+float2	 breverse:	  register(c9);
+
+#define START_ANGLE (detector.x)			
+#define END_ANGLE   (detector.y)
+#define START_LEN   (detector.z)
+#define END_LEN     (detector.w)
+#define SRC_CGBLEND	breverse.y
+
+#define PI      3.141592653589793238462643383279
+#define PI2     6.283185307179586476925286766559
+
+
+
+float4 main( float2 tex : TEXCOORD0 ) : COLOR0
+{
+    float4 const0 = float4(0.0, 1.0, 0.505, 0.999);
+    //-------------------------------------------------
+    
+    float4 org_color = tex2D( map_src, tex );
+    
+	if(any(SRC_CGBLEND)&&any(org_color.a))
+		org_color.rgb/=org_color.a;
+    
+
+    // get current UV vector's length & angle
+    float4 yuv  = mul( org_color, matRGB2YUV );
+    float flen  = length(yuv.yz);
+    float angle = atan2(yuv.z, yuv.y);
+    if ( angle < 0.0 )  // convert angle to [0, 2PI) range
+    {
+        angle += PI2;
+    }
+
+    // make our angle conform to [START_ANGLE, END_ANGLE] range
+    float mod = fmod(END_ANGLE, PI2);
+    if ( (END_ANGLE>PI2) && (angle<mod) )
+    {
+        angle += PI2;
+    }
+
+    // calculate the soft edge
+    float4 in_value = float4(angle, angle, flen, flen);
+    float4 alpha_array = smoothstep(lo_bound, hi_bound, in_value);
+    float edge_alpha = 1.0 - (alpha_array.z-alpha_array.w) * (alpha_array.x-alpha_array.y);		// ------\__/-----м╪пн
+    	
+	float y = 1.0;
+    if(yuv.x>gray_bound.x && yuv.x<gray_bound.y) 
+       y =0;  
+    edge_alpha=max(y,edge_alpha);
+    if(breverse.x)
+		edge_alpha=1.0f-edge_alpha;
+	
+
+		
+    // mask the reference color
+    float4 retcolor;
+    retcolor.rgb = org_color.rgb - refcolor.rgb*(1.0-edge_alpha);
+    retcolor.a = org_color.a;
+    retcolor.a *= edge_alpha;
+    return retcolor;
+}

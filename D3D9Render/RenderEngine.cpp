@@ -6,6 +6,7 @@ CRenderEngine::CRenderEngine(void)
 : m_pD3D(NULL)
 , m_pDevice(NULL)
 , m_pResMgr(NULL)
+, m_pBuffMgr(NULL)
 {
 	ZeroMemory(&m_DeviceSettings, sizeof(m_DeviceSettings));
 	ZeroMemory(&m_DeviceSettings.pp, sizeof(m_DeviceSettings.pp));

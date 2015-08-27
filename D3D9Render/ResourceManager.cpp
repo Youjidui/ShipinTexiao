@@ -12,11 +12,21 @@ typedef struct _QuadVec2UV
 
 CResourceManager::CResourceManager(void)
 : m_pQuadMesh(NULL)
+, m_matWorld(NULL)
+, m_matPrj(NULL)
+, m_matView(NULL)
 {
+	m_matWorld    = new D3DXMATRIXA16;
+	m_matView     = new D3DXMATRIXA16;
+	m_matPrj      = new D3DXMATRIXA16;
+	CreateQuadMatrix(m_matWorld, m_matView, m_matPrj);
 }
 
 CResourceManager::~CResourceManager(void)
 {
+	delete m_matPrj;
+	delete m_matView;
+	delete m_matWorld;
 }
 
 
@@ -83,4 +93,23 @@ CBaseMesh* CResourceManager::CreateQuadMesh(LPDIRECT3DDEVICE9 lpDevice)
 		}
 	}
 	return m_pQuadMesh;
+}
+
+void CResourceManager::GetQuadMatrix( D3DXMATRIX** ppMatWorld, D3DXMATRIX** ppMatView , D3DXMATRIX** ppMatPrj )
+{
+	*ppMatWorld = m_matWorld;
+	*ppMatView = m_matView;
+	*ppMatPrj = m_matPrj;
+}
+
+void CResourceManager::CreateQuadMatrix( D3DXMATRIX* pMatWorld, D3DXMATRIX* pMatView , D3DXMATRIX* pMatPrj )
+{
+	D3DXMatrixIdentity( pMatWorld );
+	D3DXMatrixIdentity( pMatView  );
+	D3DXMatrixOrthoLH( pMatPrj, 1.0, 1.0,0.1f, 100.0f );
+
+	D3DXVECTOR3 vFromPt   = D3DXVECTOR3( 0.0f, 0.0f, -100.0f); 
+	D3DXVECTOR3 vLookatPt = D3DXVECTOR3( 0.0f, 0.0f,  0.0f );
+	D3DXVECTOR3 vUpVec    = D3DXVECTOR3( 0.0f, 1.0f,  0.0f );
+	D3DXMatrixLookAtLH( pMatView, &vFromPt, &vLookatPt, &vUpVec );
 }

@@ -1,0 +1,26 @@
+sampler2D map_src : register(s0);
+float2 fTexelSize : register(c0);
+float  fTuneStr : register(c1); // fine tune strength
+
+float4 main(float2 tc_src : TEXCOORD0) : COLOR0
+{
+    float2 offset = fTuneStr * fTexelSize;
+    float2 tc_offset[4] = {
+        {-offset.x, offset.y},
+        { offset.x, offset.y},
+        {-offset.x,-offset.y},
+        { offset.x,-offset.y},
+    };
+    float4 curColor = tex2D( map_src, tc_src );
+    for ( int i=0 ; i<4 ; i++ )
+    {
+#ifdef EXPAND
+        curColor.a *= tex2D( map_src, tc_src + tc_offset[i] ).a;
+#elif defined(SHRINK)
+        curColor.a = max(curColor.a, tex2D( map_src, tc_src + tc_offset[i] ).a);
+#else
+    #error "EXPAND" or "SHRINK" must be defined
+#endif
+    }
+    return curColor;
+}

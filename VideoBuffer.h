@@ -5,19 +5,29 @@ enum RenderEngineType
 	RET_D3D9 = 0
 };
 
-enum VideoBufferType
-{
-	VBT_SYSTEM_MEM = 0x00,
-	VBT_D3D9_MEM   = 0x01,
-	VBT_D3D11_MEM   = 0x02,
-};
 
 struct VideoBufferInfo
 {
-	VideoBufferType eType;
-	int nWidth;
-	int nHeight;
-	DWORD format;
+	enum MemType
+	{
+		SYSTEM_MEM = 0x00,
+		VIDEO_MEM   = 0x01,
+	};
+
+	enum Usage
+	{
+		_IN,
+		_IN_OUT,
+		_OUT
+	};
+
+	DWORD format;				//IN
+	MemType eType;		//IN
+	Usage eUsage;	//IN
+	int nWidth;					//IN
+	int nHeight;				//IN
+	int nAllocWidth;			//OUT
+	int nAllocHeight;			//OUT
 };
 
 class CVideoBuffer;
@@ -25,7 +35,7 @@ class CVideoBufferManager;
 
 
 //特技参数，每个特技有自己的参数
-struct tagFxParamBase
+struct FxParamBase
 {
 	unsigned int cbSize;
 	char FxType[8];		//int64,形如'ShapWipe',注意是单引号
@@ -36,13 +46,13 @@ struct tagFxParamBase
 class ITransEffect
 {
 public:
-	 virtual int Render(CVideoBuffer* pSrcA, CVideoBuffer* pSrcB, CVideoBuffer* pDst, tagFxParamBase* pParam) = 0;
+	 virtual int Render(CVideoBuffer* pSrcA, CVideoBuffer* pSrcB, CVideoBuffer* pDst, FxParamBase* pParam) = 0;
 };
 //内部特技
 class IEffect
 {
 public:
-	virtual int Render(CVideoBuffer* pSrc,CVideoBuffer* pDst,tagFxParamBase* pParam) = 0;
+	virtual int Render(CVideoBuffer* pSrc,CVideoBuffer* pDst,FxParamBase* pParam) = 0;
 };
 
 class CRenderEngine;

@@ -11,6 +11,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Utility", "Utility\Utility.
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VideoEffect", "VideoEffect\VideoEffect.vcproj", "{E740E006-6110-43A0-B557-028DEE6BA19D}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EffColorKey", "EffColorKey\EffColorKey.vcproj", "{9C09434E-7AD7-4AFD-A28C-FD4A5C37316E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -37,6 +39,10 @@ Global
 		{E740E006-6110-43A0-B557-028DEE6BA19D}.Debug|Win32.Build.0 = Debug|Win32
 		{E740E006-6110-43A0-B557-028DEE6BA19D}.Release|Win32.ActiveCfg = Release|Win32
 		{E740E006-6110-43A0-B557-028DEE6BA19D}.Release|Win32.Build.0 = Release|Win32
+		{9C09434E-7AD7-4AFD-A28C-FD4A5C37316E}.Debug|Win32.ActiveCfg = Debug|Win32
+		{9C09434E-7AD7-4AFD-A28C-FD4A5C37316E}.Debug|Win32.Build.0 = Debug|Win32
+		{9C09434E-7AD7-4AFD-A28C-FD4A5C37316E}.Release|Win32.ActiveCfg = Release|Win32
+		{9C09434E-7AD7-4AFD-A28C-FD4A5C37316E}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

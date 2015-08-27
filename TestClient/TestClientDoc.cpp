@@ -35,8 +35,9 @@ CTestClientDoc::CTestClientDoc()
 , m_pDestImage(NULL)
 {
 	memset(&m_DestVideoBufferInfo, 0, sizeof(VideoBufferInfo));
-	m_DestVideoBufferInfo.eType = VBT_D3D9_MEM;
 	m_DestVideoBufferInfo.format = D3DFMT_A8B8G8R8;
+	m_DestVideoBufferInfo.eType = VideoBufferInfo::VIDEO_MEM;
+	m_DestVideoBufferInfo.eUsage = VideoBufferInfo::_OUT;
 	m_DestVideoBufferInfo.nWidth = 1920;
 	m_DestVideoBufferInfo.nHeight = 1080;
 }
@@ -164,7 +165,7 @@ bool CTestClientDoc::UpdateBuffer( UINT level, const BYTE* pBits, int w, int h, 
 	}
 	if(!pBuf)
 	{
-		VideoBufferInfo bi = {VBT_SYSTEM_MEM, w, h, D3DFMT_A8B8G8R8};
+		VideoBufferInfo bi = {D3DFMT_A8B8G8R8, VideoBufferInfo::SYSTEM_MEM, VideoBufferInfo::_IN, w, h, 0, 0};
 		pBuf = m_pBufferMgr->CreateVideoBuffer(bi);
 	}
 	if(pBuf)
@@ -191,9 +192,14 @@ bool CTestClientDoc::InitEffect(HWND hDeviceWnd, int nBackBufferWidth, int nBack
 {
 	m_pRenderEngine = InitEffectModule(hDeviceWnd, nBackBufferWidth, nBackBufferHeight);
 	if(m_pRenderEngine)
+	{
 		m_pBufferMgr = CreateVideoBufferManager(m_pRenderEngine);
+		//m_pRenderEngine->SetVideoBufferManager(m_pBufferMgr);
+	}
 	if(m_pBufferMgr)
+	{
 		SetBackBufferSize(nBackBufferWidth, nBackBufferHeight);
+	}
 	return !!m_pBufferMgr;
 }
 
@@ -201,6 +207,7 @@ void CTestClientDoc::UninitEffect()
 {
 	ReleaseVideoBufferManager(m_pBufferMgr);
 	m_pBufferMgr = NULL;
+	m_pRenderEngine->SetVideoBufferManager(NULL);
 	UninitEffectModule(m_pRenderEngine);
 	m_pRenderEngine = NULL;
 }
@@ -253,7 +260,7 @@ bool CTestClientDoc::Render()
 					//CopyBuffer(m_pDestImage, m_SrcImages[0]);
 
 					CNegativeRender eff;
-					if(eff.Init(m_pRenderEngine->GetDevice(), m_pRenderEngine->GetResourceManager()))
+					if(eff.Init(m_pRenderEngine))
 					{
 						NegativeFxParam param;
 						bOK = eff.Render(pSrc, pDest, &param);

@@ -6,10 +6,10 @@
 	>
 	<Tool
 		Name="VCCLCompilerTool"
-		AdditionalIncludeDirectories="../DXSDK/Include"
+		AdditionalIncludeDirectories="&quot;$(ProjectDir)../DXSDK/Include&quot;;&quot;$(SolutionDir)DXSDK/Include&quot;"
 	/>
 	<Tool
 		Name="VCLinkerTool"
-		AdditionalLibraryDirectories="../DXSDK/Lib/x86"
+		AdditionalLibraryDirectories="&quot;$(ProjectDir)../DXSDK/Lib/x86&quot;;&quot;$(SolutionDir)DXSDK/Lib/x86&quot;"
 	/>
 </VisualStudioPropertySheet>

@@ -2,33 +2,34 @@
 #include <assert.h>
 #include <d3d9.h>
 #include ".\basetexture.h"
+#include "VideoBuffer.h"
 
-/*
-void GenerateMatrix( ,D3DXMATRIX* matDummy ,MAT_STYLE matStyle)
-{
-	GenerateMatrix(pResMan, pBufferDef, matDummy, matStyle);
-}
 
-void GenerateMatrix( ,D3DXMATRIX* matDummy ,MAT_STYLE matStyle)
+bool GenerateMatrix(CVideoBuffer* pBuffer, D3DXMATRIX* matDummy , MAT_STYLE matStyle)
 {
-	if (pBufferDef == NULL)
-		return;
+	if (pBuffer == NULL)
+		return false;
+
+	const VideoBufferInfo& bi = pBuffer->GetVideoBufferInfo();
+	bool bReverse = false;
 
 	D3DXMatrixIdentity( matDummy );
-	float m_fu =  0.5f/(float)(pBufferDef->BaseWidth);
-	float m_fv =  0.5f/(float)(pBufferDef->BaseHeight);      	
-	float fv = pBufferDef->bReverse?-m_fv:m_fv;
+	float m_fu =  0.5f/(float)(bi.nAllocWidth);
+	float m_fv =  0.5f/(float)(bi.nAllocHeight);      	
+	float fv = bReverse ? -m_fv:m_fv;
 	switch(matStyle)
 	{
 	case mat_ImageP:
 		{
-			float fxZoom  =  (pBufferDef->GetImageWidth()-1.0) /((float)pBufferDef->BaseWidth);
-			float fyZoom  =  (pBufferDef->GetImageHeight()-1.0)/((float)pBufferDef->BaseHeight);
-			D3DXMatrixScaling ( matDummy, fxZoom, fyZoom, 1.0f );	
-			matDummy->_31 = m_fu + pBufferDef->rcImage.left/((float)pBufferDef->BaseWidth);
-			matDummy->_32 = fv   + pBufferDef->rcImage.top/((float)pBufferDef->BaseHeight); 
+			float fxZoom  =  (bi.nWidth-1.0f) /((float)bi.nAllocWidth);
+			float fyZoom  =  (bi.nHeight-1.0f)/((float)bi.nAllocHeight);
+			D3DXMatrixScaling ( matDummy, fxZoom, fyZoom, 1.0f );
+			//matDummy->_31 = m_fu + pBufferDef->rcImage.left/((float)pBufferDef->BaseWidth);
+			//matDummy->_32 = fv   + pBufferDef->rcImage.top/((float)pBufferDef->BaseHeight); 
+			matDummy->_31 = m_fu + 0;
+			matDummy->_32 = fv   + 0; 
 
-			if( pBufferDef->bReverse ) 
+			if( bReverse ) 
 			{
 				matDummy->_32 +=  matDummy->_22;
 				matDummy->_22  = -matDummy->_22;             
@@ -37,13 +38,15 @@ void GenerateMatrix( ,D3DXMATRIX* matDummy ,MAT_STYLE matStyle)
 		break;
 	case  mat_Image:
 		{
-			float fxZoom  =  (pBufferDef->GetImageWidth() - 0.0f) /((float)pBufferDef->BaseWidth);
-			float fyZoom  =  (pBufferDef->GetImageHeight() - 0.0f) /((float)pBufferDef->BaseHeight);
+			float fxZoom  =  (bi.nWidth - 0.0f) /((float)bi.nAllocWidth);
+			float fyZoom  =  (bi.nHeight - 0.0f) /((float)bi.nAllocHeight);
 			D3DXMatrixScaling ( matDummy, fxZoom, fyZoom, 1.0f );	
-			matDummy->_31 = m_fu + pBufferDef->rcImage.left/((float)pBufferDef->BaseWidth);
-			matDummy->_32 = fv + pBufferDef->rcImage.top/((float)pBufferDef->BaseHeight); 
+			//matDummy->_31 = m_fu + pBufferDef->rcImage.left/((float)pBufferDef->BaseWidth);
+			//matDummy->_32 = fv + pBufferDef->rcImage.top/((float)pBufferDef->BaseHeight); 
+			matDummy->_31 = m_fu + 0;
+			matDummy->_32 = fv + 0; 
 
-			if( pBufferDef->bReverse ) 
+			if( bReverse ) 
 			{
 				matDummy->_32 +=  matDummy->_22;
 				matDummy->_22  = -matDummy->_22;             
@@ -53,28 +56,17 @@ void GenerateMatrix( ,D3DXMATRIX* matDummy ,MAT_STYLE matStyle)
 	case mat_Tci:
 		{
 			static D3DXMATRIX matScale;
-			float fxZoom  = pBufferDef->GetImageWidth()/((float)pBufferDef->BaseWidth);
-			float fyZoom  = pBufferDef->GetImageHeight()/((float)pBufferDef->BaseHeight);
+			float fxZoom  = bi.nWidth/((float)bi.nAllocWidth);
+			float fyZoom  = bi.nHeight/((float)bi.nAllocHeight);
 			D3DXMatrixScaling ( &matScale, fxZoom, fyZoom, 1.0f );	
-			//matScale._31 = pBufferDef->rcImage.left/((float)pBufferDef->BaseWidth);
-			//matScale._32 = pBufferDef->rcImage.top/((float)pBufferDef->BaseHeight); 
-
-			//matDummy->_11 =  0.5f*fxZoom;
-			//matDummy->_22 = -0.5*fyZoom; 			
-			//matDummy->_41 =  0.5f*fxZoom + m_fu + pBufferDef->rcImage.left/((float)pBufferDef->BaseWidth);
-			//matDummy->_42 =  0.5f*fyZoom + fv   + pBufferDef->rcImage.top/((float)pBufferDef->BaseHeight);
-		 
-			//*matDummy     =  (*matDummy) * matScale;  
-
-			//D3DXMatrixScaling ( &matScale, fxZoom, fyZoom, 1.0f );	
 
 			matDummy->_11 = 1.0f;         matDummy->_12 =  0.0f;
-			matDummy->_21 = 0.0f;         matDummy->_22 =  pBufferDef->bReverse?1.0f:-1.0f; 
+			matDummy->_21 = 0.0f;         matDummy->_22 =  bReverse?1.0f:-1.0f; 
 			matDummy->_31 = 0.0;          matDummy->_32 =  0.0;
 			matDummy->_41 = 0.5f + m_fu ;
 			matDummy->_42 = 0.5f + fv;
 			matDummy->_33 = 0.0f;         matDummy->_44 =  0.0f;    
-			*matDummy     =  (*matDummy)*matScale;// * matScale;  
+			*matDummy     =  (*matDummy)*matScale;
 
 		}
 		break;
@@ -82,7 +74,7 @@ void GenerateMatrix( ,D3DXMATRIX* matDummy ,MAT_STYLE matStyle)
 	case mat_Identity:
 		{
 			matDummy->_31 = m_fu;	 matDummy->_32 = fv;
-			if( pBufferDef->bReverse )
+			if( bReverse )
 			{
 				matDummy->_32 +=  matDummy->_22;
 				matDummy->_22  = -matDummy->_22;
@@ -92,12 +84,16 @@ void GenerateMatrix( ,D3DXMATRIX* matDummy ,MAT_STYLE matStyle)
 		break;
 	case mat_HalfHW:
 		{
-			float fxZoom  =  pBufferDef->GetImageWidth() /((float)pBufferDef->BaseWidth)*0.5;
-			float fyZoom  =  pBufferDef->GetImageHeight() /((float)(pBufferDef->BaseHeight))*0.5;
+			//float fxZoom  =  pBufferDef->GetImageWidth() /((float)pBufferDef->BaseWidth)*0.5;
+			//float fyZoom  =  pBufferDef->GetImageHeight() /((float)(pBufferDef->BaseHeight))*0.5;
+			float fxZoom  =  bi.nWidth /((float)bi.nAllocWidth)*0.5f;
+			float fyZoom  =  bi.nHeight /((float)(bi.nAllocHeight))*0.5f;
 			D3DXMatrixScaling ( matDummy, fxZoom, fyZoom, 1.0f );	
-			matDummy->_31 = m_fu + pBufferDef->rcImage.left/((float)pBufferDef->BaseWidth);
-			matDummy->_32 = fv   + pBufferDef->rcImage.top/((float)(pBufferDef->BaseHeight)); 
-			if( pBufferDef->bReverse ) 
+			//matDummy->_31 = m_fu + pBufferDef->rcImage.left/((float)pBufferDef->BaseWidth);
+			//matDummy->_32 = fv   + pBufferDef->rcImage.top/((float)(pBufferDef->BaseHeight)); 
+			matDummy->_31 = m_fu + 0;
+			matDummy->_32 = fv   + 0; 
+			if( bReverse ) 
 			{
 				matDummy->_32 +=  matDummy->_22;
 				matDummy->_22  = -matDummy->_22;             
@@ -106,13 +102,15 @@ void GenerateMatrix( ,D3DXMATRIX* matDummy ,MAT_STYLE matStyle)
 		break;
 	case mat_HalfH:
 		{
-			float fxZoom  = pBufferDef->GetImageWidth()/((float)pBufferDef->BaseWidth);
-			float fyZoom  = pBufferDef->GetImageHeight()/((float)(pBufferDef->BaseHeight*2.0));
+			float fxZoom  = bi.nWidth/((float)bi.nAllocWidth);
+			float fyZoom  = bi.nHeight/((float)(bi.nAllocHeight*2.0));
 			D3DXMatrixScaling ( matDummy, fxZoom, fyZoom, 1.0f );	
-			matDummy->_31 = m_fu + pBufferDef->rcImage.left/((float)pBufferDef->BaseWidth);
-			matDummy->_32 = fv   + pBufferDef->rcImage.top/((float)(pBufferDef->BaseHeight)); 
+			//matDummy->_31 = m_fu + pBufferDef->rcImage.left/((float)pBufferDef->BaseWidth);
+			//matDummy->_32 = fv   + pBufferDef->rcImage.top/((float)(pBufferDef->BaseHeight)); 
+			matDummy->_31 = m_fu + 0;
+			matDummy->_32 = fv   + 0; 
 
-			if( pBufferDef->bReverse ) 
+			if( bReverse ) 
 			{
 				matDummy->_32 +=  matDummy->_22;
 				matDummy->_22  = -matDummy->_22;             
@@ -121,14 +119,15 @@ void GenerateMatrix( ,D3DXMATRIX* matDummy ,MAT_STYLE matStyle)
 		break;
 	case mat_HalfW:
 		{
-			//m_fu =0.0; fv =0.0;
-      float fxZoom  = (pBufferDef->GetImageWidth() - 1.0)/((float)pBufferDef->BaseWidth)*0.5f;
-			float fyZoom  = pBufferDef->GetImageHeight()/((float)(pBufferDef->BaseHeight ));
-			D3DXMatrixScaling ( matDummy, fxZoom, fyZoom, 1.0f );	
-			matDummy->_31 = m_fu + pBufferDef->rcImage.left/((float)pBufferDef->BaseWidth);
-			matDummy->_32 = fv   + pBufferDef->rcImage.top/((float)(pBufferDef->BaseHeight)); 
+		    float fxZoom  = (bi.nWidth - 1.0f)/((float)bi.nAllocWidth)*0.5f;
+			float fyZoom  = bi.nHeight/((float)(bi.nAllocHeight));
+			D3DXMatrixScaling ( matDummy, fxZoom, fyZoom, 1.0f );
+			//matDummy->_31 = m_fu + pBufferDef->rcImage.left/((float)pBufferDef->BaseWidth);
+			//matDummy->_32 = fv   + pBufferDef->rcImage.top/((float)(pBufferDef->BaseHeight)); 
+			matDummy->_31 = m_fu + 0;
+			matDummy->_32 = fv   + 0; 
 
-			if( pBufferDef->bReverse ) 
+			if( bReverse ) 
 			{
 				matDummy->_32 +=  matDummy->_22;
 				matDummy->_22  = -matDummy->_22;             
@@ -137,13 +136,15 @@ void GenerateMatrix( ,D3DXMATRIX* matDummy ,MAT_STYLE matStyle)
 		break;
 	case mat_DoubleW:
 		{
-			float fu = 0.5/pBufferDef->BaseWidth; float fv = 0.5/ pBufferDef->BaseHeight;
-            float fxZoom  = pBufferDef->GetImageWidth()/((float)pBufferDef->BaseWidth)*2.0f;
-			float fyZoom  = pBufferDef->GetImageHeight()/((float)(pBufferDef->BaseHeight));
-			D3DXMatrixScaling ( matDummy, fxZoom, fyZoom, 1.0f );	
-			matDummy->_31 = fu + pBufferDef->rcImage.left/((float)pBufferDef->BaseWidth);
-			matDummy->_32 = fv + pBufferDef->rcImage.top/((float)(pBufferDef->BaseHeight)); 			
-			if( pBufferDef->bReverse ) 
+			float fu = 0.5f/bi.nAllocWidth; float fv = 0.5f/ bi.nAllocHeight;
+            float fxZoom  = bi.nWidth/((float)bi.nAllocWidth)*2.0f;
+			float fyZoom  = bi.nHeight/((float)(bi.nAllocHeight));
+			D3DXMatrixScaling ( matDummy, fxZoom, fyZoom, 1.0f );
+			//matDummy->_31 = fu + pBufferDef->rcImage.left/((float)pBufferDef->BaseWidth);
+			//matDummy->_32 = fv + pBufferDef->rcImage.top/((float)(pBufferDef->BaseHeight));
+			matDummy->_31 = fu + 0;
+			matDummy->_32 = fv + 0;
+			if( bReverse ) 
 			{
 				matDummy->_32 +=  matDummy->_22;
 				matDummy->_22  = -matDummy->_22;             
@@ -152,13 +153,12 @@ void GenerateMatrix( ,D3DXMATRIX* matDummy ,MAT_STYLE matStyle)
 		break;
     case mat_DoubleFW:
         {
-            //float fu = 0.08/pBufferDef->BaseWidth;
-			float fu = 0.5/pBufferDef->BaseWidth;
-			float fv = 0.5/ pBufferDef->BaseHeight;
+			float fu = 0.5f/bi.nAllocWidth;
+			float fv = 0.5f/ bi.nAllocHeight;
             float fxZoom  = 2.0f;   float fyZoom  = 1.0f;
             D3DXMatrixScaling ( matDummy, fxZoom, fyZoom, 1.0f );	
             matDummy->_31 = fu;     matDummy->_32 = fv; 			
-            if( pBufferDef->bReverse ) 
+            if( bReverse ) 
             {
                 matDummy->_32 +=  matDummy->_22;
                 matDummy->_22  = -matDummy->_22;             
@@ -167,8 +167,27 @@ void GenerateMatrix( ,D3DXMATRIX* matDummy ,MAT_STYLE matStyle)
         break;
         
 	}
+	return true;
 }
-*/
+
+LPDIRECT3DTEXTURE9 CreateTexture(LPDIRECT3DDEVICE9 pDevice, CVideoBuffer* pSrc)
+{
+	const VideoBufferInfo& srcBuffInfo = pSrc->GetVideoBufferInfo();
+	LPDIRECT3DTEXTURE9 lpTex = NULL;
+	if(SUCCEEDED(pDevice->CreateTexture(srcBuffInfo.nWidth, srcBuffInfo.nHeight, 1, 0, D3DFMT_A8R8G8B8, D3DPOOL_DEFAULT, &lpTex, NULL)))
+	{
+		LPDIRECT3DSURFACE9 lpTexSurf = NULL;
+		if(SUCCEEDED(lpTex->GetSurfaceLevel(0, &lpTexSurf)))
+		{
+			if(SUCCEEDED(pDevice->UpdateSurface(pSrc->GetSurface(), NULL, lpTexSurf, NULL)))
+			{
+			}
+			lpTexSurf->Release();
+		}
+	}
+	return lpTex;
+}
+
 
 CBaseTexture::CBaseTexture(void)
 :m_pTexture( NULL )

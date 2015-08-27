@@ -1,0 +1,77 @@
+sampler2D map_src   : register(s0);
+
+float4x4 matRGB2YUV : register(c0);
+float4   detector   : register(c4); // start length, end length,hi hue, low hue, 
+float4   refcolor   : register(c5);
+float4   lo_bound   : register(c6);
+float4   hi_bound   : register(c7);
+float2   gray_bound : register(c8);
+float2	 breverse:	  register(c9);
+
+#define START_ANGLE (detector.x)
+#define END_ANGLE   (detector.y)
+#define START_LEN   (detector.z)
+#define END_LEN     (detector.w)
+
+#define PI      3.141592653589793238462643383279
+#define PI2     6.283185307179586476925286766559
+
+
+void main( float2 tex : TEXCOORD0,
+			out float4 oColor:COLOR0,
+			out float4 oAlpha:COLOR1 )
+{
+    float4 const0 = float4(0.0, 1.0, 0.505, 0.999);
+    //-------------------------------------------------
+    
+    float4 org_color = tex2D( map_src, tex );
+    
+    float3 org_yuv[2];
+#ifdef FMT_YUYV
+    org_yuv[0].xyz = org_color.xyw;
+    org_yuv[1].xyz = org_color.zyw;
+#elif defined(FMT_UYVY)
+    org_yuv[0].xyz = org_color.yxz;
+    org_yuv[1].xyz = org_color.wxz;
+#else
+    #error Either "FMT_YUYV" or "FMT_UYVY" should be defined
+#endif
+
+    float alpha_channel[2];
+    for ( int i=0 ; i<2 ; i++ )
+    {
+        float3 yuv = org_yuv[i] - float3(0.0, 0.5, 0.5);
+
+        // get current UV vector's length & angle
+        float flen  = length(yuv.yz);
+        float angle = atan2(yuv.z, yuv.y);
+        if ( angle < 0.0 )  // convert angle to [0, 2PI) range
+        {
+            angle += PI2;
+        }
+
+        // make our angle conform to [START_ANGLE, END_ANGLE] range
+        float mod = fmod(END_ANGLE, PI2);
+        if ( (END_ANGLE>PI2) && (angle<mod) )
+        {
+            angle += PI2;
+        }
+
+        // calculate the soft edge
+        float4 in_value = float4(angle, angle, flen, flen);
+        float4 alpha_array = smoothstep(lo_bound, hi_bound, in_value);
+        alpha_channel[i] = saturate(1.0 - (alpha_array.z-alpha_array.w) * (alpha_array.x-alpha_array.y));
+        //float a2 = clamp(yuv.x,R_L.x,R_L.y);
+        float y = 1.0;
+        if(yuv.x> gray_bound.x && yuv.x< gray_bound.y) 
+          y =0;            
+        
+        alpha_channel[i] = max(alpha_channel[i],y);
+        
+        if(breverse.x)
+			alpha_channel[i]=1.0f-alpha_channel[i];	
+    }  
+    
+    oAlpha=float4(alpha_channel[0], alpha_channel[0], alpha_channel[1], alpha_channel[1]);
+    oColor=org_color;
+}

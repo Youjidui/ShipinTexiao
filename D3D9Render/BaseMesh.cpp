@@ -370,19 +370,20 @@ bool  CBaseMesh::Draw( const UINT iB_id,
 
 }
 
-//bool  CBaseMesh::DrawMesh( const UINT iB_id, 
-//						   const UINT uNumVertices, 
-//						   const UINT uPrimitiveCount,                           
-//						   LPCTSTR pszShaderName )
-//{
-//	m_pEngine->SetVertexShader(pszShaderName);
-//
-//	Draw( iB_id,uNumVertices, uPrimitiveCount ); 
-//
-//	m_pEngine->SetVertexShader( NULL );
-//	return TRUE;
-//
-//}
+bool  CBaseMesh::DrawMesh( const UINT iB_id, 
+						   const UINT uNumVertices, 
+						   const UINT uPrimitiveCount,                           
+						   LPDIRECT3DVERTEXSHADER9 pShader )
+{
+	m_pDevice->SetVertexShader(pShader);
+
+	Draw( iB_id,uNumVertices, uPrimitiveCount ); 
+
+	m_pDevice->SetVertexShader( NULL );
+	return TRUE;
+
+}
+
 bool  CBaseMesh::DrawMeshFx( const UINT iB_id, 
 						  const UINT uNumVertices, 
 						  const UINT uPrimitiveCount                           
@@ -393,10 +394,11 @@ bool  CBaseMesh::DrawMeshFx( const UINT iB_id,
 	return TRUE;
 
 }
-//bool  CBaseMesh::DrawMesh(const UINT iB_id, LPCTSTR pszShaderName)
-//{	
-//	return DrawMesh( iB_id,m_uNumVertices, m_uPrimitiveCount, pszShaderName ); 	
-//}
+bool  CBaseMesh::DrawMesh(const UINT iB_id, LPDIRECT3DVERTEXSHADER9 pShader)
+{	
+	return DrawMesh( iB_id,m_uNumVertices, m_uPrimitiveCount, pShader); 	
+}
+
 bool  CBaseMesh::DrawMeshFx( const UINT iB_id )
 {
 	return Draw( iB_id,m_uNumVertices, m_uPrimitiveCount); 		

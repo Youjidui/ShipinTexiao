@@ -48,6 +48,7 @@ struct TImageInfo
 };
 
 
+class CVideoBuffer;
 
 class  CBaseTexture
 {
@@ -112,5 +113,5 @@ protected:
   UINT						m_uSizeInBytes;	// 纹理所占显存的大小(单位:字节)
 };
 
-//void GenerateMatrix(LPDIRECT3DDEVICE9 pDevice, D3DXMATRIX* matDummy, MAT_STYLE matStyle);
-//void GenerateMatrix( LPDIRECT3DDEVICE9 pDevice, D3DXMATRIX* matDummy, MAT_STYLE matStyle);
+bool GenerateMatrix( CVideoBuffer* pBuffer, D3DXMATRIX* matDummy, MAT_STYLE matStyle);
+LPDIRECT3DTEXTURE9 CreateTexture(LPDIRECT3DDEVICE9 pDevice, CVideoBuffer* pSrc);

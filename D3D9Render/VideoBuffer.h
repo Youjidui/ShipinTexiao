@@ -24,8 +24,14 @@ public:
 		return m_pSurface;
 	}
 
+	LPDIRECT3DTEXTURE9 GetTexture()
+	{
+		return m_pTexture;
+	}
+
 private:
 	IDirect3DDevice9* m_pDevice;
 	VideoBufferInfo m_BufferInfo;
 	IDirect3DSurface9* m_pSurface;
+	LPDIRECT3DTEXTURE9 m_pTexture;
 };

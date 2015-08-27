@@ -13,6 +13,7 @@
 CVideoBufferManager* CreateVideoBufferManager(CRenderEngine* pEngine)
 {
 	CVideoBufferManager* p = new CVideoBufferManager(pEngine->GetDevice());
+	pEngine->SetVideoBufferManager(p);
 	return p;
 }
 

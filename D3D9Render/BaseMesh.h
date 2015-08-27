@@ -2,6 +2,7 @@
 
 #include <assert.h>
 #include <d3dx9mesh.h>
+//#include "../DXSDK/Include/d3dx9mesh.h"
 #include <string>
 #pragma comment(lib, "d3dx9.lib")
 
@@ -55,14 +56,16 @@ public:
 	{
 		return m_pMesh;
 	}
+
+	//等把特技代码移植完了，这些Draw函数都要整理
     BOOL DrawInstance(int nNumInstance);
 	BOOL DrawInstance(UINT strideInstance, int nNumInstance);
-   //bool       DrawMesh( const UINT  iB_id = 0, LPCTSTR pszShaderName =NULL );
+   bool       DrawMesh( const UINT  iB_id = 0, LPDIRECT3DVERTEXSHADER9 pShader = NULL );
    bool       DrawMeshFx( const UINT  iB_id = 0  );
-   //bool       DrawMesh( const UINT  iB_id,
-	  //                  const UINT uNumVertices,
-   //                     const UINT uPrimitiveCount,
-   //                     LPCTSTR pszShaderName = NULL);
+   bool       DrawMesh( const UINT  iB_id,
+	                    const UINT uNumVertices,
+                        const UINT uPrimitiveCount,
+                        LPDIRECT3DVERTEXSHADER9 pShader = NULL);
    bool       DrawMeshFx( const UINT  iB_id,
 	   const UINT uNumVertices,
 	   const UINT uPrimitiveCount

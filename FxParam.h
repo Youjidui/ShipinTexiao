@@ -2,7 +2,7 @@
 
 #include "VideoBuffer.h"
 
-struct NegativeFxParam : tagFxParamBase
+struct NegativeFxParam : FxParamBase
 {
 
 };
