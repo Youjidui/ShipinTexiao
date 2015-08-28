@@ -12,6 +12,7 @@
 #include "../D3D9Render/VideoBuffer.h"
 #include "../D3D9Render/VideoBufferManager.h"
 #include "../EffNegative/NegativeRender.h"
+#include "../EffColorKey/ColorKeyRender.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -259,11 +260,23 @@ bool CTestClientDoc::Render()
 					const VideoBufferInfo& srcBufferInfo = pSrc->GetVideoBufferInfo();
 					//CopyBuffer(m_pDestImage, m_SrcImages[0]);
 
-					CNegativeRender eff;
-					if(eff.Init(m_pRenderEngine))
+					if(0)
 					{
-						NegativeFxParam param;
-						bOK = eff.Render(pSrc, pDest, &param);
+						CNegativeRender eff;
+						if(eff.Init(m_pRenderEngine))
+						{
+							NegativeFxParam param;
+							bOK = eff.Render(pSrc, pDest, &param);
+						}
+					}
+					else if(1)
+					{
+						ColorKeyRender eff;
+						if(eff.Init(m_pRenderEngine))
+						{
+							ColorKeyParam param;
+							bOK = eff.Render(pSrc, pDest, &param);
+						}
 					}
 				}
 			}

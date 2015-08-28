@@ -1,6 +1,8 @@
 #include "StdAfx.h"
 #include "VideoBuffer.h"
 #include "../Utility/SafeDelete.h"
+#include <DxErr.h>
+#pragma comment(lib, "DxErr")
 
 CVideoBuffer::CVideoBuffer(IDirect3DDevice9* pDevice, const VideoBufferInfo& info)
 : m_pDevice(pDevice)
@@ -49,7 +51,7 @@ bool CVideoBuffer::Create(IDirect3DDevice9* pDevice, const VideoBufferInfo& info
 				hr = pDevice->CreateTexture( info.nWidth,
 					info.nHeight,
 					1,
-					D3DUSAGE_DYNAMIC | D3DUSAGE_WRITEONLY,	//D3DLOCK_DISCARD
+					D3DUSAGE_DYNAMIC,// | D3DUSAGE_WRITEONLY,	//D3DLOCK_DISCARD
 					D3DFMT_A8R8G8B8,
 					D3DPOOL_DEFAULT,
 					&m_pTexture,
@@ -57,6 +59,13 @@ bool CVideoBuffer::Create(IDirect3DDevice9* pDevice, const VideoBufferInfo& info
 				if(SUCCEEDED(hr))
 				{
 					hr = m_pTexture->GetSurfaceLevel(0, &m_pSurface);
+				}
+				else
+				{
+					LPCTSTR pszErrorString = DXGetErrorString(hr);
+					LPCTSTR pszErrorDesc = DXGetErrorDescription(hr);
+					TRACE(pszErrorString);
+					TRACE(pszErrorDesc);
 				}
 			}
 		}

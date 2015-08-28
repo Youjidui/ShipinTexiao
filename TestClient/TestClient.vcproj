@@ -200,6 +200,10 @@
 			ReferencedProjectIdentifier="{739DB65F-C89F-45FF-9690-AB025CA7DBF9}"
 			RelativePathToProject=".\Utility\Utility.vcproj"
 		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{9C09434E-7AD7-4AFD-A28C-FD4A5C37316E}"
+			RelativePathToProject=".\EffColorKey\EffColorKey.vcproj"
+		/>
 	</References>
 	<Files>
 		<Filter

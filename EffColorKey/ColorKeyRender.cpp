@@ -35,10 +35,11 @@ HRESULT ColorKeyRender::SetSourceTextureWithTrans( const DWORD dwSampler, CVideo
 	//return SetSourceTexture(dwSampler, pTexDef->pContainer);
 	hr = pDevice->SetTextureStageState( dwSampler, D3DTSS_TEXTURETRANSFORMFLAGS, D3DTTFF_DISABLE );
 	hr = pDevice->SetTextureStageState( dwSampler, D3DTSS_TEXCOORDINDEX,dwSampler );
-	LPDIRECT3DTEXTURE9 lpTex = CreateTexture(pDevice, pTexDef);
+	//LPDIRECT3DTEXTURE9 lpTex = CreateTexture(pDevice, pTexDef);
+	LPDIRECT3DTEXTURE9 lpTex = pTexDef->GetTexture();
 	if(lpTex)
 		hr = pDevice->SetTexture( dwSampler,  lpTex);
-	lpTex->Release();
+	//lpTex->Release();
 
 	return hr;
 }
@@ -289,7 +290,7 @@ void ColorKeyRender::_colorkey_pass(CVideoBuffer* pSrcDef, CVideoBuffer* pDstDef
 		pDevice->SetPixelShaderConstantF(7, (float*)&hi_bound, 1);
 		pDevice->SetPixelShaderConstantF(8, (float*)&D3DXVECTOR2(m_pParam->fGrayMin,m_pParam->fGrayMax), 1);
 		//D3DXVECTOR2  fIsReverse=D3DXVECTOR2( m_pParam->bIsReverse*1.0f,pSrcDef->bIsCG_BlenedBuffer);
-		D3DXVECTOR2  fIsReverse=D3DXVECTOR2( 1.0f, 0.f);
+		D3DXVECTOR2  fIsReverse=D3DXVECTOR2( m_pParam->bIsReverse*1.0f, 0.f);
 		pDevice->SetPixelShaderConstantF(9, (float*)&fIsReverse, 1);
 
 		// draw

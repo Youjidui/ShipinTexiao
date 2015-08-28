@@ -42,7 +42,8 @@ bool CNegativeRender::Render( CVideoBuffer* pSrc, CVideoBuffer* pDest, NegativeF
 
 		//目前需要copy一次，从memory到video memory的texture
 		//这个应该在将来去掉，以提高性能
-		LPDIRECT3DTEXTURE9 lpTex = CreateTexture(pDevice, pSrc);
+		//LPDIRECT3DTEXTURE9 lpTex = CreateTexture(pDevice, pSrc);
+		LPDIRECT3DTEXTURE9 lpTex = pSrc->GetTexture();
 		if(lpTex)
 		{
 			m_pNegativeEffect->SetTexture("g_txColor", lpTex);

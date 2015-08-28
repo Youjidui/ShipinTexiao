@@ -1,6 +1,0 @@
-sampler2D  Texture0      :register (s0);
-float4 main( float2 texUV: TEXCOORD0 ):COLOR
-{    
-   float4 srcColor  = tex2D( Texture0,texUV );   
-   return float4(srcColor.rgb * srcColor.a,1.0);
-}

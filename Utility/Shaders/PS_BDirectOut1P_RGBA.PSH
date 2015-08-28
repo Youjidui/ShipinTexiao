@@ -1,9 +1,0 @@
-sampler2D g_texSource:register(s0);
-float     g_alpha    :register(c0);
-float4 main( float2 texUV  : TEXCOORD0  ): COLOR
-{
-  float4 sColor = tex2D( g_texSource,texUV );
-  sColor.a  *= g_alpha;
-  sColor.rgb = sColor.rgb * sColor.a;
-  return sColor;
-}

@@ -1,5 +1,0 @@
-float vAlphaValue:register(c0);
-float4 main( float2 texUV0: TEXCOORD0):COLOR
-{
-  return vAlphaValue.xxxx;
-} 
