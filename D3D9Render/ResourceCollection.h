@@ -34,10 +34,18 @@ T* TResourceCollection<T>::Create( LPDIRECT3DDEVICE9 pDevice, LPCTSTR pszFilenam
 	}
 	else
 	{
-		pShader = new T;
-		pShader->Create(pDevice, pszFilename);
-		std::pair<ResourceMap::iterator, bool> ret = m_items.insert(std::make_pair(pszFilename, pShader));
-		assert(ret.second);
+		T* pNewShader = new T;
+		HRESULT hr = pNewShader->Create(pDevice, pszFilename);
+		if(SUCCEEDED(hr))
+		{
+			std::pair<ResourceMap::iterator, bool> ret = m_items.insert(std::make_pair(pszFilename, pNewShader));
+			assert(ret.second);
+			pShader = pNewShader;
+		}
+		else
+		{
+			delete pNewShader;
+		}
 	}
 	return pShader;
 }

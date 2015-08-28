@@ -78,32 +78,51 @@ bool ColorKeyRender::Init(CRenderEngine* pEngine )
 	m_pBuffer[11]._diffuse = 0xFFFFFFFF;
 	m_pBuffer[11]._Pos = D3DXVECTOR3(-0.5f+WIDTH, -0.5f, 0.0f);
 
-	m_PS_ColorKey_RGB32_NOMASK = pResMan->CreatePixelShader(pDevice, _T("PS_colorkey_PS3.PS"));
-	m_PS_ColorKey_RGB32_MASK = pResMan->CreatePixelShader(pDevice, _T("PS_colorkey_RGB32_MASK_v3.PS"));
+	m_PS_ColorKey_RGB32_NOMASK = pResMan->CreatePixelShader(pDevice, _T("NewEffects/PS_colorkey_PS3.PSH"));
+	ASSERT(m_PS_ColorKey_RGB32_NOMASK);
+	m_PS_ColorKey_RGB32_MASK = pResMan->CreatePixelShader(pDevice, _T("NewEffects/PS_colorkey_RGB32_MASK_v3.PSH"));
+	ASSERT(m_PS_ColorKey_RGB32_MASK);
 
-	m_PS_ColorKey_YUV16_NA_YUYV_NOMASK = pResMan->CreatePixelShader(pDevice, _T("PS_colorkey_YUV16_YUYV.PS"));
-	m_PS_ColorKey_YUV16_NA_UYVY_NOMASK = pResMan->CreatePixelShader(pDevice, _T("PS_colorkey_YUV16_UYVY.PS"));
-	m_PS_ColorKey_YUV16_AP_YUYV_NOMASK = pResMan->CreatePixelShader(pDevice, _T("PS_colorkey_YUV16_AP_YUYV.PS"));
-	m_PS_ColorKey_YUV16_AP_UYVY_NOMASK = pResMan->CreatePixelShader(pDevice, _T("PS_colorkey_YUV16_AP_UYVY.PS"));
+	m_PS_ColorKey_YUV16_NA_YUYV_NOMASK = pResMan->CreatePixelShader(pDevice, _T("NewEffects/PS_colorkey_YUV16_YUYV.PSH"));
+	ASSERT(m_PS_ColorKey_YUV16_NA_YUYV_NOMASK);
+	m_PS_ColorKey_YUV16_NA_UYVY_NOMASK = pResMan->CreatePixelShader(pDevice, _T("NewEffects/PS_colorkey_YUV16_UYVY.PSH"));
+	ASSERT(m_PS_ColorKey_YUV16_NA_UYVY_NOMASK);
+	m_PS_ColorKey_YUV16_AP_YUYV_NOMASK = pResMan->CreatePixelShader(pDevice, _T("NewEffects/PS_colorkey_YUV16_AP_YUYV.PSH"));
+	ASSERT(m_PS_ColorKey_YUV16_AP_YUYV_NOMASK);
+	m_PS_ColorKey_YUV16_AP_UYVY_NOMASK = pResMan->CreatePixelShader(pDevice, _T("NewEffects/PS_colorkey_YUV16_AP_UYVY.PSH"));
+	ASSERT(m_PS_ColorKey_YUV16_AP_UYVY_NOMASK);
 
-	m_PS_ColorKey_YUV16_NA_YUYV_MASK = pResMan->CreatePixelShader(pDevice, _T("PS_colorkey_YUV16_MASK_YUYV.PS"));
-	m_PS_ColorKey_YUV16_NA_UYVY_MASK = pResMan->CreatePixelShader(pDevice, _T("PS_colorkey_YUV16_MASK_UYVY.PS"));
-	m_PS_ColorKey_YUV16_AP_YUYV_MASK = pResMan->CreatePixelShader(pDevice, _T("PS_colorkey_YUV16_AP_MASK_YUYV.PS"));
-	m_PS_ColorKey_YUV16_AP_UYVY_MASK = pResMan->CreatePixelShader(pDevice, _T("PS_colorkey_YUV16_AP_MASK_UYVY.PS"));
+	m_PS_ColorKey_YUV16_NA_YUYV_MASK = pResMan->CreatePixelShader(pDevice, _T("NewEffects/PS_colorkey_YUV16_MASK_YUYV.PSH"));
+	ASSERT(m_PS_ColorKey_YUV16_NA_YUYV_MASK);
+	m_PS_ColorKey_YUV16_NA_UYVY_MASK = pResMan->CreatePixelShader(pDevice, _T("NewEffects/PS_colorkey_YUV16_MASK_UYVY.PSH"));
+	ASSERT(m_PS_ColorKey_YUV16_NA_UYVY_MASK);
+	m_PS_ColorKey_YUV16_AP_YUYV_MASK = pResMan->CreatePixelShader(pDevice, _T("NewEffects/PS_colorkey_YUV16_AP_MASK_YUYV.PSH"));
+	ASSERT(m_PS_ColorKey_YUV16_AP_YUYV_MASK);
+	m_PS_ColorKey_YUV16_AP_UYVY_MASK = pResMan->CreatePixelShader(pDevice, _T("NewEffects/PS_colorkey_YUV16_AP_MASK_UYVY.PSH"));
+	ASSERT(m_PS_ColorKey_YUV16_AP_UYVY_MASK);
 
-	m_PS_Blur = pResMan->CreatePixelShader(pDevice, _T("PS_Blur_PS3.ps"));
+	m_PS_Blur = pResMan->CreatePixelShader(pDevice, _T("NewEffects/PS_Blur_PS3.psh"));
+	ASSERT(m_PS_Blur);
 
-	m_PS_FineTune_RGB32_EXPAND = pResMan->CreatePixelShader(pDevice, _T("PS_FineTune_RGB32_EXPAND.ps"));
-	m_PS_FineTune_YUV16_EXPAND = pResMan->CreatePixelShader(pDevice, _T("PS_FineTune_YUV16_EXPAND.ps"));
-	m_PS_FineTune_RGB32_SHRINK = pResMan->CreatePixelShader(pDevice, _T("PS_FineTune_RGB32_SHRINK.ps"));
-	m_PS_FineTune_YUV16_SHRINK = pResMan->CreatePixelShader(pDevice, _T("PS_FineTune_YUV16_SHRINK.ps"));
+	m_PS_FineTune_RGB32_EXPAND = pResMan->CreatePixelShader(pDevice, _T("NewEffects/PS_FineTune_RGB32_EXPAND.psh"));
+	ASSERT(m_PS_FineTune_RGB32_EXPAND);
+	m_PS_FineTune_YUV16_EXPAND = pResMan->CreatePixelShader(pDevice, _T("NewEffects/PS_FineTune_YUV16_EXPAND.psh"));
+	ASSERT(m_PS_FineTune_YUV16_EXPAND);
+	m_PS_FineTune_RGB32_SHRINK = pResMan->CreatePixelShader(pDevice, _T("NewEffects/PS_FineTune_RGB32_SHRINK.psh"));
+	ASSERT(m_PS_FineTune_RGB32_SHRINK);
+	m_PS_FineTune_YUV16_SHRINK = pResMan->CreatePixelShader(pDevice, _T("NewEffects/PS_FineTune_YUV16_SHRINK.psh"));
+	ASSERT(m_PS_FineTune_YUV16_SHRINK);
 
-	m_PS_ColorKey_YUVA_NOMASK = pResMan->CreatePixelShader(pDevice, _T("PS_colorkey_YUVA_NOMASK.ps"));
+	m_PS_ColorKey_YUVA_NOMASK = pResMan->CreatePixelShader(pDevice, _T("NewEffects/PS_colorkey_YUVA_NOMASK.psh"));
+	ASSERT(m_PS_ColorKey_YUVA_NOMASK);
 
-	m_PS_ColorKey_YUVA_MASK = pResMan->CreatePixelShader(pDevice, _T("PS_colorkey_YUVA_MASK.ps"));
+	m_PS_ColorKey_YUVA_MASK = pResMan->CreatePixelShader(pDevice, _T("NewEffects/PS_colorkey_YUVA_MASK.psh"));
+	ASSERT(m_PS_ColorKey_YUVA_MASK);
 
-	m_VS_DirectOut = pResMan->CreateVertexShader(pDevice, _T("VSDirectOut.VS"));
-	m_VS_DirectOut_V3 = pResMan->CreateVertexShader(pDevice, _T("VS_DirectOut_V3.VS"));
+	m_VS_DirectOut = pResMan->CreateVertexShader(pDevice, _T("Shaders/VS_DirectOut.VSH"));
+	ASSERT(m_VS_DirectOut);
+	m_VS_DirectOut_V3 = pResMan->CreateVertexShader(pDevice, _T("Shaders/VS_DirectOutV3.VSH"));
+	ASSERT(m_VS_DirectOut_V3);
 
 	return true;
 }
@@ -115,12 +134,12 @@ void ColorKeyRender::Uninit()
 
 bool _fine_tune_enabled()
 {
-	return true;
+	return false;
 }
 
 bool _blur_enabled()
 {
-	return true;
+	return false;
 }
 
 bool ColorKeyRender::Render( CVideoBuffer* pSrc, CVideoBuffer* pDest, ColorKeyParam* pParam )
@@ -223,8 +242,8 @@ void ColorKeyRender::_colorkey_pass(CVideoBuffer* pSrcDef, CVideoBuffer* pDstDef
 	shader_array[YUV16][AP][YUYV][MASK]     = m_PS_ColorKey_YUV16_AP_YUYV_MASK;
 	shader_array[YUV16][AP][UYVY][MASK]     = m_PS_ColorKey_YUV16_AP_UYVY_MASK;
 
-	BOOL shader_yuv16 = false;
-	BOOL shader_alpha = false;
+	BOOL shader_yuv16 = FALSE;
+	BOOL shader_alpha = FALSE;
 	BOOL shader_yuyv = FALSE;
 	BOOL shader_mask = FALSE;
 	CPixelShader* pixelshader = shader_array[shader_yuv16][shader_alpha][shader_yuyv][shader_mask];

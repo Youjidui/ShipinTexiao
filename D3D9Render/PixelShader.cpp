@@ -1,6 +1,11 @@
 #include "StdAfx.h"
 #include ".\pixelshader.h"
 #include "../Utility/SafeDelete.h"
+#include <DxErr.h>
+#pragma comment(lib, "DxErr")
+#include <Shlwapi.h>
+#pragma comment(lib, "Shlwapi")
+
 
 CPixelShader::CPixelShader(void)
 : m_pDevice(NULL)
@@ -20,30 +25,66 @@ HRESULT CPixelShader::Create (  LPDIRECT3DDEVICE9 pDevice,
 	HRESULT hr = E_FAIL;
 	m_strResID	= szShaderName;
 	m_pDevice	= pDevice;
-	//wcscpy(m_szShaderFile,szShaderName);
-	HANDLE hFile;  
-	hFile = CreateFile( szShaderName, 
-		GENERIC_READ,              // open for reading 
-		FILE_SHARE_READ,
-		NULL,                      // no security 
-		OPEN_EXISTING,
-		FILE_ATTRIBUTE_NORMAL,     // normal file 
-		NULL );                     // no attr. template 
 
-	if (hFile == INVALID_HANDLE_VALUE) 
-	{ 
-		return hr;//Shader不存在
-	} 
-	DWORD dwFileSize = GetFileSize( hFile, NULL);
-	BYTE *PBuffer = new BYTE[dwFileSize];  DWORD dwReaded;
-	ReadFile(hFile, PBuffer, dwFileSize, &dwReaded,NULL);   
-	if(SUCCEEDED( m_pDevice->CreatePixelShader((DWORD*)PBuffer,
-		(LPDIRECT3DPIXELSHADER9*)&m_pShader)))
+	TCHAR szExeFilePath[MAX_PATH];
+	GetModuleFileName(NULL, szExeFilePath, MAX_PATH);
+	LPTSTR p = szExeFilePath + lstrlen(szExeFilePath) - 1;
+	while(*p != '/' && *p != '\\') p--;
+	p++;
+	lstrcpy(p, szShaderName);
+
+	//HANDLE hFile;  
+	//hFile = CreateFile( szExeFilePath, 
+	//	GENERIC_READ,              // open for reading 
+	//	FILE_SHARE_READ,
+	//	NULL,                      // no security 
+	//	OPEN_EXISTING,
+	//	FILE_ATTRIBUTE_NORMAL,     // normal file 
+	//	NULL );                     // no attr. template 
+
+	//if (hFile == INVALID_HANDLE_VALUE) 
+	//{ 
+	//	return hr;//Shader不存在
+	//} 
+	//DWORD dwFileSize = GetFileSize( hFile, NULL);
+	//BYTE *PBuffer = new BYTE[dwFileSize];  DWORD dwReaded;
+	//ReadFile(hFile, PBuffer, dwFileSize, &dwReaded,NULL);
+	 
+	ASSERT(PathFileExists(szExeFilePath));
+
+	LPD3DXBUFFER pCompiledShader = NULL, pErrorInfo = NULL;
+	LPD3DXCONSTANTTABLE pConstTable = NULL;
+	//hr  = D3DXCompileShaderFromFile(szExeFilePath, NULL, NULL, "main", "ps_3_0", 0, &pCompiledShader, &pErrorInfo, &pConstTable);
+	LPCSTR pShaderProfile = D3DXGetPixelShaderProfile(pDevice);
+	hr  = D3DXCompileShaderFromFile(szExeFilePath, NULL, NULL, "main", pShaderProfile, 0, &pCompiledShader, &pErrorInfo, &pConstTable);
+	if(SUCCEEDED(hr))
 	{
-        hr = D3DXGetShaderConstantTable( (DWORD*)PBuffer, &m_pConstTable );
+		LPDIRECT3DPIXELSHADER9 pShader = NULL;
+		hr = pDevice->CreatePixelShader((DWORD*)pCompiledShader->GetBufferPointer(), &pShader);
+		if(SUCCEEDED(hr))
+		{
+			//hr = D3DXGetShaderConstantTable( (DWORD*)PBuffer, &m_pConstTable );
+			m_pConstTable = pConstTable;
+			m_pShader = pShader;
+		}
+		else
+		{
+			LPCTSTR pszErrorString = DXGetErrorString(hr);
+			LPCTSTR pszErrorDesc = DXGetErrorDescription(hr);
+			TRACE(pszErrorString);
+			TRACE(pszErrorDesc);
+		}
 	}
-	delete[] PBuffer;
-	CloseHandle( hFile );
+	else
+	{
+		LPCTSTR pszErrorString = DXGetErrorString(hr);
+		LPCTSTR pszErrorDesc = DXGetErrorDescription(hr);
+		TRACE(pszErrorString);
+		TRACE(pszErrorDesc);
+	}
+
+	//delete[] PBuffer;
+	//CloseHandle( hFile );
 	return hr;
 }
 
