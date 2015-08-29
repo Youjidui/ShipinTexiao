@@ -2,6 +2,7 @@
 #include ".\vertexshader.h"
 #include <wchar.h>
 #include "../Utility/SafeDelete.h"
+#include "../Utility/PathSettings.h"
 
 #include <DxErr.h>
 #pragma comment(lib, "DxErr")
@@ -30,11 +31,12 @@ HRESULT CVertexShader::Create ( LPDIRECT3DDEVICE9 pDevice,
 	m_strResID = szShaderName;
 
 	TCHAR szExeFilePath[MAX_PATH];
-	GetModuleFileName(NULL, szExeFilePath, MAX_PATH);
-	LPTSTR p = szExeFilePath + lstrlen(szExeFilePath) - 1;
-	while(*p != '/' && *p != '\\') p--;
-	p++;
-	lstrcpy(p, szShaderName);
+	//GetModuleFileName(NULL, szExeFilePath, MAX_PATH);
+	//LPTSTR p = szExeFilePath + lstrlen(szExeFilePath) - 1;
+	//while(*p != '/' && *p != '\\') p--;
+	//p++;
+	//lstrcpy(p, szShaderName);
+	PathSettings::BuildResourcePath(szExeFilePath, sizeof(szExeFilePath), szShaderName);
 	ASSERT(PathFileExists(szExeFilePath));
 
 	//HANDLE hFile; 

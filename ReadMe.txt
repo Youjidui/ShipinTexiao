@@ -1,0 +1,4 @@
+运行程序是TestClient
+编译生成的文件在Debug或者Release文件夹下
+运行前请把下面的文件复制到EXE所在文件夹下
+FreeImage文件夹下的FreeImage.dll，用于图像文件读取和格式转换

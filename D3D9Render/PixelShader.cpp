@@ -1,6 +1,7 @@
 #include "StdAfx.h"
 #include ".\pixelshader.h"
 #include "../Utility/SafeDelete.h"
+#include "../Utility/PathSettings.h"
 #include <DxErr.h>
 #pragma comment(lib, "DxErr")
 #include <Shlwapi.h>
@@ -29,11 +30,13 @@ HRESULT CPixelShader::Create (  LPDIRECT3DDEVICE9 pDevice,
 	m_pDevice	= pDevice;
 
 	TCHAR szExeFilePath[MAX_PATH];
-	GetModuleFileName(NULL, szExeFilePath, MAX_PATH);
-	LPTSTR p = szExeFilePath + lstrlen(szExeFilePath) - 1;
-	while(*p != '/' && *p != '\\') p--;
-	p++;
-	lstrcpy(p, szShaderName);
+	//GetModuleFileName(NULL, szExeFilePath, MAX_PATH);
+	//LPTSTR p = szExeFilePath + lstrlen(szExeFilePath) - 1;
+	//while(*p != '/' && *p != '\\') p--;
+	//p++;
+	//lstrcpy(p, szShaderName);
+	PathSettings::BuildResourcePath(szExeFilePath, sizeof(szExeFilePath), szShaderName);
+	ASSERT(PathFileExists(szExeFilePath));
 
 	//HANDLE hFile;  
 	//hFile = CreateFile( szExeFilePath, 
@@ -51,8 +54,6 @@ HRESULT CPixelShader::Create (  LPDIRECT3DDEVICE9 pDevice,
 	//DWORD dwFileSize = GetFileSize( hFile, NULL);
 	//BYTE *PBuffer = new BYTE[dwFileSize];  DWORD dwReaded;
 	//ReadFile(hFile, PBuffer, dwFileSize, &dwReaded,NULL);
-	 
-	ASSERT(PathFileExists(szExeFilePath));
 
 	LPD3DXBUFFER pCompiledShader = NULL, pErrorInfo = NULL;
 	LPD3DXCONSTANTTABLE pConstTable = NULL;

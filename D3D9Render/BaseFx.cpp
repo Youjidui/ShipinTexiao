@@ -4,6 +4,7 @@
 #include <assert.h>
 #include "../Utility/ColorConvertor.h"
 #include "../Utility/SafeDelete.h"
+#include "../Utility/PathSettings.h"
 
 #include <DxErr.h>
 #pragma comment(lib, "DxErr")
@@ -30,11 +31,12 @@ HRESULT CBaseFx::Create ( LPDIRECT3DDEVICE9 pDevice,const TCHAR* szFxName, const
 	HRESULT hr = S_OK;
 
 	TCHAR szExeFilePath[MAX_PATH];
-	GetModuleFileName(NULL, szExeFilePath, MAX_PATH);
-	LPTSTR p = szExeFilePath + lstrlen(szExeFilePath) - 1;
-	while(*p != '/' && *p != '\\') p--;
-	p++;
-	lstrcpy(p, szFxName);
+	//GetModuleFileName(NULL, szExeFilePath, MAX_PATH);
+	//LPTSTR p = szExeFilePath + lstrlen(szExeFilePath) - 1;
+	//while(*p != '/' && *p != '\\') p--;
+	//p++;
+	//lstrcpy(p, szFxName);
+	PathSettings::BuildResourcePath(szExeFilePath, sizeof(szExeFilePath), szFxName);
 	ASSERT(PathFileExists(szExeFilePath));
 
 	LPD3DXEFFECT pEffect = NULL;
