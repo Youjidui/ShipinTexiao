@@ -62,12 +62,13 @@ HRESULT CPixelShader::Create (  LPDIRECT3DDEVICE9 pDevice,
 	LPD3DXMACRO pMacros = NULL;
 	if(ppszMacros)
 	{
-		pMacros = new D3DXMACRO[nMacroCount];
-		ZeroMemory(pMacros, sizeof(D3DXMACRO) * nMacroCount);
+		int nAllocCount = nMacroCount + 1;
+		pMacros = new D3DXMACRO[nAllocCount];
+		ZeroMemory(pMacros, sizeof(D3DXMACRO) * nAllocCount);
 		for(int i = 0; i < nMacroCount; ++i)
 		{
 			pMacros[i].Name = ppszMacros[i];
-			pMacros[i].Definition = "1";
+			pMacros[i].Definition = "\n";
 		}
 	}
 

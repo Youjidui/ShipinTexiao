@@ -78,11 +78,13 @@ bool ColorKeyRender::Init(CRenderEngine* pEngine )
 	m_pBuffer[11]._diffuse = 0xFFFFFFFF;
 	m_pBuffer[11]._Pos = D3DXVECTOR3(-0.5f+WIDTH, -0.5f, 0.0f);
 
-	int nMacroCount = 1;
+	int nMacroCount = 2;
 	const char** pMacro_YUYV = new const char*[nMacroCount];
 	pMacro_YUYV[0] = "FMT_YUYV";
+	pMacro_YUYV[1] = NULL;
 	const char** pMacro_UYVY = new const char*[nMacroCount];
-	pMacro_YUYV[0] = "FMT_UYVY";
+	pMacro_UYVY[0] = "FMT_UYVY";
+	pMacro_UYVY[1] = NULL;
 
 	m_PS_ColorKey_RGB32_NOMASK = pResMan->CreatePixelShader(pDevice, _T("NewEffects/PS_colorkey_PS3.PSH"));
 	ASSERT(m_PS_ColorKey_RGB32_NOMASK);
@@ -111,9 +113,11 @@ bool ColorKeyRender::Init(CRenderEngine* pEngine )
 	ASSERT(m_PS_Blur);
 
 	const char** pMacro_EXPAND = new const char*[nMacroCount];
-	pMacro_YUYV[0] = "EXPAND";
+	pMacro_EXPAND[0] = "EXPAND";
+	pMacro_EXPAND[1] = NULL;
 	const char** pMacro_SHRINK = new const char*[nMacroCount];
-	pMacro_YUYV[0] = "SHRINK";
+	pMacro_SHRINK[0] = "SHRINK";
+	pMacro_SHRINK[1] = NULL;
 
 	m_PS_FineTune_RGB32_EXPAND = pResMan->CreatePixelShader(pDevice, _T("NewEffects/PS_FineTune_RGB32.psh"), pMacro_EXPAND, nMacroCount);
 	ASSERT(m_PS_FineTune_RGB32_EXPAND);
