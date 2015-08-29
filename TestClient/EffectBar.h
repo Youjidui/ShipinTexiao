@@ -25,4 +25,5 @@ public:
 	CSliderCtrl m_ctrlProgress;
 	afx_msg void OnBnClickedParameters();
 	virtual BOOL OnInitDialog();
+	afx_msg void OnCbnSelchangeEffects();
 };

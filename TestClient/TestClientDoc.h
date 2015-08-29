@@ -19,7 +19,7 @@ protected: // 仅从序列化创建
 public:
 	void SetImage(UINT level, LPCTSTR pszFilename);
 	bool SetBackBufferSize(UINT w, UINT h);
-	bool SetEffect(LPCTSTR pszEffectName);
+	void SetEffect(LPCTSTR pszEffectName);
 
 // 操作
 public:
@@ -54,6 +54,8 @@ protected:
 	std::vector<CVideoBuffer*> m_SrcImages;
 
 	VideoBufferInfo m_DestVideoBufferInfo;
+
+	CString m_strEffectName;
 
 // 生成的消息映射函数
 protected:

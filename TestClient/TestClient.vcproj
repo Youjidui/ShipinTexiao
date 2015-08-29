@@ -286,6 +286,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\EffectName.h"
+				>
+			</File>
+			<File
 				RelativePath=".\EffectSettingsPane.h"
 				>
 			</File>

@@ -7,6 +7,7 @@
 
 #include "TestClientDoc.h"
 //#include "CommonMessage.h"
+#include "EffectName.h"
 #include "../FreeImage/FreeImage.h"
 #include <d3dx9.h>
 #include "../D3D9Render/VideoBuffer.h"
@@ -260,7 +261,7 @@ bool CTestClientDoc::Render()
 					const VideoBufferInfo& srcBufferInfo = pSrc->GetVideoBufferInfo();
 					//CopyBuffer(m_pDestImage, m_SrcImages[0]);
 
-					if(0)
+					if(FX_NEGATIVE == m_strEffectName)
 					{
 						CNegativeRender eff;
 						if(eff.Init(m_pRenderEngine))
@@ -269,12 +270,19 @@ bool CTestClientDoc::Render()
 							bOK = eff.Render(pSrc, pDest, &param);
 						}
 					}
-					else if(1)
+					else if(FX_COLOR_KEY == m_strEffectName)
 					{
 						ColorKeyRender eff;
 						if(eff.Init(m_pRenderEngine))
 						{
 							ColorKeyParam param;
+							param.fKeyColor[0] = 0.8f;
+							param.fKeyColor[1] = 0.8f;
+							//param.fKeyColor[2] = 0.8f;
+							param.fAngle1 = 1.0f;
+							param.fAngle2 = 2.0f;
+							param.fLength1 = 0.2f;
+							param.fLength2 = 0.45f;
 							bOK = eff.Render(pSrc, pDest, &param);
 						}
 					}
@@ -353,4 +361,9 @@ bool CTestClientDoc::Draw( HWND hWnd )
 		}
 	}
 	return bOK;
+}
+
+void CTestClientDoc::SetEffect( LPCTSTR pszEffectName )
+{
+	m_strEffectName = pszEffectName;
 }

@@ -58,7 +58,7 @@ public:
 	}
 
 	//等把特技代码移植完了，这些Draw函数都要整理
-    BOOL DrawInstance(int nNumInstance);
+    //BOOL DrawInstance(int nNumInstance);
 	BOOL DrawInstance(UINT strideInstance, int nNumInstance);
    bool       DrawMesh( const UINT  iB_id = 0, LPDIRECT3DVERTEXSHADER9 pShader = NULL );
    bool       DrawMeshFx( const UINT  iB_id = 0  );

@@ -22,6 +22,7 @@ struct NVVertex
 struct ColorKeyParam : public FxParamBase
 {
 	DWORD version;
+	float fKeyColor[4];	//r,g,b,a
 	float fAngle1, fAngle2, fLength1, fLength2;
 	float fSoftness, fBlurness, fFineTune;
 	float fGrayMin,fGrayMax;
@@ -34,6 +35,7 @@ struct ColorKeyParam : public FxParamBase
 	void ResetAllParam()
 	{
 		version = 0x0100;
+		fKeyColor[0] = fKeyColor[1] = fKeyColor[2] = 0.0f; fKeyColor[3] = 1.0f;
 		fAngle1 = D3DX_PI/2.0f - D3DX_PI/12.0f + YUV_ANGLE_ERROR;
 		fAngle2 = D3DX_PI/2.0f + D3DX_PI/12.0f + YUV_ANGLE_ERROR;
 		fLength1 = MIN_LENGTH / LENGTH_SCALE;

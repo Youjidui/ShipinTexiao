@@ -300,12 +300,6 @@ void ColorKeyRender::_colorkey_pass(CVideoBuffer* pSrcDef, CVideoBuffer* pDstDef
 	//	vertexshader = m_pResMan->m_VSDirectOut_3stages_V3;
 
 	ColorKeyParam* m_pParam = (ColorKeyParam*)pFxParam;
-	D3DXVECTOR4     m_vecKeyColor;
-	m_vecKeyColor.x = 0.0f;
-	m_vecKeyColor.y = 0.0f;
-	m_vecKeyColor.z = 0.0f;
-	m_vecKeyColor.w = 1.0f;
-
 	// render
 	if ( SUCCEEDED(pDevice->BeginScene()) )
 	{
@@ -315,7 +309,7 @@ void ColorKeyRender::_colorkey_pass(CVideoBuffer* pSrcDef, CVideoBuffer* pDstDef
 			m_pParam->fLength1, m_pParam->fLength2 );
 		pDevice->SetPixelShaderConstantF(0, (float*)ColorConvertor::GetMatrix_RGBA2YUVA(),  4);
 		pDevice->SetPixelShaderConstantF(4, (float*)&ps_detector,   1);
-		pDevice->SetPixelShaderConstantF(5, (float*)&m_vecKeyColor, 1);
+		pDevice->SetPixelShaderConstantF(5, (float*)&m_pParam->fKeyColor, 1);
 		float ang_soft = m_pParam->fSoftness/3.0f;
 		float len_soft = m_pParam->fSoftness/9.0f;
 		D3DXVECTOR4 lo_bound(ps_detector.x-ang_soft, ps_detector.y-ang_soft, ps_detector.z-len_soft, ps_detector.w-len_soft);

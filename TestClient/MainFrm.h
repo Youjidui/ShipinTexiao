@@ -51,6 +51,7 @@ protected:
 	afx_msg LRESULT OnToolbarCreateNew(WPARAM wp, LPARAM lp);
 	afx_msg LRESULT OnSetImage(WPARAM w, LPARAM l);
 	afx_msg LRESULT OnSetTargetBufferSize(WPARAM w, LPARAM l);
+	afx_msg LRESULT OnSelectEffect(WPARAM w, LPARAM l);
 	DECLARE_MESSAGE_MAP()
 
 public:
