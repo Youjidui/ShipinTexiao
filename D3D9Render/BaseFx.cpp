@@ -5,6 +5,12 @@
 #include "../Utility/ColorConvertor.h"
 #include "../Utility/SafeDelete.h"
 
+#include <DxErr.h>
+#pragma comment(lib, "DxErr")
+#include <Shlwapi.h>
+#pragma comment(lib, "Shlwapi")
+
+
 CBaseFx::CBaseFx()
 : m_pDevice(NULL)
 , m_pEffect(NULL)
@@ -15,7 +21,7 @@ CBaseFx::~CBaseFx()
 {	
 	Destroy();
 }
-HRESULT CBaseFx::Create ( LPDIRECT3DDEVICE9 pDevice,const TCHAR* szFxName)
+HRESULT CBaseFx::Create ( LPDIRECT3DDEVICE9 pDevice,const TCHAR* szFxName, const char** ppszMacros, int nMacroCount)
 {
 	m_pDevice		  = pDevice;
 	m_strResID          = szFxName;
@@ -29,6 +35,7 @@ HRESULT CBaseFx::Create ( LPDIRECT3DDEVICE9 pDevice,const TCHAR* szFxName)
 	while(*p != '/' && *p != '\\') p--;
 	p++;
 	lstrcpy(p, szFxName);
+	ASSERT(PathFileExists(szExeFilePath));
 
 	LPD3DXEFFECT pEffect = NULL;
 	ID3DXBuffer* pBuffer = NULL;	
@@ -37,15 +44,30 @@ HRESULT CBaseFx::Create ( LPDIRECT3DDEVICE9 pDevice,const TCHAR* szFxName)
 	{
 		try
 		{
-			hr = D3DXCreateEffectFromFile(pDevice, szExeFilePath, NULL, NULL, 0, NULL, &pEffect, &pBuffer);
+			LPD3DXMACRO pMacros = NULL;
+			if(ppszMacros)
+			{
+				pMacros = new D3DXMACRO[nMacroCount];
+				ZeroMemory(pMacros, sizeof(D3DXMACRO) * nMacroCount);
+				for(int i = 0; i < nMacroCount; ++i)
+				{
+					pMacros[i].Name = ppszMacros[i];
+				}
+			}
+
+			hr = D3DXCreateEffectFromFile(pDevice, szExeFilePath, pMacros, NULL, 0, NULL, &pEffect, &pBuffer);
 			if(SUCCEEDED(hr))
 			{
 				m_pEffect = pEffect;
 			}
 			else
 			{
-				pBuffer;
+				LPCTSTR pszErrorString = DXGetErrorString(hr);
+				LPCTSTR pszErrorDesc = DXGetErrorDescription(hr);
+				TRACE(pszErrorString);
+				TRACE(pszErrorDesc);
 			}
+
 			//hFile = CreateFile( szExeFilePath, 
 			//	GENERIC_READ,              // open for reading 
 			//	FILE_SHARE_READ,
@@ -98,7 +120,7 @@ HRESULT CBaseFx::Create ( LPDIRECT3DDEVICE9 pDevice,const TCHAR* szFxName)
 			hr = E_FAIL;
 			assert(0);
 		}	
-		Sleep(10);
+		//Sleep(10);
 	}
 	return hr;
 }

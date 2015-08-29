@@ -12,9 +12,10 @@ public:
 
 	~TResourceCollection(void)	{DeleteAll();	}
 
-	T* Create(LPDIRECT3DDEVICE9 pDevice, LPCTSTR pszShaderFileName);
+	T* Create(LPDIRECT3DDEVICE9 pDevice, LPCTSTR pszResFileName);
+	T* Create(LPDIRECT3DDEVICE9 pDevice, LPCTSTR pszResFileName, const char** ppszMacros, int nMacroCount);
 
-	bool Delete(LPCTSTR pszShaderFileName);
+	bool Delete(LPCTSTR pszResFileName);
 	void DeleteAll();
 
 private:
@@ -26,6 +27,33 @@ private:
 template<class T>
 T* TResourceCollection<T>::Create( LPDIRECT3DDEVICE9 pDevice, LPCTSTR pszFilename )
 {
+	T* pRes = NULL;
+	ResourceMap::iterator i = m_items.find(pszFilename);
+	if(m_items.end() != i)
+	{
+		pRes = i->second;
+	}
+	else
+	{
+		T* pNew = new T;
+		HRESULT hr = pNew->Create(pDevice, pszFilename);
+		if(SUCCEEDED(hr))
+		{
+			std::pair<ResourceMap::iterator, bool> ret = m_items.insert(std::make_pair(pszFilename, pNew));
+			assert(ret.second);
+			pRes = pNew;
+		}
+		else
+		{
+			delete pNew;
+		}
+	}
+	return pRes;
+}
+
+template<class T>
+T* TResourceCollection<T>::Create( LPDIRECT3DDEVICE9 pDevice, LPCTSTR pszFilename, const char** ppszMacros, int nMacroCount )
+{
 	T* pShader = NULL;
 	ResourceMap::iterator i = m_items.find(pszFilename);
 	if(m_items.end() != i)
@@ -35,7 +63,7 @@ T* TResourceCollection<T>::Create( LPDIRECT3DDEVICE9 pDevice, LPCTSTR pszFilenam
 	else
 	{
 		T* pNewShader = new T;
-		HRESULT hr = pNewShader->Create(pDevice, pszFilename);
+		HRESULT hr = pNewShader->Create(pDevice, pszFilename, ppszMacros, nMacroCount);
 		if(SUCCEEDED(hr))
 		{
 			std::pair<ResourceMap::iterator, bool> ret = m_items.insert(std::make_pair(pszFilename, pNewShader));
@@ -51,10 +79,10 @@ T* TResourceCollection<T>::Create( LPDIRECT3DDEVICE9 pDevice, LPCTSTR pszFilenam
 }
 
 template<class T>
-bool TResourceCollection<T>::Delete( LPCTSTR pszShaderFileName )
+bool TResourceCollection<T>::Delete( LPCTSTR pszFileName )
 {
 	bool bFound = false;
-	ResourceMap::iterator i = m_items.find(pszShaderFileName);
+	ResourceMap::iterator i = m_items.find(pszFileName);
 	if(m_items.end() != i)
 	{
 		T* pShader = i->second;

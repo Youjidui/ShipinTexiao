@@ -9,7 +9,7 @@ class  CPixelShader
 public:
   CPixelShader(void);
   virtual ~CPixelShader(void);
-  HRESULT Create ( LPDIRECT3DDEVICE9 pDevice, const TCHAR* szShaderName);
+  HRESULT Create ( LPDIRECT3DDEVICE9 pDevice, const TCHAR* szShaderName, const char** ppszMacros = NULL, int nMacroCount = 0);
   HRESULT GetFunction(void* pData, UINT* pSizeOfData);
 
   UINT GetSamplerIndex(D3DXHANDLE hTexName);

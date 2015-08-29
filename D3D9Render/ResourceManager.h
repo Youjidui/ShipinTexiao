@@ -13,9 +13,9 @@ public:
 
 public:
 	CBaseMesh* CreateQuadMesh(LPDIRECT3DDEVICE9 lpDevice);
-	CBaseFx* CreateEffect(LPDIRECT3DDEVICE9 lpDevice, LPCTSTR lpszEffectName);
-	CVertexShader* CreateVertexShader(LPDIRECT3DDEVICE9 lpDevice, LPCTSTR lpszShaderName);
-	CPixelShader* CreatePixelShader(LPDIRECT3DDEVICE9 lpDevice, LPCTSTR lpszShaderName);
+	CBaseFx* CreateEffect(LPDIRECT3DDEVICE9 lpDevice, LPCTSTR lpszEffectName, const char** ppszMacros = NULL, int nMacroCount = 0);
+	CVertexShader* CreateVertexShader(LPDIRECT3DDEVICE9 lpDevice, LPCTSTR lpszShaderName, const char** ppszMacros = NULL, int nMacroCount = 0);
+	CPixelShader* CreatePixelShader(LPDIRECT3DDEVICE9 lpDevice, LPCTSTR lpszShaderName, const char** ppszMacros = NULL, int nMacroCount = 0);
 	void GetQuadMatrix( D3DXMATRIX** ppMatWorld, D3DXMATRIX** ppMatView , D3DXMATRIX** ppMatPrj );
 
 private:

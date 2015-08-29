@@ -8,8 +8,7 @@ class  CVertexShader
 public:
   CVertexShader(void);
   virtual ~CVertexShader(void);
-   HRESULT Create ( LPDIRECT3DDEVICE9 pDevice,
-		                LPCTSTR szShaderName);
+   HRESULT Create ( LPDIRECT3DDEVICE9 pDevice, LPCTSTR szShaderName, const char** ppszMacros = NULL, int nMacroCount = 0);
    HRESULT GetFunction(void* pData, UINT* pSizeOfData);
    LPDIRECT3DVERTEXSHADER9 GetVertexShaderPtr() { return m_pShader; }
 protected:

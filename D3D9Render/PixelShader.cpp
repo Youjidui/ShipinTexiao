@@ -20,7 +20,9 @@ CPixelShader::~CPixelShader(void)
 }
 
 HRESULT CPixelShader::Create (  LPDIRECT3DDEVICE9 pDevice,
-							  const TCHAR* szShaderName)
+							  const TCHAR* szShaderName,
+							  const char** ppszMacros,
+							  int nMacroCount)
 {
 	HRESULT hr = E_FAIL;
 	m_strResID	= szShaderName;
@@ -56,7 +58,20 @@ HRESULT CPixelShader::Create (  LPDIRECT3DDEVICE9 pDevice,
 	LPD3DXCONSTANTTABLE pConstTable = NULL;
 	//hr  = D3DXCompileShaderFromFile(szExeFilePath, NULL, NULL, "main", "ps_3_0", 0, &pCompiledShader, &pErrorInfo, &pConstTable);
 	LPCSTR pShaderProfile = D3DXGetPixelShaderProfile(pDevice);
-	hr  = D3DXCompileShaderFromFile(szExeFilePath, NULL, NULL, "main", pShaderProfile, 0, &pCompiledShader, &pErrorInfo, &pConstTable);
+
+	LPD3DXMACRO pMacros = NULL;
+	if(ppszMacros)
+	{
+		pMacros = new D3DXMACRO[nMacroCount];
+		ZeroMemory(pMacros, sizeof(D3DXMACRO) * nMacroCount);
+		for(int i = 0; i < nMacroCount; ++i)
+		{
+			pMacros[i].Name = ppszMacros[i];
+			pMacros[i].Definition = "1";
+		}
+	}
+
+	hr  = D3DXCompileShaderFromFile(szExeFilePath, pMacros, NULL, "main", pShaderProfile, 0, &pCompiledShader, &pErrorInfo, &pConstTable);
 	if(SUCCEEDED(hr))
 	{
 		LPDIRECT3DPIXELSHADER9 pShader = NULL;

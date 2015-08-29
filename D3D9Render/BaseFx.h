@@ -7,8 +7,7 @@ class  CBaseFx
 public:
 	CBaseFx();
 	virtual ~CBaseFx();
-	HRESULT Create (LPDIRECT3DDEVICE9 pDevice,
-		const TCHAR* szFxName);
+	HRESULT Create (LPDIRECT3DDEVICE9 pDevice, const TCHAR* szFxName, const char** ppszMacros = NULL, int nMacroCount = 0);
 	LPD3DXEFFECT GetFxPtr();
 	HRESULT GetFunction(void* pData, UINT* pSizeOfData){return S_OK;};
 

@@ -30,19 +30,19 @@ CResourceManager::~CResourceManager(void)
 }
 
 
-CBaseFx* CResourceManager::CreateEffect( LPDIRECT3DDEVICE9 lpDevice, LPCTSTR lpszEffectName )
+CBaseFx* CResourceManager::CreateEffect( LPDIRECT3DDEVICE9 lpDevice, LPCTSTR lpszEffectName, const char** ppszMacros, int nMacroCount )
 {
-	return m_FxRes.Create(lpDevice, lpszEffectName);
+	return m_FxRes.Create(lpDevice, lpszEffectName, ppszMacros, nMacroCount);
 }
 
-CVertexShader* CResourceManager::CreateVertexShader( LPDIRECT3DDEVICE9 lpDevice, LPCTSTR lpszShaderName )
+CVertexShader* CResourceManager::CreateVertexShader( LPDIRECT3DDEVICE9 lpDevice, LPCTSTR lpszShaderName, const char** ppszMacros, int nMacroCount )
 {
-	return m_VSRes.Create(lpDevice, lpszShaderName);
+	return m_VSRes.Create(lpDevice, lpszShaderName, ppszMacros, nMacroCount);
 }
 
-CPixelShader* CResourceManager::CreatePixelShader( LPDIRECT3DDEVICE9 lpDevice, LPCTSTR lpszShaderName )
+CPixelShader* CResourceManager::CreatePixelShader( LPDIRECT3DDEVICE9 lpDevice, LPCTSTR lpszShaderName, const char** ppszMacros, int nMacroCount )
 {
-	return m_PSRes.Create(lpDevice, lpszShaderName);
+	return m_PSRes.Create(lpDevice, lpszShaderName, ppszMacros, nMacroCount);
 }
 
 CBaseMesh* CResourceManager::CreateQuadMesh(LPDIRECT3DDEVICE9 lpDevice)
