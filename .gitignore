@@ -4,5 +4,5 @@
 *.aps
 *.ncb
 *.suo
-Debug/
-Release/
+Debug*/
+Release*/
