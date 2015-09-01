@@ -8,7 +8,7 @@
 #include "TestClientDoc.h"
 //#include "CommonMessage.h"
 #include "EffectName.h"
-#include "FreeImage.h"
+#include "../FreeImage/FreeImage.h"
 #include <d3dx9.h>
 #include "../D3D9Render/VideoBuffer.h"
 #include "../D3D9Render/VideoBufferManager.h"
