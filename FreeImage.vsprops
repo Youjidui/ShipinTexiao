@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="gb2312"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="FreeImage"
+	>
+	<Tool
+		Name="VCCLCompilerTool"
+		AdditionalIncludeDirectories="$(ProjectDir)../FreeImage/Dist/x32;$(SolutionDir)/FreeImage/Dist/x32"
+	/>
+	<Tool
+		Name="VCLinkerTool"
+		AdditionalLibraryDirectories="$(ProjectDir)../FreeImage/Dist/x32;$(SolutionDir)/FreeImage/Dist/x32"
+	/>
+</VisualStudioPropertySheet>
