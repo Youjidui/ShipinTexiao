@@ -2,7 +2,6 @@
 
 #include <assert.h>
 #include <d3dx9mesh.h>
-//#include "../DXSDK/Include/d3dx9mesh.h"
 #include <string>
 #pragma comment(lib, "d3dx9.lib")
 

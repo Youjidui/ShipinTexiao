@@ -157,7 +157,7 @@ bool _blur_enabled()
 	return false;
 }
 
-bool ColorKeyRender::Render( CVideoBuffer* pSrc, CVideoBuffer* pDest, ColorKeyParam* pParam )
+bool ColorKeyRender::Render( CVideoBuffer* pDest, CVideoBuffer* pSrc, ColorKeyParam* pParam )
 {
 	LPDIRECT3DDEVICE9 pDevice = m_pEngine->GetDevice();
 	CResourceManager* pResMan = m_pEngine->GetResourceManager();

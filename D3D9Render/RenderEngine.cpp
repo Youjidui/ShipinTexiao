@@ -1,6 +1,8 @@
 #include "StdAfx.h"
 #include "RenderEngine.h"
 #include "../Utility/mathmacros.h"
+#include "VideoBuffer.h"
+#include "../Utility/SafeDelete.h"
 
 CRenderEngine::CRenderEngine(void)
 : m_pD3D(NULL)
@@ -77,3 +79,28 @@ bool CRenderEngine::SetVertexShader( LPCTSTR lpszShaderName )
 	}
 	return SUCCEEDED(hr);
 }
+
+bool CRenderEngine::SetRenderTarget( CVideoBuffer* pDest )
+{
+	LPDIRECT3DDEVICE9 pDevice = GetDevice();
+	LPDIRECT3DSURFACE9 pRTSurface = NULL;
+	pRTSurface = pDest->GetSurface();
+	// set render target
+	pDevice->SetRenderTarget(0, pRTSurface);
+	SAFE_RELEASE(pRTSurface);
+
+	const VideoBufferInfo& buffInfo = pDest->GetVideoBufferInfo();
+	// set view port
+	D3DVIEWPORT9 vp;
+	vp.MaxZ = 1.0f;
+	vp.MinZ = 0.0f;
+	vp.X        = 0;
+	vp.Y        = 0;
+	vp.Width    = buffInfo.nWidth;
+	vp.Height   = buffInfo.nHeight;
+	pDevice->SetViewport(&vp);
+
+	pDevice->Clear(0, NULL, D3DCLEAR_TARGET|D3DCLEAR_ZBUFFER, 0, 1.0f, 0);
+	return true;
+}
+

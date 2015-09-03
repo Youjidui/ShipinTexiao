@@ -12,7 +12,7 @@ struct D3DDeviceSettings
 	D3DPRESENT_PARAMETERS pp;
 };
 
-
+//infrastructure and internal interfaces
 class AFX_EXT_CLASS CRenderEngine
 {
 public:
@@ -31,6 +31,7 @@ public:
 	//virtual bool UploadConvert(const handle_tpr hColor, const handle_tpr hKey, const handle_tpr hDst, BOOL bHiTrans, long lSourceWidth, long lSourceHeight, NX3DDepthUploadInfo* pDepthInfo = NULL){assert(0);return FALSE;};
 	//virtual BOOL DownloadConvert(const handle_tpr hSrc,const handle_tpr hDst, const handle_tpr hKey){assert(0);return FALSE;};
 	bool SetVertexShader(LPCTSTR lpszShaderName);
+	bool SetRenderTarget( CVideoBuffer* pDest );
 
 private:
 	LPDIRECT3D9                  m_pD3D;

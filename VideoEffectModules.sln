@@ -13,6 +13,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VideoEffect", "VideoEffect\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EffColorKey", "EffColorKey\EffColorKey.vcproj", "{9C09434E-7AD7-4AFD-A28C-FD4A5C37316E}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EffAmoebaWipeTrans", "EffAmoebaWipeTrans\EffAmoebaWipeTrans.vcproj", "{C2BDC561-6BE5-4949-B15F-4BFFFFF6C626}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SonyBlur", "SonyBlur\SonyBlur.vcproj", "{28113454-E158-4135-BB89-298A1C09BB0E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -69,6 +73,22 @@ Global
 		{9C09434E-7AD7-4AFD-A28C-FD4A5C37316E}.Release|Win32.Build.0 = Release|Win32
 		{9C09434E-7AD7-4AFD-A28C-FD4A5C37316E}.Release|x64.ActiveCfg = Release|x64
 		{9C09434E-7AD7-4AFD-A28C-FD4A5C37316E}.Release|x64.Build.0 = Release|x64
+		{C2BDC561-6BE5-4949-B15F-4BFFFFF6C626}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C2BDC561-6BE5-4949-B15F-4BFFFFF6C626}.Debug|Win32.Build.0 = Debug|Win32
+		{C2BDC561-6BE5-4949-B15F-4BFFFFF6C626}.Debug|x64.ActiveCfg = Debug|x64
+		{C2BDC561-6BE5-4949-B15F-4BFFFFF6C626}.Debug|x64.Build.0 = Debug|x64
+		{C2BDC561-6BE5-4949-B15F-4BFFFFF6C626}.Release|Win32.ActiveCfg = Release|Win32
+		{C2BDC561-6BE5-4949-B15F-4BFFFFF6C626}.Release|Win32.Build.0 = Release|Win32
+		{C2BDC561-6BE5-4949-B15F-4BFFFFF6C626}.Release|x64.ActiveCfg = Release|x64
+		{C2BDC561-6BE5-4949-B15F-4BFFFFF6C626}.Release|x64.Build.0 = Release|x64
+		{28113454-E158-4135-BB89-298A1C09BB0E}.Debug|Win32.ActiveCfg = Debug|Win32
+		{28113454-E158-4135-BB89-298A1C09BB0E}.Debug|Win32.Build.0 = Debug|Win32
+		{28113454-E158-4135-BB89-298A1C09BB0E}.Debug|x64.ActiveCfg = Debug|x64
+		{28113454-E158-4135-BB89-298A1C09BB0E}.Debug|x64.Build.0 = Debug|x64
+		{28113454-E158-4135-BB89-298A1C09BB0E}.Release|Win32.ActiveCfg = Release|Win32
+		{28113454-E158-4135-BB89-298A1C09BB0E}.Release|Win32.Build.0 = Release|Win32
+		{28113454-E158-4135-BB89-298A1C09BB0E}.Release|x64.ActiveCfg = Release|x64
+		{28113454-E158-4135-BB89-298A1C09BB0E}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

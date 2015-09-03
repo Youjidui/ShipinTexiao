@@ -12,7 +12,7 @@ public:
 
 	bool Init(CRenderEngine* pEngine);
 	void Uninit();
-	bool Render(CVideoBuffer* pSrc, CVideoBuffer* pDest, NegativeFxParam* pParam);
+	bool Render(CVideoBuffer* pDst, CVideoBuffer* pSrc, NegativeFxParam* pParam);
 
 private:
 	bool SetRenderTarget(CVideoBuffer* pDest);

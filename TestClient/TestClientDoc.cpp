@@ -14,6 +14,7 @@
 #include "../D3D9Render/VideoBufferManager.h"
 #include "../EffNegative/NegativeRender.h"
 #include "../EffColorKey/ColorKeyRender.h"
+#include "../SonyBlur/SonyBlurRender.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -267,7 +268,7 @@ bool CTestClientDoc::Render()
 						if(eff.Init(m_pRenderEngine))
 						{
 							NegativeFxParam param;
-							bOK = eff.Render(pSrc, pDest, &param);
+							bOK = eff.Render(pDest, pSrc, &param);
 						}
 					}
 					else if(FX_COLOR_KEY == m_strEffectName)
@@ -283,7 +284,18 @@ bool CTestClientDoc::Render()
 							param.fAngle2 = 2.0f;
 							param.fLength1 = 0.2f;
 							param.fLength2 = 0.45f;
-							bOK = eff.Render(pSrc, pDest, &param);
+							bOK = eff.Render(pDest, pSrc, &param);
+						}
+					}
+					else if(FX_SONY_BLUR == m_strEffectName)
+					{
+						CSonyBlurRender eff;
+						if(eff.Init(m_pRenderEngine))
+						{
+							SonyBlurFxParam param;
+							param.blurX = 41.0f;
+							param.blurY = 29.1f;
+							bOK = eff.Render(pDest, pSrc, &param);
 						}
 					}
 				}

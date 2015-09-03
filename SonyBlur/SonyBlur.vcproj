@@ -2,10 +2,10 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="TestClient"
-	ProjectGUID="{0897C5DF-0987-46E9-9750-4095F00B6FE1}"
-	RootNamespace="TestClient"
-	Keyword="MFCProj"
+	Name="SonyBlur"
+	ProjectGUID="{28113454-E158-4135-BB89-298A1C09BB0E}"
+	RootNamespace="SonyBlur"
+	Keyword="Win32Proj"
 	TargetFrameworkVersion="196613"
 	>
 	<Platforms>
@@ -23,8 +23,8 @@
 			Name="Debug|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)_$(PlatformName)"
 			IntermediateDirectory="$(ConfigurationName)_$(PlatformName)"
-			ConfigurationType="1"
-			InheritedPropertySheets="..\DXSDK.vsprops;..\FreeImage.vsprops"
+			ConfigurationType="4"
+			InheritedPropertySheets="..\DXSDK.vsprops"
 			UseOfMFC="2"
 			CharacterSet="1"
 			>
@@ -42,14 +42,11 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="_DEBUG"
-				MkTypLibCompatible="false"
-				ValidateParameters="true"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG"
+				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -62,27 +59,15 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG"
-				Culture="2052"
-				AdditionalIncludeDirectories="$(IntDir)"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLinkerTool"
-				AdditionalDependencies="FreeImage.lib"
-				LinkIncremental="2"
-				AdditionalLibraryDirectories="../FreeImage"
-				GenerateDebugInformation="true"
-				SubSystem="2"
-				TargetMachine="1"
+				Name="VCLibrarianTool"
 			/>
 			<Tool
 				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -94,7 +79,68 @@
 				Name="VCFxCopTool"
 			/>
 			<Tool
-				Name="VCAppVerifierTool"
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
+			Name="Release|Win32"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)_$(PlatformName)"
+			IntermediateDirectory="$(ConfigurationName)_$(PlatformName)"
+			ConfigurationType="4"
+			InheritedPropertySheets="..\DXSDK.vsprops"
+			UseOfMFC="2"
+			CharacterSet="1"
+			WholeProgramOptimization="1"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="2"
+				EnableIntrinsicFunctions="true"
+				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
+				RuntimeLibrary="2"
+				EnableFunctionLevelLinking="true"
+				UsePrecompiledHeader="2"
+				WarningLevel="3"
+				DebugInformationFormat="3"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLibrarianTool"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -104,8 +150,8 @@
 			Name="Debug|x64"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)_$(PlatformName)"
 			IntermediateDirectory="$(ConfigurationName)_$(PlatformName)"
-			ConfigurationType="1"
-			InheritedPropertySheets="..\DXSDK_x64.vsprops;..\FreeImage_x64.vsprops"
+			ConfigurationType="4"
+			InheritedPropertySheets="..\DXSDK_x64.vsprops"
 			UseOfMFC="2"
 			CharacterSet="1"
 			>
@@ -123,14 +169,12 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="_DEBUG"
-				MkTypLibCompatible="false"
 				TargetEnvironment="3"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG"
+				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -143,27 +187,15 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG"
-				Culture="2052"
-				AdditionalIncludeDirectories="$(IntDir)"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLinkerTool"
-				AdditionalDependencies="FreeImage.lib"
-				LinkIncremental="2"
-				AdditionalLibraryDirectories="../FreeImage"
-				GenerateDebugInformation="true"
-				SubSystem="2"
-				TargetMachine="17"
+				Name="VCLibrarianTool"
 			/>
 			<Tool
 				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -173,94 +205,6 @@
 			/>
 			<Tool
 				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCPostBuildEventTool"
-			/>
-		</Configuration>
-		<Configuration
-			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)_$(PlatformName)"
-			IntermediateDirectory="$(ConfigurationName)_$(PlatformName)"
-			ConfigurationType="1"
-			InheritedPropertySheets="..\DXSDK.vsprops;..\FreeImage.vsprops"
-			UseOfMFC="2"
-			CharacterSet="1"
-			WholeProgramOptimization="1"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-				PreprocessorDefinitions="NDEBUG"
-				MkTypLibCompatible="false"
-				ValidateParameters="true"
-			/>
-			<Tool
-				Name="VCCLCompilerTool"
-				Optimization="2"
-				EnableIntrinsicFunctions="true"
-				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG"
-				MinimalRebuild="false"
-				RuntimeLibrary="2"
-				EnableFunctionLevelLinking="true"
-				UsePrecompiledHeader="2"
-				WarningLevel="3"
-				DebugInformationFormat="3"
-			/>
-			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="NDEBUG"
-				Culture="2052"
-				AdditionalIncludeDirectories="$(IntDir)"
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-			/>
-			<Tool
-				Name="VCLinkerTool"
-				AdditionalDependencies="FreeImage.lib"
-				LinkIncremental="1"
-				AdditionalLibraryDirectories="../FreeImage"
-				GenerateDebugInformation="true"
-				SubSystem="2"
-				OptimizeReferences="2"
-				EnableCOMDATFolding="2"
-				TargetMachine="1"
-			/>
-			<Tool
-				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
-			/>
-			<Tool
-				Name="VCXDCMakeTool"
-			/>
-			<Tool
-				Name="VCBscMakeTool"
-			/>
-			<Tool
-				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCAppVerifierTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -270,7 +214,8 @@
 			Name="Release|x64"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)_$(PlatformName)"
 			IntermediateDirectory="$(ConfigurationName)_$(PlatformName)"
-			ConfigurationType="1"
+			ConfigurationType="4"
+			InheritedPropertySheets="..\DXSDK_x64.vsprops"
 			UseOfMFC="2"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
@@ -289,16 +234,13 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="NDEBUG"
-				MkTypLibCompatible="false"
 				TargetEnvironment="3"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG"
-				MinimalRebuild="false"
+				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="2"
@@ -310,29 +252,15 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="NDEBUG"
-				Culture="2052"
-				AdditionalIncludeDirectories="$(IntDir)"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLinkerTool"
-				AdditionalDependencies="FreeImage.lib"
-				LinkIncremental="1"
-				AdditionalLibraryDirectories="../FreeImage"
-				GenerateDebugInformation="true"
-				SubSystem="2"
-				OptimizeReferences="2"
-				EnableCOMDATFolding="2"
-				TargetMachine="17"
+				Name="VCLibrarianTool"
 			/>
 			<Tool
 				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -344,38 +272,11 @@
 				Name="VCFxCopTool"
 			/>
 			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
 				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
 	</Configurations>
 	<References>
-		<ProjectReference
-			ReferencedProjectIdentifier="{E740E006-6110-43A0-B557-028DEE6BA19D}"
-			RelativePathToProject=".\VideoEffect\VideoEffect.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{93AD0DE0-6F9D-4976-BB07-99B3C1463333}"
-			RelativePathToProject=".\D3D9Render\D3D9Render.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{3308018F-008C-4A3F-8E50-3788E74E976D}"
-			RelativePathToProject=".\EffNegative\EffNegative.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{739DB65F-C89F-45FF-9690-AB025CA7DBF9}"
-			RelativePathToProject=".\Utility\Utility.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{9C09434E-7AD7-4AFD-A28C-FD4A5C37316E}"
-			RelativePathToProject=".\EffColorKey\EffColorKey.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{28113454-E158-4135-BB89-298A1C09BB0E}"
-			RelativePathToProject=".\SonyBlur\SonyBlur.vcproj"
-		/>
 	</References>
 	<Files>
 		<Filter
@@ -384,23 +285,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\BufferBar.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\BufferSettingsPane.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\EffectBar.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\EffectSettingsPane.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\MainFrm.cpp"
+				RelativePath=".\SonyBlurRender.cpp"
 				>
 			</File>
 			<File
@@ -408,14 +293,6 @@
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="1"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|x64"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -431,6 +308,14 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
+					Name="Debug|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="1"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
 					Name="Release|x64"
 					>
 					<Tool
@@ -439,18 +324,6 @@
 					/>
 				</FileConfiguration>
 			</File>
-			<File
-				RelativePath=".\TestClient.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\TestClientDoc.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\TestClientView.cpp"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="头文件"
@@ -458,35 +331,7 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\BufferBar.h"
-				>
-			</File>
-			<File
-				RelativePath=".\BufferSettingsPane.h"
-				>
-			</File>
-			<File
-				RelativePath=".\CommonMessage.h"
-				>
-			</File>
-			<File
-				RelativePath=".\EffectBar.h"
-				>
-			</File>
-			<File
-				RelativePath=".\EffectName.h"
-				>
-			</File>
-			<File
-				RelativePath=".\EffectSettingsPane.h"
-				>
-			</File>
-			<File
-				RelativePath=".\MainFrm.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Resource.h"
+				RelativePath=".\SonyBlurRender.h"
 				>
 			</File>
 			<File
@@ -497,52 +342,12 @@
 				RelativePath=".\targetver.h"
 				>
 			</File>
-			<File
-				RelativePath=".\TestClient.h"
-				>
-			</File>
-			<File
-				RelativePath=".\TestClientDoc.h"
-				>
-			</File>
-			<File
-				RelativePath=".\TestClientView.h"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="资源文件"
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
-			<File
-				RelativePath=".\res\TestClient.ico"
-				>
-			</File>
-			<File
-				RelativePath=".\TestClient.rc"
-				>
-			</File>
-			<File
-				RelativePath=".\res\TestClient.rc2"
-				>
-			</File>
-			<File
-				RelativePath=".\res\TestClientDoc.ico"
-				>
-			</File>
-			<File
-				RelativePath=".\res\Toolbar.bmp"
-				>
-			</File>
-			<File
-				RelativePath=".\res\Toolbar256.bmp"
-				>
-			</File>
-			<File
-				RelativePath=".\UserImages.bmp"
-				>
-			</File>
 		</Filter>
 		<File
 			RelativePath=".\ReadMe.txt"
@@ -550,9 +355,5 @@
 		</File>
 	</Files>
 	<Globals>
-		<Global
-			Name="RESOURCE_FILE"
-			Value="TestClient.rc"
-		/>
 	</Globals>
 </VisualStudioProject>

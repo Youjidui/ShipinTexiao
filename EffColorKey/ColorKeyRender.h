@@ -58,7 +58,7 @@ public:
 
 	bool Init(CRenderEngine* pEngine);
 	void Uninit();
-	bool Render(CVideoBuffer* pSrc, CVideoBuffer* pDest, ColorKeyParam* pParam);
+	bool Render(CVideoBuffer* pDest, CVideoBuffer* pSrc, ColorKeyParam* pParam);
 
 private:
 	HRESULT SetSourceTextureWithTrans( const DWORD dwSampler, CVideoBuffer* pTexDef, MAT_STYLE matStyle );

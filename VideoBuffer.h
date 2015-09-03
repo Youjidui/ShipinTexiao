@@ -46,13 +46,13 @@ struct FxParamBase
 class ITransEffect
 {
 public:
-	 virtual int Render(CVideoBuffer* pSrcA, CVideoBuffer* pSrcB, CVideoBuffer* pDst, FxParamBase* pParam) = 0;
+	 virtual int Render(CVideoBuffer* pDst, CVideoBuffer* pSrcA, CVideoBuffer* pSrcB, FxParamBase* pParam) = 0;
 };
 //内部特技
 class IEffect
 {
 public:
-	virtual int Render(CVideoBuffer* pSrc,CVideoBuffer* pDst,FxParamBase* pParam) = 0;
+	virtual int Render(CVideoBuffer* pDst, CVideoBuffer* pSrc, FxParamBase* pParam) = 0;
 };
 
 class CRenderEngine;

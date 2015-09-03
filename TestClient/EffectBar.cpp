@@ -51,6 +51,7 @@ BOOL CEffectBar::OnInitDialog()
 	//m_ctrlEffects.AddString(_T("none"));
 	m_ctrlEffects.AddString(FX_NEGATIVE);
 	m_ctrlEffects.AddString(FX_COLOR_KEY);
+	m_ctrlEffects.AddString(FX_SONY_BLUR);
 
 	m_ctrlEffects.SetCurSel(0);
 

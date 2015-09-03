@@ -5,6 +5,7 @@
 #include "../Utility/CriticalSection.h"
 #include <d3d9.h>
 
+//private (non-shared) resources, system memory buffer and video memory buffer
 class AFX_EXT_CLASS CVideoBufferManager
 {
 public:

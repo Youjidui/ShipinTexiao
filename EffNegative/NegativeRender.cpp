@@ -20,11 +20,11 @@ bool CNegativeRender::Init( CRenderEngine* pEngine)
 	LPDIRECT3DDEVICE9 pDevice = m_pEngine->GetDevice();
 	CResourceManager* pResMgr = m_pEngine->GetResourceManager();
 	m_pQuadMesh = pResMgr->CreateQuadMesh(pDevice);
-	m_pNegativeEffect = pResMgr->CreateEffect(pDevice, _T("NewEffects/fx_GNegative.fx"));
+	m_pNegativeEffect = pResMgr->CreateEffect(pDevice, _T("NewEffects/Negative.fx"));
 	return true;
 }
 
-bool CNegativeRender::Render( CVideoBuffer* pSrc, CVideoBuffer* pDest, NegativeFxParam* pParam )
+bool CNegativeRender::Render( CVideoBuffer* pDest, CVideoBuffer* pSrc, NegativeFxParam* pParam )
 {
 	LPDIRECT3DDEVICE9 pDevice = m_pEngine->GetDevice();
 	CResourceManager* pResMan = m_pEngine->GetResourceManager();
@@ -78,26 +78,27 @@ bool CNegativeRender::Render( CVideoBuffer* pSrc, CVideoBuffer* pDest, NegativeF
 
 bool CNegativeRender::SetRenderTarget( CVideoBuffer* pDest )
 {
-	LPDIRECT3DDEVICE9 pDevice = m_pEngine->GetDevice();
-	LPDIRECT3DSURFACE9 pRTSurface = NULL;
-	pRTSurface = pDest->GetSurface();
-	// set render target
-	pDevice->SetRenderTarget(0, pRTSurface);
-	SAFE_RELEASE(pRTSurface);
+	//LPDIRECT3DDEVICE9 pDevice = m_pEngine->GetDevice();
+	//LPDIRECT3DSURFACE9 pRTSurface = NULL;
+	//pRTSurface = pDest->GetSurface();
+	//// set render target
+	//pDevice->SetRenderTarget(0, pRTSurface);
+	//SAFE_RELEASE(pRTSurface);
 
-	const VideoBufferInfo& buffInfo = pDest->GetVideoBufferInfo();
-	// set view port
-	D3DVIEWPORT9 vp;
-	vp.MaxZ = 1.0f;
-	vp.MinZ = 0.0f;
-		vp.X        = 0;
-		vp.Y        = 0;
-		vp.Width    = buffInfo.nWidth;
-		vp.Height   = buffInfo.nHeight;
-	pDevice->SetViewport(&vp);
+	//const VideoBufferInfo& buffInfo = pDest->GetVideoBufferInfo();
+	//// set view port
+	//D3DVIEWPORT9 vp;
+	//vp.MaxZ = 1.0f;
+	//vp.MinZ = 0.0f;
+	//	vp.X        = 0;
+	//	vp.Y        = 0;
+	//	vp.Width    = buffInfo.nWidth;
+	//	vp.Height   = buffInfo.nHeight;
+	//pDevice->SetViewport(&vp);
 
-	pDevice->Clear(0, NULL, D3DCLEAR_TARGET|D3DCLEAR_ZBUFFER, 0, 1.0f, 0);
-	return true;
+	//pDevice->Clear(0, NULL, D3DCLEAR_TARGET|D3DCLEAR_ZBUFFER, 0, 1.0f, 0);
+	//return true;
+	return m_pEngine->SetRenderTarget(pDest);
 }
 
 

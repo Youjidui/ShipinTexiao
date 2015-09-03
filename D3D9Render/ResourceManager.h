@@ -5,6 +5,7 @@
 #include "PixelShaderResource.h"
 #include "VertexShaderResource.h"
 
+//shared resources, such as shaders, meshes, matrix, but not video buffers
 class CResourceManager
 {
 public:
