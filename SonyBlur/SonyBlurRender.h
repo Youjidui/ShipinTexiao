@@ -1,14 +1,9 @@
 #pragma once
 
 #include "../VideoBuffer.h"
+#include "../FxParam.h"
 #include "../D3D9Render/RenderEngine.h"
 #include "../D3D9Render/VideoBuffer.h"
-
-struct SonyBlurFxParam : FxParamBase
-{
-	float blurX;
-	float blurY;
-};
 
 
 class CSonyBlurRender

@@ -1,7 +1,7 @@
 #pragma once
 #include "afxwin.h"
 #include "afxcmn.h"
-
+#include "ParamBlurDlg.h"
 
 // CEffectBar ¶Ô»°¿ò
 
@@ -23,7 +23,11 @@ protected:
 public:
 	CComboBox m_ctrlEffects;
 	CSliderCtrl m_ctrlProgress;
+	CParamBlurDlg m_blurDlg;
+
 	afx_msg void OnBnClickedParameters();
 	virtual BOOL OnInitDialog();
 	afx_msg void OnCbnSelchangeEffects();
+	afx_msg void OnDestroy();
+	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
 };

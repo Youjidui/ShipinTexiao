@@ -278,7 +278,7 @@ LRESULT CMainFrame::OnSelectEffect( WPARAM w, LPARAM l )
 {
 	CTestClientDoc* pDoc = (CTestClientDoc*)GetActiveDocument();
 	//pDoc->SelectEffect(w);
-	pDoc->SetEffect((LPCTSTR)l);
+	pDoc->SetEffect((LPCTSTR)w, (FxParamBase*)l);
 	pDoc->UpdateAllViews(NULL);
 	return 0;
 }

@@ -28,4 +28,5 @@ public:
 	afx_msg void OnBnClickedSelectImage2();
 	afx_msg void OnEnKillfocusHeight();
 	afx_msg void OnEnKillfocusWidth();
+	afx_msg void OnDestroy();
 };

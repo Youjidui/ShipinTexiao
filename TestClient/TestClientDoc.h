@@ -19,7 +19,7 @@ protected: // 仅从序列化创建
 public:
 	void SetImage(UINT level, LPCTSTR pszFilename);
 	bool SetBackBufferSize(UINT w, UINT h);
-	void SetEffect(LPCTSTR pszEffectName);
+	void SetEffect(LPCTSTR pszEffectName, FxParamBase* pParam);
 
 // 操作
 public:
@@ -56,6 +56,7 @@ protected:
 	VideoBufferInfo m_DestVideoBufferInfo;
 
 	CString m_strEffectName;
+	FxParamBase* m_pEffectParam;
 
 // 生成的消息映射函数
 protected:

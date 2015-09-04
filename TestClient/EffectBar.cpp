@@ -6,6 +6,7 @@
 #include "EffectBar.h"
 #include "EffectName.h"
 #include "CommonMessage.h"
+#include "../FxParam.h"
 
 // CEffectBar 对话框
 
@@ -32,6 +33,8 @@ void CEffectBar::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(CEffectBar, CDialog)
 	ON_BN_CLICKED(IDC_PARAMETERS, &CEffectBar::OnBnClickedParameters)
 	ON_CBN_SELCHANGE(IDC_EFFECTS, &CEffectBar::OnCbnSelchangeEffects)
+	ON_WM_DESTROY()
+	ON_WM_HSCROLL()
 END_MESSAGE_MAP()
 
 
@@ -41,6 +44,30 @@ void CEffectBar::OnBnClickedParameters()
 {
 	// TODO: 在此添加控件通知处理程序代码
 	//根据选择的特效，弹出其参数对话框
+	int nSel = m_ctrlEffects.GetCurSel();
+	if(LB_ERR != nSel)
+	{
+		CString str;
+		m_ctrlEffects.GetLBText(nSel, str);
+		if(FX_NEGATIVE == str)
+		{
+
+		}
+		else if(FX_COLOR_KEY == str)
+		{
+		}
+		else if(FX_SONY_BLUR == str)
+		{
+			if(!m_blurDlg.GetSafeHwnd())
+			{
+				m_blurDlg.Create(CParamBlurDlg::IDD);
+			}
+			m_blurDlg.ShowWindow(SW_SHOW);
+		}
+		else if(FX_AMOEBA_WIPE == str)
+		{
+		}
+	}
 }
 
 BOOL CEffectBar::OnInitDialog()
@@ -49,14 +76,39 @@ BOOL CEffectBar::OnInitDialog()
 
 	// TODO:  在此添加额外的初始化
 	//m_ctrlEffects.AddString(_T("none"));
-	m_ctrlEffects.AddString(FX_NEGATIVE);
-	m_ctrlEffects.AddString(FX_COLOR_KEY);
-	m_ctrlEffects.AddString(FX_SONY_BLUR);
+	int i = m_ctrlEffects.AddString(FX_NEGATIVE);
+	//m_ctrlEffects.SetItemData(i, FX_NEGATIVE);
+	NegativeFxParam* pN = new NegativeFxParam;
+	m_ctrlEffects.SetItemDataPtr(i, pN);
+	i = m_ctrlEffects.AddString(FX_COLOR_KEY);
+	{
+		ColorKeyParam* pCK = new ColorKeyParam;
+		pCK->fKeyColor[0] = 0.8f;
+		pCK->fKeyColor[1] = 0.8f;
+		//param.fKeyColor[2] = 0.8f;
+		pCK->fAngle1 = 1.0f;
+		pCK->fAngle2 = 2.0f;
+		pCK->fLength1 = 0.2f;
+		pCK->fLength2 = 0.45f;
+		m_ctrlEffects.SetItemDataPtr(i, pCK);
+	}
+	i = m_ctrlEffects.AddString(FX_SONY_BLUR);
+	{
+		SonyBlurFxParam* pSB = new SonyBlurFxParam;
+		pSB->blurX = 41.0f;	pSB->blurY = 29.9f;
+		m_ctrlEffects.SetItemDataPtr(i, pSB);
+		m_blurDlg.SetParam(pSB);
+	}
+	i = m_ctrlEffects.AddString(FX_AMOEBA_WIPE);
+	AmoebaWipeFxParam* pAW = new AmoebaWipeFxParam;
+	m_ctrlEffects.SetItemDataPtr(i, pAW);
 
 	m_ctrlEffects.SetCurSel(0);
 
 	//ON_CONTROL(CBN_SELCHANGE, IDC_EFFECTS
 	PostMessage(WM_COMMAND, MAKELONG(IDC_EFFECTS, CBN_SELCHANGE), (LPARAM)m_ctrlEffects.GetSafeHwnd());
+
+	m_ctrlProgress.SetRange(0, 100);
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 	// 异常: OCX 属性页应返回 FALSE
@@ -64,12 +116,42 @@ BOOL CEffectBar::OnInitDialog()
 
 void CEffectBar::OnCbnSelchangeEffects()
 {
-	// TODO: 在此添加控件通知处理程序代码
 	int nSel = m_ctrlEffects.GetCurSel();
 	if(LB_ERR != nSel)
 	{
 		CString str;
 		m_ctrlEffects.GetLBText(nSel, str);
-		AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, nSel, (LPARAM)(LPCTSTR)str);
+		void* pParam = m_ctrlEffects.GetItemDataPtr(nSel);
+		AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)(LPCTSTR)str, (LPARAM)pParam);
+	}
+}
+
+void CEffectBar::OnDestroy()
+{
+	int n = m_ctrlEffects.GetCount();
+	for(int i = 0; i < n; ++i)
+	{
+		void* pParam = m_ctrlEffects.GetItemDataPtr(i);
+		delete pParam;
+	}
+
+	CDialog::OnDestroy();
+}
+
+void CEffectBar::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
+{
+	CDialog::OnHScroll(nSBCode, nPos, pScrollBar);
+
+	int nSel = m_ctrlEffects.GetCurSel();
+	if(LB_ERR != nSel)
+	{
+		CString str;
+		m_ctrlEffects.GetLBText(nSel, str);
+		if(FX_AMOEBA_WIPE == str)
+		{
+			AmoebaWipeFxParam* pParam = (AmoebaWipeFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
+			pParam->fProgress = nPos;
+			AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)(LPCTSTR)str, (LPARAM)pParam);
+		}
 	}
 }

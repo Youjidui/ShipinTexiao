@@ -1,6 +1,8 @@
 #include "StdAfx.h"
 #include "AmoebaWipeRender.h"
+#include "../Utility/ColorConvertor.h"
 
+#define		NOISE_BITMAP_SIZE	32
 
 
 VOID WINAPI ColorFill (D3DXVECTOR4* pOut, const D3DXVECTOR2* pTexCoord, 
@@ -27,10 +29,7 @@ CAmoebaWipeRender::CAmoebaWipeRender(void)
 
 CAmoebaWipeRender::~CAmoebaWipeRender(void)
 {
-	CVideoBufferManager* pBufMgr = m_pEngine->GetVideoBufferManager();
-	pBufMgr->ReleaseVideoBuffer(m_pNoiseTexture);
-	//CResourceManager* pResMgr = m_pEngine->GetResourceManager();
-	//pResMgr->ReleaseEffect();
+	Uninit();
 }
 
 
@@ -45,10 +44,69 @@ bool CAmoebaWipeRender::Init( CRenderEngine* pEngine)
 	VideoBufferInfo mediaBI = {D3DFMT_A8R8G8B8, VideoBufferInfo::VIDEO_MEM, VideoBufferInfo::_IN, 1920, 1080, 0, 0};
 	m_pNoiseTexture = pBufMgr->CreateVideoBuffer(mediaBI);
 	ASSERT(m_pNoiseTexture);
+	m_blurRender.Init(pEngine);
 	return true;
 }
 
+
+void CAmoebaWipeRender::Uninit()
+{
+	m_blurRender.Uninit();
+	CVideoBufferManager* pBufMgr = m_pEngine->GetVideoBufferManager();
+	pBufMgr->ReleaseVideoBuffer(m_pNoiseTexture);
+	//CResourceManager* pResMgr = m_pEngine->GetResourceManager();
+	//pResMgr->ReleaseEffect();
+}
+
+
 bool CAmoebaWipeRender::Render( CVideoBuffer* pDest, CVideoBuffer* pSrcA, CVideoBuffer* pSrcB, AmoebaWipeFxParam* pParam )
+{
+	LPDIRECT3DDEVICE9 pDevice = m_pEngine->GetDevice();
+	CResourceManager* pResMan = m_pEngine->GetResourceManager();
+	//float	fAspect = m_pResMan->GetAspect() * m_pEngine->GetCurProfile()->nEditWidth / (float) (m_pEngine->GetCurProfile()->nEditHeight  * m_pResMan->GetAspectVerifyCoef());
+	float	fAspect = 1920.0f/1080.0f;
+
+	CreateNoiseTexture(pParam);
+
+	//handle_tpr hKey[3] = {INVALID_RESID,INVALID_RESID};
+	//TP_VBufferDef * pKeyDef[3];
+
+	//for(int i = 0; i < 3 ;i ++)
+	//{
+	//	hKey[i] = NewRTBuffer(0,0,pProfile->nEditWidth,pProfile->nEditHeight);
+	//	pKeyDef[i] = m_pResMan->GetBufferDef(hKey[i]);
+	//}	
+
+	CVideoBufferManager* pBufMgr = m_pEngine->GetVideoBufferManager();
+	VideoBufferInfo mediaBI = {D3DFMT_A8R8G8B8, VideoBufferInfo::VIDEO_MEM, VideoBufferInfo::_IN_OUT, 1920, 1080, 0, 0};
+	CVideoBuffer* pMedia = pBufMgr->CreateVideoBuffer(mediaBI);
+	Resize(pMedia, m_pNoiseTexture, pParam);
+
+	//VideoBufferInfo mediaBI = {D3DFMT_A8R8G8B8, VideoBufferInfo::VIDEO_MEM, VideoBufferInfo::_IN_OUT, 1920, 1080, 0, 0};
+	CVideoBuffer* pMediaBlur = pBufMgr->CreateVideoBuffer(mediaBI);
+	SonyBlurFxParam blurParam;
+	blurParam.blurX = 200.0f / (4.0f + 28.0f * pParam->fBumpDensity);
+	blurParam.blurY = 200.0f / (4.0f + 28.0f * pParam->fBumpDensity) / fAspect;
+	m_blurRender.Render(pMediaBlur, pMedia, &blurParam);
+
+	Light(pMedia, pMediaBlur, pParam);
+
+	blurParam.blurX = 100.0f / (4.0f + 28.0f * pParam->fBumpDensity) / (pParam->fHeight + 1.0f);
+	blurParam.blurY = 100.0f / (4.0f + 28.0f * pParam->fBumpDensity) / (pParam->fHeight + 1.0f);
+	CVideoBuffer* pMediaBlur2 = pBufMgr->CreateVideoBuffer(mediaBI);
+	m_blurRender.Render(pMediaBlur2, pMedia, &blurParam);
+
+	Last(pDest, pSrcA, pSrcB, pMediaBlur, pMediaBlur2, pParam);
+
+	pBufMgr->ReleaseVideoBuffer(pMediaBlur2);
+	pBufMgr->ReleaseVideoBuffer(pMediaBlur);
+	pBufMgr->ReleaseVideoBuffer(pMedia);
+
+	return true;
+}
+
+
+bool CAmoebaWipeRender::CreateNoiseTexture( AmoebaWipeFxParam* pParam )
 {
 	LPDIRECT3DDEVICE9 pDevice = m_pEngine->GetDevice();
 	CResourceManager* pResMan = m_pEngine->GetResourceManager();
@@ -70,3 +128,190 @@ bool CAmoebaWipeRender::Render( CVideoBuffer* pDest, CVideoBuffer* pSrcA, CVideo
 
 	return true;
 }
+
+
+void CAmoebaWipeRender::Resize(CVideoBuffer* pDest, CVideoBuffer* pSrc, AmoebaWipeFxParam* pParam )
+{
+	LPDIRECT3DDEVICE9 pDevice = m_pEngine->GetDevice();
+	CResourceManager* pResMan = m_pEngine->GetResourceManager();
+	//float	fAspect = m_pResMan->GetAspect() * m_pEngine->GetCurProfile()->nEditWidth / (float) (m_pEngine->GetCurProfile()->nEditHeight  * m_pResMan->GetAspectVerifyCoef());
+	float	fAspect = 1920.0f/1080.0f;
+
+	D3DXMATRIX* matWorld = NULL, *matView = NULL, *matProj= NULL;
+	pResMan->GetQuadMatrix(&matWorld, &matView, &matProj);
+	D3DXMATRIXA16 matCombine,matTex,matRotation,matTrans,matInvTrans,matAspect,matInvAspect;
+	matCombine = *matView * *matProj;
+	D3DXMatrixIdentity(&matTex);
+	matTex._11 = (4.0f + 28.0f * pParam->fBumpDensity) / NOISE_BITMAP_SIZE;
+	matTex._22 = (4.0f + 28.0f * pParam->fBumpDensity) / NOISE_BITMAP_SIZE;
+	matTex._31 = 0.5f / NOISE_BITMAP_SIZE;
+	matTex._32 = 0.5f / NOISE_BITMAP_SIZE;
+
+	D3DXMatrixIdentity(&matTrans);
+	D3DXMatrixIdentity(&matInvTrans);
+	D3DXMatrixIdentity(&matAspect);
+	D3DXMatrixIdentity(&matInvAspect);
+	matTrans._31 = -0.5f;
+	matTrans._32 = -0.5f;
+	matInvTrans._31 = 0.5f;
+	matInvTrans._32 = 0.5f;
+	matAspect._11 *= fAspect;
+	matInvAspect  /= 1.0f / fAspect;
+	D3DXMatrixRotationZ(&matRotation,pParam->fSlant * D3DX_PI / 4.0f);
+	matTex = matTrans * matAspect * matRotation * matInvAspect * matInvTrans * matTex;
+
+
+	m_pEngine->SetRenderTarget(pDest);
+	m_pEffect->SetMatrix("g_matWorldViewProj",&matCombine);
+	m_pEffect->SetMatrix("g_matTex",&matTex);
+	m_pEffect->SetTexture("g_txColor",m_pNoiseTexture->GetTexture());
+	m_pEffect->SetTechnique("Amoeba");	
+
+	if(SUCCEEDED(pDevice->BeginScene()))
+	{
+		UINT cPass;
+		m_pEffect->Begin(&cPass,0);
+		m_pEffect->BeginPass(0);
+		m_pQuadMesh->DrawMeshFx();
+		m_pEffect->EndPass();
+		m_pEffect->End();
+		pDevice->EndScene();
+	}
+}
+
+void CAmoebaWipeRender::Light( CVideoBuffer* pDest, CVideoBuffer* pSrc, AmoebaWipeFxParam* pParam )
+{
+	LPDIRECT3DDEVICE9 pDevice = m_pEngine->GetDevice();
+	CResourceManager* pResMan = m_pEngine->GetResourceManager();
+	//float	fAspect = m_pResMan->GetAspect() * m_pEngine->GetCurProfile()->nEditWidth / (float) (m_pEngine->GetCurProfile()->nEditHeight  * m_pResMan->GetAspectVerifyCoef());
+	float	fAspect = 1920.0f/1080.0f;
+
+	D3DXMATRIX* matWorld = NULL, *matView = NULL, *matProj= NULL;
+	pResMan->GetQuadMatrix(&matWorld, &matView, &matProj);
+	D3DXMATRIXA16 matCombine,matTex,matRotation,matTrans,matInvTrans,matAspect,matInvAspect;
+	matCombine = *matView * *matProj;
+
+	D3DXMatrixIdentity(&matTrans);
+	D3DXMatrixIdentity(&matInvTrans);
+	D3DXMatrixIdentity(&matAspect);
+	D3DXMatrixIdentity(&matInvAspect);
+	matTrans._31 = -0.5f;
+	matTrans._32 = -0.5f;
+	matInvTrans._31 = 0.5f;
+	matInvTrans._32 = 0.5f;
+	matAspect._11 *= fAspect;
+	matInvAspect  /= 1.0f / fAspect;
+	D3DXMatrixRotationZ(&matRotation,pParam->fSlant * D3DX_PI / 4.0f);
+	D3DXMatrixIdentity(&matTex);
+	matTex._31 = 0.5f / 1920.0f;
+	matTex._32 = 0.5f / 1080.0f;
+
+
+	pParam->fSoftEdge /= 2.0f;
+	pParam->fHeight /= 10.0f;
+	float	fCenter = pParam->fOffset * 2.0f - 1.0f;
+	float	fSoftCenter = pParam->fOffset + fCenter * (pParam->fSoftEdge + pParam->fHeight);
+	float	fHeightCenter = pParam->fOffset + fCenter * pParam->fHeight;
+
+	D3DXVECTOR4 vMisc = D3DXVECTOR4(fSoftCenter - (pParam->fSoftEdge + pParam->fHeight),fSoftCenter + (pParam->fSoftEdge - pParam->fHeight),fHeightCenter - pParam->fHeight,fHeightCenter + pParam->fHeight);
+	m_pEffect->SetVector("g_vMisc",&vMisc);
+
+	const VideoBufferInfo& bi = pSrc->GetVideoBufferInfo();
+	D3DXVECTOR4 vColorSize = D3DXVECTOR4(bi.nAllocWidth, bi.nAllocHeight, pParam->fBrightness * 20.0f, 0.0f);
+	m_pEffect->SetVector("g_textureInfo",&vColorSize);
+	float fLightAngle = D3DXToRadian(pParam->fLightAngle);
+	D3DXVECTOR4 vLightDir = D3DXVECTOR4( sin(fLightAngle),-sin(fLightAngle),cos(fLightAngle),-cos(fLightAngle));	
+	m_pEffect->SetVector("g_vLightDir",&vLightDir);		
+
+	D3DXCOLOR vHighLight = D3DXCOLOR(pParam->crHColor);
+	D3DXCOLOR vShadow = D3DXCOLOR(pParam->crLColor);
+
+	//ColorConvertor::RGBA2(pSrcDef[0]->bufferFormat == FMT_RGBA32 ?  FMT_RGBA32 : FMT_YUVA32 ,&vHighLight,&vHighLight);
+	//ColorConvertor::RGBA2(pSrcDef[0]->bufferFormat == FMT_RGBA32 ?  FMT_RGBA32 : FMT_YUVA32 ,&vShadow,&vShadow);
+
+	//m_pEffect->SetFloatArray("g_HighLight",(float*)&vHighLight,4);
+	//m_pEffect->SetFloatArray("g_Shadow",(float*)&vShadow,4);
+	m_pEffect->SetVector("g_HighLight",(D3DXVECTOR4*)&vHighLight);
+	m_pEffect->SetVector("g_Shadow",(D3DXVECTOR4*)&vShadow);
+
+	m_pEngine->SetRenderTarget(pDest);
+	m_pEffect->SetMatrix("g_matWorldViewProj",&matCombine);
+	m_pEffect->SetMatrix("g_matTex",&matTex);
+	m_pEffect->SetTexture("g_txKey",pSrc->GetTexture());	
+
+	if(SUCCEEDED(pDevice->BeginScene()))
+	{
+		UINT cPass;
+		m_pEffect->Begin(&cPass,0);
+		m_pEffect->BeginPass(1);
+		m_pQuadMesh->DrawMeshFx();
+		m_pEffect->EndPass();
+		m_pEffect->End();
+		pDevice->EndScene();
+	}
+}
+
+void CAmoebaWipeRender::Last( CVideoBuffer* pDest, CVideoBuffer* pSrcA, CVideoBuffer* pSrcB, CVideoBuffer* pSrcC, CVideoBuffer* pSrcD, AmoebaWipeFxParam* pParam )
+{
+	LPDIRECT3DDEVICE9 pDevice = m_pEngine->GetDevice();
+	CResourceManager* pResMan = m_pEngine->GetResourceManager();
+	//float	fAspect = m_pResMan->GetAspect() * m_pEngine->GetCurProfile()->nEditWidth / (float) (m_pEngine->GetCurProfile()->nEditHeight  * m_pResMan->GetAspectVerifyCoef());
+	float	fAspect = 1920.0f/1080.0f;
+
+	D3DXMATRIX* matWorld = NULL, *matView = NULL, *matProj= NULL;
+	pResMan->GetQuadMatrix(&matWorld, &matView, &matProj);
+	D3DXMATRIXA16 matCombine,matTex,matRotation,matTrans,matInvTrans,matAspect,matInvAspect;
+	matCombine = *matView * *matProj;
+
+	D3DXMatrixIdentity(&matTrans);
+	D3DXMatrixIdentity(&matInvTrans);
+	D3DXMatrixIdentity(&matAspect);
+	D3DXMatrixIdentity(&matInvAspect);
+	matTrans._31 = -0.5f;
+	matTrans._32 = -0.5f;
+	matInvTrans._31 = 0.5f;
+	matInvTrans._32 = 0.5f;
+	matAspect._11 *= fAspect;
+	matInvAspect  /= 1.0f / fAspect;
+	D3DXMatrixRotationZ(&matRotation,pParam->fSlant * D3DX_PI / 4.0f);
+	D3DXMatrixIdentity(&matTex);
+	matTex._31 = 0.5f / 1920.0f;
+	matTex._32 = 0.5f / 1080.0f;
+
+	//handle_tpr hTemp[2] = {INVALID_RESID,INVALID_RESID};
+	//TP_VBufferDef * pTempDef[2] = {pSrcDef[0],pSrcDef[1]};
+	//for(int i = 0; i< 2;i ++)
+	//{
+	//	if(pTempDef[i]->BaseWidth != pProfile->nEditWidth || pTempDef[i]->BaseHeight != pProfile->nEditHeight
+	//		|| pTempDef[i]->rcImage.left != CEIL(pTempDef[i]->OffsetX) || pTempDef[i]->rcImage.top != CEIL(pTempDef[i]->OffsetY))
+	//	{
+	//		hTemp[i] = NewRTBuffer(pTempDef[i]->OffsetX,pTempDef[i]->OffsetY,pProfile->nEditWidth,pProfile->nEditHeight);
+	//		m_pEngine->EffectVideoCopy(pSrcDef[i]->handle,hTemp[i]);
+	//		pTempDef[i] = m_pResMan->GetBufferDef(hTemp[i]);
+	//	}
+	//}
+	//Draw Out
+	m_pEngine->SetRenderTarget(pDest);	
+
+	m_pEffect->SetMatrix("g_matWorldViewProj",&matCombine);
+	m_pEffect->SetMatrix("g_matTex",&matTex);
+	m_pEffect->SetTexture("g_txColor",pSrcA->GetTexture());
+	m_pEffect->SetTexture("g_txColor1",pSrcB->GetTexture());
+	m_pEffect->SetTexture("g_txKey",pSrcC->GetTexture());
+	m_pEffect->SetTexture("g_txLight",pSrcD->GetTexture());
+	//D3DXVECTOR4 vAlpha(pSrcDef[0]->fAlphaValue,pSrcDef[1]->fAlphaValue,0,0);
+	D3DXVECTOR4 vAlpha(1.0f,1.0f,0,0);
+	m_pEffect->SetVector("g_vAlpha",&vAlpha);	
+
+	if(SUCCEEDED(pDevice->BeginScene()))
+	{
+		UINT cPass;
+		m_pEffect->Begin(&cPass,0);
+		m_pEffect->BeginPass(2);
+		m_pQuadMesh->DrawMeshFx();
+		m_pEffect->EndPass();
+		m_pEffect->End();
+		pDevice->EndScene();
+	}
+}
+

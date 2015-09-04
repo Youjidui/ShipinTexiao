@@ -197,16 +197,16 @@ CBaseTexture::CBaseTexture(void)
 ,m_pDCSurface(NULL)
 ,m_hDC(NULL)
 {	
-	m_imageInfo    = new TImageInfo;
-	m_imageInfo->Base_Width   = m_imageInfo->Base_Height = 0;	
+	//m_imageInfo    = new TImageInfo;
+	//m_imageInfo->Base_Width   = m_imageInfo->Base_Height = 0;	
 	m_uSizeInBytes = 0;
 }
 
 
 CBaseTexture::~CBaseTexture(void)
 {	 
-	delete m_imageInfo;
-	m_imageInfo = NULL;
+	//delete m_imageInfo;
+	//m_imageInfo = NULL;
 }
 
 HRESULT CBaseTexture::Create( LPDIRECT3DDEVICE9 pDevice,
@@ -223,18 +223,18 @@ HRESULT CBaseTexture::Create( LPDIRECT3DDEVICE9 pDevice,
 
 	m_dwUsage                 = dwUsage;  
 
-	m_imageInfo->Base_Width   = nWidth;
-	m_imageInfo->Base_Height  = nHeight;
-	m_imageInfo->bFree        = true;
+	//m_imageInfo->Base_Width   = nWidth;
+	//m_imageInfo->Base_Height  = nHeight;
+	//m_imageInfo->bFree        = true;
 
 	m_d3dFormat               = format;
 
 	m_d3dPool = pool;
 
-	if(pool == D3DPOOL_SYSTEMMEM)
-	{
-		m_imageInfo->eMemType = MEM_SYSTEM;
-	}
+	//if(pool == D3DPOOL_SYSTEMMEM)
+	//{
+	//	m_imageInfo->eMemType = MEM_SYSTEM;
+	//}
 
 	{
 		if(SUCCEEDED( D3DXCreateTextureFromFileEx( m_pDevice,
@@ -254,8 +254,8 @@ HRESULT CBaseTexture::Create( LPDIRECT3DDEVICE9 pDevice,
 		{
 			D3DSURFACE_DESC desc;
 			(m_pTexture)->GetLevelDesc(0,&desc);
-			m_imageInfo->Base_Width   = desc.Width;
-			m_imageInfo->Base_Height  = desc.Height;
+			//m_imageInfo->Base_Width   = desc.Width;
+			//m_imageInfo->Base_Height  = desc.Height;
 			m_d3dFormat = desc.Format;
 			m_uSizeInBytes = desc.Width * desc.Height * GetPixelSizeInBitsByFormat(m_d3dFormat)/8;
 			return S_OK;
@@ -301,17 +301,17 @@ HRESULT CBaseTexture::Create( LPDIRECT3DDEVICE9 pDevice,
 
 	m_dwUsage                 = dwUsage;  
 
-	m_imageInfo->Base_Width   = nWidth;
-	m_imageInfo->Base_Height  = nHeight;
-	m_d3dFormat               = format;
-	m_imageInfo->bFree        = true;
+	//m_imageInfo->Base_Width   = nWidth;
+	//m_imageInfo->Base_Height  = nHeight;
+	//m_d3dFormat               = format;
+	//m_imageInfo->bFree        = true;
    
 	m_d3dPool        = pool;
 
-	if(pool == D3DPOOL_SYSTEMMEM)
-	{
-		m_imageInfo->eMemType = MEM_SYSTEM;
-	}
+	//if(pool == D3DPOOL_SYSTEMMEM)
+	//{
+	//	m_imageInfo->eMemType = MEM_SYSTEM;
+	//}
 
 	if(SUCCEEDED( m_pDevice->CreateTexture( nWidth,
 		nHeight,
@@ -370,39 +370,39 @@ HRESULT  CBaseTexture::Destroy()
 
 HRESULT CBaseTexture::OnRestore()
 {
-	if( m_d3dPool == D3DPOOL_DEFAULT && m_pDevice )
-	{
-		HRESULT hr = S_OK;
-		if(FAILED(hr =  m_pDevice->CreateTexture( m_imageInfo->Base_Width,
-			m_imageInfo->Base_Height,
-			(m_dwUsage&D3DUSAGE_AUTOGENMIPMAP)?0:1,
-			m_dwUsage,
-			m_d3dFormat,
-			m_d3dPool,
-			(LPDIRECT3DTEXTURE9*)&m_pTexture,
-			NULL)))
-		{				
-			if(hr == D3DERR_INVALIDCALL)
-			{
-				MessageBox(NULL,L"INVALIDCALL",L"D3D ERROR",MB_OK|MB_ICONERROR);
-			}
-			else if(hr == D3DERR_OUTOFVIDEOMEMORY)
-			{
-				MessageBox(NULL,L"OUTOFVIDEOMEMORY",L"D3D ERROR",MB_OK|MB_ICONERROR);
-			}
-			else if(hr == E_OUTOFMEMORY)
-			{
-				MessageBox(NULL,L"OUTOFMEMORY",L"D3D ERROR",MB_OK|MB_ICONERROR);
-			}	
-			else
-			{
-				MessageBox(NULL,L"UNKNOW ERROR",L"D3D ERROR",MB_OK|MB_ICONERROR);
-			}
-			return E_FAIL;
-		}
+	//if( m_d3dPool == D3DPOOL_DEFAULT && m_pDevice )
+	//{
+	//	HRESULT hr = S_OK;
+	//	if(FAILED(hr =  m_pDevice->CreateTexture( m_imageInfo->Base_Width,
+	//		m_imageInfo->Base_Height,
+	//		(m_dwUsage&D3DUSAGE_AUTOGENMIPMAP)?0:1,
+	//		m_dwUsage,
+	//		m_d3dFormat,
+	//		m_d3dPool,
+	//		(LPDIRECT3DTEXTURE9*)&m_pTexture,
+	//		NULL)))
+	//	{				
+	//		if(hr == D3DERR_INVALIDCALL)
+	//		{
+	//			MessageBox(NULL,L"INVALIDCALL",L"D3D ERROR",MB_OK|MB_ICONERROR);
+	//		}
+	//		else if(hr == D3DERR_OUTOFVIDEOMEMORY)
+	//		{
+	//			MessageBox(NULL,L"OUTOFVIDEOMEMORY",L"D3D ERROR",MB_OK|MB_ICONERROR);
+	//		}
+	//		else if(hr == E_OUTOFMEMORY)
+	//		{
+	//			MessageBox(NULL,L"OUTOFMEMORY",L"D3D ERROR",MB_OK|MB_ICONERROR);
+	//		}	
+	//		else
+	//		{
+	//			MessageBox(NULL,L"UNKNOW ERROR",L"D3D ERROR",MB_OK|MB_ICONERROR);
+	//		}
+	//		return E_FAIL;
+	//	}
 
-		if(m_dwUsage&D3DUSAGE_AUTOGENMIPMAP) m_pTexture->SetAutoGenFilterType(  D3DTEXF_ANISOTROPIC);
-	}
+	//	if(m_dwUsage&D3DUSAGE_AUTOGENMIPMAP) m_pTexture->SetAutoGenFilterType(  D3DTEXF_ANISOTROPIC);
+	//}
 	return S_OK;
 }
 

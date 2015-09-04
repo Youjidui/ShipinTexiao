@@ -22,6 +22,7 @@ public:
 	HRESULT SetBool(LPCSTR pName, BOOL bValue);
 	HRESULT SetBoolArray(LPCSTR pName, BOOL* pBValue, UINT uCount);
 	HRESULT SetFloat(LPCSTR pName, FLOAT fValue);
+	HRESULT SetFloatArray(LPCSTR pName, FLOAT* pf, UINT Count);
 	void	CheckParamName(LPCSTR pName);
 
 

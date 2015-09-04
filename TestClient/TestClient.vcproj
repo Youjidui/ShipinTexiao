@@ -376,6 +376,10 @@
 			ReferencedProjectIdentifier="{28113454-E158-4135-BB89-298A1C09BB0E}"
 			RelativePathToProject=".\SonyBlur\SonyBlur.vcproj"
 		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{C2BDC561-6BE5-4949-B15F-4BFFFFF6C626}"
+			RelativePathToProject=".\EffAmoebaWipeTrans\EffAmoebaWipeTrans.vcproj"
+		/>
 	</References>
 	<Files>
 		<Filter
@@ -401,6 +405,10 @@
 			</File>
 			<File
 				RelativePath=".\MainFrm.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ParamBlurDlg.cpp"
 				>
 			</File>
 			<File
@@ -483,6 +491,10 @@
 			</File>
 			<File
 				RelativePath=".\MainFrm.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ParamBlurDlg.h"
 				>
 			</File>
 			<File

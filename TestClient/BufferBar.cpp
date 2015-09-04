@@ -40,6 +40,7 @@ BEGIN_MESSAGE_MAP(CBufferBar, CDialog)
 	ON_BN_CLICKED(IDC_SELECT_IMAGE2, &CBufferBar::OnBnClickedSelectImage2)
 	ON_EN_KILLFOCUS(IDC_HEIGHT, &CBufferBar::OnEnKillfocusHeight)
 	ON_EN_KILLFOCUS(IDC_WIDTH, &CBufferBar::OnEnKillfocusWidth)
+	ON_WM_DESTROY()
 END_MESSAGE_MAP()
 
 
@@ -88,4 +89,9 @@ void CBufferBar::OnEnKillfocusWidth()
 	// TODO: 在此添加控件通知处理程序代码
 	UpdateData(TRUE);
 	AfxGetMainWnd()->PostMessage(UM_SET_TARGET_BUFFER_SIZE, m_uWidth, m_uHeight);
+}
+
+void CBufferBar::OnDestroy()
+{
+	CDialog::OnDestroy();
 }

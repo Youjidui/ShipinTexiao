@@ -290,6 +290,20 @@ HRESULT CBaseFx::SetFloat(LPCSTR pName, FLOAT fValue)
 }
 
 
+HRESULT CBaseFx::SetFloatArray( LPCSTR pName, FLOAT* pf, UINT Count )
+{
+	CheckParamName(pName);
+
+	HRESULT hr = E_FAIL;
+	LPD3DXEFFECT pEffect = GetFxPtr();
+	if(pEffect)
+		hr = pEffect->SetFloatArray(pName,pf,Count);
+	return hr;
+}
+
+
+
+
 
 HRESULT CBaseFx::SetTechnique(LPCSTR pName)
 {

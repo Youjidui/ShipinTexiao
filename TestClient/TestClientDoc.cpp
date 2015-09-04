@@ -15,6 +15,7 @@
 #include "../EffNegative/NegativeRender.h"
 #include "../EffColorKey/ColorKeyRender.h"
 #include "../SonyBlur/SonyBlurRender.h"
+#include "../EffAmoebaWipeTrans/AmoebaWipeRender.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -36,6 +37,7 @@ CTestClientDoc::CTestClientDoc()
 //, m_pResourceManager(NULL)
 , m_pBufferMgr(NULL)
 , m_pDestImage(NULL)
+, m_pEffectParam(NULL)
 {
 	memset(&m_DestVideoBufferInfo, 0, sizeof(VideoBufferInfo));
 	m_DestVideoBufferInfo.format = D3DFMT_A8B8G8R8;
@@ -267,8 +269,7 @@ bool CTestClientDoc::Render()
 						CNegativeRender eff;
 						if(eff.Init(m_pRenderEngine))
 						{
-							NegativeFxParam param;
-							bOK = eff.Render(pDest, pSrc, &param);
+							bOK = eff.Render(pDest, pSrc, (NegativeFxParam*)m_pEffectParam);
 						}
 					}
 					else if(FX_COLOR_KEY == m_strEffectName)
@@ -276,15 +277,7 @@ bool CTestClientDoc::Render()
 						ColorKeyRender eff;
 						if(eff.Init(m_pRenderEngine))
 						{
-							ColorKeyParam param;
-							param.fKeyColor[0] = 0.8f;
-							param.fKeyColor[1] = 0.8f;
-							//param.fKeyColor[2] = 0.8f;
-							param.fAngle1 = 1.0f;
-							param.fAngle2 = 2.0f;
-							param.fLength1 = 0.2f;
-							param.fLength2 = 0.45f;
-							bOK = eff.Render(pDest, pSrc, &param);
+							bOK = eff.Render(pDest, pSrc, (ColorKeyParam*)m_pEffectParam);
 						}
 					}
 					else if(FX_SONY_BLUR == m_strEffectName)
@@ -292,10 +285,19 @@ bool CTestClientDoc::Render()
 						CSonyBlurRender eff;
 						if(eff.Init(m_pRenderEngine))
 						{
-							SonyBlurFxParam param;
-							param.blurX = 41.0f;
-							param.blurY = 29.1f;
-							bOK = eff.Render(pDest, pSrc, &param);
+							bOK = eff.Render(pDest, pSrc, (SonyBlurFxParam*)m_pEffectParam);
+						}
+					}
+					else if(FX_AMOEBA_WIPE == m_strEffectName)
+					{
+						if(m_SrcImages.size() >= 2)
+						{
+							CVideoBuffer* pSrc2 = m_SrcImages[1];
+							CAmoebaWipeRender eff;
+							if(eff.Init(m_pRenderEngine))
+							{
+								bOK = eff.Render(pDest, pSrc, pSrc2, (AmoebaWipeFxParam*)m_pEffectParam);
+							}
 						}
 					}
 				}
@@ -375,7 +377,8 @@ bool CTestClientDoc::Draw( HWND hWnd )
 	return bOK;
 }
 
-void CTestClientDoc::SetEffect( LPCTSTR pszEffectName )
+void CTestClientDoc::SetEffect( LPCTSTR pszEffectName, FxParamBase* pParam )
 {
 	m_strEffectName = pszEffectName;
+	m_pEffectParam = pParam;
 }

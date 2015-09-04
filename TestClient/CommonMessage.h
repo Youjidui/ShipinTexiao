@@ -12,9 +12,10 @@
 
 #define UM_SELECT_EFFECT (WM_USER + 602)
 //某个视频特效被选择
-//WPARAM: UINT  = effect ID
-//LPARAM: LPCTSTR = effect Name
+//WPARAM: LPCTSTR = effect Name
+//LPARAM: FxParamBase*  = effect parameter
 
 #define UM_EFFECT_PARAMETER_CHANGE (WM_USER + 603)
 //某个特效的参数发生改变
-//WPARAM: FxParamBase* = 特效参数结构变量指针
+//WPARAM: LPCTSTR = effect Name
+//LPARAM: FxParamBase* = 特效参数结构变量指针

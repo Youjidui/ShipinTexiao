@@ -1,26 +1,10 @@
 #pragma once
 
 #include "../VideoBuffer.h"
+#include "../FxParam.h"
 #include "../D3D9Render/RenderEngine.h"
 #include "../D3D9Render/VideoBuffer.h"
-
-struct AmoebaWipeFxParam : FxParamBase
-{
-	float fProgress;
-	float	fPhase;
-	float	fBumpDensity;
-	float	fSlant;
-	float	fHeight;
-	float	fSoftEdge;
-	int		nRandomSeed;
-	//
-	float	fBrightness;
-	float	fLightAngle;
-	D3DCOLOR	crHColor;
-	D3DCOLOR	crLColor;
-	//
-	float	fOffset;
-};
+#include "../SonyBlur/SonyBlurRender.h"
 
 
 class CAmoebaWipeRender
@@ -33,6 +17,12 @@ public:
 	void Uninit();
 	bool Render(CVideoBuffer* pDest, CVideoBuffer* pSrcA, CVideoBuffer* pSrcB, AmoebaWipeFxParam* pParam);
 
+protected:
+	bool CreateNoiseTexture(AmoebaWipeFxParam* pParam);
+	void Resize(CVideoBuffer* pDest, CVideoBuffer* pSrc, AmoebaWipeFxParam* pParam );
+	void Light(CVideoBuffer* pDest, CVideoBuffer* pSrc, AmoebaWipeFxParam* pParam );
+	void Last(CVideoBuffer* pDest, CVideoBuffer* pSrcA, CVideoBuffer* pSrcB, CVideoBuffer* pSrcC, CVideoBuffer* pSrcD, AmoebaWipeFxParam* pParam );
+
 private:
 	CRenderEngine*		m_pEngine;
 	CBaseMesh*			m_pQuadMesh;
@@ -40,4 +30,5 @@ private:
 	CVideoBuffer*		m_pNoiseTexture;
 	int m_nRandomSeed;
 	float m_fPhase;
+	CSonyBlurRender		m_blurRender;
 };

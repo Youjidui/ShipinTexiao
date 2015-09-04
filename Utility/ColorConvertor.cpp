@@ -1,5 +1,6 @@
 #include "StdAfx.h"
 #include "ColorConvertor.h"
+#include <assert.h>
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -40,15 +41,8 @@ const D3DXMATRIXA16 g_matRGBA2YUVA_SD(
 
 //////////////////////////////////////////////////////////////////////////
 
-ColorConvertor::ColorConvertor(void)
-{
-}
 
-ColorConvertor::~ColorConvertor(void)
-{
-}
-
-void ColorConvertor::ColorConv_RGBA_YUVA(const D3DXCOLOR *rgba, D3DXCOLOR *yuva)
+void ColorConvertor::RGBA2YUVA(const D3DXCOLOR *rgba, D3DXCOLOR *yuva)
 {	
 	D3DXMATRIXA16 matConvert;
 	D3DXMatrixTranspose(&matConvert,GetMatrix_RGBA2YUVA());
@@ -58,20 +52,20 @@ void ColorConvertor::ColorConv_RGBA_YUVA(const D3DXCOLOR *rgba, D3DXCOLOR *yuva)
 	*yuva = D3DXCOLOR((float*)vRGBA);
 }
 
-void ColorConvertor::ColorConv_RGBA_YUYV(const D3DXCOLOR *rgba, D3DXCOLOR *yuyv)
+void ColorConvertor::RGBA2YUYV(const D3DXCOLOR *rgba, D3DXCOLOR *yuyv)
 {
 	D3DXCOLOR yuva;
-	ColorConv_RGBA_YUVA(rgba, &yuva);
+	RGBA2YUVA(rgba, &yuva);
 	yuyv->r = yuva.r;
 	yuyv->g = yuva.g;
 	yuyv->b = yuva.r;
 	yuyv->a = yuva.b;
 }
 
-void ColorConvertor::ColorConv_RGBA_UYVY(const D3DXCOLOR *rgba, D3DXCOLOR *uyvy)
+void ColorConvertor::RGBA2UYVY(const D3DXCOLOR *rgba, D3DXCOLOR *uyvy)
 {
 	D3DXCOLOR yuva;
-	ColorConv_RGBA_YUVA(rgba, &yuva);
+	RGBA2YUVA(rgba, &yuva);
 	uyvy->r = yuva.g;
 	uyvy->g = yuva.r;
 	uyvy->b = yuva.b;
@@ -80,7 +74,7 @@ void ColorConvertor::ColorConv_RGBA_UYVY(const D3DXCOLOR *rgba, D3DXCOLOR *uyvy)
 
 
 
-void ColorConvertor::ColorConv_YUVA_RGBA(const D3DXCOLOR *yuva, D3DXCOLOR *rgba)
+void ColorConvertor::YUVA2RGBA(const D3DXCOLOR *yuva, D3DXCOLOR *rgba)
 {
 	D3DXMATRIXA16 matConvert;
 	D3DXMatrixTranspose(&matConvert,GetMatrix_YUVA2RGBA());
@@ -89,16 +83,16 @@ void ColorConvertor::ColorConv_YUVA_RGBA(const D3DXCOLOR *yuva, D3DXCOLOR *rgba)
 	*rgba = D3DXCOLOR((float*)vYUVA);
 }
 
-void ColorConvertor::ColorConv_YUYV_RGBA(const D3DXCOLOR *yuyv, D3DXCOLOR *rgba)
+void ColorConvertor::YUYV2RGBA(const D3DXCOLOR *yuyv, D3DXCOLOR *rgba)
 {	
 	const D3DXCOLOR vYUVA(yuyv->b,yuyv->g,yuyv->a,1.0f);
-	ColorConv_YUVA_RGBA(&vYUVA,rgba);
+	YUVA2RGBA(&vYUVA,rgba);
 }
 
-void ColorConvertor::ColorConv_UYVY_RGBA(const D3DXCOLOR *uyvy, D3DXCOLOR *rgba)
+void ColorConvertor::UYVY2RGBA(const D3DXCOLOR *uyvy, D3DXCOLOR *rgba)
 {
 	const D3DXCOLOR vYUVA(uyvy->g,uyvy->r,uyvy->b,1.0f);
-	ColorConv_YUVA_RGBA(&vYUVA,rgba);
+	YUVA2RGBA(&vYUVA,rgba);
 }
 
 const D3DXMATRIXA16* ColorConvertor::GetMatrix_YUVA2RGBA() 
@@ -115,5 +109,23 @@ const D3DXMATRIXA16* ColorConvertor::GetMatrix_RGBA2YUVA()
 		return &g_matRGBA2YUVA_SD; 
 	else
 		return &g_matRGBA2YUVA_HD; 
+}
+
+
+void ColorConvertor::RGBA2(const Buffer_Color_Format fmt,D3DXCOLOR *crSrc,D3DXCOLOR *crDest)
+{
+	switch(fmt)
+	{
+	case FMT_RGBA32:*crDest = *crSrc;break;
+	case FMT_YUVA32:
+		RGBA2YUVA(crSrc,  crDest);		
+		break;
+	case FMT_YUYV:
+		RGBA2YUYV(crSrc,  crDest);		
+		break;
+	default:
+		assert(0);
+		break;
+	}	
 }
 

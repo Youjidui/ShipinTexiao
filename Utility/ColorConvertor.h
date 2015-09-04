@@ -2,20 +2,31 @@
 
 #include <d3dx9math.h>
 
+enum Buffer_Color_Format
+{
+	FMT_RGBA32,
+	FMT_YUVA32, 
+	FMT_RGB24,   
+	FMT_UYVY,
+	FMT_YUYV,      
+	FMT_A8,
+	FMT_YUYV16,
+	FMT_UYVY16,
+};
+
 class ColorConvertor
 {
 public:
-	ColorConvertor(void);
-	~ColorConvertor(void);
+	static void RGBA2YUVA(const D3DXCOLOR *rgba, D3DXCOLOR *yuva);
+	static void YUVA2RGBA(const D3DXCOLOR *yuva, D3DXCOLOR *rgba);
 
-	void ColorConv_RGBA_YUVA(const D3DXCOLOR *rgba, D3DXCOLOR *yuva);
-	void ColorConv_YUVA_RGBA(const D3DXCOLOR *yuva, D3DXCOLOR *rgba);
+	static void RGBA2YUYV(const D3DXCOLOR *rgba, D3DXCOLOR *yuyv);
+	static void RGBA2UYVY(const D3DXCOLOR *rgba, D3DXCOLOR *uyvy);
 
-	void ColorConv_RGBA_YUYV(const D3DXCOLOR *rgba, D3DXCOLOR *yuyv);
-	void ColorConv_RGBA_UYVY(const D3DXCOLOR *rgba, D3DXCOLOR *uyvy);
+	static void YUYV2RGBA(const D3DXCOLOR *yuyv, D3DXCOLOR *rgba);
+	static void UYVY2RGBA(const D3DXCOLOR *uyvy, D3DXCOLOR *rgba);
 
-	void ColorConv_YUYV_RGBA(const D3DXCOLOR *yuyv, D3DXCOLOR *rgba);
-	void ColorConv_UYVY_RGBA(const D3DXCOLOR *uyvy, D3DXCOLOR *rgba);
+	static void RGBA2(const Buffer_Color_Format fmt,D3DXCOLOR *crSrc,D3DXCOLOR *crDest);
 
 	static const D3DXMATRIXA16* GetMatrix_YUVA2RGBA();
 
