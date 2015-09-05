@@ -3,6 +3,7 @@
 #include "afxcmn.h"
 #include "ParamBlurDlg.h"
 #include "ParamColorKeyDlg.h"
+#include "ParamAmoebaWipeDlg.h"
 
 // CEffectBar ¶Ô»°¿ò
 
@@ -26,6 +27,7 @@ public:
 	CSliderCtrl m_ctrlProgress;
 	CParamBlurDlg m_blurDlg;
 	CParamColorKeyDlg m_colorKeyDlg;
+	CParamAmoebaWipeDlg m_amoebaWipeDlg;
 
 	afx_msg void OnBnClickedParameters();
 	virtual BOOL OnInitDialog();

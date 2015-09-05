@@ -40,6 +40,7 @@ bool CAmoebaWipeRender::Init( CRenderEngine* pEngine)
 	CResourceManager* pResMgr = m_pEngine->GetResourceManager();
 	m_pQuadMesh = pResMgr->CreateQuadMesh(pDevice);
 	m_pEffect = pResMgr->CreateEffect(pDevice, _T("NewEffects/AmoebaWipeTrans.fx"));
+	ASSERT(m_pEffect);
 	CVideoBufferManager* pBufMgr = m_pEngine->GetVideoBufferManager();
 	VideoBufferInfo mediaBI = {D3DFMT_A8R8G8B8, VideoBufferInfo::VIDEO_MEM, VideoBufferInfo::_IN, 1920, 1080, 0, 0};
 	m_pNoiseTexture = pBufMgr->CreateVideoBuffer(mediaBI);

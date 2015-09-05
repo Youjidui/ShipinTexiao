@@ -296,6 +296,49 @@ BEGIN
     CONTROL         "",IDC_SLIDER_GRAY_MAX,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,57,223,100,15
 END
 
+IDD_AMOEBA_WIPE DIALOGEX 0, 0, 192, 297
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Amoeba Wipe"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    LTEXT           "Progress",IDC_STATIC,7,10,29,8
+    CONTROL         "",IDC_SLIDER_PROGRESS,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,76,7,100,15
+    LTEXT           "Phase",IDC_STATIC,7,25,20,8
+    CONTROL         "",IDC_SLIDER_PHASE,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,76,22,100,15
+    LTEXT           "Bump Density",IDC_STATIC,7,41,44,8
+    CONTROL         "",IDC_SLIDER_BUMP_DENSITY,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,76,38,100,15
+    LTEXT           "Slant",IDC_STATIC,7,57,17,8
+    CONTROL         "",IDC_SLIDER_SLANT,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,76,54,100,15
+    LTEXT           "Height",IDC_STATIC,7,72,22,8
+    CONTROL         "",IDC_SLIDER_HEIGHT,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,76,69,100,15
+    LTEXT           "Soft Edge",IDC_STATIC,7,88,32,8
+    CONTROL         "",IDC_SLIDER_SOFT_EDGE,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,76,85,100,15
+    LTEXT           "Random Seed",IDC_STATIC,7,103,45,8
+    CONTROL         "",IDC_SLIDER_RANDOM_SEED,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,76,100,100,15
+    LTEXT           "Brightness",IDC_STATIC,7,118,34,8
+    CONTROL         "",IDC_SLIDER_BRIGHTNESS,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,76,115,100,15
+    LTEXT           "Light Angle",IDC_STATIC,7,132,36,8
+    CONTROL         "",IDC_SLIDER_LIGHT_ANGLE,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,76,130,100,15
+    LTEXT           "High Color R",IDC_STATIC,7,147,40,8
+    CONTROL         "",IDC_SLIDER_HIGH_COLOR_R,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,76,145,100,15
+    LTEXT           "High Color G",IDC_STATIC,7,162,40,8
+    CONTROL         "",IDC_SLIDER_HIGH_COLOR_G,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,76,160,100,15
+    LTEXT           "High Color B",IDC_STATIC,7,178,40,8
+    CONTROL         "",IDC_SLIDER_HIGH_COLOR_B,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,76,175,100,15
+    LTEXT           "High Color A",IDC_STATIC,7,193,40,8
+    CONTROL         "",IDC_SLIDER_HIGH_COLOR_A,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,76,190,100,15
+    LTEXT           "Low Color R",IDC_STATIC,7,208,39,8
+    CONTROL         "",IDC_SLIDER_LOW_COLOR_R,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,76,206,100,15
+    LTEXT           "Low Color G",IDC_STATIC,7,223,39,8
+    CONTROL         "",IDC_SLIDER_LOW_COLOR_G,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,76,221,100,15
+    LTEXT           "Low Color B",IDC_STATIC,7,239,38,8
+    CONTROL         "",IDC_SLIDER_LOW_COLOR_B,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,76,236,100,15
+    LTEXT           "Low Color A",IDC_STATIC,7,254,39,8
+    CONTROL         "",IDC_SLIDER_LOW_COLOR_A,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,76,251,100,15
+    LTEXT           "Offset",IDC_STATIC,7,270,22,8
+    CONTROL         "",IDC_SLIDER_OFFSET,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,76,267,100,15
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -379,6 +422,14 @@ BEGIN
         RIGHTMARGIN, 164
         TOPMARGIN, 7
         BOTTOMMARGIN, 300
+    END
+
+    IDD_AMOEBA_WIPE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 185
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 290
     END
 END
 #endif    // APSTUDIO_INVOKED

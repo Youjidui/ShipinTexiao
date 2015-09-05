@@ -408,6 +408,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ParamAmoebaWipeDlg.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\ParamBlurDlg.cpp"
 				>
 			</File>
@@ -495,6 +499,10 @@
 			</File>
 			<File
 				RelativePath=".\MainFrm.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ParamAmoebaWipeDlg.h"
 				>
 			</File>
 			<File

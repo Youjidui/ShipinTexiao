@@ -71,6 +71,11 @@ void CEffectBar::OnBnClickedParameters()
 		}
 		else if(FX_AMOEBA_WIPE == str)
 		{
+			if(!m_amoebaWipeDlg.GetSafeHwnd())
+			{
+				m_amoebaWipeDlg.Create(CParamAmoebaWipeDlg::IDD);
+			}
+			m_amoebaWipeDlg.ShowWindow(SW_SHOW);
 		}
 	}
 }
@@ -106,8 +111,19 @@ BOOL CEffectBar::OnInitDialog()
 		m_blurDlg.SetParam(pSB);
 	}
 	i = m_ctrlEffects.AddString(FX_AMOEBA_WIPE);
-	AmoebaWipeFxParam* pAW = new AmoebaWipeFxParam;
-	m_ctrlEffects.SetItemDataPtr(i, pAW);
+	{
+		AmoebaWipeFxParam* pAW = new AmoebaWipeFxParam;
+		ZeroMemory(pAW, sizeof(AmoebaWipeFxParam));
+		pAW->cbSize = sizeof(AmoebaWipeFxParam);
+		pAW->fBumpDensity = 0.25f;
+		pAW->fHeight = 0.5f;
+		pAW->fSoftEdge = 0.05f;
+		pAW->fBrightness = 0.2f;
+		pAW->fLightAngle = 135.f;
+		pAW->fOffset = 0.5f;
+		m_ctrlEffects.SetItemDataPtr(i, pAW);
+		m_amoebaWipeDlg.SetParam(pAW);
+	}
 
 	m_ctrlEffects.SetCurSel(0);
 
@@ -144,9 +160,14 @@ void CEffectBar::OnDestroy()
 	CDialog::OnDestroy();
 }
 
-void CEffectBar::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
+void CEffectBar::OnHScroll(UINT nSBCode, UINT uPos, CScrollBar* pScrollBar)
 {
-	CDialog::OnHScroll(nSBCode, nPos, pScrollBar);
+	CDialog::OnHScroll(nSBCode, uPos, pScrollBar);
+
+	CSliderCtrl* pCtrl = (CSliderCtrl*)pScrollBar;
+	int nPos = uPos;
+	if(pCtrl)
+		nPos = pCtrl->GetPos();
 
 	int nSel = m_ctrlEffects.GetCurSel();
 	if(LB_ERR != nSel)
@@ -156,7 +177,7 @@ void CEffectBar::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 		if(FX_AMOEBA_WIPE == str)
 		{
 			AmoebaWipeFxParam* pParam = (AmoebaWipeFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
-			pParam->fProgress = nPos;
+			pParam->fProgress = nPos / 100.f;
 			AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)(LPCTSTR)str, (LPARAM)pParam);
 		}
 	}
