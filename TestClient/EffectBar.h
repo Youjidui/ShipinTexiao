@@ -2,6 +2,7 @@
 #include "afxwin.h"
 #include "afxcmn.h"
 #include "ParamBlurDlg.h"
+#include "ParamColorKeyDlg.h"
 
 // CEffectBar ¶Ô»°¿ò
 
@@ -24,6 +25,7 @@ public:
 	CComboBox m_ctrlEffects;
 	CSliderCtrl m_ctrlProgress;
 	CParamBlurDlg m_blurDlg;
+	CParamColorKeyDlg m_colorKeyDlg;
 
 	afx_msg void OnBnClickedParameters();
 	virtual BOOL OnInitDialog();

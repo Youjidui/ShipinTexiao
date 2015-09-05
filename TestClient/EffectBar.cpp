@@ -55,6 +55,11 @@ void CEffectBar::OnBnClickedParameters()
 		}
 		else if(FX_COLOR_KEY == str)
 		{
+			if(!m_colorKeyDlg.GetSafeHwnd())
+			{
+				m_colorKeyDlg.Create(CParamColorKeyDlg::IDD);
+			}
+			m_colorKeyDlg.ShowWindow(SW_SHOW);
 		}
 		else if(FX_SONY_BLUR == str)
 		{
@@ -91,6 +96,7 @@ BOOL CEffectBar::OnInitDialog()
 		pCK->fLength1 = 0.2f;
 		pCK->fLength2 = 0.45f;
 		m_ctrlEffects.SetItemDataPtr(i, pCK);
+		m_colorKeyDlg.SetParam(pCK);
 	}
 	i = m_ctrlEffects.AddString(FX_SONY_BLUR);
 	{

@@ -261,6 +261,41 @@ BEGIN
     EDITTEXT        IDC_EDIT_BLUR_Y,29,30,40,14,ES_AUTOHSCROLL
 END
 
+IDD_DIALOG3 DIALOGEX 0, 0, 171, 307
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Color Key"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    PUSHBUTTON      "È¡Ïû",IDCANCEL,114,286,50,14
+    LTEXT           "Key Color",IDC_STATIC,7,7,32,8
+    LTEXT           "R",IDC_STATIC,44,9,8,8
+    LTEXT           "G",IDC_STATIC,43,27,8,8
+    LTEXT           "B",IDC_STATIC,43,47,8,8
+    LTEXT           "A",IDC_STATIC,43,63,8,8
+    LTEXT           "Angle 1",IDC_STATIC,7,81,25,8
+    LTEXT           "Angle 2",IDC_STATIC,7,117,25,8
+    LTEXT           "Length 1",IDC_STATIC,7,99,29,8
+    LTEXT           "Length 2",IDC_STATIC,7,135,29,8
+    LTEXT           "Softness",IDC_STATIC,7,153,29,8
+    LTEXT           "Blurness",IDC_STATIC,7,171,28,8
+    LTEXT           "Fine Tune",IDC_STATIC,7,189,32,8
+    LTEXT           "Gray Min",IDC_STATIC,7,207,29,8
+    LTEXT           "Gray Max",IDC_STATIC,7,225,32,8
+    CONTROL         "",IDC_SLIDER_R,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,57,7,100,15
+    CONTROL         "",IDC_SLIDER_G,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,57,25,100,15
+    CONTROL         "",IDC_SLIDER_B,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,57,43,100,15
+    CONTROL         "",IDC_SLIDER_A,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,57,61,100,15
+    CONTROL         "",IDC_SLIDER_ANGLE1,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,57,79,100,15
+    CONTROL         "",IDC_SLIDER_LENGTH1,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,57,97,100,15
+    CONTROL         "",IDC_SLIDER_ANGLE2,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,57,115,100,15
+    CONTROL         "",IDC_SLIDER_LENGTH2,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,57,133,100,15
+    CONTROL         "",IDC_SLIDER_SOFTNESS,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,57,151,100,15
+    CONTROL         "",IDC_SLIDER_BLURNESS,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,57,169,100,15
+    CONTROL         "",IDC_SLIDER_FINE_TUNE,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,57,187,100,15
+    CONTROL         "",IDC_SLIDER_GRAY_MIN,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,57,205,100,15
+    CONTROL         "",IDC_SLIDER_GRAY_MAX,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,57,223,100,15
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -336,6 +371,14 @@ BEGIN
         RIGHTMARGIN, 127
         TOPMARGIN, 7
         BOTTOMMARGIN, 87
+    END
+
+    IDD_DIALOG3, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 164
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 300
     END
 END
 #endif    // APSTUDIO_INVOKED

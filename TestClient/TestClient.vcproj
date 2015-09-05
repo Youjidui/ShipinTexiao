@@ -412,6 +412,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ParamColorKeyDlg.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\stdafx.cpp"
 				>
 				<FileConfiguration
@@ -495,6 +499,10 @@
 			</File>
 			<File
 				RelativePath=".\ParamBlurDlg.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ParamColorKeyDlg.h"
 				>
 			</File>
 			<File
