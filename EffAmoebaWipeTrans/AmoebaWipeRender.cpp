@@ -42,9 +42,9 @@ bool CAmoebaWipeRender::Init( CRenderEngine* pEngine)
 	m_pEffect = pResMgr->CreateEffect(pDevice, _T("NewEffects/AmoebaWipeTrans.fx"));
 	ASSERT(m_pEffect);
 	CVideoBufferManager* pBufMgr = m_pEngine->GetVideoBufferManager();
-	int nEditWidth, nEditHeight;
-	m_pEngine->GetTargetVideoSize(nEditWidth, nEditHeight);
-	VideoBufferInfo mediaBI = {D3DFMT_A8R8G8B8, VideoBufferInfo::VIDEO_MEM, VideoBufferInfo::_IN, nEditWidth, nEditHeight, 0, 0};
+	//int nEditWidth, nEditHeight;
+	//m_pEngine->GetTargetVideoSize(nEditWidth, nEditHeight);
+	VideoBufferInfo mediaBI = {D3DFMT_A8R8G8B8, VideoBufferInfo::VIDEO_MEM, VideoBufferInfo::_IN, NOISE_BITMAP_SIZE, NOISE_BITMAP_SIZE, 0, 0};
 	m_pNoiseTexture = pBufMgr->CreateVideoBuffer(mediaBI);
 	ASSERT(m_pNoiseTexture);
 	m_blurRender.Init(pEngine);
@@ -199,7 +199,7 @@ void CAmoebaWipeRender::Resize(CVideoBuffer* pDest, CVideoBuffer* pSrc, AmoebaWi
 		pDevice->EndScene();
 		m_pEngine->SetRenderTarget(NULL);
 	}
-	m_pEffect->SetTexture("g_txColor", NULL);
+	//m_pEffect->SetTexture("g_txColor", NULL);
 }
 
 void CAmoebaWipeRender::Light( CVideoBuffer* pDest, CVideoBuffer* pSrc, AmoebaWipeFxParam* pParam )
@@ -258,15 +258,16 @@ void CAmoebaWipeRender::Light( CVideoBuffer* pDest, CVideoBuffer* pSrc, AmoebaWi
 	//ColorConvertor::RGBA2(pSrcDef[0]->bufferFormat == FMT_RGBA32 ?  FMT_RGBA32 : FMT_YUVA32 ,&vHighLight,&vHighLight);
 	//ColorConvertor::RGBA2(pSrcDef[0]->bufferFormat == FMT_RGBA32 ?  FMT_RGBA32 : FMT_YUVA32 ,&vShadow,&vShadow);
 
-	m_pEffect->SetFloatArray("g_HighLight",(float*)&vHighLight,4);
-	m_pEffect->SetFloatArray("g_Shadow",(float*)&vShadow,4);
-	//m_pEffect->SetVector("g_HighLight",(D3DXVECTOR4*)&vHighLight);
-	//m_pEffect->SetVector("g_Shadow",(D3DXVECTOR4*)&vShadow);
+	//m_pEffect->SetFloatArray("g_HighLight",(float*)&vHighLight,4);
+	//m_pEffect->SetFloatArray("g_Shadow",(float*)&vShadow,4);
+	m_pEffect->SetVector("g_HighLight",(D3DXVECTOR4*)&vHighLight);
+	m_pEffect->SetVector("g_Shadow",(D3DXVECTOR4*)&vShadow);
 
 	m_pEngine->SetRenderTarget(pDest);
 	m_pEffect->SetMatrix("g_matWorldViewProj",&matCombine);
 	m_pEffect->SetMatrix("g_matTex",&matTex);
 	m_pEffect->SetTexture("g_txKey",pSrc->GetTexture());
+	//D3DXSaveTextureToFile(_T("./AmoebaWipe_Light_Texture.bmp"), D3DXIFF_BMP, pSrc->GetTexture(), NULL);
 
 	if(SUCCEEDED(pDevice->BeginScene()))
 	{
@@ -279,7 +280,8 @@ void CAmoebaWipeRender::Light( CVideoBuffer* pDest, CVideoBuffer* pSrc, AmoebaWi
 		pDevice->EndScene();
 		m_pEngine->SetRenderTarget(NULL);
 	}
-	m_pEffect->SetTexture("g_txKey", NULL);
+	//m_pEffect->SetTexture("g_txKey", NULL);
+	//D3DXSaveSurfaceToFile(_T("./AmoebaWipe_Light_Render.bmp"), D3DXIFF_BMP, pDest->GetSurface(), NULL, NULL);
 }
 
 void CAmoebaWipeRender::Last( CVideoBuffer* pDest, CVideoBuffer* pSrcA, CVideoBuffer* pSrcB, CVideoBuffer* pSrcC, CVideoBuffer* pSrcD, AmoebaWipeFxParam* pParam )
@@ -347,9 +349,9 @@ void CAmoebaWipeRender::Last( CVideoBuffer* pDest, CVideoBuffer* pSrcA, CVideoBu
 		pDevice->EndScene();
 		m_pEngine->SetRenderTarget(NULL);
 	}
-	m_pEffect->SetTexture("g_txColor", NULL);
-	m_pEffect->SetTexture("g_txColor1", NULL);
-	m_pEffect->SetTexture("g_txKey", NULL);
-	m_pEffect->SetTexture("g_txLight", NULL);
+	//m_pEffect->SetTexture("g_txColor", NULL);
+	//m_pEffect->SetTexture("g_txColor1", NULL);
+	//m_pEffect->SetTexture("g_txKey", NULL);
+	//m_pEffect->SetTexture("g_txLight", NULL);
 }
 

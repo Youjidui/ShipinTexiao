@@ -179,7 +179,7 @@ bool CSonyBlurRender::Render( CVideoBuffer* pDest, CVideoBuffer* pSrc, SonyBlurF
 		m_pEffect->End();
 		pDevice->EndScene();
 		m_pEngine->SetRenderTarget(NULL);
-		m_pEffect->SetTexture("g_txColor", NULL);
+		//m_pEffect->SetTexture("g_txColor", NULL);
 	}
 	return true;
 }
