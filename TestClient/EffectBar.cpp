@@ -130,7 +130,8 @@ BOOL CEffectBar::OnInitDialog()
 	//ON_CONTROL(CBN_SELCHANGE, IDC_EFFECTS
 	PostMessage(WM_COMMAND, MAKELONG(IDC_EFFECTS, CBN_SELCHANGE), (LPARAM)m_ctrlEffects.GetSafeHwnd());
 
-	m_ctrlProgress.SetRange(0, 100);
+	m_ctrlProgress.SetRange(0, 10000);	//1.f, 0, 0.0001f
+	SetProgress(&m_ctrlProgress);
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 	// 异常: OCX 属性页应返回 FALSE
@@ -169,6 +170,11 @@ void CEffectBar::OnHScroll(UINT nSBCode, UINT uPos, CScrollBar* pScrollBar)
 	if(pCtrl)
 		nPos = pCtrl->GetPos();
 
+	OnProgressChange(nPos);
+}
+
+void CEffectBar::OnProgressChange( int nPos )
+{
 	int nSel = m_ctrlEffects.GetCurSel();
 	if(LB_ERR != nSel)
 	{
@@ -177,8 +183,24 @@ void CEffectBar::OnHScroll(UINT nSBCode, UINT uPos, CScrollBar* pScrollBar)
 		if(FX_AMOEBA_WIPE == str)
 		{
 			AmoebaWipeFxParam* pParam = (AmoebaWipeFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
-			pParam->fProgress = nPos / 100.f;
+			//pParam->fProgress = nPos / 100.f;
+			pParam->fOffset = nPos / 10000.f;
 			AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)(LPCTSTR)str, (LPARAM)pParam);
+		}
+	}
+}
+
+void CEffectBar::SetProgress(CSliderCtrl* pCtrl)
+{
+	int nSel = m_ctrlEffects.GetCurSel();
+	if(LB_ERR != nSel)
+	{
+		CString str;
+		m_ctrlEffects.GetLBText(nSel, str);
+		if(FX_AMOEBA_WIPE == str)
+		{
+			AmoebaWipeFxParam* pParam = (AmoebaWipeFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
+			if(pParam)	pCtrl->SetPos(pParam->fOffset * 10000);
 		}
 	}
 }

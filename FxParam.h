@@ -58,20 +58,20 @@ struct ColorKeyParam : public FxParamBase
 
 struct AmoebaWipeFxParam : FxParamBase
 {
-	float fProgress;
+	//progress
+	float	fOffset;
+	//bump and blur
 	float	fPhase;
 	float	fBumpDensity;
 	float	fSlant;
 	float	fHeight;
 	float	fSoftEdge;
 	int		nRandomSeed;
-	//
+	//light
 	float	fBrightness;
 	float	fLightAngle;
 	D3DCOLOR	crHColor;
 	D3DCOLOR	crLColor;
-	//
-	float	fOffset;
 };
 
 

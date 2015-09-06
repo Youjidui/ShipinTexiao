@@ -20,6 +20,8 @@ public:
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV Ö§³Ö
+	void SetProgress(CSliderCtrl* pCtrl);
+	void OnProgressChange(int nPos);
 
 	DECLARE_MESSAGE_MAP()
 public:
