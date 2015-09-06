@@ -30,10 +30,10 @@ HRESULT CRenderEngine::Create( HWND hDeviceWnd, UINT nBackBufferWidth, UINT nBac
 	m_DeviceSettings.pp.BackBufferWidth        = nBackBufferWidth ;
 	m_DeviceSettings.pp.BackBufferHeight       = nBackBufferHeight;  
 
-	RECT rcClient;
-	GetClientRect(GetDesktopWindow(),&rcClient);
-	m_DeviceSettings.pp.BackBufferWidth = UINT(RECTWIDTH(rcClient) * 0.99f);
-	m_DeviceSettings.pp.BackBufferHeight = UINT(RECTHEIGHT(rcClient) * 0.8f);
+	//RECT rcClient;
+	//GetClientRect(GetDesktopWindow(),&rcClient);
+	//m_DeviceSettings.pp.BackBufferWidth = UINT(RECTWIDTH(rcClient) * 0.99f);
+	//m_DeviceSettings.pp.BackBufferHeight = UINT(RECTHEIGHT(rcClient) * 0.8f);
 
 	m_DeviceSettings.pp.BackBufferCount        = 1;	
 	m_DeviceSettings.pp.BackBufferFormat       = D3DFMT_A8R8G8B8;
@@ -84,24 +84,31 @@ bool CRenderEngine::SetRenderTarget( CVideoBuffer* pDest )
 {
 	LPDIRECT3DDEVICE9 pDevice = GetDevice();
 	LPDIRECT3DSURFACE9 pRTSurface = NULL;
-	pRTSurface = pDest->GetSurface();
+	if(pDest)
+	{
+		pRTSurface = pDest->GetSurface();
+	}
+
 	// set render target
 	pDevice->SetRenderTarget(0, pRTSurface);
-	SAFE_RELEASE(pRTSurface);
+	//SAFE_RELEASE(pRTSurface);
 
-	const VideoBufferInfo& buffInfo = pDest->GetVideoBufferInfo();
-	// set view port
-	D3DVIEWPORT9 vp;
-	vp.MaxZ = 1.0f;
-	vp.MinZ = 0.0f;
-	vp.X        = 0;
-	vp.Y        = 0;
-	vp.Width    = buffInfo.nWidth;
-	vp.Height   = buffInfo.nHeight;
-	pDevice->SetViewport(&vp);
+	if(pRTSurface)
+	{
+		const VideoBufferInfo& buffInfo = pDest->GetVideoBufferInfo();
+		// set view port
+		D3DVIEWPORT9 vp;
+		vp.MaxZ = 1.0f;
+		vp.MinZ = 0.0f;
+		vp.X        = 0;
+		vp.Y        = 0;
+		vp.Width    = buffInfo.nWidth;
+		vp.Height   = buffInfo.nHeight;
+		pDevice->SetViewport(&vp);
 
-	pDevice->Clear(0, NULL, D3DCLEAR_TARGET|D3DCLEAR_ZBUFFER, 0, 1.0f, 0);
-	return true;
+		pDevice->Clear(0, NULL, D3DCLEAR_TARGET|D3DCLEAR_ZBUFFER, 0, 1.0f, 0);
+	}
+	return !!pRTSurface;
 }
 
 void CRenderEngine::GetTargetVideoSize( int& nEditWidth, int& nEditHeight )

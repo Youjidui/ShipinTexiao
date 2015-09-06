@@ -127,33 +127,8 @@ HRESULT CBaseFx::Create ( LPDIRECT3DDEVICE9 pDevice,const TCHAR* szFxName, const
 	}
 	return hr;
 }
-/*
-HRESULT CBaseFx::SetYUVA2RGBAMatrix()
-{
-	LPD3DXEFFECT pEffect = m_pEffect;
-	if(pEffect == NULL)
-		return E_FAIL;
 
-	D3DXHANDLE hMatRGB2YUV = pEffect->GetParameterByName(NULL,"matRGBA2YUVA");
-	D3DXHANDLE hMatYUV2RGB = pEffect->GetParameterByName(NULL,"matYUVA2RGBA");
 
-	if(0)//m_pResMan->m_dwVideoMode == VM_SD)
-	{
-		if(hMatRGB2YUV)
-			pEffect->SetMatrix(hMatRGB2YUV,&g_matRGBA2YUVA_SD);
-		if(hMatYUV2RGB)
-			pEffect->SetMatrix(hMatYUV2RGB,&g_matYUVA2RGBA_SD);
-	}		
-	else
-	{		
-		if(hMatRGB2YUV)
-			pEffect->SetMatrix(hMatRGB2YUV,&g_matRGBA2YUVA_HD);
-		if(hMatYUV2RGB)
-			pEffect->SetMatrix(hMatYUV2RGB,&g_matYUVA2RGBA_HD);
-	}		
-	return S_OK;
-}
-*/
 LPD3DXEFFECT CBaseFx::GetFxPtr()
 {
 	return m_pEffect;
@@ -178,16 +153,16 @@ HRESULT CBaseFx::OnRestore()
 	return S_OK;
 }
 
-HRESULT CBaseFx::SetTexture(LPCSTR pName, CBaseTexture* pBaseTex)
-{
-	CheckParamName(pName);
-
-	HRESULT hr = E_FAIL;
-	LPD3DXEFFECT pEffect = GetFxPtr();
-	if(pEffect)
-		hr = pEffect->SetTexture(pName,pBaseTex->GetTexture());
-	return hr;
-}
+//HRESULT CBaseFx::SetTexture(LPCSTR pName, CBaseTexture* pBaseTex)
+//{
+//	CheckParamName(pName);
+//
+//	HRESULT hr = E_FAIL;
+//	LPD3DXEFFECT pEffect = GetFxPtr();
+//	if(pEffect)
+//		hr = pEffect->SetTexture(pName,pBaseTex->GetTexture());
+//	return hr;
+//}
 
 HRESULT CBaseFx::SetTexture(LPCSTR pName, LPDIRECT3DTEXTURE9 pTex)
 {
@@ -196,7 +171,16 @@ HRESULT CBaseFx::SetTexture(LPCSTR pName, LPDIRECT3DTEXTURE9 pTex)
 	HRESULT hr = E_FAIL;
 	LPD3DXEFFECT pEffect = GetFxPtr();
 	if(pEffect)
+	{
 		hr = pEffect->SetTexture(pName, pTex);
+		if(FAILED(hr))
+		{
+			LPCTSTR pszErrorString = DXGetErrorString(hr);
+			LPCTSTR pszErrorDesc = DXGetErrorDescription(hr);
+			TRACE(pszErrorString);
+			TRACE(pszErrorDesc);
+		}
+	}
 	return hr;
 }
 

@@ -67,10 +67,10 @@ bool CNegativeRender::Render( CVideoBuffer* pDest, CVideoBuffer* pSrc, NegativeF
 				m_pNegativeEffect->EndPass();
 				m_pNegativeEffect->End();
 				pDevice->EndScene();
+				m_pEngine->SetRenderTarget(NULL);
 			}
 			lpTex->Release();
-			lpTex = NULL;
-			m_pNegativeEffect->SetTexture("g_txColor", lpTex);
+			m_pNegativeEffect->SetTexture("g_txColor", NULL);
 		}
 	}
 	return true;

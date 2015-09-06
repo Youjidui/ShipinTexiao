@@ -12,7 +12,7 @@ public:
 	HRESULT GetFunction(void* pData, UINT* pSizeOfData){return S_OK;};
 
 public:
-	HRESULT SetTexture(LPCSTR pName, CBaseTexture* pBaseTex);
+	//HRESULT SetTexture(LPCSTR pName, CBaseTexture* pBaseTex);
 	HRESULT SetTexture(LPCSTR pName, LPDIRECT3DTEXTURE9 pTex);
 	HRESULT SetMatrix(LPCSTR pName, D3DXMATRIX* pMat);
 	HRESULT SetMatrixArray(LPCSTR pName, D3DXMATRIX* pMat, UINT uCount);

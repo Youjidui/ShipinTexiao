@@ -7,6 +7,7 @@
 CVideoBuffer::CVideoBuffer(IDirect3DDevice9* pDevice, const VideoBufferInfo& info)
 : m_pDevice(pDevice)
 , m_pSurface(NULL)
+, m_pTexture(NULL)
 {
 	memcpy(&m_BufferInfo, &info, sizeof(info));
 	Create(pDevice, info);
@@ -77,7 +78,7 @@ bool CVideoBuffer::Create(IDirect3DDevice9* pDevice, const VideoBufferInfo& info
 				hr = pDevice->CreateTexture( info.nWidth,
 					info.nHeight,
 					1,
-					D3DUSAGE_RENDERTARGET | D3DUSAGE_WRITEONLY,
+					D3DUSAGE_RENDERTARGET,// | D3DUSAGE_WRITEONLY,
 					D3DFMT_A8R8G8B8,
 					D3DPOOL_DEFAULT,
 					&m_pTexture,
@@ -85,6 +86,13 @@ bool CVideoBuffer::Create(IDirect3DDevice9* pDevice, const VideoBufferInfo& info
 				if(SUCCEEDED(hr))
 				{
 					hr = m_pTexture->GetSurfaceLevel(0, &m_pSurface);
+				}
+				else
+				{
+					LPCTSTR pszErrorString = DXGetErrorString(hr);
+					LPCTSTR pszErrorDesc = DXGetErrorDescription(hr);
+					TRACE(pszErrorString);
+					TRACE(pszErrorDesc);
 				}
 			}
 		}
@@ -95,17 +103,26 @@ bool CVideoBuffer::Create(IDirect3DDevice9* pDevice, const VideoBufferInfo& info
 			{
 			case VideoBufferInfo::SYSTEM_MEM:
 				{
+					m_pTexture = NULL;
 					hr = pDevice->CreateOffscreenPlainSurface( info.nWidth,
 						info.nHeight,
 						D3DFMT_A8R8G8B8,
 						D3DPOOL_SYSTEMMEM,
 						&m_pSurface,
 						NULL );
+					if(FAILED(hr))
+					{
+						LPCTSTR pszErrorString = DXGetErrorString(hr);
+						LPCTSTR pszErrorDesc = DXGetErrorDescription(hr);
+						TRACE(pszErrorString);
+						TRACE(pszErrorDesc);
+					}
 				}
 				break;
 			case VideoBufferInfo::VIDEO_MEM:
 			default:
 				{
+					m_pTexture = NULL;
 					hr = pDevice->CreateRenderTarget( info.nWidth,
 						info.nHeight,
 						D3DFMT_A8R8G8B8,
@@ -114,12 +131,20 @@ bool CVideoBuffer::Create(IDirect3DDevice9* pDevice, const VideoBufferInfo& info
 						TRUE,
 						&m_pSurface,
 						NULL );
+					if(FAILED(hr))
+					{
+						LPCTSTR pszErrorString = DXGetErrorString(hr);
+						LPCTSTR pszErrorDesc = DXGetErrorDescription(hr);
+						TRACE(pszErrorString);
+						TRACE(pszErrorDesc);
+					}
 				}
 				break;
 			}
 		}
 		break;
 	}
+	ASSERT(NULL != m_pSurface);
 	return SUCCEEDED(hr);
 }
 

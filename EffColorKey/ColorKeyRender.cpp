@@ -325,6 +325,7 @@ void ColorKeyRender::_colorkey_pass(CVideoBuffer* pSrcDef, CVideoBuffer* pDstDef
 		//m_pEngine->ApplyCurRenderState();
 		m_pQuadMesh->DrawMesh(0, vertexshader);
 		pDevice->EndScene();
+		m_pEngine->SetRenderTarget(NULL);
 	}
 	pDevice->SetPixelShader(NULL);
 	pDevice->SetTexture(1, NULL);
@@ -357,6 +358,7 @@ void ColorKeyRender::_fine_tune_pass(CVideoBuffer* pSrcDef, CVideoBuffer* pDstDe
 		//pResMan->GetQuadMesh()->DrawMesh(m_pResMan->m_VSDirectOut);
 		m_pQuadMesh->DrawMesh(0, m_VS_DirectOut->GetVertexShaderPtr());
 		pDevice->EndScene();
+		m_pEngine->SetRenderTarget(NULL);
 	}
 	pDevice->SetRenderTarget(1, NULL);
 	//m_pResMan->DumpResourceToFile(pSrcDef->handle, L"c:\\finetune_src_alpha.dds", true);
@@ -388,6 +390,7 @@ void ColorKeyRender::_blur_pass(CVideoBuffer* pSrcDef, CVideoBuffer* pDstDef, Fx
 		//m_pEngine->ApplyCurRenderState();
 		m_pQuadMesh->DrawMesh(0, m_VS_DirectOut->GetVertexShaderPtr());
 		pDevice->EndScene();
+		m_pEngine->SetRenderTarget(NULL);
 	}
 	//m_pResMan->DumpResourceToFile(hDestID, L"c:\\dest.dds");
 	pDevice->SetRenderTarget(1, NULL);
