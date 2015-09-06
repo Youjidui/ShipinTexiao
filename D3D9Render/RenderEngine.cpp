@@ -104,3 +104,9 @@ bool CRenderEngine::SetRenderTarget( CVideoBuffer* pDest )
 	return true;
 }
 
+void CRenderEngine::GetTargetVideoSize( int& nEditWidth, int& nEditHeight )
+{
+	nEditWidth = m_DeviceSettings.pp.BackBufferWidth;
+	nEditHeight = m_DeviceSettings.pp.BackBufferHeight;
+}
+

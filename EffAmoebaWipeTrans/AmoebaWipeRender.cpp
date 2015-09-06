@@ -42,7 +42,9 @@ bool CAmoebaWipeRender::Init( CRenderEngine* pEngine)
 	m_pEffect = pResMgr->CreateEffect(pDevice, _T("NewEffects/AmoebaWipeTrans.fx"));
 	ASSERT(m_pEffect);
 	CVideoBufferManager* pBufMgr = m_pEngine->GetVideoBufferManager();
-	VideoBufferInfo mediaBI = {D3DFMT_A8R8G8B8, VideoBufferInfo::VIDEO_MEM, VideoBufferInfo::_IN, 1920, 1080, 0, 0};
+	int nEditWidth, nEditHeight;
+	m_pEngine->GetTargetVideoSize(nEditWidth, nEditHeight);
+	VideoBufferInfo mediaBI = {D3DFMT_A8R8G8B8, VideoBufferInfo::VIDEO_MEM, VideoBufferInfo::_IN, nEditWidth, nEditHeight, 0, 0};
 	m_pNoiseTexture = pBufMgr->CreateVideoBuffer(mediaBI);
 	ASSERT(m_pNoiseTexture);
 	m_blurRender.Init(pEngine);
@@ -65,9 +67,12 @@ bool CAmoebaWipeRender::Render( CVideoBuffer* pDest, CVideoBuffer* pSrcA, CVideo
 	LPDIRECT3DDEVICE9 pDevice = m_pEngine->GetDevice();
 	CResourceManager* pResMan = m_pEngine->GetResourceManager();
 	//float	fAspect = m_pResMan->GetAspect() * m_pEngine->GetCurProfile()->nEditWidth / (float) (m_pEngine->GetCurProfile()->nEditHeight  * m_pResMan->GetAspectVerifyCoef());
-	float	fAspect = 1920.0f/1080.0f;
+	int nEditWidth, nEditHeight;
+	m_pEngine->GetTargetVideoSize(nEditWidth, nEditHeight);
+	float	fAspect = nEditWidth*1.0f/nEditHeight;
 
-	CreateNoiseTexture(pParam);
+	bool bOK = CreateNoiseTexture(pParam);
+	ASSERT(bOK);
 
 	//handle_tpr hKey[3] = {INVALID_RESID,INVALID_RESID};
 	//TP_VBufferDef * pKeyDef[3];
@@ -79,11 +84,10 @@ bool CAmoebaWipeRender::Render( CVideoBuffer* pDest, CVideoBuffer* pSrcA, CVideo
 	//}	
 
 	CVideoBufferManager* pBufMgr = m_pEngine->GetVideoBufferManager();
-	VideoBufferInfo mediaBI = {D3DFMT_A8R8G8B8, VideoBufferInfo::VIDEO_MEM, VideoBufferInfo::_IN_OUT, 1920, 1080, 0, 0};
+	VideoBufferInfo mediaBI = {D3DFMT_A8R8G8B8, VideoBufferInfo::VIDEO_MEM, VideoBufferInfo::_IN_OUT, nEditWidth, nEditHeight, 0, 0};
 	CVideoBuffer* pMedia = pBufMgr->CreateVideoBuffer(mediaBI);
 	Resize(pMedia, m_pNoiseTexture, pParam);
 
-	//VideoBufferInfo mediaBI = {D3DFMT_A8R8G8B8, VideoBufferInfo::VIDEO_MEM, VideoBufferInfo::_IN_OUT, 1920, 1080, 0, 0};
 	CVideoBuffer* pMediaBlur = pBufMgr->CreateVideoBuffer(mediaBI);
 	SonyBlurFxParam blurParam;
 	blurParam.blurX = 200.0f / (4.0f + 28.0f * pParam->fBumpDensity);
@@ -136,7 +140,9 @@ void CAmoebaWipeRender::Resize(CVideoBuffer* pDest, CVideoBuffer* pSrc, AmoebaWi
 	LPDIRECT3DDEVICE9 pDevice = m_pEngine->GetDevice();
 	CResourceManager* pResMan = m_pEngine->GetResourceManager();
 	//float	fAspect = m_pResMan->GetAspect() * m_pEngine->GetCurProfile()->nEditWidth / (float) (m_pEngine->GetCurProfile()->nEditHeight  * m_pResMan->GetAspectVerifyCoef());
-	float	fAspect = 1920.0f/1080.0f;
+	int nEditWidth, nEditHeight;
+	m_pEngine->GetTargetVideoSize(nEditWidth, nEditHeight);
+	float	fAspect = nEditWidth*1.0f/nEditHeight;
 
 	D3DXMATRIX* matWorld = NULL, *matView = NULL, *matProj= NULL;
 	pResMan->GetQuadMatrix(&matWorld, &matView, &matProj);
@@ -185,7 +191,9 @@ void CAmoebaWipeRender::Light( CVideoBuffer* pDest, CVideoBuffer* pSrc, AmoebaWi
 	LPDIRECT3DDEVICE9 pDevice = m_pEngine->GetDevice();
 	CResourceManager* pResMan = m_pEngine->GetResourceManager();
 	//float	fAspect = m_pResMan->GetAspect() * m_pEngine->GetCurProfile()->nEditWidth / (float) (m_pEngine->GetCurProfile()->nEditHeight  * m_pResMan->GetAspectVerifyCoef());
-	float	fAspect = 1920.0f/1080.0f;
+	int nEditWidth, nEditHeight;
+	m_pEngine->GetTargetVideoSize(nEditWidth, nEditHeight);
+	float	fAspect = nEditWidth*1.0f/nEditHeight;
 
 	D3DXMATRIX* matWorld = NULL, *matView = NULL, *matProj= NULL;
 	pResMan->GetQuadMatrix(&matWorld, &matView, &matProj);
@@ -204,8 +212,8 @@ void CAmoebaWipeRender::Light( CVideoBuffer* pDest, CVideoBuffer* pSrc, AmoebaWi
 	matInvAspect  /= 1.0f / fAspect;
 	D3DXMatrixRotationZ(&matRotation,pParam->fSlant * D3DX_PI / 4.0f);
 	D3DXMatrixIdentity(&matTex);
-	matTex._31 = 0.5f / 1920.0f;
-	matTex._32 = 0.5f / 1080.0f;
+	matTex._31 = 0.5f / nEditWidth;
+	matTex._32 = 0.5f / nEditHeight;
 
 
 	pParam->fSoftEdge /= 2.0f;
@@ -257,7 +265,9 @@ void CAmoebaWipeRender::Last( CVideoBuffer* pDest, CVideoBuffer* pSrcA, CVideoBu
 	LPDIRECT3DDEVICE9 pDevice = m_pEngine->GetDevice();
 	CResourceManager* pResMan = m_pEngine->GetResourceManager();
 	//float	fAspect = m_pResMan->GetAspect() * m_pEngine->GetCurProfile()->nEditWidth / (float) (m_pEngine->GetCurProfile()->nEditHeight  * m_pResMan->GetAspectVerifyCoef());
-	float	fAspect = 1920.0f/1080.0f;
+	int nEditWidth, nEditHeight;
+	m_pEngine->GetTargetVideoSize(nEditWidth, nEditHeight);
+	float	fAspect = nEditWidth*1.0f/nEditHeight;
 
 	D3DXMATRIX* matWorld = NULL, *matView = NULL, *matProj= NULL;
 	pResMan->GetQuadMatrix(&matWorld, &matView, &matProj);
@@ -276,8 +286,8 @@ void CAmoebaWipeRender::Last( CVideoBuffer* pDest, CVideoBuffer* pSrcA, CVideoBu
 	matInvAspect  /= 1.0f / fAspect;
 	D3DXMatrixRotationZ(&matRotation,pParam->fSlant * D3DX_PI / 4.0f);
 	D3DXMatrixIdentity(&matTex);
-	matTex._31 = 0.5f / 1920.0f;
-	matTex._32 = 0.5f / 1080.0f;
+	matTex._31 = 0.5f / nEditWidth;
+	matTex._32 = 0.5f / nEditHeight;
 
 	//handle_tpr hTemp[2] = {INVALID_RESID,INVALID_RESID};
 	//TP_VBufferDef * pTempDef[2] = {pSrcDef[0],pSrcDef[1]};

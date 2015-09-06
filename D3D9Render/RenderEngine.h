@@ -27,6 +27,7 @@ public:
 	void SetVideoBufferManager(CVideoBufferManager* pBuffMgr) {m_pBuffMgr = pBuffMgr; }
 	CVideoBufferManager* GetVideoBufferManager()	{return m_pBuffMgr;}
 	LPDIRECT3DDEVICE9 GetDevice()	{return m_pDevice;}
+	void GetTargetVideoSize(int& nEditWidth, int& nEditHeight);
 
 	//virtual bool UploadConvert(const handle_tpr hColor, const handle_tpr hKey, const handle_tpr hDst, BOOL bHiTrans, long lSourceWidth, long lSourceHeight, NX3DDepthUploadInfo* pDepthInfo = NULL){assert(0);return FALSE;};
 	//virtual BOOL DownloadConvert(const handle_tpr hSrc,const handle_tpr hDst, const handle_tpr hKey){assert(0);return FALSE;};
