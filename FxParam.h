@@ -75,3 +75,45 @@ struct AmoebaWipeFxParam : FxParamBase
 };
 
 
+struct BarmWipeFxParam
+{
+	struct Pattern
+	{
+		int nPattern;
+		BOOL bInvert;
+		float fOffset;
+		float fRotate;
+		float fCenterX;
+		float fCenterY;
+		float fAspect;
+		float fSoftWidth;
+		float fBorderWidth;
+		D3DCOLOR crBorderColor;
+	};
+	struct Modify
+	{
+		int		nMultipleType;
+		BOOL	bFlip;
+		int		nMultipleNumberX;
+		int		nMultipleNumberY;
+		BOOL	bOverlap;
+		int		nDivideType;
+		float   fDivideWidth;
+	};
+	struct General
+	{
+		float fTransparency;
+		General()
+		{
+			fTransparency = 1.0f;
+		}
+	};
+
+	Pattern     structPattern;
+	Modify      structModify;
+	General     structGeneral;   
+	float fSlant;
+} ;
+
+
+

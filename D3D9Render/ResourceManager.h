@@ -14,6 +14,13 @@ public:
 
 public:
 	CBaseMesh* CreateQuadMesh(LPDIRECT3DDEVICE9 lpDevice);
+	CBaseMesh* CreateQuadGridMesh(LPDIRECT3DDEVICE9 lpDevice);
+	CBaseMesh* CreateQuadWHMipmapMesh(LPDIRECT3DDEVICE9 lpDevice);	//WH = 0	width of src >= width of target and height of src >= height of target
+	CBaseMesh* CreateQuadWMipmapMesh(LPDIRECT3DDEVICE9 lpDevice);	//W = 1
+	CBaseMesh* CreateQuadHMipmapMesh(LPDIRECT3DDEVICE9 lpDevice);	//H = 2
+	CBaseMesh* CreateQuadInstanceMesh(LPDIRECT3DDEVICE9 lpDevice);
+	CBaseMesh* CreateMesh(LPDIRECT3DDEVICE9 pDevice, LPD3DXMESH pMesh, LPCTSTR pszResFileName);
+	CBaseMesh* FindMesh(LPCTSTR pszResName);
 	CBaseFx* CreateEffect(LPDIRECT3DDEVICE9 lpDevice, LPCTSTR lpszEffectName, const char** ppszMacros = NULL, int nMacroCount = 0);
 	CVertexShader* CreateVertexShader(LPDIRECT3DDEVICE9 lpDevice, LPCTSTR lpszShaderName, const char** ppszMacros = NULL, int nMacroCount = 0);
 	CPixelShader* CreatePixelShader(LPDIRECT3DDEVICE9 lpDevice, LPCTSTR lpszShaderName, const char** ppszMacros = NULL, int nMacroCount = 0);
@@ -24,8 +31,14 @@ private:
 
 private:
 	CBaseMesh* m_pQuadMesh;
+	CBaseMesh* m_pQuadGridMesh;
+	CBaseMesh* m_pQuadWHMipmapMesh;
+	CBaseMesh* m_pQuadWMipmapMesh;
+	CBaseMesh* m_pQuadHMipmapMesh;
+	CBaseMesh* m_pQuadInstanceMesh;
 	D3DXMATRIXA16 *m_matWorld, *m_matPrj, *m_matView;
 	CFxEffectResource m_FxRes;
 	CPixelShaderResource m_PSRes;
 	CVertexShaderResource m_VSRes;
+	CMeshResource m_MeshRes;
 };

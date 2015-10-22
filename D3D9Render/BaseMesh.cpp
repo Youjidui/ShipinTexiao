@@ -301,28 +301,28 @@ HRESULT CBaseMesh::Create( LPDIRECT3DDEVICE9 pDevice,
 }
 
 
-//BOOL CBaseMesh::DrawInstance(int nNumInstance)
-//{
-//    m_pDevice->SetStreamSource(0,m_pVB[0],0,sizeof(float) * 5);
-//    m_pDevice->SetStreamSourceFreq(0,D3DSTREAMSOURCE_INDEXEDDATA|nNumInstance);
-//    m_pDevice->SetStreamSource(1,m_pVB[1],0,sizeof(float));
-//    m_pDevice->SetStreamSourceFreq(1,D3DSTREAMSOURCE_INSTANCEDATA|1ul);
-//    m_pDevice->SetIndices(m_pIB[0]);
-//    m_pDevice->SetVertexDeclaration(m_pDecl);
-//    
-//    HRESULT hr = S_OK;
-//	hr = m_pDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST,0,0,4,0,2);    
-//
-//    m_pDevice->SetStreamSourceFreq(0,1);
-//    m_pDevice->SetStreamSourceFreq(1,1);
-//	m_pDevice->SetVertexDeclaration(NULL);
-//	m_pDevice->SetIndices(NULL);
-//	m_pDevice->SetStreamSource(0, NULL, 0, 0);
-//	m_pDevice->SetStreamSource(1, NULL, 0, 0);
-//
-//    assert(SUCCEEDED(hr));
-//    return (SUCCEEDED(hr));
-//}
+BOOL CBaseMesh::DrawInstance(int nNumInstance)
+{
+    m_pDevice->SetStreamSource(0,m_pVB[0],0,sizeof(float) * 5);
+    m_pDevice->SetStreamSourceFreq(0,D3DSTREAMSOURCE_INDEXEDDATA|nNumInstance);
+    m_pDevice->SetStreamSource(1,m_pVB[1],0,sizeof(float));
+    m_pDevice->SetStreamSourceFreq(1,D3DSTREAMSOURCE_INSTANCEDATA|1ul);
+    m_pDevice->SetIndices(m_pIB[0]);
+    m_pDevice->SetVertexDeclaration(m_pDecl);
+    
+    HRESULT hr = S_OK;
+	hr = m_pDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST,0,0,4,0,2);    
+
+    m_pDevice->SetStreamSourceFreq(0,1);
+    m_pDevice->SetStreamSourceFreq(1,1);
+	m_pDevice->SetVertexDeclaration(NULL);
+	m_pDevice->SetIndices(NULL);
+	m_pDevice->SetStreamSource(0, NULL, 0, 0);
+	m_pDevice->SetStreamSource(1, NULL, 0, 0);
+
+    assert(SUCCEEDED(hr));
+    return (SUCCEEDED(hr));
+}
 
 BOOL CBaseMesh::DrawInstance(UINT strideInstance, int nNumInstance)
 {

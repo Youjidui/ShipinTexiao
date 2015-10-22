@@ -246,7 +246,7 @@ void CAmoebaWipeRender::Light( CVideoBuffer* pDest, CVideoBuffer* pSrc, AmoebaWi
 	m_pEffect->SetVector("g_vMisc", &vMisc);
 
 	const VideoBufferInfo& bi = pSrc->GetVideoBufferInfo();
-	D3DXVECTOR4 vColorSize = D3DXVECTOR4(bi.nAllocWidth, bi.nAllocHeight, pParam->fBrightness * 20.0f, 0.0f);
+	D3DXVECTOR4 vColorSize = D3DXVECTOR4(bi.nAllocWidth * 1.0f, bi.nAllocHeight * 1.0f, pParam->fBrightness * 20.0f, 0.0f);
 	m_pEffect->SetVector("g_textureInfo",&vColorSize);
 	float fLightAngle = D3DXToRadian(pParam->fLightAngle);
 	D3DXVECTOR4 vLightDir = D3DXVECTOR4( sin(fLightAngle),-sin(fLightAngle),cos(fLightAngle),-cos(fLightAngle));	
