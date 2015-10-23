@@ -7,6 +7,7 @@
 #include "EffectName.h"
 #include "CommonMessage.h"
 
+#pragma warning(disable:4244)
 
 const float MaxValue = 256.0f;
 

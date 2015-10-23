@@ -8,6 +8,8 @@
 #include "CommonMessage.h"
 #include "../FxParam.h"
 
+#pragma warning(disable:4244)
+
 // CEffectBar ¶Ô»°¿ò
 
 IMPLEMENT_DYNAMIC(CEffectBar, CDialog)
@@ -77,6 +79,14 @@ void CEffectBar::OnBnClickedParameters()
 			}
 			m_amoebaWipeDlg.ShowWindow(SW_SHOW);
 		}
+		else if(FX_BARM_WIPE == str)
+		{
+			if(!m_barmWipeDlg.GetSafeHwnd())
+			{
+				m_barmWipeDlg.Create(CParamBarmWipeDlg::IDD);
+			}
+			m_barmWipeDlg.ShowWindow(SW_SHOW);
+		}
 	}
 }
 
@@ -123,6 +133,16 @@ BOOL CEffectBar::OnInitDialog()
 		pAW->fOffset = 0.5f;
 		m_ctrlEffects.SetItemDataPtr(i, pAW);
 		m_amoebaWipeDlg.SetParam(pAW);
+	}
+
+	i = m_ctrlEffects.AddString(FX_BARM_WIPE);
+	{
+		BarmWipeFxParam* pParam = new BarmWipeFxParam;
+		ZeroMemory(pParam, sizeof(BarmWipeFxParam));
+		pParam->cbSize = sizeof(BarmWipeFxParam);
+		pParam->fSlant = 1.0f;
+		m_ctrlEffects.SetItemDataPtr(i, pParam);
+		m_barmWipeDlg.SetParam(pParam);
 	}
 
 	m_ctrlEffects.SetCurSel(0);
@@ -201,6 +221,11 @@ void CEffectBar::SetProgress(CSliderCtrl* pCtrl)
 		{
 			AmoebaWipeFxParam* pParam = (AmoebaWipeFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
 			if(pParam)	pCtrl->SetPos(pParam->fOffset * 10000);
+		}
+		else if(FX_BARM_WIPE == str)
+		{
+			BarmWipeFxParam* pParam = (BarmWipeFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
+			if(pParam)	pCtrl->SetPos(pParam->structPattern.fOffset * 10000);
 		}
 	}
 }

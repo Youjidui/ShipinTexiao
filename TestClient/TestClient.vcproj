@@ -380,6 +380,10 @@
 			ReferencedProjectIdentifier="{C2BDC561-6BE5-4949-B15F-4BFFFFF6C626}"
 			RelativePathToProject=".\EffAmoebaWipeTrans\EffAmoebaWipeTrans.vcproj"
 		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{AF9FF148-E429-4B63-A790-6A07DD18ED07}"
+			RelativePathToProject=".\BarmWipeTrans\BarmWipeTrans.vcproj"
+		/>
 	</References>
 	<Files>
 		<Filter
@@ -409,6 +413,10 @@
 			</File>
 			<File
 				RelativePath=".\ParamAmoebaWipeDlg.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ParamBarmWipeDlg.cpp"
 				>
 			</File>
 			<File
@@ -503,6 +511,10 @@
 			</File>
 			<File
 				RelativePath=".\ParamAmoebaWipeDlg.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ParamBarmWipeDlg.h"
 				>
 			</File>
 			<File

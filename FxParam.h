@@ -75,7 +75,7 @@ struct AmoebaWipeFxParam : FxParamBase
 };
 
 
-struct BarmWipeFxParam
+struct BarmWipeFxParam : FxParamBase
 {
 	struct Pattern
 	{

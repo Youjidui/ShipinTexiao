@@ -2,6 +2,8 @@
 #include "BarmWipeRender.h"
 #include "../Utility/SafeDelete.h"
 
+#pragma warning(disable:4244)
+
 #define INSIDE(x,Min,Max) (x >= Min && x <= Max)
 
 
