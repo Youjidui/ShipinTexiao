@@ -31,6 +31,21 @@ bool CBarmWipeRender::Init( CRenderEngine* pEngine)
 	m_pMaskEffect = pResMgr->CreateEffect(pDevice, _T("NewEffects/Barm_Mask.fx"));
 	ASSERT(m_pMaskEffect);
 	CVideoBufferManager* pBufMgr = m_pEngine->GetVideoBufferManager();
+	int w, h;
+	m_pEngine->GetTargetVideoSize(w, h);
+	if(!m_privateData.m_pDivideHorTexture)
+	{
+		VideoBufferInfo bi = {D3DFMT_L8, VideoBufferInfo::VIDEO_MEM, VideoBufferInfo::_IN, w, 1, w, 1};
+		m_privateData.m_pDivideHorTexture = pBufMgr->CreateVideoBuffer(bi);
+		ASSERT(m_privateData.m_pDivideHorTexture);
+	}
+	if(!m_privateData.m_pDivideVertTexture)
+	{
+		VideoBufferInfo bi = {D3DFMT_L8, VideoBufferInfo::VIDEO_MEM, VideoBufferInfo::_IN, h, 1, h, 1};
+		m_privateData.m_pDivideVertTexture = pBufMgr->CreateVideoBuffer(bi);
+		ASSERT(m_privateData.m_pDivideVertTexture);
+	}
+
 	return true;
 }
 
@@ -327,24 +342,28 @@ CVideoBuffer* CBarmWipeRender::RenderMulitDivide(CVideoBuffer* pMask, CVideoBuff
 void CBarmWipeRender::GenerateDivideTexture(LPDIRECT3DTEXTURE9	pDivideTexture,int nBuffWidth, float fDivideWidth)
 {
 	D3DLOCKED_RECT lr;
-	pDivideTexture->LockRect(0,&lr,NULL,0);
-	BYTE * pCr = (BYTE*) lr.pBits;
-	int nIndex = 0;
-	int nValue = 0;
-	for(int i = 0;i < nBuffWidth && nIndex < nBuffWidth;i++)
+	HRESULT hr = pDivideTexture->LockRect(0,&lr,NULL,0);
+	ASSERT(SUCCEEDED(hr));
+	if(SUCCEEDED(hr))
 	{
-		int nNumRow = int(nBuffWidth * fDivideWidth * (i + 1)) - int(nBuffWidth * fDivideWidth * i);
-
-		nValue = i%2;
-		if(nNumRow == 0)
+		BYTE * pCr = (BYTE*) lr.pBits;
+		int nIndex = 0;
+		int nValue = 0;
+		for(int i = 0;i < nBuffWidth && nIndex < nBuffWidth;i++)
 		{
-			nValue = 1.0f - nValue;
-			nNumRow = 1;
-		}		
-		for(int j = 0; j < nNumRow && nIndex < nBuffWidth;j ++)
-			pCr[nIndex++] = nValue;		
+			int nNumRow = int(nBuffWidth * fDivideWidth * (i + 1)) - int(nBuffWidth * fDivideWidth * i);
+
+			nValue = i%2;
+			if(nNumRow == 0)
+			{
+				nValue = 1.0f - nValue;
+				nNumRow = 1;
+			}		
+			for(int j = 0; j < nNumRow && nIndex < nBuffWidth;j ++)
+				pCr[nIndex++] = nValue;		
+		}
+		pDivideTexture->UnlockRect(0);
 	}
-	pDivideTexture->UnlockRect(0);
 }
 
 void CBarmWipeRender::GenerateDivideTexture(BarmWipeFxParam* pParam)
@@ -433,7 +452,9 @@ bool CBarmWipeRender::RenderDrawOut(CVideoBuffer* pSrcDefA, CVideoBuffer* pSrcDe
 	//m_pEngine->ColorConv_RGBA_YUVA(&crBorderColor,&crBorderColor);
 	vBorderColor = D3DXVECTOR4(crBorderColor.r,crBorderColor.g,crBorderColor.b,crBorderColor.a);
 	UINT uPass,cPass;
-	switch(biSrcA.format) {
+	//biSrcA.format
+	int biSrcA_format = FMT_RGBA32;
+	switch(biSrcA_format) {
 		case FMT_YUYV:
 			//if(pSrcDef->pAlpha)
 			//{
