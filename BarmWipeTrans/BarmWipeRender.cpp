@@ -13,6 +13,7 @@ CBarmWipeRender::CBarmWipeRender(void)
 , m_pEffect(NULL)
 , m_pMaskEffect(NULL)
 {
+	m_privateData.m_nPattern = 10000; //outside from 0 to 5
 }
 
 CBarmWipeRender::~CBarmWipeRender(void)

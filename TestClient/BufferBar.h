@@ -29,4 +29,6 @@ public:
 	afx_msg void OnEnKillfocusHeight();
 	afx_msg void OnEnKillfocusWidth();
 	afx_msg void OnDestroy();
+	afx_msg LRESULT OnUpdateImageFile( WPARAM w, LPARAM l );
+	virtual BOOL OnInitDialog();
 };
