@@ -380,7 +380,6 @@
 			ReferencedProjectIdentifier="{C2BDC561-6BE5-4949-B15F-4BFFFFF6C626}"
 			RelativePathToProject=".\EffAmoebaWipeTrans\EffAmoebaWipeTrans.vcproj"
 		/>
-<<<<<<< HEAD
 		<ProjectReference
 			ReferencedProjectIdentifier="{F2C49BAF-F5E8-483C-8A41-DCB7BDF99B2D}"
 			RelativePathToProject=".\EffPush\EffPush.vcproj"
@@ -388,17 +387,6 @@
 		<ProjectReference
 			ReferencedProjectIdentifier="{AF9FF148-E429-4B63-A790-6A07DD18ED07}"
 			RelativePathToProject=".\BarmWipeTrans\BarmWipeTrans.vcproj"
-=======
-    <ProjectReference
-
-			ReferencedProjectIdentifier="{F2C49BAF-F5E8-483C-8A41-DCB7BDF99B2D}"
-			RelativePathToProject=".\EffPush\EffPush.vcproj"
-    />
-    <ProjectReference
-			ReferencedProjectIdentifier="{AF9FF148-E429-4B63-A790-6A07DD18ED07}"
-			RelativePathToProject=".\BarmWipeTrans\BarmWipeTrans.vcproj"
-
->>>>>>> c47a4c2fb8befe0f174c275f658a9693593288d4
 		/>
 	</References>
 	<Files>
