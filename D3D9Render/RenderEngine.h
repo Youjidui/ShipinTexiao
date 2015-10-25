@@ -33,6 +33,11 @@ public:
 	//virtual BOOL DownloadConvert(const handle_tpr hSrc,const handle_tpr hDst, const handle_tpr hKey){assert(0);return FALSE;};
 	bool SetVertexShader(LPCTSTR lpszShaderName);
 	bool SetRenderTarget( CVideoBuffer* pDest );
+	CVideoBuffer* CreateRenderTargetBuffer();
+	CVideoBuffer* CreateSourceBuffer(int nWidth, int nHeight);
+
+public:
+	bool EffectVideoCopy( CVideoBuffer* pSrc, CVideoBuffer* pDst  );
 
 private:
 	LPDIRECT3D9                  m_pD3D;

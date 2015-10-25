@@ -92,6 +92,7 @@ bool CRenderEngine::SetRenderTarget( CVideoBuffer* pDest )
 	// set render target
 	pDevice->SetRenderTarget(0, pRTSurface);
 	//SAFE_RELEASE(pRTSurface);
+	pDevice->SetRenderTarget(1, NULL);
 
 	if(pRTSurface)
 	{
@@ -115,5 +116,98 @@ void CRenderEngine::GetTargetVideoSize( int& nEditWidth, int& nEditHeight )
 {
 	nEditWidth = m_DeviceSettings.pp.BackBufferWidth;
 	nEditHeight = m_DeviceSettings.pp.BackBufferHeight;
+}
+
+bool CRenderEngine::EffectVideoCopy( CVideoBuffer* pSrc, CVideoBuffer* pDst  )
+{
+	LPDIRECT3DDEVICE9 pDevice = GetDevice();
+	CResourceManager* pResMan = GetResourceManager();
+	//这个函数只用于特技缺省Copy ，由调用者决定是否使用Zbuffer
+	//CZBufferManager zbuffer(this,DEPTHSTENCIL_NONE);
+
+	//TP_VBufferDef *vBufferSrc = m_pResManager->GetBufferDef( hSrc );
+	//TP_VBufferDef *vBufferDst = m_pResManager->GetBufferDef( hDst );
+	//assert( vBufferSrc->bufferFormat == vBufferDst->bufferFormat );	
+	CBaseMesh *pMesh          = GetResourceManager()->CreateQuadMesh(GetDevice());
+	const VideoBufferInfo& srcBI = pSrc->GetVideoBufferInfo();
+	const VideoBufferInfo& destBI = pDst->GetVideoBufferInfo();
+	//GAutoLock l(&m_D3Dcs);
+	//UINT PSShader,VSShader;
+	//D3DXMATRIX matWorld,matScale;
+	D3DXMATRIX 	matTexture;  
+	float f_Offsetx;
+	//long nWidth,nHeight;
+	float vBufferSrcOffsetY = 0.0f;
+	f_Offsetx = vBufferSrcOffsetY;
+	int iTargetImageWidth  = srcBI.nWidth;
+	int iTargetImageHeight = srcBI.nHeight;
+	int RTTextureWidth     = destBI.nAllocWidth;
+	int RTTextureHeight    = destBI.nAllocHeight;
+
+	D3DXMATRIX  *pMatWorld, *pMatView, *pMatProj;
+	GetResourceManager()->GetQuadMatrix(&pMatWorld, &pMatView, &pMatProj);
+	D3DXMATRIX matWVP = *pMatWorld * (*pMatView)* (*pMatProj);
+	D3DXMATRIX matCC = (*pMatView)*(*pMatProj);
+	pDevice->SetRenderState( D3DRS_ALPHABLENDENABLE,FALSE ); 
+	pDevice->SetRenderState( D3DRS_ALPHATESTENABLE ,FALSE ); 	
+
+	D3DXVECTOR4 vMeshArgs(  f_Offsetx/(float)RTTextureWidth,
+		vBufferSrcOffsetY/(float)RTTextureHeight,
+		iTargetImageWidth/(float)RTTextureWidth,
+		iTargetImageHeight/(float)RTTextureHeight);
+	pDevice->SetTexture( 0,pSrc->GetTexture());
+	//if(vBufferSrc->pAlpha )	SetSourceTexture( 1,vBufferSrc->pAlpha );
+	GenerateMatrix( pSrc, &matTexture, mat_Image );	
+
+	//vBufferDst->bRenderToFullTarget = true;
+	//vBufferDst->bClearFullTarget    = true;
+	//vBufferDst->bDiscardAlpha       = false;
+	//if(vBufferSrc->pAlpha&&!vBufferDst->pAlpha)
+	//{
+	//	vBufferDst->pAlpha= AllocateVideoAlphaRT();
+	//}
+	//SetRenderTarget( 0, hDst,D3DCLEAR_TARGET,vBufferDst->COLOR_BLACK(), 0,1.0f,0 );	// --zms-- yuyv无论何种情况，都清除为黑色（而不是绿色）。
+	SetRenderTarget(pDst);
+
+	float bHaveAlpha     = 0.0f;//vBufferSrc->pAlpha?1.0:0.0;
+	float bParticleBlend = 0.0f;//vBufferSrc->bParticleBlend?1.0:0.0;
+
+	CVertexShader* pVS = pResMan->CreateVertexShader(pDevice, _T("Shaders/VS_SplitField.VSH"));
+	CPixelShader* pPS = pResMan->CreatePixelShader(pDevice, _T("Shaders/PS_DirectOutEffect.PSH"));
+
+	if(SUCCEEDED(pDevice -> BeginScene()))
+	{				 
+		pDevice->SetSamplerState( 0, D3DSAMP_MINFILTER, D3DTEXF_POINT );
+		pDevice->SetSamplerState( 1, D3DSAMP_MINFILTER, D3DTEXF_POINT );
+		pDevice->SetSamplerState( 0, D3DSAMP_MAGFILTER, D3DTEXF_POINT );
+		pDevice->SetSamplerState( 1, D3DSAMP_MAGFILTER, D3DTEXF_POINT );
+
+		pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE,FALSE);
+		pDevice->SetRenderState(D3DRS_ALPHATESTENABLE,FALSE);
+		pDevice->SetPixelShader(pPS->GetPixelShader());
+		pDevice->SetPixelShaderConstantF(0,&bHaveAlpha,1);
+		pDevice->SetPixelShaderConstantF(1,&bParticleBlend,1);
+		pDevice->SetVertexShaderConstantF( 0, (float*)&matCC,      4 );
+		pDevice->SetVertexShaderConstantF( 4, (float*)&matTexture, 4 );
+		pDevice->SetVertexShaderConstantF( 8, (float*)&vMeshArgs,  1 );
+
+		pMesh -> DrawMesh(0, pVS->GetVertexShaderPtr());
+		pDevice->EndScene();
+	}
+
+	pDevice->SetPixelShader( NULL );
+	pDevice->SetRenderTarget(0,NULL);
+	
+	return true;  
+}
+
+CVideoBuffer* CRenderEngine::CreateRenderTargetBuffer()
+{
+	int nEditWidth, nEditHeight;
+	GetTargetVideoSize(nEditWidth, nEditHeight);
+	CVideoBufferManager* pBufMgr = GetVideoBufferManager();
+	VideoBufferInfo mediaBI = {D3DFMT_A8R8G8B8, VideoBufferInfo::VIDEO_MEM, VideoBufferInfo::_IN_OUT, nEditWidth, nEditHeight, 0, 0};
+	CVideoBuffer* pMask = pBufMgr->CreateVideoBuffer(mediaBI);
+	return pMask;
 }
 

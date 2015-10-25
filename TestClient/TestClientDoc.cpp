@@ -16,7 +16,12 @@
 #include "../EffColorKey/ColorKeyRender.h"
 #include "../SonyBlur/SonyBlurRender.h"
 #include "../EffAmoebaWipeTrans/AmoebaWipeRender.h"
+<<<<<<< HEAD
 #include "../EffPush/PushRender.h"
+=======
+#include "../BarmWipeTrans/BarmWipeRender.h"
+
+>>>>>>> de3bfc145099d011f86b6de45ea2e0a0f52fbd2f
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -300,15 +305,26 @@ bool CTestClientDoc::Render()
 							}
 						}
 					}
+<<<<<<< HEAD
 					else if(FX_PUSH == m_strEffectName)
+=======
+					else if(FX_BARM_WIPE == m_strEffectName)
+>>>>>>> de3bfc145099d011f86b6de45ea2e0a0f52fbd2f
 					{
 						if(m_SrcImages.size() >= 2)
 						{
 							CVideoBuffer* pSrc2 = m_SrcImages[1];
+<<<<<<< HEAD
 							CPushRender eff;
 							if(eff.Init(m_pRenderEngine))
 							{
 								bOK = eff.Render(pDest, pSrc, pSrc2, (PushFxParam*)m_pEffectParam);
+=======
+							CBarmWipeRender eff;
+							if(eff.Init(m_pRenderEngine))
+							{
+								bOK = eff.Render(pDest, pSrc, pSrc2, (BarmWipeFxParam*)m_pEffectParam);
+>>>>>>> de3bfc145099d011f86b6de45ea2e0a0f52fbd2f
 							}
 						}
 					}

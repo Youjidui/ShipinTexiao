@@ -10,8 +10,20 @@ typedef struct _QuadVec2UV
 }QuadVec2UV,*LPQuadVec2UV;
 
 
+typedef struct _QuadVec
+{
+	D3DXVECTOR3  _vPos;
+	D3DXVECTOR2  _vUV;  
+}QuadVec,*LPQuadVec;
+
+
 CResourceManager::CResourceManager(void)
 : m_pQuadMesh(NULL)
+, m_pQuadGridMesh(NULL)
+, m_pQuadWHMipmapMesh(NULL)
+, m_pQuadWMipmapMesh(NULL)
+, m_pQuadHMipmapMesh(NULL)
+, m_pQuadInstanceMesh(NULL)
 , m_matWorld(NULL)
 , m_matPrj(NULL)
 , m_matView(NULL)
@@ -45,6 +57,25 @@ CPixelShader* CResourceManager::CreatePixelShader( LPDIRECT3DDEVICE9 lpDevice, L
 	return m_PSRes.Create(lpDevice, lpszShaderName, ppszMacros, nMacroCount);
 }
 
+void CResourceManager::GetQuadMatrix( D3DXMATRIX** ppMatWorld, D3DXMATRIX** ppMatView , D3DXMATRIX** ppMatPrj )
+{
+	*ppMatWorld = m_matWorld;
+	*ppMatView = m_matView;
+	*ppMatPrj = m_matPrj;
+}
+
+void CResourceManager::CreateQuadMatrix( D3DXMATRIX* pMatWorld, D3DXMATRIX* pMatView , D3DXMATRIX* pMatPrj )
+{
+	D3DXMatrixIdentity( pMatWorld );
+	D3DXMatrixIdentity( pMatView  );
+	D3DXMatrixOrthoLH( pMatPrj, 1.0, 1.0,0.1f, 100.0f );
+
+	D3DXVECTOR3 vFromPt   = D3DXVECTOR3( 0.0f, 0.0f, -100.0f); 
+	D3DXVECTOR3 vLookatPt = D3DXVECTOR3( 0.0f, 0.0f,  0.0f );
+	D3DXVECTOR3 vUpVec    = D3DXVECTOR3( 0.0f, 1.0f,  0.0f );
+	D3DXMatrixLookAtLH( pMatView, &vFromPt, &vLookatPt, &vUpVec );
+}
+
 CBaseMesh* CResourceManager::CreateQuadMesh(LPDIRECT3DDEVICE9 lpDevice)
 {
 	if(!m_pQuadMesh)
@@ -70,10 +101,10 @@ CBaseMesh* CResourceManager::CreateQuadMesh(LPDIRECT3DDEVICE9 lpDevice)
 		QuadMesh[3]._vUV1 = QuadMesh[3]._vUV0  = D3DXVECTOR2( 0.0f,1.0f  );
 
 
-		m_pQuadMesh = new CBaseMesh();
-		if(m_pQuadMesh)
+		CBaseMesh* pMesh = new CBaseMesh();
+		if(pMesh)
 		{
-			HRESULT hr = m_pQuadMesh->Create(lpDevice,
+			HRESULT hr = pMesh->Create(lpDevice,
 				QuadMesh,
 				sizeof(QuadMesh),
 				sizeof(QuadVec2UV),
@@ -87,29 +118,392 @@ CBaseMesh* CResourceManager::CreateQuadMesh(LPDIRECT3DDEVICE9 lpDevice)
 			if(FAILED(hr))
 			{
 				//m_pQuadMesh->Destroy();
-				delete m_pQuadMesh;
-				m_pQuadMesh = NULL;
+				delete pMesh;
 			}
+			else m_pQuadMesh = pMesh;
 		}
 	}
 	return m_pQuadMesh;
 }
 
-void CResourceManager::GetQuadMatrix( D3DXMATRIX** ppMatWorld, D3DXMATRIX** ppMatView , D3DXMATRIX** ppMatPrj )
+CBaseMesh* CResourceManager::CreateQuadGridMesh( LPDIRECT3DDEVICE9 lpDevice )
 {
-	*ppMatWorld = m_matWorld;
-	*ppMatView = m_matView;
-	*ppMatPrj = m_matPrj;
+	if(!m_pQuadGridMesh)
+	{
+		QuadVec pBuffer[252 * 4];   unsigned short pIndex[252 * 6];  
+		for(int i=0;i<252;i++)
+		{
+			pBuffer[ i*4+0 ]._vPos = D3DXVECTOR3 ( -0.5f, 0.5f,(float)i);
+			pBuffer[ i*4+0 ]._vUV  = D3DXVECTOR2 (  0.0f, 0.0f );
+			pBuffer[ i*4+1 ]._vPos = D3DXVECTOR3 (  0.5f, 0.5f,(float)i);
+			pBuffer[ i*4+1 ]._vUV  = D3DXVECTOR2 (  1.0f, 0.0f );
+			pBuffer[ i*4+2 ]._vPos = D3DXVECTOR3 (  0.5f,-0.5f,(float)i);
+			pBuffer[ i*4+2 ]._vUV  = D3DXVECTOR2 (  1.0f, 1.0f );
+			pBuffer[ i*4+3 ]._vPos = D3DXVECTOR3 (  -0.5f,-0.5f,(float)i);
+			pBuffer[ i*4+3 ]._vUV  = D3DXVECTOR2 (  0.0f, 1.0f );
+
+			pIndex[i*6 + 0] = i*4+0;
+			pIndex[i*6 + 1] = i*4+1;
+			pIndex[i*6 + 2] = i*4+2;
+			pIndex[i*6 + 3] = i*4+2;
+			pIndex[i*6 + 4] = i*4+3;
+			pIndex[i*6 + 5] = i*4+0;
+		}
+
+		D3DVERTEXELEMENT9 _VertexElemShader2[] = 
+		{
+			{ 0, 0, D3DDECLTYPE_FLOAT3,D3DDECLMETHOD_DEFAULT,D3DDECLUSAGE_POSITION,  0 },		
+			{ 0, 12,D3DDECLTYPE_FLOAT2,D3DDECLMETHOD_DEFAULT,D3DDECLUSAGE_TEXCOORD,  0 },		
+			D3DDECL_END()
+		};
+		unsigned short* ppIndex[2]; ppIndex[0] = pIndex; ppIndex[1] = NULL;
+
+		CBaseMesh* pMesh = new CBaseMesh;
+		if(pMesh)
+		{
+			HRESULT hr = pMesh->Create(lpDevice,
+				pBuffer,
+				sizeof(pBuffer),
+				sizeof(QuadVec),
+				D3DPT_TRIANGLELIST,
+				252*2,
+				D3DFVF_XYZ|D3DFVF_TEX1,
+				_VertexElemShader2,
+				(const unsigned short**)ppIndex,
+				sizeof(pIndex),1,
+				_T("QuadGridMesh"));
+			if(FAILED(hr))
+				delete pMesh;
+			else m_pQuadGridMesh = pMesh;
+		}
+	}
+	return m_pQuadGridMesh;
 }
 
-void CResourceManager::CreateQuadMatrix( D3DXMATRIX* pMatWorld, D3DXMATRIX* pMatView , D3DXMATRIX* pMatPrj )
+CBaseMesh* CResourceManager::CreateQuadWHMipmapMesh( LPDIRECT3DDEVICE9 lpDevice )
 {
-	D3DXMatrixIdentity( pMatWorld );
-	D3DXMatrixIdentity( pMatView  );
-	D3DXMatrixOrthoLH( pMatPrj, 1.0, 1.0,0.1f, 100.0f );
+	if(!m_pQuadWHMipmapMesh)
+	{
+		QuadVec QuadMipMapMesh[] =
+		{
+			D3DXVECTOR3( -0.5f,-0.5f,0.0f ),D3DXVECTOR2( 0.0f,1.0f ), 
+			D3DXVECTOR3( -0.5f,0.5f,0.0f ),D3DXVECTOR2( 0.0f,0.0f ),
+			D3DXVECTOR3( 0.5f,-0.5f,0.0f),D3DXVECTOR2( 1.0f,1.0f ),
+			D3DXVECTOR3( 0.5f,0.5f,0.0f ),D3DXVECTOR2( 1.0f,0.0f ),     
 
-	D3DXVECTOR3 vFromPt   = D3DXVECTOR3( 0.0f, 0.0f, -100.0f); 
-	D3DXVECTOR3 vLookatPt = D3DXVECTOR3( 0.0f, 0.0f,  0.0f );
-	D3DXVECTOR3 vUpVec    = D3DXVECTOR3( 0.0f, 1.0f,  0.0f );
-	D3DXMatrixLookAtLH( pMatView, &vFromPt, &vLookatPt, &vUpVec );
+			D3DXVECTOR3( -0.5f,-0.65f,1.0f ),D3DXVECTOR2( 0.0f,1.0f ), 
+			D3DXVECTOR3( -0.5f,-0.5f,1.0f ),D3DXVECTOR2( 0.0f,1.0f ), 
+			D3DXVECTOR3( 0.5f,-0.65f,1.0f ),D3DXVECTOR2( 1.0f,1.0f ),
+			D3DXVECTOR3( 0.5f,-0.5f,1.0f),D3DXVECTOR2( 1.0f,1.0f ),                        
+
+
+			D3DXVECTOR3( 0.5f,-0.5f,2.0f),D3DXVECTOR2( 1.0f,1.0f ),
+			D3DXVECTOR3( 0.5f,0.5f,2.0f ),D3DXVECTOR2( 1.0f,0.0f ),     
+			D3DXVECTOR3( 0.65f,-0.5f,2.0f),D3DXVECTOR2( 1.0f,1.0f ),
+			D3DXVECTOR3( 0.65f,0.5f,2.0f ),D3DXVECTOR2( 1.0f,0.0f ), 
+
+			D3DXVECTOR3( 0.5f,0.65f,0.0f),D3DXVECTOR2( 1.0f,0.0f ),
+			D3DXVECTOR3( -0.5f,0.65f,0.0f ),D3DXVECTOR2( 0.0f,0.0f ), 
+
+			D3DXVECTOR3( -0.65f,0.5f,0.0f),D3DXVECTOR2( 0.0f,0.0f ),
+			D3DXVECTOR3( -0.65f,-0.5f,0.0f ),D3DXVECTOR2( 0.0f,1.0f ), 
+		};
+		//0 All Border
+		unsigned short pMinMapIndex0[] =
+		{
+			//Center
+			1,2,0,
+			1,3,2,
+			//Down
+			5,7,6,
+			5,6,4,
+			//Right
+			9,10,8,
+			9,10,11,
+			//Top
+			13,12,3,
+			13,3,1,
+			//Left
+			14,1,0,
+			14,0,15,
+		};
+		D3DVERTEXELEMENT9 _VertexElemShader2[] = 
+		{
+			{ 0, 0, D3DDECLTYPE_FLOAT3,D3DDECLMETHOD_DEFAULT,D3DDECLUSAGE_POSITION,  0 },		
+			{ 0, 12,D3DDECLTYPE_FLOAT2,D3DDECLMETHOD_DEFAULT,D3DDECLUSAGE_TEXCOORD,  0 },		
+			D3DDECL_END()
+		};
+		unsigned short* ppIndex[2];
+		ppIndex[0] = pMinMapIndex0; ppIndex[1] = NULL;
+
+		CBaseMesh* pMesh = new CBaseMesh;
+		if(pMesh)
+		{
+			HRESULT hr = pMesh->Create(lpDevice,
+				QuadMipMapMesh,
+				sizeof(QuadMipMapMesh),
+				sizeof(QuadVec),
+				D3DPT_TRIANGLELIST,
+				10,
+				D3DFVF_XYZ|D3DFVF_TEX1,
+				_VertexElemShader2,
+				(const unsigned short**)ppIndex,
+				sizeof(pMinMapIndex0),1,
+				_T("QuadWHMipmapMesh"));
+			if(FAILED(hr))	delete pMesh;
+			else	m_pQuadWHMipmapMesh = pMesh;
+		}
+	}
+	return m_pQuadWHMipmapMesh;
 }
+
+
+
+CBaseMesh* CResourceManager::CreateQuadWMipmapMesh( LPDIRECT3DDEVICE9 lpDevice )
+{
+	if(!m_pQuadWMipmapMesh)
+	{
+		QuadVec QuadMipMapMesh[] =
+		{
+			D3DXVECTOR3( -0.5f,-0.5f,0.0f ),D3DXVECTOR2( 0.0f,1.0f ), 
+			D3DXVECTOR3( -0.5f,0.5f,0.0f ),D3DXVECTOR2( 0.0f,0.0f ),
+			D3DXVECTOR3( 0.5f,-0.5f,0.0f),D3DXVECTOR2( 1.0f,1.0f ),
+			D3DXVECTOR3( 0.5f,0.5f,0.0f ),D3DXVECTOR2( 1.0f,0.0f ),     
+
+			D3DXVECTOR3( -0.5f,-0.65f,1.0f ),D3DXVECTOR2( 0.0f,1.0f ), 
+			D3DXVECTOR3( -0.5f,-0.5f,1.0f ),D3DXVECTOR2( 0.0f,1.0f ), 
+			D3DXVECTOR3( 0.5f,-0.65f,1.0f ),D3DXVECTOR2( 1.0f,1.0f ),
+			D3DXVECTOR3( 0.5f,-0.5f,1.0f),D3DXVECTOR2( 1.0f,1.0f ),                        
+
+
+			D3DXVECTOR3( 0.5f,-0.5f,2.0f),D3DXVECTOR2( 1.0f,1.0f ),
+			D3DXVECTOR3( 0.5f,0.5f,2.0f ),D3DXVECTOR2( 1.0f,0.0f ),     
+			D3DXVECTOR3( 0.65f,-0.5f,2.0f),D3DXVECTOR2( 1.0f,1.0f ),
+			D3DXVECTOR3( 0.65f,0.5f,2.0f ),D3DXVECTOR2( 1.0f,0.0f ), 
+
+			D3DXVECTOR3( 0.5f,0.65f,0.0f),D3DXVECTOR2( 1.0f,0.0f ),
+			D3DXVECTOR3( -0.5f,0.65f,0.0f ),D3DXVECTOR2( 0.0f,0.0f ), 
+
+			D3DXVECTOR3( -0.65f,0.5f,0.0f),D3DXVECTOR2( 0.0f,0.0f ),
+			D3DXVECTOR3( -0.65f,-0.5f,0.0f ),D3DXVECTOR2( 0.0f,1.0f ), 
+		};
+		//1 Left Right Border
+		unsigned short pMinMapIndex1[] =
+		{
+			//Center
+			1,2,0,
+			1,3,2,
+			//Right
+			9,10,8,
+			9,10,11,
+			//Left
+			14,1,0,
+			14,0,15,
+		};
+		D3DVERTEXELEMENT9 _VertexElemShader2[] = 
+		{
+			{ 0, 0, D3DDECLTYPE_FLOAT3,D3DDECLMETHOD_DEFAULT,D3DDECLUSAGE_POSITION,  0 },		
+			{ 0, 12,D3DDECLTYPE_FLOAT2,D3DDECLMETHOD_DEFAULT,D3DDECLUSAGE_TEXCOORD,  0 },		
+			D3DDECL_END()
+		};
+		unsigned short* ppIndex[2];
+		ppIndex[0] = pMinMapIndex1;
+		ppIndex[1] = NULL;
+
+		CBaseMesh* pMesh = new CBaseMesh;
+		if(pMesh)
+		{
+			HRESULT hr = pMesh->Create(lpDevice,
+				QuadMipMapMesh,
+				sizeof(QuadMipMapMesh),
+				sizeof(QuadVec),
+				D3DPT_TRIANGLELIST,
+				6,
+				D3DFVF_XYZ|D3DFVF_TEX1,
+				_VertexElemShader2,
+				(const unsigned short**)ppIndex,
+				sizeof(pMinMapIndex1),1,
+				_T("QuadWMipmapMesh"));
+			if(FAILED(hr))	delete pMesh;
+			else	m_pQuadWMipmapMesh = pMesh;
+		}
+	}
+	return m_pQuadWMipmapMesh;
+}
+
+
+CBaseMesh* CResourceManager::CreateQuadHMipmapMesh( LPDIRECT3DDEVICE9 lpDevice )
+{
+	if(!m_pQuadHMipmapMesh)
+	{
+		QuadVec QuadMipMapMesh[] =
+		{
+			D3DXVECTOR3( -0.5f,-0.5f,0.0f ),D3DXVECTOR2( 0.0f,1.0f ), 
+			D3DXVECTOR3( -0.5f,0.5f,0.0f ),D3DXVECTOR2( 0.0f,0.0f ),
+			D3DXVECTOR3( 0.5f,-0.5f,0.0f),D3DXVECTOR2( 1.0f,1.0f ),
+			D3DXVECTOR3( 0.5f,0.5f,0.0f ),D3DXVECTOR2( 1.0f,0.0f ),     
+
+			D3DXVECTOR3( -0.5f,-0.65f,1.0f ),D3DXVECTOR2( 0.0f,1.0f ), 
+			D3DXVECTOR3( -0.5f,-0.5f,1.0f ),D3DXVECTOR2( 0.0f,1.0f ), 
+			D3DXVECTOR3( 0.5f,-0.65f,1.0f ),D3DXVECTOR2( 1.0f,1.0f ),
+			D3DXVECTOR3( 0.5f,-0.5f,1.0f),D3DXVECTOR2( 1.0f,1.0f ),                        
+
+
+			D3DXVECTOR3( 0.5f,-0.5f,2.0f),D3DXVECTOR2( 1.0f,1.0f ),
+			D3DXVECTOR3( 0.5f,0.5f,2.0f ),D3DXVECTOR2( 1.0f,0.0f ),     
+			D3DXVECTOR3( 0.65f,-0.5f,2.0f),D3DXVECTOR2( 1.0f,1.0f ),
+			D3DXVECTOR3( 0.65f,0.5f,2.0f ),D3DXVECTOR2( 1.0f,0.0f ), 
+
+			D3DXVECTOR3( 0.5f,0.65f,0.0f),D3DXVECTOR2( 1.0f,0.0f ),
+			D3DXVECTOR3( -0.5f,0.65f,0.0f ),D3DXVECTOR2( 0.0f,0.0f ), 
+
+			D3DXVECTOR3( -0.65f,0.5f,0.0f),D3DXVECTOR2( 0.0f,0.0f ),
+			D3DXVECTOR3( -0.65f,-0.5f,0.0f ),D3DXVECTOR2( 0.0f,1.0f ), 
+		};
+		//2 Top Bottom Border
+		unsigned short pMinMapIndex2[] =
+		{
+			//Center
+			1,2,0,
+			1,3,2,
+			//Down
+			5,7,6,
+			5,6,4,
+
+			//Top
+			13,12,3,
+			13,3,1,            
+		};
+		D3DVERTEXELEMENT9 _VertexElemShader2[] = 
+		{
+			{ 0, 0, D3DDECLTYPE_FLOAT3,D3DDECLMETHOD_DEFAULT,D3DDECLUSAGE_POSITION,  0 },		
+			{ 0, 12,D3DDECLTYPE_FLOAT2,D3DDECLMETHOD_DEFAULT,D3DDECLUSAGE_TEXCOORD,  0 },		
+			D3DDECL_END()
+		};
+		unsigned short* ppIndex[2];
+		ppIndex[0] = pMinMapIndex2;
+		ppIndex[1] = NULL;
+
+		CBaseMesh* pMesh = new CBaseMesh;
+		if(pMesh)
+		{
+			HRESULT hr = pMesh->Create(lpDevice,
+				QuadMipMapMesh,
+				sizeof(QuadMipMapMesh),
+				sizeof(QuadVec),
+				D3DPT_TRIANGLELIST,
+				10,
+				D3DFVF_XYZ|D3DFVF_TEX1,
+				_VertexElemShader2,
+				(const unsigned short**)ppIndex,
+				sizeof(pMinMapIndex2),1,
+				_T("QuadHMipmapMesh"));
+			if(FAILED(hr))	delete pMesh;
+			else	m_pQuadHMipmapMesh = pMesh;
+		}
+	}
+	return m_pQuadHMipmapMesh;
+}
+
+CBaseMesh* CResourceManager::CreateQuadInstanceMesh( LPDIRECT3DDEVICE9 lpDevice )
+{
+	if(!m_pQuadInstanceMesh)
+	{
+		//Create Instance Quad Mesh
+		struct INSTANCEVERTEX
+		{
+			D3DXVECTOR3 position;
+			D3DXVECTOR2 uv;
+		};    
+
+		LPDIRECT3DVERTEXDECLARATION9 pDcl = NULL;
+		LPDIRECT3DVERTEXBUFFER9 pVB[2] = {NULL,NULL};
+		LPDIRECT3DINDEXBUFFER9  pIB = NULL;
+
+		D3DVERTEXELEMENT9 declInstance[] = 
+		{	
+			{ 0, 0,     D3DDECLTYPE_FLOAT3, D3DDECLMETHOD_DEFAULT,  D3DDECLUSAGE_POSITION,  0 },
+			{ 0, 12,    D3DDECLTYPE_FLOAT2, D3DDECLMETHOD_DEFAULT,  D3DDECLUSAGE_TEXCOORD,  0 },
+			{ 1, 0,     D3DDECLTYPE_FLOAT1, D3DDECLMETHOD_DEFAULT,  D3DDECLUSAGE_TEXCOORD,  1 },	
+			D3DDECL_END()
+		};
+
+		lpDevice->CreateVertexDeclaration( declInstance,&pDcl);
+
+		if( FAILED( lpDevice->CreateVertexBuffer( 4 * sizeof(INSTANCEVERTEX),
+			0, 0,
+			D3DPOOL_DEFAULT, &pVB[0], NULL ) ) )
+		{
+			return FALSE;
+		}
+
+		HRESULT hr = S_OK;
+
+		INSTANCEVERTEX* pVertices;
+		if( FAILED( pVB[0]->Lock( 0, 0, (void**)&pVertices, 0 ) ) )
+			return NULL;
+		pVertices[0].position = D3DXVECTOR3(-0.5f,-0.5f,0.0f);
+		pVertices[0].uv = D3DXVECTOR2(0.0f,1.0f);
+
+		pVertices[1].position = D3DXVECTOR3(-0.5f,0.5f,0.0f);
+		pVertices[1].uv = D3DXVECTOR2(0.0f,0.0f);
+
+		pVertices[2].position = D3DXVECTOR3(0.5f,-0.5f,0.0f);
+		pVertices[2].uv = D3DXVECTOR2(1.0f,1.0f);
+
+		pVertices[3].position = D3DXVECTOR3(0.5f,0.5f,0.0f);
+		pVertices[3].uv = D3DXVECTOR2(1.0f,0.0f);
+
+		pVB[0]->Unlock();
+
+		if(FAILED(hr = lpDevice->CreateIndexBuffer(6 * sizeof(WORD),0,D3DFMT_INDEX16,D3DPOOL_DEFAULT,
+			&pIB,NULL)))
+			return NULL;
+
+		WORD * pWord = NULL;
+		pIB->Lock(0,0,(void**)&pWord,0);
+		pWord[0] = 0;
+		pWord[1] = 1;
+		pWord[2] = 2;
+
+		pWord[3] = 1;
+		pWord[4] = 3;
+		pWord[5] = 2;
+		pIB->Unlock();
+
+		if(FAILED(hr = lpDevice->CreateVertexBuffer(1000 * sizeof(float),0,0,D3DPOOL_DEFAULT,
+			&pVB[1],NULL)))
+			return NULL;
+
+		float *pVB1 = NULL;
+		pVB[1]->Lock(0,0,(void**)&pVB1,0);
+
+		for(int i = 0;i<1000;i ++)
+			pVB1[i] =  i;
+		pVB[1]->Unlock();
+
+		CBaseMesh* pMesh    = new CBaseMesh;
+		if( SUCCEEDED( pMesh->Create( lpDevice,
+			pVB,
+			pIB,
+			pDcl,
+			_T("QuadInstanceMesh"))))
+		{
+			m_pQuadInstanceMesh = pMesh;
+		}
+		else
+			delete pMesh;
+	}
+	return m_pQuadInstanceMesh;
+}
+
+CBaseMesh* CResourceManager::CreateMesh( LPDIRECT3DDEVICE9 lpDevice, LPD3DXMESH pMesh, LPCTSTR lpszMeshName )
+{
+	return m_MeshRes.Create(lpDevice, pMesh, lpszMeshName);
+}
+
+CBaseMesh* CResourceManager::FindMesh( LPCTSTR pszResName )
+{
+	return m_MeshRes.Find(pszResName);
+}
+
