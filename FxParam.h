@@ -14,8 +14,6 @@ struct SonyBlurFxParam : FxParamBase
 	float blurY;
 };
 
-
-
 #define MIN_LENGTH      0.0f
 #define MAX_LENGTH      1.0f
 #define LENGTH_SCALE    2.0f
@@ -74,6 +72,32 @@ struct AmoebaWipeFxParam : FxParamBase
 	D3DCOLOR	crLColor;
 };
 
+// begin push param
+struct PushFxParam : FxParamBase
+{
+	DWORD dwType ;
+	float fTransition;
+	BOOL  bReverse;
+	float fFirstSoftness;
+	DWORD dwFirstColor;
+	float fSecondSoftness;
+	DWORD dwSecondColor;
+};
+
+enum Push_Type{
+   Right2Left = 0,
+   Left2Right,
+   Bottom2Top,
+   Top2Bottom,
+   BottomRight,
+   BottomLeft,
+   TopLeft,
+   TopRight,
+
+
+   NUM 
+};
+// end push param
 
 struct BarmWipeFxParam : FxParamBase
 {
@@ -119,6 +143,5 @@ struct BarmWipeFxParam : FxParamBase
 	General     structGeneral;   
 	float fSlant;
 } ;
-
 
 
