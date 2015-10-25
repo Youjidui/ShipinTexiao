@@ -17,6 +17,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EffAmoebaWipeTrans", "EffAm
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SonyBlur", "SonyBlur\SonyBlur.vcproj", "{28113454-E158-4135-BB89-298A1C09BB0E}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EffPush", "EffPush\EffPush.vcproj", "{F2C49BAF-F5E8-483C-8A41-DCB7BDF99B2D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -89,6 +91,12 @@ Global
 		{28113454-E158-4135-BB89-298A1C09BB0E}.Release|Win32.Build.0 = Release|Win32
 		{28113454-E158-4135-BB89-298A1C09BB0E}.Release|x64.ActiveCfg = Release|x64
 		{28113454-E158-4135-BB89-298A1C09BB0E}.Release|x64.Build.0 = Release|x64
+		{F2C49BAF-F5E8-483C-8A41-DCB7BDF99B2D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F2C49BAF-F5E8-483C-8A41-DCB7BDF99B2D}.Debug|Win32.Build.0 = Debug|Win32
+		{F2C49BAF-F5E8-483C-8A41-DCB7BDF99B2D}.Debug|x64.ActiveCfg = Debug|Win32
+		{F2C49BAF-F5E8-483C-8A41-DCB7BDF99B2D}.Release|Win32.ActiveCfg = Release|Win32
+		{F2C49BAF-F5E8-483C-8A41-DCB7BDF99B2D}.Release|Win32.Build.0 = Release|Win32
+		{F2C49BAF-F5E8-483C-8A41-DCB7BDF99B2D}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

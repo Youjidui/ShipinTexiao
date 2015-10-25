@@ -16,7 +16,7 @@
 #include "../EffColorKey/ColorKeyRender.h"
 #include "../SonyBlur/SonyBlurRender.h"
 #include "../EffAmoebaWipeTrans/AmoebaWipeRender.h"
-
+#include "../EffPush/PushRender.h"
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -297,6 +297,18 @@ bool CTestClientDoc::Render()
 							if(eff.Init(m_pRenderEngine))
 							{
 								bOK = eff.Render(pDest, pSrc, pSrc2, (AmoebaWipeFxParam*)m_pEffectParam);
+							}
+						}
+					}
+					else if(FX_PUSH == m_strEffectName)
+					{
+						if(m_SrcImages.size() >= 2)
+						{
+							CVideoBuffer* pSrc2 = m_SrcImages[1];
+							CPushRender eff;
+							if(eff.Init(m_pRenderEngine))
+							{
+								bOK = eff.Render(pDest, pSrc, pSrc2, (PushFxParam*)m_pEffectParam);
 							}
 						}
 					}

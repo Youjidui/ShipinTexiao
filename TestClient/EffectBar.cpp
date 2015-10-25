@@ -125,6 +125,13 @@ BOOL CEffectBar::OnInitDialog()
 		m_amoebaWipeDlg.SetParam(pAW);
 	}
 
+	i = m_ctrlEffects.AddString(FX_PUSH);
+	{
+		PushFxParam* pPushFxParam = new PushFxParam;
+		m_ctrlEffects.SetItemDataPtr(i, pPushFxParam);
+	}
+
+
 	m_ctrlEffects.SetCurSel(0);
 
 	//ON_CONTROL(CBN_SELCHANGE, IDC_EFFECTS
