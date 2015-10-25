@@ -164,8 +164,9 @@ bool ColorKeyRender::Render( CVideoBuffer* pDest, CVideoBuffer* pSrc, ColorKeyPa
 	CVideoBufferManager* pBufMan = m_pEngine->GetVideoBufferManager();
 
 	// setup world/view/projection transformation
-	D3DXMATRIX  *pMatWorld, *pMatView, *pMatProj;
-	pResMan->GetQuadMatrix(&pMatWorld, &pMatView, &pMatProj);
+	D3DXMATRIX  matWorld, *pMatView = NULL, *pMatProj = NULL;
+	D3DXMatrixIdentity(&matWorld);
+	pResMan->GetOrthoMatrix(&pMatView, &pMatProj);
 	D3DXMATRIX matWVP = (*pMatView)* (*pMatProj);
 	pDevice->SetVertexShaderConstantF(0, (float*)matWVP, 4);
 

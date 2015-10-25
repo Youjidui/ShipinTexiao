@@ -4,17 +4,9 @@
 
 CBaseWipe::CBaseWipe(void)
 {
-	m_pMesh = NULL;
 	m_pEngine = NULL;
+	m_pQuadMesh = NULL;
 	m_pEffect = NULL;
-
-	D3DXMatrixIdentity(&m_matWorld);
-	D3DXVECTOR3 vEyePt( 0.0f, 0.0f,-0.5f/tanf(D3DX_PI/8) );
-	D3DXVECTOR3 vLookatPt( 0.0f, 0.0f, 0.0f );
-	D3DXVECTOR3 vUpVec( 0.0f, 1.0f, 0.0f );	
-	D3DXMatrixLookAtLH( &m_matView, &vEyePt, &vLookatPt, &vUpVec );
-
-	D3DXMatrixPerspectiveFovLH( &m_matProj, D3DX_PI/4, 1.0f, 0.5f, 1000.0f );
 }
 
 CBaseWipe::~CBaseWipe(void)
@@ -29,7 +21,7 @@ CBaseWipe::~CBaseWipe(void)
 HRESULT CBaseWipe::InitMesh(CRenderEngine* pEngine) 
 {
 	m_pEngine = pEngine;	
-	m_pMesh = pEngine->GetResourceManager()->CreateQuadMesh(pEngine->GetDevice());	
+	m_pQuadMesh = pEngine->GetResourceManager()->CreateQuadMesh(pEngine->GetDevice());	
 
 	return S_OK;
 }

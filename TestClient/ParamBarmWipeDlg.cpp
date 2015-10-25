@@ -47,38 +47,38 @@ BOOL CParamBarmWipeDlg::OnInitDialog()
 	pCtrl->SetRange(0, 10000);	//1.f, 0, 0.0001f
 	if(m_pParam)	pCtrl->SetPos(m_pParam->structPattern.fOffset * 10000);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_DIVIDE_WIDTH);
-	pCtrl->SetRange(2000, 10000);	//1.0f, 0.20f, 0.0001f
-	if(m_pParam)	pCtrl->SetPos(m_pParam->structModify.fDivideWidth * 10);
+	pCtrl->SetRange(0, 10000);	//1.f, 0, 0.0001f
+	if(m_pParam)	pCtrl->SetPos(m_pParam->structModify.fDivideWidth * 10000);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_DIVIDE_TYPE);
-	pCtrl->SetRange(1, 5);	//1800.0f, 0.0f,  0.1f
+	pCtrl->SetRange(1, 5);	//5, 1,  1
 	if(m_pParam)	pCtrl->SetPos(m_pParam->structModify.nDivideType);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_CENTER_X);
-	pCtrl->SetRange(-100000, 100000);	//1.0f, -1.0f, 0.00001f
-	if(m_pParam)	pCtrl->SetPos(m_pParam->structPattern.fCenterX * 100000);
+	pCtrl->SetRange(-20000, 20000);	//2.0f, -2.0f, 0.0001f
+	if(m_pParam)	pCtrl->SetPos(m_pParam->structPattern.fCenterX * 10000);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_CENTER_Y);
-	pCtrl->SetRange(0, 100000);	//1.0f, 0.0f, 0.00001f
-	if(m_pParam)	pCtrl->SetPos(m_pParam->structPattern.fCenterY * 100000);
+	pCtrl->SetRange(-20000, 20000);	//2.0f, -2.0f, 0.0001f
+	if(m_pParam)	pCtrl->SetPos(m_pParam->structPattern.fCenterY * 10000);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_INVERT);
 	pCtrl->SetRange(0, 10000);	//1.0f, 0.0f, 0.0001f
 	if(m_pParam)	pCtrl->SetPos(m_pParam->structPattern.bInvert * 10000);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_TRANSPARENCY);
-	pCtrl->SetRange(0, 100);	//100, 0, 1
-	if(m_pParam)	pCtrl->SetPos(m_pParam->structGeneral.fTransparency);
+	pCtrl->SetRange(0, 10000);	//1.0f, 0.0f,  0.0001f
+	if(m_pParam)	pCtrl->SetPos(m_pParam->structGeneral.fTransparency * 10000);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_MULTIPLE_TYPE);
-	pCtrl->SetRange(0, 100);	//100, 0, 1
+	pCtrl->SetRange(0, 3);	//3, 0, 1	??
 	if(m_pParam)	pCtrl->SetPos(m_pParam->structModify.nMultipleType);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_MULTIPLE_NUMBER_X);
-	pCtrl->SetRange(0, 10000);	//1.0f, 0.0f,  0.0001f
-	if(m_pParam)	pCtrl->SetPos(m_pParam->structModify.nMultipleNumberX * 10000);
+	pCtrl->SetRange(1, 20);	//20, 1, 1
+	if(m_pParam)	pCtrl->SetPos(m_pParam->structModify.nMultipleNumberX);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_MULTIPLE_NUMBER_Y);
-	pCtrl->SetRange(-36000, 72000);	//720.0f, -360.0f, 0.01f
-	if(m_pParam)	pCtrl->SetPos(m_pParam->structModify.nMultipleNumberY * 100);
+	pCtrl->SetRange(1, 20);	//20, 1, 1
+	if(m_pParam)	pCtrl->SetPos(m_pParam->structModify.nMultipleNumberY);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_PATTERN);
-	pCtrl->SetRange(-36000, 72000);	//720.0f, -360.0f, 0.01f
-	if(m_pParam)	pCtrl->SetPos(m_pParam->structPattern.nPattern * 100);
+	pCtrl->SetRange(0, 5);	//5, 0, 1
+	if(m_pParam)	pCtrl->SetPos(m_pParam->structPattern.nPattern);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_FLIP);
-	pCtrl->SetRange(-36000, 72000);	//720.0f, -360.0f, 0.01f
-	if(m_pParam)	pCtrl->SetPos(m_pParam->structModify.bFlip * 100);
+	pCtrl->SetRange(0, 1);	//
+	if(m_pParam)	pCtrl->SetPos(m_pParam->structModify.bFlip);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_OVERLAP);
 	pCtrl->SetRange(-36000, 72000);	//720.0f, -360.0f, 0.01f
 	if(m_pParam)	pCtrl->SetPos(m_pParam->structModify.bOverlap * 100);
@@ -96,11 +96,11 @@ BOOL CParamBarmWipeDlg::OnInitDialog()
 	//pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_HIGH_COLOR_A);
 	//pCtrl->SetRange(0, 255);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_BORDER_WIDTH);
-	pCtrl->SetRange(-36000, 72000);	//720.0f, -360.0f, 0.01f
-	if(m_pParam)	pCtrl->SetPos(m_pParam->structPattern.fBorderWidth * 100);
+	pCtrl->SetRange(0, 50000);	//5.0f, 0.0f,  0.0001f
+	if(m_pParam)	pCtrl->SetPos(m_pParam->structPattern.fBorderWidth * 10000);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_SOFT_WIDTH);
-	pCtrl->SetRange(-36000, 72000);	//720.0f, -360.0f, 0.01f
-	if(m_pParam)	pCtrl->SetPos(m_pParam->structPattern.fSoftWidth * 100);
+	pCtrl->SetRange(0, 50000);	//5.0f, 0.0f,  0.0001f
+	if(m_pParam)	pCtrl->SetPos(m_pParam->structPattern.fSoftWidth * 10000);
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 	// 异常: OCX 属性页应返回 FALSE

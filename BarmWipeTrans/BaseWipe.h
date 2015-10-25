@@ -23,11 +23,11 @@ public:
     virtual void    Ready(CVideoBuffer* pMaskDef);
 protected:	
 	CRenderEngine*		m_pEngine;
-	CBaseMesh*			m_pMesh;
+	CBaseMesh*			m_pQuadMesh;
 	CBaseFx*			m_pEffect;
 
 public:
-	D3DXMATRIXA16	m_matWorld,m_matView,m_matProj,m_matAspectProj;
+	D3DXMATRIXA16		m_matAspectProj;
 	float				m_fAspect;
 };
 

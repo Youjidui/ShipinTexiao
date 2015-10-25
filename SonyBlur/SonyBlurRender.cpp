@@ -96,9 +96,10 @@ bool CSonyBlurRender::Render( CVideoBuffer* pDest, CVideoBuffer* pSrc, SonyBlurF
 		m_pEffect->SetTechnique("RenderONERT");
 
 	// VS constant
-	D3DXMATRIX	*matWorld,*matView,*matPorj;
-	pResMan->GetQuadMatrix(&matWorld,&matView,&matPorj);
-	D3DXMATRIX matCombined = (*matWorld)*(*matView)*(*matPorj);
+	D3DXMATRIX	matWorld, *matView = NULL, *matPorj = NULL;
+	D3DXMatrixIdentity(&matWorld);
+	pResMan->GetOrthoMatrix(&matView,&matPorj);
+	D3DXMATRIX matCombined = (matWorld)*(*matView)*(*matPorj);
 	D3DXMATRIX matTextureSrc;
 	m_pEffect->SetMatrix("g_matWorldViewProj",&matCombined);
 

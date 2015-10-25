@@ -65,9 +65,12 @@ BOOL LineIntersection(D3DXVECTOR3 Line0[],D3DXVECTOR3 Line1[],D3DXVECTOR3& vPt)/
 HRESULT CBarmWipe::Draw(CVideoBuffer* pMaskDef, void* pParamRaw, void* pParent)
 {
 	BarmWipeFxParam* pParam = (BarmWipeFxParam*)pParamRaw;
+	LPDIRECT3DDEVICE9 pDevice = m_pEngine->GetDevice();
+	CResourceManager* pResMgr = m_pEngine->GetResourceManager();
 	CVideoBufferManager* pVM = m_pEngine->GetVideoBufferManager();
 	const VideoBufferInfo& biMask = pMaskDef->GetVideoBufferInfo();
 
+	HRESULT hr = E_FAIL;
 	float fOffset = 1.0f;	
 
 	switch(pParam->structPattern.nPattern) {
@@ -76,7 +79,8 @@ HRESULT CBarmWipe::Draw(CVideoBuffer* pMaskDef, void* pParamRaw, void* pParent)
 	case 2:
 	case 3:		
 		fOffset = CalcOffset(pParamRaw,pParam->structPattern.nPattern);
-		Draw(pMaskDef,pParamRaw,pParent,pParam->structPattern.nPattern,fOffset);
+		hr = Draw(pMaskDef,pParamRaw,pParent,pParam->structPattern.nPattern,fOffset);
+		ASSERT(SUCCEEDED(hr));
 		break;
 	case 4:
 	case 5:
@@ -84,36 +88,52 @@ HRESULT CBarmWipe::Draw(CVideoBuffer* pMaskDef, void* pParamRaw, void* pParent)
 			//handle_tpr hMask0 = ((GBarmWipeRender*)pParent)->NewRTBuffer(0,0,pMaskDef->GetImageWidth(),pMaskDef->GetImageHeight());
 			//handle_tpr hMask1 = ((GBarmWipeRender*)pParent)->NewRTBuffer(0,0,pMaskDef->GetImageWidth(),pMaskDef->GetImageHeight());
 			CVideoBuffer* pMask0 = pVM->CreateVideoBuffer(biMask);
+			ASSERT(pMask0);
 			CVideoBuffer* pMask1 = pVM->CreateVideoBuffer(biMask);
+			ASSERT(pMask1);
 			//TP_VBufferDef* pMaskDef0 = m_pResMan->GetBufferDef(hMask0);
 			//TP_VBufferDef* pMaskDef1 = m_pResMan->GetBufferDef(hMask1);
 			
 			int nAdd = pParam->structPattern.nPattern == 4 ? 0 : 2;
 
 			fOffset = min(CalcOffset(pParamRaw,0 + nAdd),CalcOffset(pParamRaw,1 + nAdd));
-			Draw(pMask0,pParamRaw,pParent,0 + nAdd,fOffset);
-			Draw(pMask1,pParamRaw,pParent,1 + nAdd,fOffset);
+			hr = Draw(pMask0,pParamRaw,pParent,0 + nAdd,fOffset);
+			ASSERT(SUCCEEDED(hr));
+			hr = Draw(pMask1,pParamRaw,pParent,1 + nAdd,fOffset);
+			ASSERT(SUCCEEDED(hr));
 
-			m_pEngine->SetRenderTarget(pMaskDef);
+			bool bOK = m_pEngine->SetRenderTarget(pMaskDef);
+			ASSERT(bOK);
 
-			m_pEffect->SetTechnique("Compose");
+			hr = m_pEffect->SetTechnique("Compose");
+			ASSERT(SUCCEEDED(hr));
 			D3DXMATRIXA16 matCombine,matMask;
-			matCombine = m_matView * m_matProj;
-			m_pEffect->SetMatrix("g_matWorldViewProj",&matCombine);	
+			LPD3DXMATRIX matView = NULL, matProj= NULL;
+			pResMgr->GetPerspectiveMatrix(&matView, &matProj);
+			matCombine = *matView * *matProj;
+			hr = m_pEffect->SetMatrix("g_matWorldViewProj",&matCombine);
+			ASSERT(SUCCEEDED(hr));
 
 			::GenerateMatrix(pMask0,&matMask,mat_Image);
-			m_pEffect->SetMatrix("g_matMask",&matMask);	
+			hr = m_pEffect->SetMatrix("g_matMask",&matMask);
+			ASSERT(SUCCEEDED(hr));
 
-			m_pEffect->SetTexture("g_txMask0",pMask0->GetTexture());
-			m_pEffect->SetTexture("g_txMask1",pMask1->GetTexture());
+			hr = m_pEffect->SetTexture("g_txMask0",pMask0->GetTexture());
+			ASSERT(SUCCEEDED(hr));
+			hr = m_pEffect->SetTexture("g_txMask1",pMask1->GetTexture());
+			ASSERT(SUCCEEDED(hr));
 
 			UINT cPass;
-			m_pEffect->Begin(&cPass,0);
-
-			m_pEffect->BeginPass(0);
-			m_pMesh->DrawMeshFx();
-			m_pEffect->EndPass();	
-			m_pEffect->End();
+			hr = m_pEffect->Begin(&cPass,0);
+			ASSERT(SUCCEEDED(hr));
+			hr = m_pEffect->BeginPass(0);
+			ASSERT(SUCCEEDED(hr));
+			bOK = m_pQuadMesh->DrawMeshFx();
+			ASSERT(bOK);
+			hr = m_pEffect->EndPass();
+			ASSERT(SUCCEEDED(hr));
+			hr = m_pEffect->End();
+			ASSERT(SUCCEEDED(hr));
 
 			//D3DXSaveTextureToFile(L"C:\\mask0.bmp",D3DXIFF_BMP,((CBaseTexture*)pMaskDef0->pContainer)->GetTexture(),NULL);		
 			//D3DXSaveTextureToFile(L"C:\\mask1.bmp",D3DXIFF_BMP,((CBaseTexture*)pMaskDef1->pContainer)->GetTexture(),NULL);		
@@ -190,6 +210,7 @@ HRESULT CBarmWipe::Draw(CVideoBuffer* pMaskDef, void* pParamRaw,void* pParent,in
 	fOffset *= pParam->structPattern.fOffset;
 	const VideoBufferInfo& biMask = pMaskDef->GetVideoBufferInfo();
 	
+	HRESULT hr = E_FAIL;
 
 	D3DXMATRIXA16 matRot,matTrans,matWorld,matType,matCombine;	
 
@@ -225,9 +246,12 @@ HRESULT CBarmWipe::Draw(CVideoBuffer* pMaskDef, void* pParamRaw,void* pParent,in
 		break;
 	}	
 	matWorld = matType *  matRot * matTrans;
-	matCombine = matWorld * m_matView * m_matAspectProj;
+	LPD3DXMATRIX matView = NULL, matProj= NULL;
+	pResMan->GetPerspectiveMatrix(&matView, &matProj);
+	matCombine = matWorld * *matView * m_matAspectProj;
 
-	m_pEngine->SetRenderTarget(pMaskDef);
+	bool bOK = m_pEngine->SetRenderTarget(pMaskDef);
+	ASSERT(bOK);
 	BOOL bDrawBorder = pParam->structPattern.fBorderWidth > 0.0f;
 	BOOL bDrawSoft = pParam->structPattern.fSoftWidth > 0.0f;
 
@@ -236,7 +260,7 @@ HRESULT CBarmWipe::Draw(CVideoBuffer* pMaskDef, void* pParamRaw,void* pParent,in
 		D3DXPLANE plane(-1.0f ,0.0f,0.0f,0.0f);
 
 		D3DXMATRIXA16 matClip;	
-		matClip = matType * matRot * m_matView * m_matAspectProj;
+		matClip = matType * matRot * *matView * m_matAspectProj;
 		D3DXMatrixInverse(&matClip,NULL,&matClip);
 		D3DXMatrixTranspose(&matClip,&matClip);                        
 		D3DXPlaneTransform(&plane,&plane,&matClip);
@@ -247,35 +271,42 @@ HRESULT CBarmWipe::Draw(CVideoBuffer* pMaskDef, void* pParamRaw,void* pParent,in
 		
 		D3DXPlaneFromPointNormal(&plane,&D3DXVECTOR3(vCenter.x,vCenter.y,vCenter.z),&D3DXVECTOR3(plane.a,plane.b,plane.c));
 
-		pDevice->SetClipPlane(0,(float*)&plane); 
-		D3DXMATRIXA16 matProj = m_matView * m_matAspectProj;
+		hr = pDevice->SetClipPlane(0,(float*)&plane); 
+		ASSERT(SUCCEEDED(hr));
+		D3DXMATRIXA16 matProj = *matView * m_matAspectProj;
   
-		m_pEffect->SetTechnique("ZMask");
-		m_pEffect->SetMatrix("g_matWorldViewProj",&matProj);	
+		hr = m_pEffect->SetTechnique("ZMask");
+		ASSERT(SUCCEEDED(hr));
+		hr = m_pEffect->SetMatrix("g_matWorldViewProj",&matProj);
+		ASSERT(SUCCEEDED(hr));
 
 		UINT cPass;
-		m_pEffect->Begin(&cPass,0);
-	
-		m_pEffect->BeginPass(0);
-		m_pMesh->DrawMeshFx();
-		m_pEffect->EndPass();
-		
-		m_pEffect->End();
+		hr = m_pEffect->Begin(&cPass,0);
+		ASSERT(SUCCEEDED(hr));
+		hr = m_pEffect->BeginPass(0);
+		ASSERT(SUCCEEDED(hr));
+		bOK = m_pQuadMesh->DrawMeshFx();
+		ASSERT(bOK);
+		hr = m_pEffect->EndPass();
+		ASSERT(SUCCEEDED(hr));
+		hr = m_pEffect->End();
+		ASSERT(SUCCEEDED(hr));
+
 		D3DXVECTOR4 vMisc1(D3DCMP_GREATER,0.0f,0.0f,0.0f);
-		m_pEffect->SetVector("g_vMisc1",&vMisc1);
+		hr = m_pEffect->SetVector("g_vMisc1",&vMisc1);
 
 		//D3DXSaveTextureToFile(L"C:\\mask.bmp",D3DXIFF_BMP,((CBaseTexture*)pMaskDef->pContainer)->GetTexture(),NULL);		
 	}		
 
-	m_pEffect->SetTechnique("Mask");
-
-	m_pEffect->SetMatrix("g_matWorldViewProj",&matCombine);	
+	hr = m_pEffect->SetTechnique("Mask");
+	ASSERT(SUCCEEDED(hr));
+	hr = m_pEffect->SetMatrix("g_matWorldViewProj",&matCombine);
+	ASSERT(SUCCEEDED(hr));
 	D3DXVECTOR4 vMisc(pParam->structPattern.fBorderWidth / 4.0f,pParam->structPattern.fSoftWidth / 4.0f,
 		fOffset,
 		fAxisOffset);
-	m_pEffect->SetVector("g_vMisc",&vMisc);
-
-	
+	hr = m_pEffect->SetVector("g_vMisc",&vMisc);
+	ASSERT(SUCCEEDED(hr));
 
 	BOOL aPass[7] = {FALSE};
 	aPass[0] = TRUE; 
@@ -299,19 +330,21 @@ HRESULT CBarmWipe::Draw(CVideoBuffer* pMaskDef, void* pParamRaw,void* pParent,in
 	{
 
 		UINT cPass;
-		m_pEffect->Begin(&cPass,0);
+		hr = m_pEffect->Begin(&cPass,0);
+		ASSERT(SUCCEEDED(hr));
 		for(UINT uPass = 0;uPass < cPass; uPass ++)
 		{
 			if(!aPass[uPass])
 				continue;			
-			m_pEffect->BeginPass(uPass);		
-
-			m_pMesh->DrawSubset(0);						
-
-			m_pEffect->EndPass();
-
+			hr = m_pEffect->BeginPass(uPass);
+			ASSERT(SUCCEEDED(hr));
+			bOK = m_pBarmMesh->DrawSubset(0);
+			ASSERT(bOK);
+			hr = m_pEffect->EndPass();
+			ASSERT(SUCCEEDED(hr));
 		}
-		m_pEffect->End();
+		hr = m_pEffect->End();
+		ASSERT(SUCCEEDED(hr));
 
 		aPass[0] = FALSE; 
 
@@ -320,11 +353,13 @@ HRESULT CBarmWipe::Draw(CVideoBuffer* pMaskDef, void* pParamRaw,void* pParent,in
 		matMirror._11 *= -1;
 
 		matWorld = matMirror * matType *  matRot * matTrans;
-		matCombine = matWorld * m_matView * m_matAspectProj;
-		m_pEffect->SetMatrix("g_matWorldViewProj",&matCombine);	
+		matCombine = matWorld * *matView * m_matAspectProj;
+		hr = m_pEffect->SetMatrix("g_matWorldViewProj",&matCombine);
+		ASSERT(SUCCEEDED(hr));
 
 		D3DXVECTOR4 vMisc(D3DCMP_LESS,0.0f,0.0f,0.0f);	
-		m_pEffect->SetVector("g_vMisc1",&vMisc);		
+		hr = m_pEffect->SetVector("g_vMisc1",&vMisc);
+		ASSERT(SUCCEEDED(hr));
 	}
 	//D3DXSaveTextureToFile(L"C:\\mask.bmp",D3DXIFF_BMP,((CBaseTexture*)pMaskDef->pContainer)->GetTexture(),NULL);
 	return S_OK;
@@ -332,12 +367,14 @@ HRESULT CBarmWipe::Draw(CVideoBuffer* pMaskDef, void* pParamRaw,void* pParent,in
 
 HRESULT CBarmWipe::InitMesh(CRenderEngine* pEngine)
 {
+	m_pEngine = pEngine;
 	LPDIRECT3DDEVICE9 pDevice = m_pEngine->GetDevice();
 	CResourceManager* pResMgr = m_pEngine->GetResourceManager();
 
 	CBaseWipe::InitMesh(pEngine);
 
 	m_pEffect = pResMgr->CreateEffect(pDevice, _T("NewEffects/Barm_Mask.fx"));
+	ASSERT(m_pEffect);
 
 	m_pBarmMesh = pResMgr->FindMesh(_T("BarmMesh"));
 	if(!m_pBarmMesh)
@@ -384,6 +421,7 @@ HRESULT CBarmWipe::InitMesh(CRenderEngine* pEngine)
 		pMesh->UnlockAttributeBuffer();
 
 		m_pBarmMesh = pResMgr->CreateMesh(pDevice, pMesh, _T("BarmMesh"));
+		ASSERT(m_pBarmMesh);
 	}	
 
 	return S_OK;

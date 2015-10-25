@@ -36,9 +36,9 @@ bool CNegativeRender::Render( CVideoBuffer* pDest, CVideoBuffer* pSrc, NegativeF
 		float m_fu =  0.5f/(float)(srcBuffInfo.nWidth);
 		float m_fv =  0.5f/(float)(srcBuffInfo.nHeight);
 
-		D3DXMATRIX  *pMatWorld, *pMatView, *pMatProj;
-		pResMan->GetQuadMatrix(&pMatWorld, &pMatView, &pMatProj);
-		D3DXMATRIX matWVP = *pMatWorld * (*pMatView)* (*pMatProj);
+		D3DXMATRIX  matWorld, *pMatView = NULL, *pMatProj = NULL;
+		pResMan->GetOrthoMatrix(&pMatView, &pMatProj);
+		D3DXMATRIX matWVP = matWorld * (*pMatView)* (*pMatProj);
 
 		//目前需要copy一次，从memory到video memory的texture
 		//这个应该在将来去掉，以提高性能

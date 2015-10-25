@@ -89,6 +89,11 @@ struct BarmWipeFxParam : FxParamBase
 		float fSoftWidth;
 		float fBorderWidth;
 		D3DCOLOR crBorderColor;
+
+		Pattern()
+			: nPattern(0), bInvert(FALSE), fOffset(0.f), fRotate(0.f), fCenterX(0.f), fCenterY(0.f),
+			fAspect(1920.f/1080.f), fSoftWidth(0.f), fBorderWidth(0.f), crBorderColor(0xffc0c0c0)
+		{		}
 	};
 	struct Modify
 	{

@@ -158,8 +158,9 @@ void CAmoebaWipeRender::Resize(CVideoBuffer* pDest, CVideoBuffer* pSrc, AmoebaWi
 	m_pEngine->GetTargetVideoSize(nEditWidth, nEditHeight);
 	float	fAspect = nEditWidth*1.0f/nEditHeight;
 
-	D3DXMATRIX* matWorld = NULL, *matView = NULL, *matProj= NULL;
-	pResMan->GetQuadMatrix(&matWorld, &matView, &matProj);
+	D3DXMATRIX matWorld, *matView = NULL, *matProj= NULL;
+	D3DXMatrixIdentity(&matWorld);
+	pResMan->GetOrthoMatrix(&matView, &matProj);
 	D3DXMATRIXA16 matCombine,matTex,matRotation,matTrans,matInvTrans,matAspect,matInvAspect;
 	matCombine = *matView * *matProj;
 	D3DXMatrixIdentity(&matTex);
@@ -211,8 +212,9 @@ void CAmoebaWipeRender::Light( CVideoBuffer* pDest, CVideoBuffer* pSrc, AmoebaWi
 	m_pEngine->GetTargetVideoSize(nEditWidth, nEditHeight);
 	float	fAspect = nEditWidth*1.0f/nEditHeight;
 
-	D3DXMATRIX* matWorld = NULL, *matView = NULL, *matProj= NULL;
-	pResMan->GetQuadMatrix(&matWorld, &matView, &matProj);
+	D3DXMATRIX matWorld , *matView = NULL, *matProj= NULL;
+	D3DXMatrixIdentity(&matWorld);
+	pResMan->GetOrthoMatrix( &matView, &matProj);
 	D3DXMATRIXA16 matCombine,matTex,matRotation,matTrans,matInvTrans,matAspect,matInvAspect;
 	matCombine = *matView * *matProj;
 
@@ -293,8 +295,9 @@ void CAmoebaWipeRender::Last( CVideoBuffer* pDest, CVideoBuffer* pSrcA, CVideoBu
 	m_pEngine->GetTargetVideoSize(nEditWidth, nEditHeight);
 	float	fAspect = nEditWidth*1.0f/nEditHeight;
 
-	D3DXMATRIX* matWorld = NULL, *matView = NULL, *matProj= NULL;
-	pResMan->GetQuadMatrix(&matWorld, &matView, &matProj);
+	D3DXMATRIX matWorld, *matView = NULL, *matProj= NULL;
+	D3DXMatrixIdentity(&matWorld);
+	pResMan->GetOrthoMatrix( &matView, &matProj);
 	D3DXMATRIXA16 matCombine,matTex,matRotation,matTrans,matInvTrans,matAspect,matInvAspect;
 	matCombine = *matView * *matProj;
 

@@ -24,21 +24,25 @@ CResourceManager::CResourceManager(void)
 , m_pQuadWMipmapMesh(NULL)
 , m_pQuadHMipmapMesh(NULL)
 , m_pQuadInstanceMesh(NULL)
-, m_matWorld(NULL)
-, m_matPrj(NULL)
-, m_matView(NULL)
+, m_matPrjOrtho(NULL)
+, m_matViewOrtho(NULL)
+, m_matPrjPersp(NULL)
+, m_matViewPersp(NULL)
 {
-	m_matWorld    = new D3DXMATRIXA16;
-	m_matView     = new D3DXMATRIXA16;
-	m_matPrj      = new D3DXMATRIXA16;
-	CreateQuadMatrix(m_matWorld, m_matView, m_matPrj);
+	m_matViewOrtho     = new D3DXMATRIXA16;
+	m_matPrjOrtho      = new D3DXMATRIXA16;
+	m_matViewPersp     = new D3DXMATRIXA16;
+	m_matPrjPersp      = new D3DXMATRIXA16;
+	CreateOrthoMatrix(m_matViewOrtho, m_matPrjOrtho);
+	CreatePerspectiveMatrix(m_matViewPersp, m_matPrjPersp);
 }
 
 CResourceManager::~CResourceManager(void)
 {
-	delete m_matPrj;
-	delete m_matView;
-	delete m_matWorld;
+	delete m_matPrjOrtho;
+	delete m_matViewOrtho;
+	delete m_matPrjPersp;
+	delete m_matViewPersp;
 }
 
 
@@ -57,16 +61,23 @@ CPixelShader* CResourceManager::CreatePixelShader( LPDIRECT3DDEVICE9 lpDevice, L
 	return m_PSRes.Create(lpDevice, lpszShaderName, ppszMacros, nMacroCount);
 }
 
-void CResourceManager::GetQuadMatrix( D3DXMATRIX** ppMatWorld, D3DXMATRIX** ppMatView , D3DXMATRIX** ppMatPrj )
+void CResourceManager::GetOrthoMatrix( D3DXMATRIX** ppMatView , D3DXMATRIX** ppMatPrj )
 {
-	*ppMatWorld = m_matWorld;
-	*ppMatView = m_matView;
-	*ppMatPrj = m_matPrj;
+	*ppMatView = m_matViewOrtho;
+	*ppMatPrj = m_matPrjOrtho;
 }
 
-void CResourceManager::CreateQuadMatrix( D3DXMATRIX* pMatWorld, D3DXMATRIX* pMatView , D3DXMATRIX* pMatPrj )
+void CResourceManager::GetPerspectiveMatrix( D3DXMATRIX** ppMatView , D3DXMATRIX** ppMatPrj )
 {
-	D3DXMatrixIdentity( pMatWorld );
+	*ppMatView = m_matViewPersp;
+	*ppMatPrj = m_matPrjPersp;
+}
+
+void CResourceManager::CreateOrthoMatrix( D3DXMATRIX* pMatView , D3DXMATRIX* pMatPrj )
+{
+	ASSERT(pMatView);
+	ASSERT(pMatPrj);
+	//D3DXMatrixIdentity( pMatWorld );
 	D3DXMatrixIdentity( pMatView  );
 	D3DXMatrixOrthoLH( pMatPrj, 1.0, 1.0,0.1f, 100.0f );
 
@@ -74,6 +85,19 @@ void CResourceManager::CreateQuadMatrix( D3DXMATRIX* pMatWorld, D3DXMATRIX* pMat
 	D3DXVECTOR3 vLookatPt = D3DXVECTOR3( 0.0f, 0.0f,  0.0f );
 	D3DXVECTOR3 vUpVec    = D3DXVECTOR3( 0.0f, 1.0f,  0.0f );
 	D3DXMatrixLookAtLH( pMatView, &vFromPt, &vLookatPt, &vUpVec );
+}
+
+void CResourceManager::CreatePerspectiveMatrix( D3DXMATRIX* pMatView , D3DXMATRIX* pMatPrj )
+{
+	ASSERT(pMatView);
+	ASSERT(pMatPrj);
+	//D3DXMatrixIdentity(pMatWorld);
+	D3DXVECTOR3 vEyePt( 0.0f, 0.0f,-0.5f/tanf(D3DX_PI/8) );
+	D3DXVECTOR3 vLookatPt( 0.0f, 0.0f, 0.0f );
+	D3DXVECTOR3 vUpVec( 0.0f, 1.0f, 0.0f );	
+	D3DXMatrixLookAtLH( pMatView, &vEyePt, &vLookatPt, &vUpVec );
+
+	D3DXMatrixPerspectiveFovLH( pMatPrj, D3DX_PI/4, 1.0f, 0.1f, 1000.0f );
 }
 
 CBaseMesh* CResourceManager::CreateQuadMesh(LPDIRECT3DDEVICE9 lpDevice)

@@ -24,10 +24,12 @@ public:
 	CBaseFx* CreateEffect(LPDIRECT3DDEVICE9 lpDevice, LPCTSTR lpszEffectName, const char** ppszMacros = NULL, int nMacroCount = 0);
 	CVertexShader* CreateVertexShader(LPDIRECT3DDEVICE9 lpDevice, LPCTSTR lpszShaderName, const char** ppszMacros = NULL, int nMacroCount = 0);
 	CPixelShader* CreatePixelShader(LPDIRECT3DDEVICE9 lpDevice, LPCTSTR lpszShaderName, const char** ppszMacros = NULL, int nMacroCount = 0);
-	void GetQuadMatrix( D3DXMATRIX** ppMatWorld, D3DXMATRIX** ppMatView , D3DXMATRIX** ppMatPrj );
+	void GetOrthoMatrix( D3DXMATRIX** ppMatView , D3DXMATRIX** ppMatPrj );
+	void GetPerspectiveMatrix( D3DXMATRIX** ppMatView , D3DXMATRIX** ppMatPrj );
 
 private:
-	void CreateQuadMatrix( D3DXMATRIX* pMatWorld, D3DXMATRIX* pMatView , D3DXMATRIX* pMatPrj );
+	void CreateOrthoMatrix( D3DXMATRIX* pMatView , D3DXMATRIX* pMatPrj );
+	void CreatePerspectiveMatrix( D3DXMATRIX* pMatView , D3DXMATRIX* pMatPrj );
 
 private:
 	CBaseMesh* m_pQuadMesh;
@@ -36,7 +38,8 @@ private:
 	CBaseMesh* m_pQuadWMipmapMesh;
 	CBaseMesh* m_pQuadHMipmapMesh;
 	CBaseMesh* m_pQuadInstanceMesh;
-	D3DXMATRIXA16 *m_matWorld, *m_matPrj, *m_matView;
+	D3DXMATRIXA16 *m_matPrjOrtho, *m_matViewOrtho,
+		*m_matPrjPersp, *m_matViewPersp;
 	CFxEffectResource m_FxRes;
 	CPixelShaderResource m_PSRes;
 	CVertexShaderResource m_VSRes;

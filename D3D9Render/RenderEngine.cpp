@@ -144,9 +144,10 @@ bool CRenderEngine::EffectVideoCopy( CVideoBuffer* pSrc, CVideoBuffer* pDst  )
 	int RTTextureWidth     = destBI.nAllocWidth;
 	int RTTextureHeight    = destBI.nAllocHeight;
 
-	D3DXMATRIX  *pMatWorld, *pMatView, *pMatProj;
-	GetResourceManager()->GetQuadMatrix(&pMatWorld, &pMatView, &pMatProj);
-	D3DXMATRIX matWVP = *pMatWorld * (*pMatView)* (*pMatProj);
+	D3DXMATRIX  matWorld, *pMatView = NULL, *pMatProj = NULL;
+	D3DXMatrixIdentity(&matWorld);
+	GetResourceManager()->GetOrthoMatrix(&pMatView, &pMatProj);
+	D3DXMATRIX matWVP = matWorld * (*pMatView)* (*pMatProj);
 	D3DXMATRIX matCC = (*pMatView)*(*pMatProj);
 	pDevice->SetRenderState( D3DRS_ALPHABLENDENABLE,FALSE ); 
 	pDevice->SetRenderState( D3DRS_ALPHATESTENABLE ,FALSE ); 	

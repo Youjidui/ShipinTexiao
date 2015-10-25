@@ -31,6 +31,7 @@ protected:
 private:
 	CRenderEngine*		m_pEngine;
 	CBaseMesh*			m_pQuadMesh;
+	CBaseMesh*			m_pInstanceMesh;
 	CBaseFx*			m_pEffect;
 	CBaseFx*			m_pMaskEffect;
 	//CVideoBuffer*		m_pNoiseTexture;

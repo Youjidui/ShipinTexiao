@@ -10,6 +10,7 @@
 CBarmWipeRender::CBarmWipeRender(void)
 : m_pEngine(NULL)
 , m_pQuadMesh(NULL)
+, m_pInstanceMesh(NULL)
 , m_pEffect(NULL)
 , m_pMaskEffect(NULL)
 {
@@ -27,6 +28,9 @@ bool CBarmWipeRender::Init( CRenderEngine* pEngine)
 	LPDIRECT3DDEVICE9 pDevice = m_pEngine->GetDevice();
 	CResourceManager* pResMgr = m_pEngine->GetResourceManager();
 	m_pQuadMesh = pResMgr->CreateQuadMesh(pDevice);
+	ASSERT(m_pQuadMesh);
+	m_pInstanceMesh = pResMgr->CreateQuadInstanceMesh(pDevice);
+	ASSERT(m_pInstanceMesh);
 	m_pEffect = pResMgr->CreateEffect(pDevice, _T("NewEffects/BasicWipe.fx"));
 	ASSERT(m_pEffect);
 	m_pMaskEffect = pResMgr->CreateEffect(pDevice, _T("NewEffects/Barm_Mask.fx"));
@@ -82,42 +86,52 @@ bool CBarmWipeRender::Render( CVideoBuffer* pDest, CVideoBuffer* pSrcA, CVideoBu
 
 	// generate mask
 	CVideoBuffer* pMask = m_pEngine->CreateRenderTargetBuffer();
-	m_pEngine->SetRenderTarget(pMask);
+	if(pMask)
+	{
+		bool bOK = m_pEngine->SetRenderTarget(pMask);
+		ASSERT(bOK);
 
-	//m_fGlobalAspect = pSrcDef->IsYUV16Buffer()?1.0f:2.0f;
+		//m_fGlobalAspect = pSrcDef->IsYUV16Buffer()?1.0f:2.0f;
 
-	if( SUCCEEDED( pDevice->BeginScene() ) )
-	{	
+		if( SUCCEEDED( pDevice->BeginScene() ) )
+		{	
 
-		BOOL bProcessMultiple = pParam->structModify.nMultipleType > 0 && (pParam->structModify.nMultipleNumberX > 1 || pParam->structModify.nMultipleNumberY > 1);
-		BOOL bProcessDivide = pParam->structModify.nDivideType >0 && pParam->structModify.fDivideWidth > 0.0f;
+			BOOL bProcessMultiple = pParam->structModify.nMultipleType > 0 && (pParam->structModify.nMultipleNumberX > 1 || pParam->structModify.nMultipleNumberY > 1);
+			BOOL bProcessDivide = pParam->structModify.nDivideType >0 && pParam->structModify.fDivideWidth > 0.0f;
 
-		if(bProcessMultiple)
-		{
-			//pMaskDef->rcImage.right = CEIL(pMaskDef->GetImageWidth() / (float)pParam->structModify.nMultipleNumberX);
-			//pMaskDef->rcImage.bottom = CEIL(pMaskDef->GetImageHeight() / (float)pParam->structModify.nMultipleNumberY);		
+			if(bProcessMultiple)
+			{
+				//pMaskDef->rcImage.right = CEIL(pMaskDef->GetImageWidth() / (float)pParam->structModify.nMultipleNumberX);
+				//pMaskDef->rcImage.bottom = CEIL(pMaskDef->GetImageHeight() / (float)pParam->structModify.nMultipleNumberY);		
 
-			//if(m_pParam->structModify.bFlip && m_pParam->structModify.nMultipleNumberY > 1)
-			//{
-			//	pMaskDef->rcImage.top += 0;
-			//	pMaskDef->rcImage.bottom += 2;
-			//}
+				//if(m_pParam->structModify.bFlip && m_pParam->structModify.nMultipleNumberY > 1)
+				//{
+				//	pMaskDef->rcImage.top += 0;
+				//	pMaskDef->rcImage.bottom += 2;
+				//}
+			}
+
+			pDevice->SetTexture(0,NULL);
+			bool bOK = RenderMask(pMask, pParam);
+			ASSERT(bOK);
+			D3DXSaveSurfaceToFile(_T("./BarmWipe_Mask.bmp"), D3DXIFF_BMP, pMask->GetSurface(), NULL, NULL);
+
+			pMask = RenderMulitDivide(pMask,pSrcA,pParam, bProcessMultiple,bProcessDivide);
+			ASSERT(pMask);
+			D3DXSaveSurfaceToFile(_T("./BarmWipe_Mask_2.bmp"), D3DXIFF_BMP, pMask->GetSurface(), NULL, NULL);
+
+			bOK = RenderDrawOut(pSrcA, pSrcB, pMask, pDest, pParam);
+			ASSERT(bOK);
+			//D3DXSaveSurfaceToFile(_T("./BarmWipe_.bmp"), D3DXIFF_BMP, pMask->GetSurface(), NULL, NULL);
+
+			pDevice->EndScene();
 		}
 
-		pDevice->SetTexture(0,NULL);
-		RenderMask(pMask, pParam);
-
-		pMask = RenderMulitDivide(pMask,pSrcA,pParam, bProcessMultiple,bProcessDivide);
-
-		RenderDrawOut(pSrcA, pSrcB, pMask, pDest, pParam);
-
-		pDevice->EndScene();
+		pDevice->SetRenderTarget(0,NULL);
+		CVideoBufferManager* pBufMgr = m_pEngine->GetVideoBufferManager();
+		pBufMgr->ReleaseVideoBuffer(pMask);
 	}
 
-	CVideoBufferManager* pBufMgr = m_pEngine->GetVideoBufferManager();
-	pBufMgr->ReleaseVideoBuffer(pMask);
-
-	pDevice->SetRenderTarget(0,NULL);
 	//pDstDef->fAlphaValue = pSrcDef->fAlphaValue * pParam->structGeneral.fTransparency;
 	return true;
 }	
@@ -152,6 +166,7 @@ bool CBarmWipeRender::RenderMask(CVideoBuffer* pMaskDef, BarmWipeFxParam* pParam
 
 CVideoBuffer* CBarmWipeRender::RenderMultiple(CVideoBuffer* pMask, CVideoBuffer* pSrcDef, BarmWipeFxParam* pParam)
 {
+	HRESULT hr = E_FAIL;
 	LPDIRECT3DDEVICE9 pDevice = m_pEngine->GetDevice();
 	CResourceManager* pResMgr = m_pEngine->GetResourceManager();
 	CVideoBuffer* pMaskDest = m_pEngine->CreateRenderTargetBuffer();
@@ -188,12 +203,15 @@ CVideoBuffer* CBarmWipeRender::RenderMultiple(CVideoBuffer* pMask, CVideoBuffer*
 	if(pParam->structModify.bOverlap || pParam->structModify.nMultipleType == 3)
 		vMultiple.w += 1.0f;
 	//else			
-	m_pEngine->SetRenderTarget(pMaskDest);
+	bool bOK = m_pEngine->SetRenderTarget(pMaskDest);
+	ASSERT(bOK);
 
-	D3DXMATRIX* matWorld = NULL, *matView = NULL, *matProj= NULL;
-	pResMgr->GetQuadMatrix(&matWorld, &matView, &matProj);
+	D3DXMATRIX matWorld, *matView = NULL, *matProj= NULL;
+	D3DXMatrixIdentity(&matWorld);
+	pResMgr->GetOrthoMatrix( &matView, &matProj);
 	D3DXMATRIX matCombine = *matView * *matProj;
-	m_pEffect->SetMatrix("g_matWorldViewProj",&matCombine);
+	hr = m_pEffect->SetMatrix("g_matWorldViewProj",&matCombine);
+	ASSERT(SUCCEEDED(hr));
 
 	D3DXVECTOR4 vTexCoordFlip;
 	//if(pSrcDef->OffsetY_Other == 1.0f && pSrcDef->bIsCGBuffer)
@@ -201,26 +219,34 @@ CVideoBuffer* CBarmWipeRender::RenderMultiple(CVideoBuffer* pMask, CVideoBuffer*
 	//else
 	vTexCoordFlip = D3DXVECTOR4 (1.0f / biInMask.nAllocWidth / matTex._11,((bOdd ? 0.0f : 1.0f) + 1.0f) / biInMask.nAllocHeight / matTex._22,0.0f,0.0f);
 
-	m_pEffect->SetTexture("g_txColor",pMask->GetTexture());			
-	m_pEffect->SetMatrix("g_matTexture",&matTex);
-	m_pEffect->SetVector("g_vMultiple",&vMultiple);
-	m_pEffect->SetVector("g_vMultipleMisc",&vMultipleMisc);
-	m_pEffect->SetVector("g_vTexCoordFlip",&vTexCoordFlip);
+	hr = m_pEffect->SetTexture("g_txColor",pMask->GetTexture());
+	ASSERT(SUCCEEDED(hr));
+	hr = m_pEffect->SetMatrix("g_matTexture",&matTex);
+	ASSERT(SUCCEEDED(hr));
+	hr = m_pEffect->SetVector("g_vMultiple",&vMultiple);
+	ASSERT(SUCCEEDED(hr));
+	hr = m_pEffect->SetVector("g_vMultipleMisc",&vMultipleMisc);
+	ASSERT(SUCCEEDED(hr));
+	hr = m_pEffect->SetVector("g_vTexCoordFlip",&vTexCoordFlip);
+	ASSERT(SUCCEEDED(hr));
 
-	m_pEffect->SetTechnique("Multiple");			
+	hr = m_pEffect->SetTechnique("Multiple");
+	ASSERT(SUCCEEDED(hr));
 
 	UINT cPass = 0;
 	UINT uPass = pParam->structModify.nMultipleType - 1;
-	m_pEffect->Begin(&cPass,0);
-
-	m_pEffect->BeginPass(uPass);				
+	hr = m_pEffect->Begin(&cPass,0);
+	ASSERT(SUCCEEDED(hr));
+	hr = m_pEffect->BeginPass(uPass);
+	ASSERT(SUCCEEDED(hr));
 	//m_pDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST,0,0,4,0,2);
-	CBaseMesh* pMesh = pResMgr->CreateQuadInstanceMesh(pDevice);
-	if(pMesh)	pMesh->DrawInstance(int(vMultiple.z * vMultiple.w));
+	bOK = m_pInstanceMesh->DrawInstance(int(vMultiple.z * vMultiple.w));
+	ASSERT(bOK);
 
-	m_pEffect->EndPass();
-
-	m_pEffect->End();	
+	hr = m_pEffect->EndPass();
+	ASSERT(SUCCEEDED(hr));
+	hr = m_pEffect->End();
+	ASSERT(SUCCEEDED(hr));
 
 	//pMaskDef = pMaskDef1;
 	//hMask = hMask1;
@@ -241,6 +267,7 @@ CVideoBuffer* CBarmWipeRender::RenderDivide(CVideoBuffer* pMask, CVideoBuffer* p
 	//handle_tpr hMask1 = NewRTBuffer(0.0f,0.0f,pMaskDef->GetImageWidth() ,pMaskDef->GetImageHeight(),pSrcDef->bIsCGBuffer);
 	//TP_VBufferDef *pMaskDef1 = m_pResMan->GetBufferDef(hMask1);
 	CVideoBuffer* pMaskDest = m_pEngine->CreateRenderTargetBuffer();
+	ASSERT(pMaskDest);
 	const VideoBufferInfo& biMaskDest = pMaskDest->GetVideoBufferInfo();
 
 	CVideoBuffer* pMaskSrc = pMask;
@@ -256,27 +283,36 @@ CVideoBuffer* CBarmWipeRender::RenderDivide(CVideoBuffer* pMask, CVideoBuffer* p
 		case 5:aPass[0] = aPass[2]  =TRUE;break;
 	}
 
-	D3DXMATRIX* matWorld = NULL, *matView = NULL, *matProj= NULL;
-	pResMgr->GetQuadMatrix(&matWorld, &matView, &matProj);
+	D3DXMATRIX matWorld, *matView = NULL, *matProj= NULL;
+	D3DXMatrixIdentity(&matWorld);
+	pResMgr->GetOrthoMatrix( &matView, &matProj);
 	D3DXMATRIX matCombine = *matView * *matProj;
-	m_pEffect->SetMatrix("g_matWorldViewProj",&matCombine);
+	HRESULT hr = m_pEffect->SetMatrix("g_matWorldViewProj",&matCombine);
+	ASSERT(SUCCEEDED(hr));
+	hr = m_pEffect->SetTechnique("Divide");
+	ASSERT(SUCCEEDED(hr));
 
-	m_pEffect->SetTechnique("Divide");			
-
-	m_pEngine->SetRenderTarget(pMaskDest);
+	bool bOK = m_pEngine->SetRenderTarget(pMaskDest);
+	ASSERT(bOK);
 
 	D3DXMATRIX matTex,matMask;
-	GenerateMatrix(pMaskSrc, &matTex, mat_Image);
-	m_pEffect->SetTexture("g_txColor",pMaskSrc->GetTexture());
-	m_pEffect->SetTexture("g_txDivide",(pParam->structModify.nDivideType < 3 || pParam->structModify.nDivideType == 5 ) ?
+	bOK = GenerateMatrix(pMaskSrc, &matTex, mat_Image);
+	ASSERT(bOK);
+	hr = m_pEffect->SetTexture("g_txColor",pMaskSrc->GetTexture());
+	ASSERT(SUCCEEDED(hr));
+	hr = m_pEffect->SetTexture("g_txDivide",(pParam->structModify.nDivideType < 3 || pParam->structModify.nDivideType == 5 ) ?
 		m_privateData.m_pDivideVertTexture->GetTexture() : m_privateData.m_pDivideHorTexture->GetTexture());
-	m_pEffect->SetMatrix("g_matTexture",&matTex);
+	ASSERT(SUCCEEDED(hr));
+	hr = m_pEffect->SetMatrix("g_matTexture",&matTex);
+	ASSERT(SUCCEEDED(hr));
+
 	D3DXMatrixIdentity(&matMask);
 	int nEditWidth, nEditHeight;
 	m_pEngine->GetTargetVideoSize(nEditWidth, nEditHeight);
 	matMask._31 = 0.5f / nEditWidth;
 	matMask._32 = 0.5f / nEditHeight;
-	m_pEffect->SetMatrix("g_matMask",&matMask);
+	hr = m_pEffect->SetMatrix("g_matMask",&matMask);
+	ASSERT(SUCCEEDED(hr));
 
 	D3DXVECTOR4 vMisc;
 	float OffsetY_Other = 1.0f;
@@ -286,11 +322,13 @@ CVideoBuffer* CBarmWipeRender::RenderDivide(CVideoBuffer* pMask, CVideoBuffer* p
 	else
 		vMisc = D3DXVECTOR4(1.0f / biMaskSrc.nHeight * (pParam_bOdd ? 0.0f : 1.0f),1.0f - 1.0f / biMaskSrc.nWidth, 1.0f - 1.0f / biMaskSrc.nHeight, 0.0f);
 
-	m_pEffect->SetVector("g_vDivideMisc",&vMisc);
+	hr = m_pEffect->SetVector("g_vDivideMisc",&vMisc);
+	ASSERT(SUCCEEDED(hr));
 
 	UINT cPass = 0;
 	UINT uPass = 0;
-	m_pEffect->Begin(&cPass,0);
+	hr = m_pEffect->Begin(&cPass,0);
+	ASSERT(SUCCEEDED(hr));
 	for(uPass = 0; uPass < cPass ;uPass ++)
 	{
 		if(!aPass[uPass])
@@ -299,44 +337,62 @@ CVideoBuffer* CBarmWipeRender::RenderDivide(CVideoBuffer* pMask, CVideoBuffer* p
 		if(aPass[0] && uPass == 2)
 		{				
 			std::swap(pMaskSrc, pMaskDest);
-
-			m_pEngine->SetRenderTarget(pMaskDest);
-
-			::GenerateMatrix(pMaskSrc, &matTex, mat_Image);
-			m_pEffect->SetTexture("g_txColor", pMaskSrc->GetTexture());
-
-			m_pEffect->SetTexture("g_txDivide",uPass < 2 ? m_privateData.m_pDivideVertTexture->GetTexture() : m_privateData.m_pDivideHorTexture->GetTexture());
-
-			m_pEffect->SetMatrix("g_matTexture", &matTex);
+			bOK = m_pEngine->SetRenderTarget(pMaskDest);
+			ASSERT(bOK);
+			bOK = GenerateMatrix(pMaskSrc, &matTex, mat_Image);
+			ASSERT(bOK);
+			hr = m_pEffect->SetTexture("g_txColor", pMaskSrc->GetTexture());
+			ASSERT(SUCCEEDED(hr));
+			hr = m_pEffect->SetTexture("g_txDivide",uPass < 2 ? m_privateData.m_pDivideVertTexture->GetTexture() : m_privateData.m_pDivideHorTexture->GetTexture());
+			ASSERT(SUCCEEDED(hr));
+			hr = m_pEffect->SetMatrix("g_matTexture", &matTex);
+			ASSERT(SUCCEEDED(hr));
 		}
 
-		m_pEffect->BeginPass(uPass);
-		m_pEffect->CommitChanges();
-		m_pQuadMesh->DrawMeshFx();	
-		m_pEffect->EndPass();
+		hr = m_pEffect->BeginPass(uPass);
+		ASSERT(SUCCEEDED(hr));
+		hr = m_pEffect->CommitChanges();
+		ASSERT(SUCCEEDED(hr));
+		bOK = m_pQuadMesh->DrawMeshFx();
+		ASSERT(bOK);
+		hr = m_pEffect->EndPass();
+		ASSERT(SUCCEEDED(hr));
 
 		//m_pResMan->DumpResourceToFile(pDestMaskDef->handle,L"c:\\mask.dds");				
 	}
-	m_pEffect->End();
+	hr = m_pEffect->End();
+	ASSERT(SUCCEEDED(hr));
 
 	return pMaskDest;
 }
 
 CVideoBuffer* CBarmWipeRender::RenderMulitDivide(CVideoBuffer* pMask, CVideoBuffer* pSrcDef, BarmWipeFxParam* pParam, BOOL bProcessMultiple, BOOL bProcessDivide )
 {
-	CVideoBuffer* pStage2Mask = pMask;
+	CVideoBuffer* pRet = pMask;
+	CVideoBuffer* pMask4Multi = pMask;
+	bool bNew = false;
 	//Multiple
 	if(bProcessMultiple)
 	{
-		pStage2Mask = RenderMultiple(pMask, pSrcDef, pParam);
+		pMask4Multi = RenderMultiple(pMask, pSrcDef, pParam);
+		pRet = pMask4Multi;
+		bNew = pMask4Multi != pMask;
 	}
 	// Divide
 
+	CVideoBuffer* pMask4Divide = pMask4Multi;
 	if(bProcessDivide)
 	{
-		pStage2Mask = RenderDivide(pStage2Mask, pSrcDef, pParam);
+		pMask4Divide = RenderDivide(pMask4Multi, pSrcDef, pParam);
+		pRet = pMask4Divide;
+		//bNew = pMask4Divide != pMask4Multi;
+		if(bNew)
+		{
+			CVideoBufferManager* pVBM = m_pEngine->GetVideoBufferManager();
+			pVBM->ReleaseVideoBuffer(pMask4Multi);
+		}
 	}
-	return pStage2Mask;
+	return pRet;
 }
 
 
@@ -405,21 +461,25 @@ bool CBarmWipeRender::RenderDrawOut(CVideoBuffer* pSrcDefA, CVideoBuffer* pSrcDe
 	LPDIRECT3DDEVICE9 pDevice = m_pEngine->GetDevice();
 	CResourceManager* pResMgr = m_pEngine->GetResourceManager();
 
-	m_pEngine->SetRenderTarget(pDstDef);
+	bool bOK = m_pEngine->SetRenderTarget(pDstDef);
+	ASSERT(bOK);
 
 	D3DVIEWPORT9 vPort;
-	pDevice->GetViewport(&vPort);
+	HRESULT hr = pDevice->GetViewport(&vPort);
+	ASSERT(SUCCEEDED(hr));
 	const VideoBufferInfo& biMask = pMaskDef->GetVideoBufferInfo();
 	const VideoBufferInfo& biDest = pDstDef->GetVideoBufferInfo();
 	vPort.Width = min( biMask.nWidth, biDest.nAllocWidth);
 	vPort.Height = min(biMask.nHeight, biDest.nAllocHeight);	
-	pDevice->SetViewport(&vPort);
+	hr = pDevice->SetViewport(&vPort);
+	ASSERT(SUCCEEDED(hr));
 
 	D3DXMATRIX matWorld0;
 	D3DXMatrixIdentity(&matWorld0);	
 
 	D3DXMATRIX matTex,matMask;	
-	GenerateMatrix(pMaskDef, &matMask, mat_Image);
+	bOK = GenerateMatrix(pMaskDef, &matMask, mat_Image);
+	ASSERT(bOK);
 
 #ifdef _TRANS	
 	D3DXMatrixIdentity(&matTex);
@@ -444,8 +504,10 @@ bool CBarmWipeRender::RenderDrawOut(CVideoBuffer* pSrcDefA, CVideoBuffer* pSrcDe
 		matWorld0._41 =  -0.5f + matWorld0._11 * 0.5f + pSrcDef_OffsetX * (pSrcDef_IsYUV16Buffer ?0.5f:1.0f) / float(vPort.Width) ;
 		matWorld0._42 =  0.5f - matWorld0._22 * 0.5f + (- pSrcDef_OffsetY /*+ (pParam->bOdd?0.0f:0.5f)*/) / float(vPort.Height);
 	}
-	::GenerateMatrix(pSrcDefA, &matTex, mat_Image);
-	m_pEffect->SetTechnique("Picture");
+	bOK = GenerateMatrix(pSrcDefA, &matTex, mat_Image);
+	ASSERT(bOK);
+	hr = m_pEffect->SetTechnique("Picture");
+	ASSERT(SUCCEEDED(hr));
 #endif
 
 	D3DXVECTOR4 vBorderColor;
@@ -485,13 +547,18 @@ bool CBarmWipeRender::RenderDrawOut(CVideoBuffer* pSrcDefA, CVideoBuffer* pSrcDe
 				uPass = 3;
 			break;				
 	}
-	m_pEffect->SetTexture("g_txMask", pMaskDef->GetTexture());
-	m_pEffect->SetTexture("g_txColor",pSrcDefA->GetTexture());
+	hr = m_pEffect->SetTexture("g_txMask", pMaskDef->GetTexture());
+	ASSERT(SUCCEEDED(hr));
+	hr = m_pEffect->SetTexture("g_txColor",pSrcDefA->GetTexture());
+	ASSERT(SUCCEEDED(hr));
 
-	LPD3DXMATRIX matWorld = NULL, matView = NULL, matProj= NULL;
-	pResMgr->GetQuadMatrix(&matWorld, &matView, &matProj);
+	D3DXMATRIXA16 matWorld;
+	D3DXMatrixIdentity(&matWorld);
+	LPD3DXMATRIX matView = NULL, matProj= NULL;
+	pResMgr->GetPerspectiveMatrix(&matView, &matProj);
 	D3DXMATRIX matCombine = *matView * *matProj;
-	m_pEffect->SetMatrix("g_matWorldViewProj", &matCombine);
+	hr = m_pEffect->SetMatrix("g_matWorldViewProj", &matCombine);
+	ASSERT(SUCCEEDED(hr));
 
 	D3DXVECTOR4 vMisc;
 	vMisc = D3DXVECTOR4(pParam->structPattern.fOffset, 
@@ -499,18 +566,25 @@ bool CBarmWipeRender::RenderDrawOut(CVideoBuffer* pSrcDefA, CVideoBuffer* pSrcDe
 		pParam->structPattern.fSoftWidth * 0.5f,
 		pParam->structPattern.bInvert ? 1.0f : 0.0f);
 
-	m_pEffect->SetMatrix("g_matTexture",&matTex);
-	m_pEffect->SetMatrix("g_matMask",&matMask);
-	m_pEffect->SetVector("g_vBorderColor",&vBorderColor);
-	m_pEffect->SetVector("g_vMisc",&vMisc);
+	hr = m_pEffect->SetMatrix("g_matTexture",&matTex);
+	ASSERT(SUCCEEDED(hr));
+	hr = m_pEffect->SetMatrix("g_matMask",&matMask);
+	ASSERT(SUCCEEDED(hr));
+	hr = m_pEffect->SetVector("g_vBorderColor",&vBorderColor);
+	ASSERT(SUCCEEDED(hr));
+	hr = m_pEffect->SetVector("g_vMisc",&vMisc);
+	ASSERT(SUCCEEDED(hr));
 
-	m_pEffect->Begin(&cPass,0);
-
-	m_pEffect->BeginPass(uPass);		
-	m_pQuadMesh->DrawMeshFx();	
-	m_pEffect->EndPass();
-
-	m_pEffect->End();
+	hr = m_pEffect->Begin(&cPass,0);
+	ASSERT(SUCCEEDED(hr));
+	hr = m_pEffect->BeginPass(uPass);
+	ASSERT(SUCCEEDED(hr));
+	bOK = m_pQuadMesh->DrawMeshFx();
+	ASSERT(bOK);
+	hr = m_pEffect->EndPass();
+	ASSERT(SUCCEEDED(hr));
+	hr = m_pEffect->End();
+	ASSERT(SUCCEEDED(hr));
 #ifndef _TRANS
 	//if(!pSrcDef->bIsCGBuffer)
 	//{
