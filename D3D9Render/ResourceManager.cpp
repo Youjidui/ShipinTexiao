@@ -1,6 +1,7 @@
 #include "StdAfx.h"
 #include "ResourceManager.h"
 
+#pragma warning(disable:4244)
 
 typedef struct _QuadVec2UV
 {
