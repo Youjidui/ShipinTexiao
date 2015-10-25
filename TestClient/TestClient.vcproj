@@ -381,8 +381,13 @@
 			RelativePathToProject=".\EffAmoebaWipeTrans\EffAmoebaWipeTrans.vcproj"
 		/>
 		<ProjectReference
+<<<<<<< HEAD
+			ReferencedProjectIdentifier="{F2C49BAF-F5E8-483C-8A41-DCB7BDF99B2D}"
+			RelativePathToProject=".\EffPush\EffPush.vcproj"
+=======
 			ReferencedProjectIdentifier="{AF9FF148-E429-4B63-A790-6A07DD18ED07}"
 			RelativePathToProject=".\BarmWipeTrans\BarmWipeTrans.vcproj"
+>>>>>>> de3bfc145099d011f86b6de45ea2e0a0f52fbd2f
 		/>
 	</References>
 	<Files>
