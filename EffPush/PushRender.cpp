@@ -30,8 +30,8 @@ void CPushRender::Uninit()
 bool CPushRender::Render(CVideoBuffer* pDst, CVideoBuffer* pSrc1,  CVideoBuffer* pSrc2, PushFxParam* pParam)
 {
 	pParam->bReverse = false;
-	pParam->dwType = 1;
-	pParam->fTransition=0;
+	pParam->dwType = 0;
+	//pParam->fTransition=0;
 	pParam->fFirstSoftness = 0;
 	pParam->dwFirstColor = 0xffffff;
 	pParam->fSecondSoftness = 0;
@@ -65,9 +65,9 @@ bool CPushRender::Render(CVideoBuffer* pDst, CVideoBuffer* pSrc1,  CVideoBuffer*
 		D3DXMATRIX matCombined,matWorld,matWorld1;
 		D3DXMATRIX matTextureSrc;
 		D3DXMatrixIdentity(&matTextureSrc);
-		GetWorldMatrix(&matWorld,&matWorld1,pParam->dwType,pParam->fTransition);
+		GetWorldMatrix(&matWorld, &matWorld1, pParam->dwType, pParam->fTransition);
 
-		matCombined = /*matScale * matTransition * */matWorld * matWorld1 /* * m_matProj*/;
+		matCombined = /*matScale * matTransition * */matWorld * matWorld1  /** m_matProj*/;
 		
 
 		D3DXCOLOR FirstColor;
@@ -95,7 +95,7 @@ bool CPushRender::Render(CVideoBuffer* pDst, CVideoBuffer* pSrc1,  CVideoBuffer*
 		m_pPushEffect->SetFloat("g_fAspect", fAspect);
 		//end by szm 2011/12/1
 
-		m_pPushEffect->SetFloat("g_fAlpha",/*ppSrcDef[0]->fAlphaValue*/ 0);
+		m_pPushEffect->SetFloat("g_fAlpha",/*ppSrcDef[0]->fAlphaValue*/ 255);
 		m_pPushEffect->SetMatrix("g_matTexture",&matTextureSrc);
 		m_pPushEffect->SetTechnique("Picture");
 
@@ -127,6 +127,9 @@ bool CPushRender::Render(CVideoBuffer* pDst, CVideoBuffer* pSrc1,  CVideoBuffer*
 
 		//GenerateMatrix(m_pResMan,pSrcDef1->handle,&matTextureSrc,mat_Image);
 		//matCombined= matScale * matTransition * matWorld1*matWorld * m_matView * m_matProj;
+		D3DXMatrixIdentity(&matTextureSrc);
+		GetWorldMatrix(&matWorld, &matWorld1, pParam->dwType, pParam->fTransition);
+		matCombined = /*matScale * matTransition */ matWorld1 * matWorld /* * m_matView * m_matProj*/;
 
 		m_pPushEffect->SetMatrix("g_matWorldViewProj",&matCombined);
 		m_pPushEffect->SetTexture("g_txColor",pSrc2->GetTexture());
@@ -158,7 +161,7 @@ bool CPushRender::Render(CVideoBuffer* pDst, CVideoBuffer* pSrc1,  CVideoBuffer*
 	return true;
 }
 
-void CPushRender::GetWorldMatrix(D3DXMATRIX * pmat0,D3DXMATRIX *pmat1,DWORD dwType,float fTranstion)
+void CPushRender::GetWorldMatrix(D3DXMATRIX * pmat0, D3DXMATRIX *pmat1, DWORD dwType, float fTranstion)
 {
 	assert(pmat0);
 	assert(pmat1);
