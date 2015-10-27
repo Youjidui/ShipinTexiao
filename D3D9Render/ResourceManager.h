@@ -4,6 +4,7 @@
 #include "FxEffectResource.h"
 #include "PixelShaderResource.h"
 #include "VertexShaderResource.h"
+#include "VideoBuffer.h"
 
 //shared resources, such as shaders, meshes, matrix, but not video buffers
 class CResourceManager

@@ -90,6 +90,8 @@ bool CBarmWipeRender::Render( CVideoBuffer* pDest, CVideoBuffer* pSrcA, CVideoBu
 	{
 		bool bOK = m_pEngine->SetRenderTarget(pMask);
 		ASSERT(bOK);
+		bOK = m_pEngine->SetDepthBuffer(true);
+		ASSERT(bOK);
 
 		//m_fGlobalAspect = pSrcDef->IsYUV16Buffer()?1.0f:2.0f;
 
@@ -127,6 +129,8 @@ bool CBarmWipeRender::Render( CVideoBuffer* pDest, CVideoBuffer* pSrcA, CVideoBu
 			pDevice->EndScene();
 		}
 
+		bOK = m_pEngine->SetDepthBuffer(false);
+		ASSERT(bOK);
 		pDevice->SetRenderTarget(0,NULL);
 		CVideoBufferManager* pBufMgr = m_pEngine->GetVideoBufferManager();
 		pBufMgr->ReleaseVideoBuffer(pMask);
@@ -240,7 +244,7 @@ CVideoBuffer* CBarmWipeRender::RenderMultiple(CVideoBuffer* pMask, CVideoBuffer*
 	hr = m_pEffect->BeginPass(uPass);
 	ASSERT(SUCCEEDED(hr));
 	//m_pDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST,0,0,4,0,2);
-	bOK = m_pInstanceMesh->DrawInstance(int(vMultiple.z * vMultiple.w));
+	bOK = !!m_pInstanceMesh->DrawInstance(int(vMultiple.z * vMultiple.w));
 	ASSERT(bOK);
 
 	hr = m_pEffect->EndPass();

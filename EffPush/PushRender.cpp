@@ -49,27 +49,30 @@ bool CPushRender::Render(CVideoBuffer* pDst, CVideoBuffer* pSrc1,  CVideoBuffer*
 		D3DVIEWPORT9 vPort;
 		pDevice->GetViewport(&vPort);
 
-		
+		int nEditWidth, nEditHeight;
+		m_pEngine->GetTargetVideoSize(nEditWidth, nEditHeight);
+		const VideoBufferInfo& biSrc1 = pSrc1->GetVideoBufferInfo();
+		const float pSrcDef0_OffsetX = 0.f, pSrcDef0_OffsetY = 0.f;
 		//非满屏定位开始
-		/*
 		D3DXMATRIX matScale, matTransition;
-		float fxZoom = pSrcDef0->GetImageWidth() / (float)vPort.Width;
-		float fyZoom = pSrcDef0->GetImageHeight() / (float)vPort.Height;
-		float ofx = -0.5f + fxZoom*0.5f + pSrcDef0->OffsetX/ (float)pProfile->nEditWidth;
-		float ofy =  0.5f - fyZoom*0.5f - pSrcDef0->OffsetY / (float)pProfile->nEditHeight;
+		float fxZoom = biSrc1.nWidth / (float)vPort.Width;
+		float fyZoom = biSrc1.nHeight / (float)vPort.Height;
+		float ofx = -0.5f + fxZoom*0.5f + pSrcDef0_OffsetX / nEditWidth;
+		float ofy =  0.5f - fyZoom*0.5f - pSrcDef0_OffsetY / nEditHeight;
 		D3DXMatrixScaling(&matScale, fxZoom, fyZoom , 1.0f);
 		D3DXMatrixTranslation(&matTransition, ofx, ofy, 0.0f);	
-		*/
 		//非满屏定位结束
 		
-		D3DXMATRIX matCombined,matWorld,matWorld1;
-		D3DXMATRIX matTextureSrc;
+		D3DXMATRIXA16 matCombined,matWorld,matWorld1;
+		D3DXMATRIXA16 matTextureSrc;
 		D3DXMatrixIdentity(&matTextureSrc);
+		GenerateMatrix(pSrc1, &matTextureSrc,mat_Image);
 		GetWorldMatrix(&matWorld,&matWorld1,pParam->dwType,pParam->fTransition);
+		LPD3DXMATRIX matView = NULL, matProj= NULL;
+		pResMan->GetPerspectiveMatrix(&matView, &matProj);
 
-		matCombined = /*matScale * matTransition * */matWorld * matWorld1 /* * m_matProj*/;
+		matCombined = matScale * matTransition * matWorld * *matView * *matProj;
 		
-
 		D3DXCOLOR FirstColor;
 		FirstColor.b = (pParam->dwFirstColor & 0xFF)/255.0f;
 		FirstColor.g = ((pParam->dwFirstColor>>8) & 0xFF)/255.0f;
@@ -87,15 +90,14 @@ bool CPushRender::Render(CVideoBuffer* pDst, CVideoBuffer* pSrc1,  CVideoBuffer*
 
 
 		//add by szm 2011/12/1 软边宽高比不对
-		int nEditWidth, nEditHeight;
-		m_pEngine->GetTargetVideoSize(nEditWidth, nEditHeight);
 		float fAspect = nEditWidth*1.0f / nEditHeight;
-		//fAspect = fAspect * pSrc1->GetImageWidth() / (float) (pSrc1->GetImageHeight() /* * m_pResMan->GetAspectVerifyCoef()*/); // 获得屏幕宽高比
-		//fAspect = 1.f / fAspect;
+		const int nGetAspectVerifyCoef = 1;	//m_pProfile->bInterval ? 2 : 1;
+		fAspect = fAspect * biSrc1.nWidth / (float) (biSrc1.nHeight * nGetAspectVerifyCoef); // 获得屏幕宽高比
+		fAspect = 1.f / fAspect;
 		m_pPushEffect->SetFloat("g_fAspect", fAspect);
 		//end by szm 2011/12/1
 
-		m_pPushEffect->SetFloat("g_fAlpha",/*ppSrcDef[0]->fAlphaValue*/ 0);
+		m_pPushEffect->SetFloat("g_fAlpha",/*ppSrcDef[0]->fAlphaValue*/ 1.0f);	//TODO: alpha
 		m_pPushEffect->SetMatrix("g_matTexture",&matTextureSrc);
 		m_pPushEffect->SetTechnique("Picture");
 
@@ -116,17 +118,20 @@ bool CPushRender::Render(CVideoBuffer* pDst, CVideoBuffer* pSrc1,  CVideoBuffer*
 			m_pPushEffect->End();
 			pDevice->EndScene();
 		}
+
+		const VideoBufferInfo& biSrc2 = pSrc2->GetVideoBufferInfo();
+
 		//非满屏定位开始
-		//fxZoom = pSrcDef1->GetImageWidth() / (float)vPort.Width;
-		//fyZoom = pSrcDef1->GetImageHeight() / (float)vPort.Height;
-		//ofx = -0.5f + fxZoom*0.5f + pSrcDef1->OffsetX/ (float)pProfile->nEditWidth;
-		//ofy =  0.5f - fyZoom*0.5f - pSrcDef1->OffsetY / (float)pProfile->nEditHeight;
-		//D3DXMatrixScaling(&matScale, fxZoom, fyZoom , 1.0f);
-		//D3DXMatrixTranslation(&matTransition, ofx, ofy, 0.0f);	
+		fxZoom = biSrc2.nWidth / (float)vPort.Width;
+		fyZoom = biSrc2.nHeight / (float)vPort.Height;
+		ofx = -0.5f + fxZoom*0.5f + pSrcDef0_OffsetX/ (float)nEditWidth;
+		ofy =  0.5f - fyZoom*0.5f - pSrcDef0_OffsetY / (float)nEditHeight;
+		D3DXMatrixScaling(&matScale, fxZoom, fyZoom , 1.0f);
+		D3DXMatrixTranslation(&matTransition, ofx, ofy, 0.0f);	
 		//非满屏定位结束
 
-		//GenerateMatrix(m_pResMan,pSrcDef1->handle,&matTextureSrc,mat_Image);
-		//matCombined= matScale * matTransition * matWorld1*matWorld * m_matView * m_matProj;
+		GenerateMatrix(pSrc1, &matTextureSrc,mat_Image);
+		matCombined= matScale * matTransition * matWorld1*matWorld * *matView * *matProj;
 
 		m_pPushEffect->SetMatrix("g_matWorldViewProj",&matCombined);
 		m_pPushEffect->SetTexture("g_txColor",pSrc2->GetTexture());
@@ -135,9 +140,11 @@ bool CPushRender::Render(CVideoBuffer* pDst, CVideoBuffer* pSrc1,  CVideoBuffer*
 		m_pPushEffect->SetMatrix("g_matTexture",&matTextureSrc);
 
 		//add by szm 2011/12/1 软边宽高比不对
+		fAspect = nEditWidth*1.0f / nEditHeight;
 		//fAspect = m_pResMan->GetAspect() * pSrcDef1->GetImageWidth() / (float) (pSrcDef1->GetImageHeight() * m_pResMan->GetAspectVerifyCoef()); // 获得屏幕宽高比
-		//fAspect = 1.f / fAspect;
-		//m_pEffect->SetFloat("g_fAspect",fAspect);
+		fAspect = fAspect * biSrc2.nWidth / (float) (biSrc2.nHeight * nGetAspectVerifyCoef); // 获得屏幕宽高比
+		fAspect = 1.f / fAspect;
+		m_pPushEffect->SetFloat("g_fAspect",fAspect);
 		//end by szm 2011/12/1
 
 		// begin&end scene

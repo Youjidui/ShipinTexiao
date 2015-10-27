@@ -43,7 +43,7 @@ public:
         LPDIRECT3DVERTEXDECLARATION9 pDcl,
 		LPCTSTR                pszResID);
 
-    BOOL    DrawSubset(UINT uAttributeID)
+    bool DrawSubset(UINT uAttributeID)
     {
         HRESULT hr = m_pMesh->DrawSubset(uAttributeID);
         assert(SUCCEEDED(hr));
@@ -55,15 +55,15 @@ public:
 	}
 
 	//等把特技代码移植完了，这些Draw函数都要整理
-    BOOL DrawInstance(int nNumInstance);
-	BOOL DrawInstance(UINT strideInstance, int nNumInstance);
-   bool       DrawMesh( const UINT  iB_id = 0, LPDIRECT3DVERTEXSHADER9 pShader = NULL );
-   bool       DrawMeshFx( const UINT  iB_id = 0  );
-   bool       DrawMesh( const UINT  iB_id,
+    bool DrawInstance(int nNumInstance);
+	bool DrawInstance(UINT strideInstance, int nNumInstance);
+	bool       DrawMesh( const UINT  iB_id = 0, LPDIRECT3DVERTEXSHADER9 pShader = NULL );
+	bool       DrawMeshFx( const UINT  iB_id = 0  );
+	bool       DrawMesh( const UINT  iB_id,
 	                    const UINT uNumVertices,
                         const UINT uPrimitiveCount,
                         LPDIRECT3DVERTEXSHADER9 pShader = NULL);
-   bool       DrawMeshFx( const UINT  iB_id,
+	bool       DrawMeshFx( const UINT  iB_id,
 	   const UINT uNumVertices,
 	   const UINT uPrimitiveCount
 	   );

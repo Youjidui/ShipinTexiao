@@ -33,6 +33,7 @@ public:
 	//virtual BOOL DownloadConvert(const handle_tpr hSrc,const handle_tpr hDst, const handle_tpr hKey){assert(0);return FALSE;};
 	bool SetVertexShader(LPCTSTR lpszShaderName);
 	bool SetRenderTarget( CVideoBuffer* pDest );
+	bool SetDepthBuffer(bool bUseDepthBuffer);
 	CVideoBuffer* CreateRenderTargetBuffer();
 	CVideoBuffer* CreateSourceBuffer(int nWidth, int nHeight);
 
@@ -40,9 +41,10 @@ public:
 	bool EffectVideoCopy( CVideoBuffer* pSrc, CVideoBuffer* pDst  );
 
 private:
-	LPDIRECT3D9                  m_pD3D;
-	LPDIRECT3DDEVICE9            m_pDevice;    
-	D3DDeviceSettings			 m_DeviceSettings;
+	LPDIRECT3D9                 m_pD3D;
+	LPDIRECT3DDEVICE9           m_pDevice;    
+	D3DDeviceSettings			m_DeviceSettings;
+	LPDIRECT3DSURFACE9			m_pDepthNoMultiSample;
 
 	CResourceManager*			m_pResMgr;
 	CVideoBufferManager*		m_pBuffMgr;

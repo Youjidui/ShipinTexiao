@@ -62,10 +62,13 @@ HRESULT CRenderEngine::Create( HWND hDeviceWnd, UINT nBackBufferWidth, UINT nBac
 	{
 		MessageBox(NULL,L"Initial GPU Failed ,Please Restart Computer !!!",L"Error",MB_OK|MB_ICONERROR);
 		return hr;
-	}	
+	}
 
-	//m_pDevice->CreateAdditionalSwapChain(&m_DeviceSettings.pp,&m_pSwapChain);
-	//m_pSwapChain->GetBackBuffer(0,D3DBACKBUFFER_TYPE_MONO,&m_pSurfBackBuffer);
+	ASSERT(m_pDevice);
+	if(FAILED(hr = m_pDevice->CreateDepthStencilSurface( nBackBufferWidth,nBackBufferHeight,
+		D3DFMT_D24S8,D3DMULTISAMPLE_NONE,0,	FALSE,	&m_pDepthNoMultiSample,NULL )))
+	{
+	}
 	return hr;
 }
 
@@ -212,3 +215,12 @@ CVideoBuffer* CRenderEngine::CreateRenderTargetBuffer()
 	return pMask;
 }
 
+bool CRenderEngine::SetDepthBuffer(bool bUseDepthBuffer)
+{
+	HRESULT hr = E_FAIL;
+	if(bUseDepthBuffer)
+		hr = m_pDevice->SetDepthStencilSurface( m_pDepthNoMultiSample );
+	else
+		hr = m_pDevice->SetDepthStencilSurface(NULL);
+	return SUCCEEDED(hr);
+}

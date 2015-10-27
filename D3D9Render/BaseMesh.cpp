@@ -301,7 +301,7 @@ HRESULT CBaseMesh::Create( LPDIRECT3DDEVICE9 pDevice,
 }
 
 
-BOOL CBaseMesh::DrawInstance(int nNumInstance)
+bool CBaseMesh::DrawInstance(int nNumInstance)
 {
     m_pDevice->SetStreamSource(0,m_pVB[0],0,sizeof(float) * 5);
     m_pDevice->SetStreamSourceFreq(0,D3DSTREAMSOURCE_INDEXEDDATA|nNumInstance);
@@ -324,7 +324,7 @@ BOOL CBaseMesh::DrawInstance(int nNumInstance)
     return (SUCCEEDED(hr));
 }
 
-BOOL CBaseMesh::DrawInstance(UINT strideInstance, int nNumInstance)
+bool CBaseMesh::DrawInstance(UINT strideInstance, int nNumInstance)
 {
 	m_pDevice->SetStreamSource(0,m_pVB[0],0,m_uVertexStride);
 	m_pDevice->SetStreamSourceFreq(0,D3DSTREAMSOURCE_INDEXEDDATA|nNumInstance);
