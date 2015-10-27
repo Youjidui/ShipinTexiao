@@ -432,6 +432,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\PushDlg.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\PushDlg.h"
+				>
+			</File>
+			<File
 				RelativePath=".\stdafx.cpp"
 				>
 				<FileConfiguration

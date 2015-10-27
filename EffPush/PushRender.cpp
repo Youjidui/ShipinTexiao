@@ -30,8 +30,8 @@ void CPushRender::Uninit()
 bool CPushRender::Render(CVideoBuffer* pDst, CVideoBuffer* pSrc1,  CVideoBuffer* pSrc2, PushFxParam* pParam)
 {
 	pParam->bReverse = false;
-	pParam->dwType = 1;
-	pParam->fTransition=0;
+	pParam->dwType = 0;
+	//pParam->fTransition=0;
 	pParam->fFirstSoftness = 0;
 	pParam->dwFirstColor = 0xffffff;
 	pParam->fSecondSoftness = 0;
@@ -165,7 +165,7 @@ bool CPushRender::Render(CVideoBuffer* pDst, CVideoBuffer* pSrc1,  CVideoBuffer*
 	return true;
 }
 
-void CPushRender::GetWorldMatrix(D3DXMATRIX * pmat0,D3DXMATRIX *pmat1,DWORD dwType,float fTranstion)
+void CPushRender::GetWorldMatrix(D3DXMATRIX * pmat0, D3DXMATRIX *pmat1, DWORD dwType, float fTranstion)
 {
 	assert(pmat0);
 	assert(pmat1);

@@ -87,6 +87,14 @@ void CEffectBar::OnBnClickedParameters()
 			}
 			m_barmWipeDlg.ShowWindow(SW_SHOW);
 		}
+		else if(FX_PUSH == str)
+		{
+			if(!m_pushDlg.GetSafeHwnd())
+			{
+				m_pushDlg.Create(CPushDlg::IDD);
+			}
+			m_pushDlg.ShowWindow(SW_SHOW);
+		}
 	}
 }
 
@@ -138,6 +146,7 @@ BOOL CEffectBar::OnInitDialog()
 	i = m_ctrlEffects.AddString(FX_PUSH);
 	{
 		PushFxParam* pPushFxParam = new PushFxParam;
+		pPushFxParam->fTransition = 0.5f;
 		m_ctrlEffects.SetItemDataPtr(i, pPushFxParam);
 	}
 	i = m_ctrlEffects.AddString(FX_BARM_WIPE);
@@ -212,6 +221,12 @@ void CEffectBar::OnProgressChange( int nPos )
 			pParam->fOffset = nPos / 10000.f;
 			AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)(LPCTSTR)str, (LPARAM)pParam);
 		}
+		else if (FX_PUSH == str)
+		{
+			PushFxParam* pParam = (PushFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
+			pParam->fTransition = nPos / 10000.f;
+			AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)(LPCTSTR)str, (LPARAM)pParam);
+		}
 	}
 }
 
@@ -231,6 +246,11 @@ void CEffectBar::SetProgress(CSliderCtrl* pCtrl)
 		{
 			BarmWipeFxParam* pParam = (BarmWipeFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
 			if(pParam)	pCtrl->SetPos(pParam->structPattern.fOffset * 10000);
+		}
+		else if (FX_PUSH == str)
+		{
+			PushFxParam* pParam = (PushFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
+			if(pParam)	pCtrl->SetPos(pParam->fTransition * 10000);
 		}
 	}
 }
