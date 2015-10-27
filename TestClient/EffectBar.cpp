@@ -87,6 +87,14 @@ void CEffectBar::OnBnClickedParameters()
 			}
 			m_barmWipeDlg.ShowWindow(SW_SHOW);
 		}
+		else if(FX_PUSH == str)
+		{
+			if(!m_pushDlg.GetSafeHwnd())
+			{
+				m_pushDlg.Create(CPushDlg::IDD);
+			}
+			m_pushDlg.ShowWindow(SW_SHOW);
+		}
 	}
 }
 

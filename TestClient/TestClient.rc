@@ -396,18 +396,18 @@ CAPTION "Dialog"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
     PUSHBUTTON      "È¡Ïû",IDCANCEL,135,214,50,14
-    LTEXT           "fDivideWidth",IDC_STATIC,7,19,42,8
-    CONTROL         "",IDC_SLIDER_DIVIDE_WIDTH,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,67,15,100,15
-    LTEXT           "fDivideWidth",IDC_STATIC,7,44,42,8
-    CONTROL         "",IDC_SLIDER_DIVIDE_WIDTH2,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,67,40,100,15
-    LTEXT           "fDivideWidth",IDC_STATIC,7,71,42,8
-    CONTROL         "",IDC_SLIDER_DIVIDE_WIDTH3,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,67,67,100,15
-    LTEXT           "fDivideWidth",IDC_STATIC,7,100,42,8
-    CONTROL         "",IDC_SLIDER_DIVIDE_WIDTH4,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,67,96,100,15
-    LTEXT           "fDivideWidth",IDC_STATIC,7,129,42,8
-    CONTROL         "",IDC_SLIDER_DIVIDE_WIDTH5,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,67,125,100,15
-    LTEXT           "fDivideWidth",IDC_STATIC,7,158,42,8
-    CONTROL         "",IDC_SLIDER_DIVIDE_WIDTH6,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,67,153,100,15
+    LTEXT           "dwType",IDC_STATIC,7,19,26,8
+    CONTROL         "",IDC_SLIDER_DWTYPE,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,67,15,100,15
+    LTEXT           "bReverse",IDC_STATIC,7,44,32,8
+    CONTROL         "",IDC_SLIDER_REVERSE,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,67,40,100,15
+    LTEXT           "fFirstSoftness",IDC_STATIC,7,71,46,8
+    CONTROL         "",IDC_SLIDER_FIRSTSOFTNESS,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,67,67,100,15
+    LTEXT           "dwFirstColor",IDC_STATIC,7,100,41,8
+    CONTROL         "",IDC_SLIDER_FIRSTCOLOR,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,67,96,100,15
+    LTEXT           "fSecondSoftness",IDC_STATIC,7,129,55,8
+    CONTROL         "",IDC_SLIDER_SECONDSOFTNESS,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,67,125,100,15
+    LTEXT           "dwSecondColor",IDC_STATIC,7,158,50,8
+    CONTROL         "",IDC_SLIDER_SECONDCOLOR,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,67,153,100,15
 END
 
 

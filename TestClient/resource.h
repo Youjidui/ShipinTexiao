@@ -45,20 +45,27 @@
 #define IDC_SLIDER_BUMP_DENSITY         1013
 #define IDC_SLIDER_DIVIDE_TYPE          1013
 #define IDC_SLIDER_DIVIDE_WIDTH2        1013
+#define IDC_SLIDER_REVERSE              1013
 #define IDC_SLIDER_SLANT                1014
 #define IDC_SLIDER_OFFSET1              1014
 #define IDC_SLIDER_DIVIDE_WIDTH3        1014
+#define IDC_SLIDER_FIRSTSOFTNESS        1014
 #define IDC_SLIDER_HEIGHT               1015
 #define IDC_SLIDER_CENTER_X             1015
 #define IDC_SLIDER_DIVIDE_WIDTH4        1015
+#define IDC_SLIDER_FIRSTCOLOR           1015
 #define IDC_SLIDER_SOFT_EDGE            1016
 #define IDC_SLIDER_CENTER_Y             1016
 #define IDC_SLIDER_DIVIDE_WIDTH5        1016
+#define IDC_SLIDER_SECOND_SOFTNESS      1016
+#define IDC_SLIDER_SECONDSOFTNESS       1016
 #define IDC_SLIDER_RANDOM_SEED          1017
 #define IDC_SLIDER_INVERT               1017
 #define IDC_SLIDER_DIVIDE_WIDTH6        1017
+#define IDC_SLIDER_SECONDCOLOR          1017
 #define IDC_SLIDER_BRIGHTNESS           1018
 #define IDC_SLIDER_TRANSPARENCY         1018
+#define IDC_SLIDER_DWTYPE               1018
 #define IDC_SLIDER_LIGHT_ANGLE          1019
 #define IDC_SLIDER_MULTIPLE_TYPE        1019
 #define IDC_SLIDER_HIGH_COLOR_R         1020
@@ -100,7 +107,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        318
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1013
+#define _APS_NEXT_CONTROL_VALUE         1019
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif
