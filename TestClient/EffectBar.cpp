@@ -102,7 +102,6 @@ BOOL CEffectBar::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 
-	// TODO:  在此添加额外的初始化
 	//m_ctrlEffects.AddString(_T("none"));
 	int i = m_ctrlEffects.AddString(FX_NEGATIVE);
 	//m_ctrlEffects.SetItemData(i, FX_NEGATIVE);
@@ -161,11 +160,10 @@ BOOL CEffectBar::OnInitDialog()
 
 	m_ctrlEffects.SetCurSel(0);
 
+	m_ctrlProgress.SetRange(0, 10000);	//1.f, 0, 0.0001f
+
 	//ON_CONTROL(CBN_SELCHANGE, IDC_EFFECTS
 	PostMessage(WM_COMMAND, MAKELONG(IDC_EFFECTS, CBN_SELCHANGE), (LPARAM)m_ctrlEffects.GetSafeHwnd());
-
-	m_ctrlProgress.SetRange(0, 10000);	//1.f, 0, 0.0001f
-	SetProgress(&m_ctrlProgress);
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 	// 异常: OCX 属性页应返回 FALSE
@@ -180,6 +178,7 @@ void CEffectBar::OnCbnSelchangeEffects()
 		m_ctrlEffects.GetLBText(nSel, str);
 		void* pParam = m_ctrlEffects.GetItemDataPtr(nSel);
 		AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)(LPCTSTR)str, (LPARAM)pParam);
+		SetProgress(&m_ctrlProgress);
 	}
 }
 
@@ -219,6 +218,13 @@ void CEffectBar::OnProgressChange( int nPos )
 			AmoebaWipeFxParam* pParam = (AmoebaWipeFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
 			//pParam->fProgress = nPos / 100.f;
 			pParam->fOffset = nPos / 10000.f;
+			AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)(LPCTSTR)str, (LPARAM)pParam);
+		}
+		if(FX_BARM_WIPE == str)
+		{
+			BarmWipeFxParam* pParam = (BarmWipeFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
+			//pParam->fProgress = nPos / 100.f;
+			pParam->structPattern.fOffset = nPos / 10000.f;
 			AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)(LPCTSTR)str, (LPARAM)pParam);
 		}
 		else if (FX_PUSH == str)

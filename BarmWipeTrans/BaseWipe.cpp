@@ -32,7 +32,8 @@ void CBaseWipe::Ready(CVideoBuffer* pMaskDef)
 	float	fAspect = nEditWidth*1.0f/nEditHeight;
 
 	//m_fAspect = m_pResMan->GetAspect() * (pMaskDef->GetImageWidth() * (pMaskDef->IsYUV16Buffer() ? 2.0f : 1.0f))  / (float)(pMaskDef->GetImageHeight()  * m_pResMan->GetAspectVerifyCoef());    
-	m_fAspect = fAspect;
+	const VideoBufferInfo& bi = pMaskDef->GetVideoBufferInfo();
+	m_fAspect = fAspect * bi.nWidth / bi.nHeight;
     D3DXMatrixPerspectiveFovLH( &m_matAspectProj, D3DX_PI/4, m_fAspect, 0.5f, 1000.0f );
     m_matAspectProj._11 *= m_fAspect;
     m_matAspectProj._22 *= m_fAspect;

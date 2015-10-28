@@ -19,7 +19,7 @@ public:
 	virtual ~CBaseWipe(void);
 public:
 	virtual HRESULT InitMesh(CRenderEngine* pEngine);
-	virtual HRESULT Draw(CVideoBuffer* pMask, void* pParamRaw,void* pParent) = 0;
+	virtual HRESULT Draw(CVideoBuffer* pMask, void* pParamRaw) = 0;
     virtual void    Ready(CVideoBuffer* pMaskDef);
 protected:	
 	CRenderEngine*		m_pEngine;

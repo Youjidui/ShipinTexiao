@@ -59,8 +59,8 @@ BOOL CParamBarmWipeDlg::OnInitDialog()
 	pCtrl->SetRange(-20000, 20000);	//2.0f, -2.0f, 0.0001f
 	if(m_pParam)	pCtrl->SetPos(m_pParam->structPattern.fCenterY * 10000);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_INVERT);
-	pCtrl->SetRange(0, 10000);	//1.0f, 0.0f, 0.0001f
-	if(m_pParam)	pCtrl->SetPos(m_pParam->structPattern.bInvert * 10000);
+	pCtrl->SetRange(0, 1);	//1, 0
+	if(m_pParam)	pCtrl->SetPos(m_pParam->structPattern.bInvert);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_TRANSPARENCY);
 	pCtrl->SetRange(0, 10000);	//1.0f, 0.0f,  0.0001f
 	if(m_pParam)	pCtrl->SetPos(m_pParam->structGeneral.fTransparency * 10000);
@@ -76,6 +76,9 @@ BOOL CParamBarmWipeDlg::OnInitDialog()
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_PATTERN);
 	pCtrl->SetRange(0, 5);	//5, 0, 1
 	if(m_pParam)	pCtrl->SetPos(m_pParam->structPattern.nPattern);
+	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_SLANT2);
+	pCtrl->SetRange(-100000, 100000);	//1.0f, -1.0f, 0.00001f
+	if(m_pParam)	pCtrl->SetPos(m_pParam->fSlant * 100000);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_FLIP);
 	pCtrl->SetRange(0, 1);	//
 	if(m_pParam)	pCtrl->SetPos(m_pParam->structModify.bFlip);
@@ -128,28 +131,37 @@ void CParamBarmWipeDlg::OnHScroll(UINT nSBCode, UINT uPos, CScrollBar* pScrollBa
 		m_pParam->structModify.fDivideWidth = nPos / 10000.f;
 		break;
 	case IDC_SLIDER_CENTER_X:
-		m_pParam->structPattern.fCenterX = nPos / 100000.f;
+		m_pParam->structPattern.fCenterX = nPos / 10000.f;
 		break; 
 	case IDC_SLIDER_CENTER_Y:
-		m_pParam->structPattern.fCenterY = nPos / 100000.0f;
+		m_pParam->structPattern.fCenterY = nPos / 10000.0f;
 		break;
 	case IDC_SLIDER_INVERT:
-		m_pParam->structPattern.bInvert = nPos / 10000.f;
+		m_pParam->structPattern.bInvert = nPos;
 		break;
 	case IDC_SLIDER_TRANSPARENCY:
-		m_pParam->structGeneral.fTransparency = nPos;
+		m_pParam->structGeneral.fTransparency = nPos / 10000.0f;
 		break;
 	case IDC_SLIDER_MULTIPLE_TYPE:
-		m_pParam->structModify.nMultipleType = nPos / 10000.f;
+		m_pParam->structModify.nMultipleType = nPos;
 		break;
 	case IDC_SLIDER_MULTIPLE_NUMBER_X:
-		m_pParam->structModify.nMultipleNumberX = nPos / 100.f;
+		m_pParam->structModify.nMultipleNumberX = nPos;
 		break;
 	case IDC_SLIDER_PATTERN:
-		m_pParam->structPattern.nPattern = nPos / 10000.f;
+		m_pParam->structPattern.nPattern = nPos;
 		break;
+	case IDC_SLIDER_SLANT2:
+		m_pParam->fSlant = nPos / 100000.f;
+		break; 
 	case IDC_SLIDER_MULTIPLE_NUMBER_Y:
-		m_pParam->structModify.nMultipleNumberY = nPos / 100.f;
+		m_pParam->structModify.nMultipleNumberY = nPos;
+		break;
+	case IDC_SLIDER_FLIP:
+		m_pParam->structModify.bFlip = nPos;
+		break;
+	case IDC_SLIDER_OVERLAP:
+		m_pParam->structModify.bOverlap = nPos / 100.0f;
 		break;
 	case IDC_SLIDER_BORDER_COLOR_R:
 		memcpy(vColor, &m_pParam->structPattern.crBorderColor, sizeof(vColor));
@@ -175,7 +187,7 @@ void CParamBarmWipeDlg::OnHScroll(UINT nSBCode, UINT uPos, CScrollBar* pScrollBa
 		m_pParam->structPattern.fBorderWidth = nPos / 10000.f;
 		break;
 	case IDC_SLIDER_SOFT_WIDTH:
-		m_pParam->structPattern.fSoftWidth = nPos / 100.f;
+		m_pParam->structPattern.fSoftWidth = nPos / 10000.f;
 		break;
 	}
 

@@ -62,7 +62,7 @@ BOOL LineIntersection(D3DXVECTOR3 Line0[],D3DXVECTOR3 Line1[],D3DXVECTOR3& vPt)/
 	}
 }
 
-HRESULT CBarmWipe::Draw(CVideoBuffer* pMaskDef, void* pParamRaw, void* pParent)
+HRESULT CBarmWipe::Draw(CVideoBuffer* pMaskDef, void* pParamRaw)
 {
 	BarmWipeFxParam* pParam = (BarmWipeFxParam*)pParamRaw;
 	LPDIRECT3DDEVICE9 pDevice = m_pEngine->GetDevice();
@@ -79,7 +79,7 @@ HRESULT CBarmWipe::Draw(CVideoBuffer* pMaskDef, void* pParamRaw, void* pParent)
 	case 2:
 	case 3:		
 		fOffset = CalcOffset(pParamRaw,pParam->structPattern.nPattern);
-		hr = Draw(pMaskDef,pParamRaw,pParent,pParam->structPattern.nPattern,fOffset);
+		hr = Draw(pMaskDef,pParamRaw, pParam->structPattern.nPattern,fOffset);
 		ASSERT(SUCCEEDED(hr));
 		break;
 	case 4:
@@ -96,10 +96,12 @@ HRESULT CBarmWipe::Draw(CVideoBuffer* pMaskDef, void* pParamRaw, void* pParent)
 			
 			int nAdd = pParam->structPattern.nPattern == 4 ? 0 : 2;
 
-			fOffset = min(CalcOffset(pParamRaw,0 + nAdd),CalcOffset(pParamRaw,1 + nAdd));
-			hr = Draw(pMask0,pParamRaw,pParent,0 + nAdd,fOffset);
+			float fOff0 = CalcOffset(pParamRaw, 0 + nAdd);
+			float fOff1 = CalcOffset(pParamRaw, 1 + nAdd);
+			fOffset = min(fOff0, fOff1);
+			hr = Draw(pMask0, pParamRaw, 0 + nAdd, fOffset);
 			ASSERT(SUCCEEDED(hr));
-			hr = Draw(pMask1,pParamRaw,pParent,1 + nAdd,fOffset);
+			hr = Draw(pMask1, pParamRaw, 1 + nAdd, fOffset);
 			ASSERT(SUCCEEDED(hr));
 
 			bool bOK = m_pEngine->SetRenderTarget(pMaskDef);
@@ -135,12 +137,10 @@ HRESULT CBarmWipe::Draw(CVideoBuffer* pMaskDef, void* pParamRaw, void* pParent)
 			hr = m_pEffect->End();
 			ASSERT(SUCCEEDED(hr));
 
-			//D3DXSaveTextureToFile(L"C:\\mask0.bmp",D3DXIFF_BMP,((CBaseTexture*)pMaskDef0->pContainer)->GetTexture(),NULL);		
-			//D3DXSaveTextureToFile(L"C:\\mask1.bmp",D3DXIFF_BMP,((CBaseTexture*)pMaskDef1->pContainer)->GetTexture(),NULL);		
-			//D3DXSaveTextureToFile(L"C:\\mask.bmp",D3DXIFF_BMP,((CBaseTexture*)pMaskDef->pContainer)->GetTexture(),NULL);
+			//D3DXSaveSurfaceToFile(_T("./BarmWipe_Mask_0.bmp"), D3DXIFF_BMP, pMask0->GetSurface(), NULL, NULL);
+			//D3DXSaveSurfaceToFile(_T("./BarmWipe_Mask_1.bmp"), D3DXIFF_BMP, pMask1->GetSurface(), NULL, NULL);
+			//D3DXSaveSurfaceToFile(_T("./BarmWipe_Mask.bmp"), D3DXIFF_BMP, pMaskDef->GetSurface(), NULL, NULL);
 
-			//((GBarmWipeRender*)pParent)->FreeRTBuffer(hMask0);
-			//((GBarmWipeRender*)pParent)->FreeRTBuffer(hMask1);
 			pVM->ReleaseVideoBuffer(pMask0);
 			pVM->ReleaseVideoBuffer(pMask1);
 		}
@@ -202,7 +202,7 @@ float	CBarmWipe::CalcOffset(void* pParamRaw,int nPattern)
 	return fOffset;
 }
 
-HRESULT CBarmWipe::Draw(CVideoBuffer* pMaskDef, void* pParamRaw,void* pParent,int nPattern,float fOffset)
+HRESULT CBarmWipe::Draw(CVideoBuffer* pMaskDef, void* pParamRaw, int nPattern,float fOffset)
 {
 	LPDIRECT3DDEVICE9 pDevice = m_pEngine->GetDevice();
 	CResourceManager* pResMan = m_pEngine->GetResourceManager();

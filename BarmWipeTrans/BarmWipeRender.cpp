@@ -67,14 +67,14 @@ bool CBarmWipeRender::Render( CVideoBuffer* pDest, CVideoBuffer* pSrcA, CVideoBu
 	LPDIRECT3DDEVICE9 pDevice = m_pEngine->GetDevice();
 	CResourceManager* pResMgr = m_pEngine->GetResourceManager();
 
+	if(pParam->structPattern.bInvert)
+	{
+		std::swap(pSrcA, pSrcB);
+	}
+
 	pParam->structPattern.fOffset = min(pParam->structPattern.fOffset, 1.f);
 	if((pParam->structPattern.fOffset <= 0.0f || pParam->structPattern.fOffset > 1.0f) && pParam->structPattern.fCenterX == 0.0f && pParam->structPattern.fCenterY == 0.0f)
 	{	
-		if(pParam->structPattern.bInvert)
-		{
-			m_pEngine->SetRenderTarget(pDest);
-		}
-		else
 		{
 			m_pEngine->EffectVideoCopy(pSrcA, pDest);
 			//pDstDef->fAlphaValue *= pParam->structGeneral.fTransparency;
@@ -93,11 +93,8 @@ bool CBarmWipeRender::Render( CVideoBuffer* pDest, CVideoBuffer* pSrcA, CVideoBu
 		bOK = m_pEngine->SetDepthBuffer(true);
 		ASSERT(bOK);
 
-		//m_fGlobalAspect = pSrcDef->IsYUV16Buffer()?1.0f:2.0f;
-
 		if( SUCCEEDED( pDevice->BeginScene() ) )
-		{	
-
+		{
 			BOOL bProcessMultiple = pParam->structModify.nMultipleType > 0 && (pParam->structModify.nMultipleNumberX > 1 || pParam->structModify.nMultipleNumberY > 1);
 			BOOL bProcessDivide = pParam->structModify.nDivideType >0 && pParam->structModify.fDivideWidth > 0.0f;
 
@@ -116,11 +113,11 @@ bool CBarmWipeRender::Render( CVideoBuffer* pDest, CVideoBuffer* pSrcA, CVideoBu
 			pDevice->SetTexture(0,NULL);
 			bool bOK = RenderMask(pMask, pParam);
 			ASSERT(bOK);
-			D3DXSaveSurfaceToFile(_T("./BarmWipe_Mask.bmp"), D3DXIFF_BMP, pMask->GetSurface(), NULL, NULL);
+			//D3DXSaveSurfaceToFile(_T("./BarmWipe_Mask.bmp"), D3DXIFF_BMP, pMask->GetSurface(), NULL, NULL);
 
 			pMask = RenderMulitDivide(pMask,pSrcA,pParam, bProcessMultiple,bProcessDivide);
 			ASSERT(pMask);
-			D3DXSaveSurfaceToFile(_T("./BarmWipe_Mask_2.bmp"), D3DXIFF_BMP, pMask->GetSurface(), NULL, NULL);
+			//D3DXSaveSurfaceToFile(_T("./BarmWipe_Mask_2.bmp"), D3DXIFF_BMP, pMask->GetSurface(), NULL, NULL);
 
 			bOK = RenderDrawOut(pSrcA, pSrcB, pMask, pDest, pParam);
 			ASSERT(bOK);
@@ -162,7 +159,7 @@ bool CBarmWipeRender::RenderMask(CVideoBuffer* pMaskDef, BarmWipeFxParam* pParam
 	if(m_privateData.m_pWipe)
 	{
 		m_privateData.m_pWipe->Ready(pMaskDef);
-		HRESULT hr = m_privateData.m_pWipe->Draw(pMaskDef, pParam, this);
+		HRESULT hr = m_privateData.m_pWipe->Draw(pMaskDef, pParam);
 		bOK = SUCCEEDED(hr);
 	}
 	return bOK;

@@ -97,6 +97,8 @@
 #define IDC_SLIDER18                    1029
 #define IDC_SLIDER_SOFT_WIDTH           1029
 #define IDC_SLIDER_BLURNESS             1030
+#define IDC_SLIDER_FLIP2                1030
+#define IDC_SLIDER_SLANT2               1030
 #define IDC_SLIDER_FINE_TUNE            1031
 #define IDC_SLIDER_GRAY_MIN             1032
 #define IDC_SLIDER_GRAY_MAX             1033

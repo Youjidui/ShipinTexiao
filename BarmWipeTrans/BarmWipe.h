@@ -17,8 +17,8 @@ public:
 	CBarmWipe();
 	~CBarmWipe();
 	virtual HRESULT InitMesh(CRenderEngine* pEngine);
-	virtual HRESULT Draw(CVideoBuffer* pMaskDef, void* pParamRaw, void* pParent);
-	HRESULT Draw(CVideoBuffer* pMaskDef, void* pParamRaw, void* pParent, int nPattern, float fOffset);
+	virtual HRESULT Draw(CVideoBuffer* pMaskDef, void* pParamRaw);
+	HRESULT Draw(CVideoBuffer* pMaskDef, void* pParamRaw, int nPattern, float fOffset);
 	float	CalcOffset(void* pParamRaw, int nPattern);
 protected:
 private:
