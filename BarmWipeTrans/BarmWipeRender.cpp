@@ -209,7 +209,7 @@ CVideoBuffer* CBarmWipeRender::RenderMultiple(CVideoBuffer* pMask, CVideoBuffer*
 
 	D3DXMATRIX matWorld, *matView = NULL, *matProj= NULL;
 	D3DXMatrixIdentity(&matWorld);
-	pResMgr->GetOrthoMatrix( &matView, &matProj);
+	pResMgr->GetPerspectiveMatrix( &matView, &matProj);
 	D3DXMATRIX matCombine = *matView * *matProj;
 	hr = m_pEffect->SetMatrix("g_matWorldViewProj",&matCombine);
 	ASSERT(SUCCEEDED(hr));
@@ -267,12 +267,12 @@ CVideoBuffer* CBarmWipeRender::RenderDivide(CVideoBuffer* pMask, CVideoBuffer* p
 
 	//handle_tpr hMask1 = NewRTBuffer(0.0f,0.0f,pMaskDef->GetImageWidth() ,pMaskDef->GetImageHeight(),pSrcDef->bIsCGBuffer);
 	//TP_VBufferDef *pMaskDef1 = m_pResMan->GetBufferDef(hMask1);
-	CVideoBuffer* pMaskDest = m_pEngine->CreateRenderTargetBuffer();
-	ASSERT(pMaskDest);
-	const VideoBufferInfo& biMaskDest = pMaskDest->GetVideoBufferInfo();
-
 	CVideoBuffer* pMaskSrc = pMask;
 	const VideoBufferInfo& biMaskSrc = pMaskSrc->GetVideoBufferInfo();
+	CVideoBufferManager* pVM = m_pEngine->GetVideoBufferManager();
+	VideoBufferInfo biMaskDest = {D3DFMT_A8R8G8B8, VideoBufferInfo::VIDEO_MEM, VideoBufferInfo::_IN_OUT, biMaskSrc.nWidth, biMaskSrc.nHeight, 0, 0};
+	CVideoBuffer* pMaskDest = pVM->CreateVideoBuffer(biMaskDest);
+	ASSERT(pMaskDest);
 
 	BOOL aPass[4] = {FALSE};
 	switch(pParam->structModify.nDivideType)
@@ -286,7 +286,7 @@ CVideoBuffer* CBarmWipeRender::RenderDivide(CVideoBuffer* pMask, CVideoBuffer* p
 
 	D3DXMATRIX matWorld, *matView = NULL, *matProj= NULL;
 	D3DXMatrixIdentity(&matWorld);
-	pResMgr->GetOrthoMatrix( &matView, &matProj);
+	pResMgr->GetPerspectiveMatrix( &matView, &matProj);
 	D3DXMATRIX matCombine = *matView * *matProj;
 	HRESULT hr = m_pEffect->SetMatrix("g_matWorldViewProj",&matCombine);
 	ASSERT(SUCCEEDED(hr));
@@ -482,19 +482,21 @@ bool CBarmWipeRender::RenderDrawOut(CVideoBuffer* pSrcDefA, CVideoBuffer* pSrcDe
 	bOK = GenerateMatrix(pMaskDef, &matMask, mat_Image);
 	ASSERT(bOK);
 
-#ifdef _TRANS	
-	D3DXMatrixIdentity(&matTex);
-	matTex._31 = 0.5f / pSrcDef->BaseWidth;
-	matTex._32 = 0.5f / pSrcDef->BaseHeight;
-
-	m_pBasicWipeEffect->SetTexture("g_txColor1",((CBaseTexture*)ppSrcDef[1]->pContainer)->GetTexture());
-
-	D3DXVECTOR4 vTransMisc(ppSrcDef[0]->fAlphaValue,ppSrcDef[1]->fAlphaValue,ppSrcDef[0]->pAlpha != NULL,ppSrcDef[1]->pAlpha != NULL);
-	m_pBasicWipeEffect->SetVector("g_vTransMisc",&vTransMisc);
-
-	m_pBasicWipeEffect->SetTechnique("Trans");
-#else
 	const VideoBufferInfo& biSrcA = pSrcDefA->GetVideoBufferInfo();
+#ifdef _TRANS
+	D3DXMatrixIdentity(&matTex);
+	matTex._31 = 0.5f / biSrcA.nAllocWidth;
+	matTex._32 = 0.5f / biSrcA.nAllocHeight;
+
+	m_pEffect->SetTexture("g_txColor1", pSrcDefB->GetTexture());
+
+	//D3DXVECTOR4 vTransMisc(ppSrcDef[0]->fAlphaValue,ppSrcDef[1]->fAlphaValue,ppSrcDef[0]->pAlpha != NULL,ppSrcDef[1]->pAlpha != NULL);
+	float fAlphaValue4SrcA = 1.0f, fAlphaValue4SrcB = 1.0f;
+	D3DXVECTOR4 vTransMisc(fAlphaValue4SrcA, fAlphaValue4SrcB, false, false);
+	m_pEffect->SetVector("g_vTransMisc",&vTransMisc);
+
+	m_pEffect->SetTechnique("Trans");
+#else
 	//if(!pSrcDef->bIsCGBuffer)	
 	{
 		matWorld0._11 = biSrcA.nWidth  / float(vPort.Width);
@@ -523,16 +525,16 @@ bool CBarmWipeRender::RenderDrawOut(CVideoBuffer* pSrcDefA, CVideoBuffer* pSrcDe
 			//if(pSrcDef->pAlpha)
 			//{
 			//	uPass = 0;
-			//	m_pBasicWipeEffect->SetTexture("g_txAlpha",((CBaseTexture*)pSrcDef->pAlpha)->GetTexture());
+			//	m_pEffect->SetTexture("g_txAlpha",((CBaseTexture*)pSrcDef->pAlpha)->GetTexture());
 			//}
 			//else
 				uPass = 1;
-#ifdef _TRANS	
-			if(ppSrcDef[1]->pAlpha)
-			{
-				uPass = 0;
-				m_pBasicWipeEffect->SetTexture("g_txAlpha1",((CBaseTexture*)ppSrcDef[1]->pAlpha)->GetTexture());
-			}
+#ifdef _TRANS
+			//if(pSrcDefB)
+			//{
+			//	uPass = 0;
+			//	m_pEffect->SetTexture("g_txAlpha1", pSrcDefB->GetTexture());
+			//}
 #endif
 			break;
 		case FMT_RGBA32:     
@@ -551,6 +553,8 @@ bool CBarmWipeRender::RenderDrawOut(CVideoBuffer* pSrcDefA, CVideoBuffer* pSrcDe
 	hr = m_pEffect->SetTexture("g_txMask", pMaskDef->GetTexture());
 	ASSERT(SUCCEEDED(hr));
 	hr = m_pEffect->SetTexture("g_txColor",pSrcDefA->GetTexture());
+	ASSERT(SUCCEEDED(hr));
+	hr = m_pEffect->SetTexture("g_txColor1",pSrcDefB->GetTexture());
 	ASSERT(SUCCEEDED(hr));
 
 	D3DXMATRIXA16 matWorld;
