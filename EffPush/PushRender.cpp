@@ -29,14 +29,6 @@ void CPushRender::Uninit()
 
 bool CPushRender::Render(CVideoBuffer* pDst, CVideoBuffer* pSrc1,  CVideoBuffer* pSrc2, PushFxParam* pParam)
 {
-	pParam->bReverse = false;
-	pParam->dwType = 0;
-	//pParam->fTransition=0;
-	pParam->fFirstSoftness = 0;
-	pParam->dwFirstColor = 0xffffff;
-	pParam->fSecondSoftness = 0;
-	pParam->dwSecondColor = 0xffffff;
-
 	LPDIRECT3DDEVICE9 pDevice = m_pEngine->GetDevice();
 	CResourceManager* pResMan = m_pEngine->GetResourceManager();
 	if (pParam->bReverse)

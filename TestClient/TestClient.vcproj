@@ -436,10 +436,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\PushDlg.h"
-				>
-			</File>
-			<File
 				RelativePath=".\stdafx.cpp"
 				>
 				<FileConfiguration
@@ -535,6 +531,10 @@
 			</File>
 			<File
 				RelativePath=".\ParamColorKeyDlg.h"
+				>
+			</File>
+			<File
+				RelativePath=".\PushDlg.h"
 				>
 			</File>
 			<File

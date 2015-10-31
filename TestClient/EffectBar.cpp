@@ -146,7 +146,14 @@ BOOL CEffectBar::OnInitDialog()
 	{
 		PushFxParam* pPushFxParam = new PushFxParam;
 		pPushFxParam->fTransition = 0.5f;
+		pPushFxParam->dwType = 0;
+		pPushFxParam->bReverse = false;
+		pPushFxParam->fFirstSoftness = 0.f;
+		pPushFxParam->fSecondSoftness = 0.f;
+		pPushFxParam->dwFirstColor = 0xFFFFFFFF;
+		pPushFxParam->dwSecondColor = 0xFFFFFFFF;
 		m_ctrlEffects.SetItemDataPtr(i, pPushFxParam);
+		m_pushDlg.SetParam(pPushFxParam);
 	}
 	i = m_ctrlEffects.AddString(FX_BARM_WIPE);
 	{

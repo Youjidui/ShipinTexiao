@@ -54,6 +54,7 @@
 #define IDC_SLIDER_CENTER_X             1015
 #define IDC_SLIDER_DIVIDE_WIDTH4        1015
 #define IDC_SLIDER_FIRSTCOLOR           1015
+#define IDC_SLIDER_FIRSTCOLOR_R         1015
 #define IDC_SLIDER_SOFT_EDGE            1016
 #define IDC_SLIDER_CENTER_Y             1016
 #define IDC_SLIDER_DIVIDE_WIDTH5        1016
@@ -63,27 +64,37 @@
 #define IDC_SLIDER_INVERT               1017
 #define IDC_SLIDER_DIVIDE_WIDTH6        1017
 #define IDC_SLIDER_SECONDCOLOR          1017
+#define IDC_SLIDER_SECONDCOLOR_R        1017
 #define IDC_SLIDER_BRIGHTNESS           1018
 #define IDC_SLIDER_TRANSPARENCY         1018
 #define IDC_SLIDER_DWTYPE               1018
+#define IDC_SLIDER_FIRSTCOLOR_G         1018
 #define IDC_SLIDER_LIGHT_ANGLE          1019
 #define IDC_SLIDER_MULTIPLE_TYPE        1019
+#define IDC_COMBO_DWTYPE                1019
 #define IDC_SLIDER_HIGH_COLOR_R         1020
 #define IDC_SLIDER_MULTIPLE_NUMBER_X    1020
+#define IDC_CHECK_REVERSE               1020
 #define IDC_SLIDER_HIGH_COLOR_G         1021
 #define IDC_SLIDER_MULTIPLE_NUMBER_Y    1021
+#define IDC_SLIDER_FIRSTCOLOR_B         1021
 #define IDC_SLIDER_G                    1022
 #define IDC_SLIDER_HIGH_COLOR_B         1022
 #define IDC_SLIDER_PATTERN              1022
+#define IDC_SLIDER_SECONDCOLOR_G        1022
 #define IDC_SLIDER_B                    1023
 #define IDC_SLIDER_HIGH_COLOR_A         1023
 #define IDC_SLIDER_FLIP                 1023
+#define IDC_SLIDER_SECONDCOLOR_B        1023
 #define IDC_SLIDER_A                    1024
 #define IDC_SLIDER_LOW_COLOR_R          1024
 #define IDC_SLIDER_OVERLAP              1024
+#define IDC_SLIDER_SECONDCOLOR4         1024
+#define IDC_SLIDER_SECONDCOLOR_A        1024
 #define IDC_SLIDER_ANGLE1               1025
 #define IDC_SLIDER_LOW_COLOR_G          1025
 #define IDC_SLIDER_BORDER_COLOR_R       1025
+#define IDC_SLIDER_FIRSTCOLOR_A         1025
 #define IDC_SLIDER_LENGTH1              1026
 #define IDC_SLIDER_LOW_COLOR_B          1026
 #define IDC_SLIDER_BORDER_COLOR_g       1026
@@ -109,7 +120,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        318
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1019
+#define _APS_NEXT_CONTROL_VALUE         1021
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif
