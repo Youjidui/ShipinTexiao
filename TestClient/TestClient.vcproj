@@ -24,7 +24,7 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)_$(PlatformName)"
 			IntermediateDirectory="$(ConfigurationName)_$(PlatformName)"
 			ConfigurationType="1"
-			InheritedPropertySheets="..\DXSDK.vsprops;..\FreeImage.vsprops"
+			InheritedPropertySheets="..\DXSDK.vsprops;..\FreeImage.vsprops;..\log4cpp.vsprops"
 			UseOfMFC="2"
 			CharacterSet="1"
 			>
@@ -71,9 +71,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="FreeImage.lib"
+				AdditionalDependencies="FreeImage.lib log4cppD.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="../FreeImage"
+				AdditionalLibraryDirectories="../FreeImage;../lib/debug"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				TargetMachine="1"
@@ -186,7 +186,7 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)_$(PlatformName)"
 			IntermediateDirectory="$(ConfigurationName)_$(PlatformName)"
 			ConfigurationType="1"
-			InheritedPropertySheets="..\DXSDK.vsprops;..\FreeImage.vsprops"
+			InheritedPropertySheets="..\DXSDK.vsprops;..\FreeImage.vsprops;..\log4cpp.vsprops"
 			UseOfMFC="2"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
@@ -235,9 +235,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="FreeImage.lib"
+				AdditionalDependencies="FreeImage.lib log4cppLIB.lib"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="../FreeImage"
+				AdditionalLibraryDirectories="../FreeImage;../lib/release"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="2"
