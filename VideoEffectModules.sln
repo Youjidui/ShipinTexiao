@@ -17,11 +17,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EffAmoebaWipeTrans", "EffAm
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SonyBlur", "SonyBlur\SonyBlur.vcproj", "{28113454-E158-4135-BB89-298A1C09BB0E}"
 EndProject
-<<<<<<< HEAD
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EffPush", "EffPush\EffPush.vcproj", "{F2C49BAF-F5E8-483C-8A41-DCB7BDF99B2D}"
-=======
+EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BarmWipeTrans", "BarmWipeTrans\BarmWipeTrans.vcproj", "{AF9FF148-E429-4B63-A790-6A07DD18ED07}"
->>>>>>> de3bfc145099d011f86b6de45ea2e0a0f52fbd2f
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SonySlide", "SonySlide\SonySlide.vcproj", "{00F3B508-F9A8-47DA-9A2B-375D9ACA1F0B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -95,21 +95,24 @@ Global
 		{28113454-E158-4135-BB89-298A1C09BB0E}.Release|Win32.Build.0 = Release|Win32
 		{28113454-E158-4135-BB89-298A1C09BB0E}.Release|x64.ActiveCfg = Release|x64
 		{28113454-E158-4135-BB89-298A1C09BB0E}.Release|x64.Build.0 = Release|x64
-<<<<<<< HEAD
 		{F2C49BAF-F5E8-483C-8A41-DCB7BDF99B2D}.Debug|Win32.ActiveCfg = Debug|Win32
 		{F2C49BAF-F5E8-483C-8A41-DCB7BDF99B2D}.Debug|Win32.Build.0 = Debug|Win32
 		{F2C49BAF-F5E8-483C-8A41-DCB7BDF99B2D}.Debug|x64.ActiveCfg = Debug|Win32
 		{F2C49BAF-F5E8-483C-8A41-DCB7BDF99B2D}.Release|Win32.ActiveCfg = Release|Win32
 		{F2C49BAF-F5E8-483C-8A41-DCB7BDF99B2D}.Release|Win32.Build.0 = Release|Win32
 		{F2C49BAF-F5E8-483C-8A41-DCB7BDF99B2D}.Release|x64.ActiveCfg = Release|Win32
-=======
 		{AF9FF148-E429-4B63-A790-6A07DD18ED07}.Debug|Win32.ActiveCfg = Debug|Win32
 		{AF9FF148-E429-4B63-A790-6A07DD18ED07}.Debug|Win32.Build.0 = Debug|Win32
 		{AF9FF148-E429-4B63-A790-6A07DD18ED07}.Debug|x64.ActiveCfg = Debug|Win32
 		{AF9FF148-E429-4B63-A790-6A07DD18ED07}.Release|Win32.ActiveCfg = Release|Win32
 		{AF9FF148-E429-4B63-A790-6A07DD18ED07}.Release|Win32.Build.0 = Release|Win32
 		{AF9FF148-E429-4B63-A790-6A07DD18ED07}.Release|x64.ActiveCfg = Release|Win32
->>>>>>> de3bfc145099d011f86b6de45ea2e0a0f52fbd2f
+		{00F3B508-F9A8-47DA-9A2B-375D9ACA1F0B}.Debug|Win32.ActiveCfg = Debug|Win32
+		{00F3B508-F9A8-47DA-9A2B-375D9ACA1F0B}.Debug|Win32.Build.0 = Debug|Win32
+		{00F3B508-F9A8-47DA-9A2B-375D9ACA1F0B}.Debug|x64.ActiveCfg = Debug|Win32
+		{00F3B508-F9A8-47DA-9A2B-375D9ACA1F0B}.Release|Win32.ActiveCfg = Release|Win32
+		{00F3B508-F9A8-47DA-9A2B-375D9ACA1F0B}.Release|Win32.Build.0 = Release|Win32
+		{00F3B508-F9A8-47DA-9A2B-375D9ACA1F0B}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

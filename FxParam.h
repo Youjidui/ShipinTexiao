@@ -145,3 +145,13 @@ struct BarmWipeFxParam : FxParamBase
 } ;
 
 
+// begin SonySlide
+
+struct SonySlideFxParam : FxParamBase
+{
+	DWORD dwType;
+	float fTransition;
+	BOOL bReverse;
+};
+
+// end SonySlide
