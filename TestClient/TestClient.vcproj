@@ -388,6 +388,10 @@
 			ReferencedProjectIdentifier="{AF9FF148-E429-4B63-A790-6A07DD18ED07}"
 			RelativePathToProject=".\BarmWipeTrans\BarmWipeTrans.vcproj"
 		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{00F3B508-F9A8-47DA-9A2B-375D9ACA1F0B}"
+			RelativePathToProject=".\SonySlide\SonySlide.vcproj"
+		/>
 	</References>
 	<Files>
 		<Filter

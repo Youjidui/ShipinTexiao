@@ -95,6 +95,10 @@ void CEffectBar::OnBnClickedParameters()
 			}
 			m_pushDlg.ShowWindow(SW_SHOW);
 		}
+		else if(FX_SONY_SLIDE == str)
+		{
+
+		}
 	}
 }
 
@@ -163,6 +167,13 @@ BOOL CEffectBar::OnInitDialog()
 		pParam->fSlant = 1.0f;
 		m_ctrlEffects.SetItemDataPtr(i, pParam);
 		m_barmWipeDlg.SetParam(pParam);
+	}
+
+	i = m_ctrlEffects.AddString(FX_SONY_SLIDE);
+	{
+		SonySlideFxParam* pParam = new SonySlideFxParam;
+		ZeroMemory(pParam, sizeof(SonySlideFxParam));
+		m_ctrlEffects.SetItemDataPtr(i, pParam);
 	}
 
 	m_ctrlEffects.SetCurSel(0);
@@ -240,6 +251,12 @@ void CEffectBar::OnProgressChange( int nPos )
 			pParam->fTransition = nPos / 10000.f;
 			AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)(LPCTSTR)str, (LPARAM)pParam);
 		}
+		else if (FX_SONY_SLIDE == str)
+		{
+			SonySlideFxParam* pParam = (SonySlideFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
+			pParam->fTransition = nPos / 10000.f;
+			AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)(LPCTSTR)str, (LPARAM)pParam);
+		}
 	}
 }
 
@@ -263,6 +280,11 @@ void CEffectBar::SetProgress(CSliderCtrl* pCtrl)
 		else if (FX_PUSH == str)
 		{
 			PushFxParam* pParam = (PushFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
+			if(pParam)	pCtrl->SetPos(pParam->fTransition * 10000);
+		}
+		else if (FX_SONY_SLIDE == str)
+		{
+			SonySlideFxParam* pParam = (SonySlideFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
 			if(pParam)	pCtrl->SetPos(pParam->fTransition * 10000);
 		}
 	}

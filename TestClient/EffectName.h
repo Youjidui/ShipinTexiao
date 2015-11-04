@@ -8,3 +8,4 @@
 #define FX_AMOEBA_WIPE _T("Amoeba Wipe")
 #define FX_PUSH _T("Push")
 #define FX_BARM_WIPE _T("Barm Wipe")
+#define FX_SONY_SLIDE _T("Sony Slide")

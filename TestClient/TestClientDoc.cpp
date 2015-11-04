@@ -17,6 +17,7 @@
 #include "../SonyBlur/SonyBlurRender.h"
 #include "../EffAmoebaWipeTrans/AmoebaWipeRender.h"
 #include "../EffPush/PushRender.h"
+#include "../SonySlide/SonySlideRender.h"
 #include "../BarmWipeTrans/BarmWipeRender.h"
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -312,6 +313,19 @@ bool CTestClientDoc::Render()
 								bOK = eff.Render(pDest, pSrc, pSrc2, (PushFxParam*)m_pEffectParam);
 							}
 						}
+					}
+					else if(FX_SONY_SLIDE == m_strEffectName)
+					{
+						if(m_SrcImages.size() >= 2)
+						{
+							CVideoBuffer* pSrc2 = m_SrcImages[1];
+							CSonySlideRender eff;
+							if(eff.Init(m_pRenderEngine))
+							{
+								bOK = eff.Render(pDest, pSrc, pSrc2, (SonySlideFxParam*)m_pEffectParam);
+							}
+						}
+
 					}
 					else if(FX_BARM_WIPE == m_strEffectName)
 					{
