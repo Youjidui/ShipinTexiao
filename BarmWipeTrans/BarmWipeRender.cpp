@@ -66,6 +66,7 @@ bool CBarmWipeRender::Render( CVideoBuffer* pDest, CVideoBuffer* pSrcA, CVideoBu
 {
 	LPDIRECT3DDEVICE9 pDevice = m_pEngine->GetDevice();
 	CResourceManager* pResMgr = m_pEngine->GetResourceManager();
+	m_pEngine->SetDepthBuffer(true);
 
 	if(pParam->structPattern.bInvert)
 	{
@@ -113,13 +114,13 @@ bool CBarmWipeRender::Render( CVideoBuffer* pDest, CVideoBuffer* pSrcA, CVideoBu
 			pDevice->SetTexture(0,NULL);
 			bool bOK = RenderMask(pMask, pParam);
 			ASSERT(bOK);
-			//D3DXSaveSurfaceToFile(_T("./BarmWipe_Mask.bmp"), D3DXIFF_BMP, pMask->GetSurface(), NULL, NULL);
+			//D3DXSaveSurfaceToFile(_T("./BarmWipe_Mask.DDS"), D3DXIFF_DDS, pMask->GetSurface(), NULL, NULL);
 
-			pMask = RenderMulitDivide(pMask,pSrcA,pParam, bProcessMultiple,bProcessDivide);
+			pMask = RenderMulitDivide(pMask,pSrcA, pParam, bProcessMultiple,bProcessDivide);
 			ASSERT(pMask);
 			//D3DXSaveSurfaceToFile(_T("./BarmWipe_Mask_2.bmp"), D3DXIFF_BMP, pMask->GetSurface(), NULL, NULL);
 
-			bOK = RenderDrawOut(pSrcA, pSrcB, pMask, pDest, pParam);
+			bOK = RenderDrawOut(pSrcB, pSrcA, pMask, pDest, pParam);
 			ASSERT(bOK);
 			//D3DXSaveSurfaceToFile(_T("./BarmWipe_.bmp"), D3DXIFF_BMP, pMask->GetSurface(), NULL, NULL);
 

@@ -207,7 +207,7 @@ HRESULT CBarmWipe::Draw(CVideoBuffer* pMaskDef, void* pParamRaw, int nPattern,fl
 	LPDIRECT3DDEVICE9 pDevice = m_pEngine->GetDevice();
 	CResourceManager* pResMan = m_pEngine->GetResourceManager();
 	BarmWipeFxParam* pParam = (BarmWipeFxParam*)pParamRaw;		
-	fOffset *= pParam->structPattern.fOffset;
+	fOffset *= pParam->structPattern.fOffset;	//progress
 	const VideoBufferInfo& biMask = pMaskDef->GetVideoBufferInfo();
 	
 	HRESULT hr = E_FAIL;
@@ -256,7 +256,7 @@ HRESULT CBarmWipe::Draw(CVideoBuffer* pMaskDef, void* pParamRaw, int nPattern,fl
 	BOOL bDrawSoft = pParam->structPattern.fSoftWidth > 0.0f;
 
 	if(bDrawBorder || bDrawSoft)
-	{		
+	{
 		D3DXPLANE plane(-1.0f ,0.0f,0.0f,0.0f);
 
 		D3DXMATRIXA16 matClip;	
