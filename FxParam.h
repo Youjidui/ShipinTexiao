@@ -155,3 +155,42 @@ struct SonySlideFxParam : FxParamBase
 };
 
 // end SonySlide
+
+struct SonyMaskFxParam : FxParamBase	//SONY_MASK_INFO
+{
+	DWORD crBorder;
+	BOOL      bInvert;
+	BOOL      bHasBorder;
+	float     fAlpha;
+	int		  nArea;
+	RECT      rcMask[3];
+	int       nNumMask;
+	int		  nMaskType;
+
+	// add 2010年2月25日 星期四
+	BOOL		bSufColor;
+	DWORD       crSuface;
+	float		fTransparency;
+	BOOL	  bEnableAll;
+
+	BOOL bBorderWithKey;
+
+	SonyMaskFxParam()
+	{
+		bHasBorder = FALSE;
+		bInvert = FALSE;
+		crBorder = 0;
+		fAlpha = 1.0f;
+		nArea = 0;
+		nNumMask = 0;
+		nMaskType = 0;// 0 Berize 1 Fix Shape
+
+		// 
+		bSufColor = FALSE;
+		crSuface = 0;
+		fTransparency = 0.5f;
+		bEnableAll = FALSE;
+		bBorderWithKey = FALSE;
+	}
+};//SONY_MASK_INFO;
+

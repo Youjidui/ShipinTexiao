@@ -23,6 +23,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BarmWipeTrans", "BarmWipeTr
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SonySlide", "SonySlide\SonySlide.vcproj", "{00F3B508-F9A8-47DA-9A2B-375D9ACA1F0B}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EffChromaKey", "EffChromaKey\EffChromaKey.vcproj", "{03AB2445-1468-4F52-8B33-F0CDE4D20D78}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EffSonyMask", "EffSonyMask\EffSonyMask.vcproj", "{19D5E421-1870-4C5F-BBD1-2E68C0248AAE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -113,6 +117,18 @@ Global
 		{00F3B508-F9A8-47DA-9A2B-375D9ACA1F0B}.Release|Win32.ActiveCfg = Release|Win32
 		{00F3B508-F9A8-47DA-9A2B-375D9ACA1F0B}.Release|Win32.Build.0 = Release|Win32
 		{00F3B508-F9A8-47DA-9A2B-375D9ACA1F0B}.Release|x64.ActiveCfg = Release|Win32
+		{03AB2445-1468-4F52-8B33-F0CDE4D20D78}.Debug|Win32.ActiveCfg = Debug|Win32
+		{03AB2445-1468-4F52-8B33-F0CDE4D20D78}.Debug|Win32.Build.0 = Debug|Win32
+		{03AB2445-1468-4F52-8B33-F0CDE4D20D78}.Debug|x64.ActiveCfg = Debug|Win32
+		{03AB2445-1468-4F52-8B33-F0CDE4D20D78}.Release|Win32.ActiveCfg = Release|Win32
+		{03AB2445-1468-4F52-8B33-F0CDE4D20D78}.Release|Win32.Build.0 = Release|Win32
+		{03AB2445-1468-4F52-8B33-F0CDE4D20D78}.Release|x64.ActiveCfg = Release|Win32
+		{19D5E421-1870-4C5F-BBD1-2E68C0248AAE}.Debug|Win32.ActiveCfg = Debug|Win32
+		{19D5E421-1870-4C5F-BBD1-2E68C0248AAE}.Debug|Win32.Build.0 = Debug|Win32
+		{19D5E421-1870-4C5F-BBD1-2E68C0248AAE}.Debug|x64.ActiveCfg = Debug|Win32
+		{19D5E421-1870-4C5F-BBD1-2E68C0248AAE}.Release|Win32.ActiveCfg = Release|Win32
+		{19D5E421-1870-4C5F-BBD1-2E68C0248AAE}.Release|Win32.Build.0 = Release|Win32
+		{19D5E421-1870-4C5F-BBD1-2E68C0248AAE}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

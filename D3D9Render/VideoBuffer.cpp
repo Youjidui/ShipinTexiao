@@ -53,7 +53,7 @@ bool CVideoBuffer::Create(IDirect3DDevice9* pDevice, const VideoBufferInfo& info
 					info.nHeight,
 					1,
 					D3DUSAGE_DYNAMIC,// | D3DUSAGE_WRITEONLY,	//D3DLOCK_DISCARD
-					D3DFMT_A8R8G8B8,
+					info.format, //D3DFMT_A8R8G8B8,
 					D3DPOOL_DEFAULT,
 					&m_pTexture,
 					NULL );
@@ -79,7 +79,7 @@ bool CVideoBuffer::Create(IDirect3DDevice9* pDevice, const VideoBufferInfo& info
 					info.nHeight,
 					1,
 					D3DUSAGE_RENDERTARGET,// | D3DUSAGE_WRITEONLY,
-					D3DFMT_A8R8G8B8,
+					info.format, //D3DFMT_A8R8G8B8,
 					D3DPOOL_DEFAULT,
 					&m_pTexture,
 					NULL );
@@ -106,7 +106,7 @@ bool CVideoBuffer::Create(IDirect3DDevice9* pDevice, const VideoBufferInfo& info
 					m_pTexture = NULL;
 					hr = pDevice->CreateOffscreenPlainSurface( info.nWidth,
 						info.nHeight,
-						D3DFMT_A8R8G8B8,
+						info.format, //D3DFMT_A8R8G8B8,
 						D3DPOOL_SYSTEMMEM,
 						&m_pSurface,
 						NULL );
@@ -125,7 +125,7 @@ bool CVideoBuffer::Create(IDirect3DDevice9* pDevice, const VideoBufferInfo& info
 					m_pTexture = NULL;
 					hr = pDevice->CreateRenderTarget( info.nWidth,
 						info.nHeight,
-						D3DFMT_A8R8G8B8,
+						info.format, //D3DFMT_A8R8G8B8,
 						D3DMULTISAMPLE_NONE,
 						0,
 						TRUE,

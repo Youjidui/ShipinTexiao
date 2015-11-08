@@ -1,0 +1,78 @@
+#include "..\..\..\..\TPEngine\src\Common\TPRenderX\Shaders\ColorSpaceFunc.inc"
+
+sampler2D	texSrc	: register(s0);
+//sampler2D	texMask	: register(s2);
+
+float4		fCoefU		: register(c20);	// [ keyCos, -keySin, fvCos, fvSin ]
+float4		fCoefV		: register(c21);	// [ keySin, keyCos, -fvSin, fvCos ]
+float4		fCoefY		: register(c22);	// [ keyYBalGain, fvYGain, 0.f, 0.f ]
+float4		fCoefYBal	: register(c23);	// [ -keyYBalOffset * keyYBalGain, 0.f, 0.f, -keyYBalClip * keyYBalGain]
+float4		fCoefCan	: register(c24);	// [ 0.f, fvCancelY, fvCancelU, fvCancelV] * bCC
+float4		fSatCrop	: register(c25);	// [ 0.f, 0.f, -keySatCrop, -ccSatCrop ]
+float4		fCoefYK		: register(c26);	// [ keyYBalMix * keyGain, ccYBalMix * ccGain, keySlopeInv * keyGain, ccSlopeInv * ccGain ]
+float4		fYKOff		: register(c27);	// [ keyClip * keyGain, ccClip * ccGain, 0.f, 0.f ]
+float4		fGain		: register(c28);	// [ -keyGain, -ccGain, 0.f, 0.f ]
+float4		fInvert		: register(c29);	// [ bInvert, -1.f, 0.f, 0.f ]
+float4		fInvCoef	: register(c30);	// [ (bInvert ? -1 : 1) * keyDensity, 1.f, 0.f, 0.f ]
+
+struct PSIN
+{
+	float2 texSrcCoord :TEXCOORD0;
+// #ifndef NOMASK
+// 	float2 tc_mask		: TEXCOORD1;
+// #endif
+};
+
+float4 main(PSIN IN):COLOR0
+{
+	float4 srcColor = tex2D(texSrc, IN.texSrcCoord);
+	float4 srcYUVA = CS_RGBA2YUVA(srcColor);	// UV Range [-0.5, 0.5]
+	srcYUVA.yz *= 2.f;
+	
+#define fY		srcYUVA.x		// [0, 1]
+#define fU		srcYUVA.y		// [-1, 1]
+#define fV		srcYUVA.z		// [-1, 1]
+#define fK		srcYUVA.w		// [0, 1]
+#define	fX		fQuatnTrans.x
+#define fZ		abs(fQuatnTrans.y)
+
+// 	float fx	= fU * keyCos + fV * keySin;
+//	float fz	= abs(-fU * keySin + fV * keyCos);
+// 	float fUU	= fU * fvCos - fV * fvSin;
+//	float fVV	= fU * fvSin + fV * fvCos;
+	float4 fYB_Key = fCoefU * fU;	// [ fU * keyCos, -fU * keySin, fU * fvCos, fU * fvSin ]
+	float4 fQuatnTrans = fCoefV * fV + fYB_Key;	// [ fU * keyCos + fV * keySin, -fU * keySin + fV * keyCos, fU * fvCos - fV * fvSin, fU * fvSin + fV * fvCos ]
+//	float fYY	= fY * fvYGain;
+//	float fYBal = (abs(fY - fYBalOffset) - fYBalClip) * fYBalGain;
+//	if (fYBal < 0.f)	fYBal = 0.f;
+//	float fKeyTmp = fZ - keySatCrop;
+//	if (fKeyTmp < 0.f)	fKeyTmp = 0.f;
+//	float fKeyTmpCC = fZ - ccSatCrop;
+//	if (fKeyTmpCC < 0.f)	fKeyTmpCC = 0.f;
+	float4 fQuatnY = fCoefY * fY + fCoefYBal;	// [ fY * keyYBalGain - keyYBalOffset * keyYBalGain, fY * fvYGain, 0.f, -keyYBalClip * keyYBalGain ]
+	fYB_Key.xy = abs(fQuatnY.x) + fQuatnY.w;
+	fYB_Key.zw = fZ + fSatCrop.zw;
+	fYB_Key = (fYB_Key < 0.f) ? 0.f : fYB_Key;		// [ fYBal, fYBal, fKeyTmp, fKeyTmpCC ]
+	//fKeyTmp = (fYBal*keyYBalMix - fX + fKeyTmp*keySlopeInv + keyClip)*keyGain;
+	//fKeyTmp = saturate(fKeyTmp);
+	//fKeyTmpCC = (fYBal*ccYBalMix - fX + fKeyTmpCC*ccSlopeInv + ccClip)*ccGain;
+	//fKeyTmpCC = saturate(fKeyTmpCC);
+	// [ (fYBal * keyYBalMix + keyClip) * keyGain, (fYBal * ccYBalMix + ccClip) * ccGain, fKeyTmp * keySlopeInv * keyGain, fKeyTmpCC * ccSlopeInv * ccGain ]
+	fYB_Key = fYB_Key * fCoefYK + fYKOff;
+	// [ (fYBal * keyYBalMix + keyClip - fX) * keyGain, (fYBal * ccYBalMix + ccClip - fX ) * ccGain, fKeyTmp * keySlopeInv * keyGain, fKeyTmpCC * ccSlopeInv * ccGain ]
+	fYB_Key = fX * fGain + fYB_Key;
+	fYB_Key.xy = fYB_Key.xy + fYB_Key.zw;
+	fYB_Key.xy = saturate(fYB_Key.xy);
+	//fKeyTmp *= keyInput * keyDensity;
+	//float fKeyTempCC = fYB_Key.y;
+	//if (bInvert)	fYB_Key.x = 1.f - fYB_Key.x;
+	fYB_Key.x *= fK;
+	fYB_Key = fYB_Key * fInvCoef + fInvert;		// [ bInvert ? 1.f - fKeyTmp : fKeyTmp, fKeyTmpCC - 1.f, 0.f, 0.f ]
+	fQuatnTrans.y = fQuatnY.y;	// [ 0.f, fYY, fUU, fVV ]
+	// [ 0.f, fYY, fUU, fVV ] - (1.f - fKeyTmpCC) * [ 0.f, fvCancelY, fvCancelU, fvCancelV] * bCC
+	fQuatnY = fYB_Key.y * fCoefCan + fQuatnTrans;
+	fQuatnY.y = saturate(fQuatnY.y);
+	fQuatnY.zw = clamp(fQuatnY.zw, -1.0f, 1.0f) * 0.5f;
+
+	return CS_YUVA2RGBA(float4(fQuatnY.yzw, fYB_Key.x));
+}
