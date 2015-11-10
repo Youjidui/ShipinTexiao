@@ -94,7 +94,7 @@ void CSonyMaskRender::BeginSonyMask(CVideoBuffer * pSrcDef,CVideoBuffer * pDstDe
 
 	//if(pMaskDef->bufferStyle == VBUFFER_STYLE_SONYMASK)
 	{  
-		if(m_nOffsetX || m_nOffsetY)
+		if(m_nOffsetX || m_nOffsetY)		//GSonyEmbossRender
 		{
 			int nNumClear = 0;
 			RECT rcImage[3];

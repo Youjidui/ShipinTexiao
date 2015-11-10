@@ -3,6 +3,7 @@
 #include "ResourceManager.h"
 #include "VideoBufferManager.h"
 
+
 struct D3DDeviceSettings
 {
 	UINT AdapterOrdinal;
@@ -39,6 +40,7 @@ public:
 
 public:
 	bool EffectVideoCopy( CVideoBuffer* pSrc, CVideoBuffer* pDst  );
+	bool BlendCompose( CVideoBuffer* pDest, CVideoBuffer* pSrcA, CVideoBuffer* pSrcB, bool bInternal = false);
 
 private:
 	LPDIRECT3D9                 m_pD3D;
@@ -49,3 +51,5 @@ private:
 	CResourceManager*			m_pResMgr;
 	CVideoBufferManager*		m_pBuffMgr;
 };
+
+

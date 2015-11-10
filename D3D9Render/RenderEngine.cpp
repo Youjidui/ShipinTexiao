@@ -224,3 +224,172 @@ bool CRenderEngine::SetDepthBuffer(bool bUseDepthBuffer)
 		hr = m_pDevice->SetDepthStencilSurface(NULL);
 	return SUCCEEDED(hr);
 }
+
+//轨间特技的合成规则：
+//从下到上，两两合成，合成结果再和更上一层合成，根据上层的Blend模式决定是进行轨间合成还是 Alpha 混合
+//Alpha 混合时，CGBLEND 只考虑自身 ALPHA，不考虑全局 Alpha,全局 Alpha 按正常模式进行
+
+bool CRenderEngine::BlendCompose( CVideoBuffer* pDest, CVideoBuffer* pSrcA, CVideoBuffer* pSrcB, bool bInternal)
+{
+	int num = 2;	//pSrcA and pSrcB
+	//TP_VBufferDef *vBufferDst  = m_pResManager->GetBufferDef( hTarget ); 
+	const VideoBufferInfo& biDst = pDest->GetVideoBufferInfo();
+	CBaseMesh *pMesh           = m_pResMgr->CreateQuadMesh(m_pDevice);
+
+	//GAutoLock l(&m_D3Dcs);
+	D3DXVECTOR4 cMode;
+	float bAlphaOK[4] = {0.0,0.0,0.0,0.0};
+	float vAlphaValues[4] = {1.0,1.0,1.0,1.0};
+	float fBlendValues[4] ={1.0,1.0,1.0,1.0};
+
+	D3DXMATRIX matTexture;
+	GenerateMatrix(pSrcA, &matTexture, mat_Identity);
+
+	//TP_VBufferDef *vBufferTemp = NULL; handle_tpr pTempHandle;
+	//if( num>2 )
+	//{
+	//	pTempHandle = m_pResManager->NewRTBuffer(0,0,m_pResManager->isMode16()?vBufferDst->GetImageWidth()*2:vBufferDst->GetImageWidth(),vBufferDst->GetImageHeight());
+	//	vBufferTemp = m_pResManager->GetBufferDef( pTempHandle );
+	//	vBufferTemp->bDiscardAlpha = vBufferDst->bDiscardAlpha; 
+	//}    
+
+	m_pDevice->SetRenderState( D3DRS_CULLMODE           ,D3DCULL_NONE);
+	m_pDevice->SetRenderState( D3DRS_ZENABLE            ,FALSE );
+	m_pDevice->SetRenderState( D3DRS_ALPHATESTENABLE    ,FALSE );
+	m_pDevice->SetRenderState( D3DRS_ALPHABLENDENABLE    ,FALSE );    
+
+	m_pDevice->SetSamplerState(0,D3DSAMP_MAGFILTER ,D3DTEXF_POINT);
+	m_pDevice->SetSamplerState(0,D3DSAMP_MINFILTER ,D3DTEXF_POINT);
+	m_pDevice->SetSamplerState(1,D3DSAMP_MAGFILTER ,D3DTEXF_POINT);
+	m_pDevice->SetSamplerState(1,D3DSAMP_MINFILTER ,D3DTEXF_POINT);
+	m_pDevice->SetSamplerState(2,D3DSAMP_MAGFILTER ,D3DTEXF_POINT);
+	m_pDevice->SetSamplerState(2,D3DSAMP_MINFILTER ,D3DTEXF_POINT);
+	m_pDevice->SetSamplerState(3,D3DSAMP_MAGFILTER ,D3DTEXF_POINT);
+	m_pDevice->SetSamplerState(3,D3DSAMP_MINFILTER ,D3DTEXF_POINT);
+
+
+	//TP_VBufferDef *vBufferSrc0 = NULL,*vBufferSrc1 = NULL;
+	int base = 1;
+	//vBufferSrc0    = m_pResManager->GetBufferDef( pSrcHandles[0] );  
+	//vBufferSrc1    = m_pResManager->GetBufferDef( pSrcHandles[1] );
+	const VideoBufferInfo& vBufferSrc0 = pSrcA->GetVideoBufferInfo();
+	const VideoBufferInfo& vBufferSrc1 = pSrcB->GetVideoBufferInfo();
+	float fbCGBlended =0.0f;
+
+	//for(int i=0;i<num-1;i++)
+	{		
+
+		//if(NULL == vBufferSrc0)	
+		//{
+		//	vBufferSrc0    = vBufferDst;  
+		//	std::swap(vBufferTemp,vBufferDst);
+		//}
+
+		//if(NULL == vBufferSrc1) vBufferSrc1    = m_pResManager->GetBufferDef( pSrcHandles[++base] );
+
+		//fbCGBlended = vBufferSrc1->bIsCG_BlenedBuffer?1.0f:0.0f;
+
+
+		m_pDevice->SetTexture( 0, pSrcA->GetTexture());
+		m_pDevice->SetTextureStageState( 0, D3DTSS_TEXTURETRANSFORMFLAGS, D3DTTFF_DISABLE );		
+		m_pDevice->SetTextureStageState( 0, D3DTSS_TEXCOORDINDEX, 0 );
+		//只有在自身存在Alpha并且CG_BlenedBuffer、ParticleBlend都不存在的情况下，才考虑自身Alpha
+		//if( vBufferSrc0->pAlpha && !(/*vBufferSrc0->bIsCG_BlenedBuffer||*/vBufferSrc0->bParticleBlend))
+		//{
+		//	bAlphaOK[0] = 1.0;
+		//	SetSourceTexture( 1, vBufferSrc0->pAlpha);
+		//}
+		//else 
+		{
+			bAlphaOK[0] = 0.0;
+			m_pDevice->SetTexture( 1, NULL );	
+		}	
+
+		m_pDevice->SetTexture( 2, pSrcB->GetTexture());
+		m_pDevice->SetTextureStageState( 2, D3DTSS_TEXTURETRANSFORMFLAGS, D3DTTFF_DISABLE );		
+		m_pDevice->SetTextureStageState( 2, D3DTSS_TEXCOORDINDEX, 0 );
+		//if(vBufferSrc1->pAlpha && !(/*vBufferSrc1->bIsCG_BlenedBuffer||*/vBufferSrc1->bParticleBlend))
+		//{
+		//	bAlphaOK[1] = 1.0;
+		//	SetSourceTexture( 3, vBufferSrc1->pAlpha);
+		//}
+		//else 
+		{
+			bAlphaOK[1] = 0.0;
+			m_pDevice->SetTexture( 3, NULL ); 	
+		}	
+		vAlphaValues[0] = 0.f;//vBufferSrc0->fAlphaValue;
+		vAlphaValues[1] = 0.f;//vBufferSrc1->fAlphaValue;
+
+		fBlendValues[0] =  0.f;//vBufferSrc1->fBlendValueExtra;
+		fBlendValues[1] =  0.f;//vBufferSrc1->fBlendValue;	
+
+		//vBufferDst->bClearFullTarget    = true;
+		//vBufferDst->bRenderToFullTarget = true;
+		//vBufferDst->OffsetX             = 0;
+		//vBufferDst->OffsetY             = 0;
+		//vBufferDst->rcImage.left        = 0;
+		//vBufferDst->rcImage.right       = vBufferDst->BaseWidth;
+		//vBufferDst->rcImage.top         = 0;
+		//vBufferDst->rcImage.bottom      = vBufferDst->BaseHeight;
+		//if(NULL== vBufferDst->pAlpha&&vBufferDst->bDiscardAlpha == false)
+		//{
+		//	vBufferDst->pAlpha = AllocateVideoAlphaRT();
+		//}
+		SetRenderTarget(pDest);
+
+		BlendMode vBufferSrc1_dwBlendOp = BLENDMODE_ALPHA;
+
+		D3DXMATRIX *matView = NULL, *matProj= NULL;
+		m_pResMgr->GetPerspectiveMatrix( &matView, &matProj);
+		D3DXMATRIXA16 matCombine = *matView * *matProj;	
+
+		m_pDevice->SetVertexShaderConstantF(0,(float*)matCombine,4);
+		m_pDevice->SetVertexShaderConstantF(4,(float*)&matTexture,4);
+		m_pDevice->SetPixelShaderConstantF(0,bAlphaOK,1);	
+		m_pDevice->SetPixelShaderConstantF(1,vAlphaValues,1);
+		m_pDevice->SetPixelShaderConstantF(2,fBlendValues,1);
+		CPixelShader* pShader = m_pResMgr->CreateBlendPixelShader(m_pDevice, vBufferSrc1_dwBlendOp);
+		if(vBufferSrc1_dwBlendOp==BLENDMODE_ALPHA)
+		{
+			m_pDevice->SetPixelShaderConstantF(3,&fbCGBlended,1);
+		}
+		m_pDevice->SetPixelShader(pShader->GetPixelShader());
+
+		if(SUCCEEDED(m_pDevice -> BeginScene())) 
+		{
+			CVertexShader* pVertexShader = m_pResMgr->CreateVertexShader(m_pDevice, _T("Shaders/VS_DirectOutV3.vsh"));
+			pMesh -> DrawMesh(0, pVertexShader->GetVertexShaderPtr());
+			m_pDevice -> EndScene(); 
+		} 
+
+		//m_pResManager->DumpResourceToFile(vBufferSrc0->handle,L"C:\\CS0.DDS",false,true);
+		//m_pResManager->DumpResourceToFile(vBufferSrc0->handle,L"C:\\CS0_A.DDS",true);
+
+		//m_pResManager->DumpResourceToFile(vBufferSrc1->handle,L"C:\\CS1.DDS",false,true);
+		//m_pResManager->DumpResourceToFile(vBufferSrc1->handle,L"C:\\CS1_A.DDS",true);
+
+		//m_pResManager->DumpResourceToFile(vBufferDst->handle,L"C:\\CV.DDS",false,true); 
+		//m_pResManager->DumpResourceToFile(vBufferDst->handle,L"C:\\CVA.DDS",true);
+
+	}
+	for( int i = 0;i< num*2;i++)
+	{
+		m_pDevice->SetTexture( i,NULL );
+	}	 
+	m_pDevice->SetRenderTarget(1,NULL);
+	m_pDevice->SetPixelShader(NULL); 
+
+	//if(vBufferDst->handle!=hTarget )
+	//{
+	//	Copy(vBufferTemp->handle,vBufferDst->handle);
+	//}
+	//if(vBufferTemp)
+	//{
+	//	m_pResManager->FreeRTBuffer( pTempHandle );
+	//}
+	return true;
+}
+
+
+

@@ -194,3 +194,72 @@ struct SonyMaskFxParam : FxParamBase	//SONY_MASK_INFO
 	}
 };//SONY_MASK_INFO;
 
+struct ChromaKeyFxParam 
+{
+	struct ChromaKeyAdjust
+	{
+		bool bOn;
+		float fClip;
+		float fGain;
+		float fHue;
+		float fAngle;
+		int nFilter;
+		float fSatCrop;
+		float fDensity;
+		bool bInvert;
+	}paramCrkAdj;
+
+	struct ChromaKeyPosition
+	{
+		float fLeft;
+		float fRight;
+	}paramCrkPos;
+
+	struct YBalance
+	{
+		bool bOn;
+		float fClip;
+		float fGain;
+		float fLum;
+	}paramYBal;
+
+	struct ColorCancel
+	{
+		bool bOn;
+		float fLum;
+		float fSat;
+		float fHue;
+		int nFilter;
+	}paramCc;
+
+	struct CancelKey
+	{
+		float fClip;
+		float fGain;
+	}paramCcKey;
+
+	struct CancelKeyPosition
+	{
+		float fLeft;
+		float fRight;
+	}paramCckPos;
+
+	struct VectorWindow
+	{
+		float fSatCrop;
+		float fAngle;
+	}paramVecWnd;
+
+	struct YBalanceMix
+	{
+		float fMix;
+	}paramYBalMix;
+
+	struct ForegroundVideoAdjust
+	{
+		float fVGain;
+		float fYGain;
+		float fCGain;
+		float fHue;
+	}paramFGVAdj;
+};

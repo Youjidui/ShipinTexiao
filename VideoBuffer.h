@@ -1,5 +1,7 @@
 #pragma once
 
+#include <d3d9types.h>
+
 enum RenderEngineType
 {
 	RET_D3D9 = 0
@@ -21,7 +23,8 @@ struct VideoBufferInfo
 		_OUT
 	};
 
-	DWORD format;				//IN
+	//DWORD format;				//IN
+	D3DFORMAT format;				//IN
 	MemType eType;		//IN
 	Usage eUsage;	//IN
 	int nWidth;					//IN

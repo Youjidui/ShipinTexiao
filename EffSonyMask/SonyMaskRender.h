@@ -39,7 +39,7 @@ private:
 	CBaseFx*		m_pProcessMaskEffect;
 
 public:
-	int                 m_nOffsetX,m_nOffsetY;
+	int                 m_nOffsetX,m_nOffsetY;	//0 基本没有用
 	BOOL				m_bProcessMask;
 	BOOL				m_bOptimize;
 	BOOL				m_bRender;

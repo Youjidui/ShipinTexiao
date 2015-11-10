@@ -522,9 +522,9 @@ CBaseMesh* CResourceManager::CreateQuadInstanceMesh( LPDIRECT3DDEVICE9 lpDevice 
 	return m_pQuadInstanceMesh;
 }
 
-CBaseMesh* CResourceManager::CreateMesh( LPDIRECT3DDEVICE9 lpDevice, LPD3DXMESH pMesh, LPCTSTR lpszMeshName )
+CBaseMesh* CResourceManager::CreateMesh( LPDIRECT3DDEVICE9 pDevice, LPD3DXMESH pMesh, LPCTSTR lpszMeshName )
 {
-	return m_MeshRes.Create(lpDevice, pMesh, lpszMeshName);
+	return m_MeshRes.Create(pDevice, pMesh, lpszMeshName);
 }
 
 CBaseMesh* CResourceManager::FindMesh( LPCTSTR pszResName )
@@ -532,3 +532,68 @@ CBaseMesh* CResourceManager::FindMesh( LPCTSTR pszResName )
 	return m_MeshRes.Find(pszResName);
 }
 
+
+CPixelShader* CResourceManager::CreateBlendPixelShader( LPDIRECT3DDEVICE9 pDevice, BlendMode eMode )
+{
+	CPixelShader* pShader = NULL;
+	switch(eMode)
+	{
+	case BLENDMODE_ADD:
+		pShader = //m_pResManager->m_BlendMode_AddPS;
+			CreatePixelShader(pDevice, _T("BlendShaders/BlendMode_AddPS.PSH"));
+		break;
+	case BLENDMODE_MUL:
+		pShader = //m_pResManager->m_BlendMode_MulPS;
+		CreatePixelShader(pDevice, _T("BlendShaders/BlendMode_MulPS.PSH"));
+		break;
+	case BLENDMODE_SUB:
+		pShader = //m_pResManager->m_BlendMode_SubPS;
+		CreatePixelShader(pDevice, _T("BlendShaders/BlendMode_SubPS.PSH"));
+		break;
+	case BLENDMODE_ALPHA:
+		pShader = //m_pResManager->m_BlendMode_AlphaBlendPS;
+		CreatePixelShader(pDevice, _T("BlendShaders/BlendMode_AlphaBlendPS.PSH"));
+		break;
+	case BLENDMODE_SCREEN:
+		pShader = //m_pResManager->m_BlendMode_ScreenPS;
+		CreatePixelShader(pDevice, _T("BlendShaders/BlendMode_ScreenPS.PSH"));
+		break;
+	case BLENDMODE_DIV:
+		pShader = //m_pResManager->m_BlendMode_DivPS;
+		CreatePixelShader(pDevice, _T("BlendShaders/BlendMode_DivPS.PSH"));
+		break;
+	case BLENDMODE_DARKEN:
+		pShader = //m_pResManager->m_BlendMode_DarkenPS;
+			CreatePixelShader(pDevice, _T("BlendShaders/BlendMode_DarkenPS.PSH"));
+		break;
+	case BLENDMODE_LIGHTEN:
+		pShader = //m_pResManager->m_BlendMode_LightenPS;
+		CreatePixelShader(pDevice, _T("BlendShaders/BlendMode_LightenPS.PSH"));
+		break;
+	case BLENDMODE_COLORBURN:
+		pShader = //m_pResManager->m_BlendMode_ColorBurnPS;
+			CreatePixelShader(pDevice, _T("BlendShaders/BlendMode_ColorBurnPS.PSH"));
+		break;
+	case BLENDMODE_COLORDODGE:
+		pShader = //m_pResManager->m_BlendMode_ColorDodgePS;
+		CreatePixelShader(pDevice, _T("BlendShaders/BlendMode_ColorDodgePS.PSH"));
+		break;
+	case BLENDMODE_SOFTLIGHT:
+		pShader = //m_pResManager->m_BlendMode_SoftLightPS;
+		CreatePixelShader(pDevice, _T("BlendShaders/BlendMode_SoftLightPS.PSH"));
+		break;
+	case BLENDMODE_HARDLIGHT:
+		pShader = //m_pResManager->m_BlendMode_HardLightPS;
+		CreatePixelShader(pDevice, _T("BlendShaders/BlendMode_HardLightPS.PSH"));
+		break;
+	case BLENDMODE_DIFFERENCE:
+		pShader= //m_pResManager->m_BlendMode_DifferencePS;
+		CreatePixelShader(pDevice, _T("BlendShaders/BlendMode_DifferencePS.PSH"));
+		break;
+	default:
+		pShader = //m_pResManager->m_BlendMode_AlphaBlendPS;
+		CreatePixelShader(pDevice, _T("BlendShaders/BlendMode_AlphaBlendPS.PSH"));
+		break;	   
+	}
+	return pShader;
+}
