@@ -24,6 +24,7 @@ CParamBlurDlg::CParamBlurDlg(CWnd* pParent /*=NULL*/)
 
 CParamBlurDlg::~CParamBlurDlg()
 {
+	delete m_pParam;
 }
 
 void CParamBlurDlg::DoDataExchange(CDataExchange* pDX)

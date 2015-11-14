@@ -186,14 +186,12 @@ BOOL CEffectBar::OnInitDialog()
 	i = m_ctrlEffects.AddString(FX_SONY_MASK);
 	{
 		SonyMaskFxParam* p = new SonyMaskFxParam;
-		ZeroMemory(p, sizeof(SonyMaskFxParam));
 		m_ctrlEffects.SetItemDataPtr(i, p);
 		//m_blurDlg.SetParam(p);
 	}
 	i = m_ctrlEffects.AddString(FX_CHROMA_KEY);
 	{
 		ChromaKeyFxParam * p = new ChromaKeyFxParam;
-		ZeroMemory(p, sizeof(ChromaKeyFxParam ));
 		m_ctrlEffects.SetItemDataPtr(i, p);
 		m_chromaKeyDlg.SetParam(p);
 	}

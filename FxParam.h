@@ -207,12 +207,15 @@ struct ChromaKeyFxParam : FxParamBase
 		float fSatCrop;
 		float fDensity;
 		bool bInvert;
+		ChromaKeyAdjust()
+			: bOn(true), fClip(100.f), fGain(100.f), fHue(0.f), fAngle(97.6f), nFilter(1), fDensity(100.f), bInvert(false) {}
 	}paramCrkAdj;
 
 	struct ChromaKeyPosition
 	{
 		float fLeft;
 		float fRight;
+		ChromaKeyPosition() : fLeft(0.f), fRight(0.f) {}
 	}paramCrkPos;
 
 	struct YBalance
@@ -221,6 +224,7 @@ struct ChromaKeyFxParam : FxParamBase
 		float fClip;
 		float fGain;
 		float fLum;
+		YBalance() : bOn(false), fClip(0.f), fGain(0.f), fLum(0.f) {}
 	}paramYBal;
 
 	struct ColorCancel
@@ -230,29 +234,34 @@ struct ChromaKeyFxParam : FxParamBase
 		float fSat;
 		float fHue;
 		int nFilter;
+		ColorCancel(): bOn(false), fLum(0.f), fSat(0.f), fHue(0.f), nFilter(1) {}
 	}paramCc;
 
 	struct CancelKey
 	{
 		float fClip;
 		float fGain;
+		CancelKey() : fClip(0.f), fGain(0.f) {}
 	}paramCcKey;
 
 	struct CancelKeyPosition
 	{
 		float fLeft;
 		float fRight;
+		CancelKeyPosition() : fLeft(0.f), fRight(0.f) {}
 	}paramCckPos;
 
 	struct VectorWindow
 	{
 		float fSatCrop;
 		float fAngle;
+		VectorWindow() : fSatCrop(20.31f), fAngle(97.6f) {}
 	}paramVecWnd;
 
 	struct YBalanceMix
 	{
 		float fMix;
+		YBalanceMix() : fMix(0.f) {}
 	}paramYBalMix;
 
 	struct ForegroundVideoAdjust
@@ -261,5 +270,6 @@ struct ChromaKeyFxParam : FxParamBase
 		float fYGain;
 		float fCGain;
 		float fHue;
+		ForegroundVideoAdjust() : fVGain(0.f), fYGain(0.f), fCGain(0.f), fHue(0.f) {}
 	}paramFGVAdj;
 };

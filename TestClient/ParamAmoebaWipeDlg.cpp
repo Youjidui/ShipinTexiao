@@ -25,6 +25,7 @@ CParamAmoebaWipeDlg::CParamAmoebaWipeDlg(CWnd* pParent /*=NULL*/)
 
 CParamAmoebaWipeDlg::~CParamAmoebaWipeDlg()
 {
+	delete m_pParam;
 }
 
 void CParamAmoebaWipeDlg::DoDataExchange(CDataExchange* pDX)

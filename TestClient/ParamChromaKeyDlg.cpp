@@ -22,6 +22,7 @@ CParamChromaKeyDlg::CParamChromaKeyDlg(CWnd* pParent /*=NULL*/)
 
 CParamChromaKeyDlg::~CParamChromaKeyDlg()
 {
+	delete m_pParam;
 }
 
 void CParamChromaKeyDlg::DoDataExchange(CDataExchange* pDX)
@@ -62,9 +63,9 @@ BOOL CParamChromaKeyDlg::OnInitDialog()
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_CK_SAT_CROP);
 	pCtrl->SetRange(0, 100*decimal_point);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->paramCrkAdj.fSatCrop*decimal_point);
-	//pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_CK_FILTER);
-	//pCtrl->SetRange(0, 9);
-	//if(m_pParam)	pCtrl->SetPos(m_pParam->paramCrkAdj.nFilter);
+	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_CK_FILTER);
+	pCtrl->SetRange(0, 9);
+	if(m_pParam)	pCtrl->SetPos(m_pParam->paramCrkAdj.nFilter);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_CK_ANGLE);
 	pCtrl->SetRange(0, 180 * decimal_point);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->paramCrkAdj.fAngle*decimal_point);
@@ -73,6 +74,12 @@ BOOL CParamChromaKeyDlg::OnInitDialog()
 	if(m_pParam)	pCtrl->SetPos(m_pParam->paramCrkAdj.fDensity*decimal_point);
 	pBtn = (CButton*)GetDlgItem(IDC_CHECK_CK_INVERT);
 	pBtn->SetCheck(m_pParam->paramCrkAdj.bInvert);
+	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_CKP_LEFT);
+	pCtrl->SetRange(-4 * 10000,  4 * 10000);
+	if(m_pParam)	pCtrl->SetPos(m_pParam->paramCrkPos.fLeft*10000);
+	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_CKP_RIGHT);
+	pCtrl->SetRange(-4 * 10000, 4 * 10000);
+	if(m_pParam)	pCtrl->SetPos(m_pParam->paramCrkPos.fRight*10000);
 
 
 	pBtn = (CButton*)GetDlgItem(IDC_CHECK_YB_ON);
@@ -100,19 +107,29 @@ BOOL CParamChromaKeyDlg::OnInitDialog()
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_CC_HUE);
 	pCtrl->SetRange(0, 360*decimal_point);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->paramCc.fHue*decimal_point);
+	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_CC_FILTER);
+	pCtrl->SetRange(0, 9);
+	if(m_pParam)	pCtrl->SetPos(m_pParam->paramCc.nFilter);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_CC_CLIP);
 	pCtrl->SetRange(0, 100*decimal_point);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->paramCcKey.fClip*decimal_point);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_CC_GAIN);
-	pCtrl->SetRange(-100, 100);
+	pCtrl->SetRange(-100*decimal_point, 100*decimal_point);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->paramCcKey.fGain*decimal_point);
+
+	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_CCP_LEFT);
+	pCtrl->SetRange(-3 * 10000,  3 * 10000);
+	if(m_pParam)	pCtrl->SetPos(m_pParam->paramCckPos.fLeft*10000);
+	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_CCP_RIGHT);
+	pCtrl->SetRange(-3 * 10000, 3 * 10000);
+	if(m_pParam)	pCtrl->SetPos(m_pParam->paramCckPos.fRight*10000);
 
 
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_VW_SAT_CROP);
 	pCtrl->SetRange(0, 100*decimal_point);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->paramVecWnd.fSatCrop*decimal_point);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_VW_ANGLE);
-	pCtrl->SetRange(0, 180);
+	pCtrl->SetRange(0, 180* decimal_point);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->paramVecWnd.fAngle*decimal_point);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_VW_MIX);
 	pCtrl->SetRange(0, 100*decimal_point);
@@ -159,11 +176,20 @@ void CParamChromaKeyDlg::OnHScroll(UINT nSBCode, UINT uPos, CScrollBar* pScrollB
 	case IDC_SLIDER_CK_SAT_CROP:
 		m_pParam->paramCrkAdj.fSatCrop = nPos / decimal_point;
 		break; 
+	case IDC_SLIDER_CK_FILTER:
+		m_pParam->paramCrkAdj.nFilter = nPos;
+		break;
 	case IDC_SLIDER_CK_ANGLE:
 		m_pParam->paramCrkAdj.fAngle = nPos / decimal_point;
 		break;
 	case IDC_SLIDER_DENSITY:
 		m_pParam->paramCrkAdj.fDensity = nPos/decimal_point;
+		break;
+	case IDC_SLIDER_CKP_LEFT:
+		m_pParam->paramCrkPos.fLeft = nPos/10000.f;
+		break;
+	case IDC_SLIDER_CKP_RIGHT:
+		m_pParam->paramCrkPos.fRight = nPos/10000.f;
 		break;
 	case IDC_SLIDER_YB_CLIP:
 		m_pParam->paramYBal.fClip = nPos / decimal_point;
@@ -183,11 +209,20 @@ void CParamChromaKeyDlg::OnHScroll(UINT nSBCode, UINT uPos, CScrollBar* pScrollB
 	case IDC_SLIDER_CC_HUE:
 		m_pParam->paramCc.fHue = nPos / decimal_point;
 		break;
+	case IDC_SLIDER_CC_FILTER:
+		m_pParam->paramCc.nFilter = nPos;
+		break;
 	case IDC_SLIDER_CC_CLIP:
 		m_pParam->paramCcKey.fClip = nPos / decimal_point;
 		break;
 	case IDC_SLIDER_CC_GAIN:
 		m_pParam->paramCcKey.fGain = nPos / decimal_point;
+		break;
+	case IDC_SLIDER_CCP_LEFT:
+		m_pParam->paramCckPos.fLeft = nPos/10000.f;
+		break;
+	case IDC_SLIDER_CCP_RIGHT:
+		m_pParam->paramCckPos.fRight = nPos/10000.f;
 		break;
 	case IDC_SLIDER_VW_SAT_CROP:
 		m_pParam->paramVecWnd.fSatCrop = nPos / decimal_point;

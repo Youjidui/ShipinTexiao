@@ -24,6 +24,7 @@ CParamColorKeyDlg::CParamColorKeyDlg(CWnd* pParent /*=NULL*/)
 
 CParamColorKeyDlg::~CParamColorKeyDlg()
 {
+	delete m_pParam;
 }
 
 void CParamColorKeyDlg::DoDataExchange(CDataExchange* pDX)

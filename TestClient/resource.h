@@ -140,6 +140,13 @@
 #define IDC_SLIDER_VA_CGAIN             1044
 #define IDC_SLIDER22                    1045
 #define IDC_SLIDER_VA_HUE               1045
+#define IDC_SLIDER_CKP_LEFT             1046
+#define IDC_SLIDER_CKP_RIGHT            1047
+#define IDC_SLIDER_CK_FILTER            1048
+#define IDC_SLIDER_CC_FILTER            1049
+#define IDC_SLIDER_CCP_LEFT             1050
+#define IDC_SLIDER_CKP_RIGHT2           1051
+#define IDC_SLIDER_CCP_RIGHT            1051
 
 // Next default values for new objects
 // 

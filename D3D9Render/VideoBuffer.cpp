@@ -44,7 +44,7 @@ BOOL CVideoBuffer::UnLockBuffer()
 bool CVideoBuffer::Create(IDirect3DDevice9* pDevice, const VideoBufferInfo& info )
 {
 	HRESULT hr = E_FAIL;
-	ASSERT(D3DFMT_A8R8G8B8 == info.format);
+	//ASSERT(D3DFMT_A8R8G8B8 == info.format);
 	switch(info.eUsage)
 	{
 	case  VideoBufferInfo::_IN:
@@ -123,7 +123,7 @@ bool CVideoBuffer::Create(IDirect3DDevice9* pDevice, const VideoBufferInfo& info
 			case VideoBufferInfo::VIDEO_MEM:
 			default:
 				{
-					ASSERT(D3DFMT_A8R8G8B8 == info.format);
+					//ASSERT(D3DFMT_A8R8G8B8 == info.format);
 					m_pTexture = NULL;
 					hr = pDevice->CreateRenderTarget( info.nWidth,
 						info.nHeight,

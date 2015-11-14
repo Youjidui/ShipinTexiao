@@ -18,6 +18,7 @@ CPushDlg::CPushDlg(CWnd* pParent /*=NULL*/)
 
 CPushDlg::~CPushDlg()
 {
+	delete m_pParam;
 }
 
 void CPushDlg::DoDataExchange(CDataExchange* pDX)
