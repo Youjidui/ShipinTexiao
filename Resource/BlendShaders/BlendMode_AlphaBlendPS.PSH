@@ -8,6 +8,33 @@ float4  bAlphaExisted:register(c0);
 float4  bAlphaValue  :register(c1);
 float2  fBlendValues :register(c2);
 bool    bCGBlended   :register(c3);
+
+float4 main( float2 texCoord:TEXCOORD0 ) : COLOR
+{
+   float4 retColor;
+   
+   float4 sColor0 = tex2D(samColor0, texCoord);
+   float sAlpha0 = 1 ? sColor0.a * bAlphaValue[0] : bAlphaValue[0];
+   sColor0.rgb = sAlpha0 * sColor0.rgb * fBlendValues[0];  
+   
+   float4 sColor1 = tex2D(samColor1, texCoord);
+   float sAlpha1 = 1 ? sColor1.a : 1.0f;
+
+   sColor1.rgb = sign(sAlpha1) * sColor1.rgb * fBlendValues[1];  
+   //float4 t         = bCGBlended?sColor1*sign(sAlpha1):sColor1*sAlpha1;
+   //=>sColor1.rgb = bCGBlended ? sColor1.rgb * sign(sAlpha1) : sColor1.rgb * sAlpha1;
+   sColor1.rgb *= sAlpha1;
+   //自身 Alpha 考虑 CGBlend,全局 Alpha 不考虑 CGBlend,否则效果不对
+   sAlpha1 *= bAlphaValue[1];
+   
+   retColor.a = sAlpha0 + sAlpha1 - sAlpha0 * sAlpha1;   
+	retColor.rgb = sColor0.rgb * (1.0 - bAlphaValue[1] * sAlpha1) + sColor1.rgb * bAlphaValue[1];
+   //retColor.a = 1;   
+	//retColor.rgb = sColor0.rgb * (1.0 - sColor1.a) + sColor1.rgb * sColor1.a;
+   return retColor; 
+}
+
+/*
 struct P_OUT
 {
    float4 oColor : COLOR0;//Color
@@ -35,3 +62,4 @@ P_OUT main( float2 texCoord:TEXCOORD0 )
    retColor.oColor  =  oColor+CS_YUYV_OFFSET;
    return retColor;  
 }
+*/

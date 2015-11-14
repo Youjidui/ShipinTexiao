@@ -107,7 +107,7 @@ bool CSonySlideRender::Render(CVideoBuffer* pDst, CVideoBuffer* pSrc1,  CVideoBu
 
 		if ( SUCCEEDED(pDevice->BeginScene()))
 		{
-
+			//pDevice->ColorFill(pTempDef->GetSurface(), NULL, 0);
 			m_pSonySliderEffect->Begin(&cPass,0);
 			//	for(;uPass<cPass;uPass++)
 			//	{
@@ -119,9 +119,13 @@ bool CSonySlideRender::Render(CVideoBuffer* pDst, CVideoBuffer* pSrc1,  CVideoBu
 
 			pDevice->EndScene();
 		}
+		//pDevice->SetRenderTarget(0, NULL);
 	}
-	m_pEngine->BlendCompose(pDst, pSrc2, pTempDef, false);
+	//D3DXSaveSurfaceToFile(_T("./SonySlide_temp.dds"), D3DXIFF_DDS, pTempDef->GetSurface(), NULL, NULL);
+
+	m_pEngine->BlendCompose(pDst, pSrc2, pTempDef);
 	//BlendTwoBuffer(pSrc1, pSrc2, pDst);
+	m_pEngine->GetVideoBufferManager()->ReleaseVideoBuffer(pTempDef);
 	return true;
 }
 

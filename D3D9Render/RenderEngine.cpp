@@ -1,4 +1,5 @@
 #include "StdAfx.h"
+#include <DxErr.h>
 #include "RenderEngine.h"
 #include "../Utility/mathmacros.h"
 #include "VideoBuffer.h"
@@ -85,6 +86,7 @@ bool CRenderEngine::SetVertexShader( LPCTSTR lpszShaderName )
 
 bool CRenderEngine::SetRenderTarget( CVideoBuffer* pDest )
 {
+	HRESULT hr = E_FAIL;
 	LPDIRECT3DDEVICE9 pDevice = GetDevice();
 	LPDIRECT3DSURFACE9 pRTSurface = NULL;
 	if(pDest)
@@ -93,9 +95,10 @@ bool CRenderEngine::SetRenderTarget( CVideoBuffer* pDest )
 	}
 
 	// set render target
-	pDevice->SetRenderTarget(0, pRTSurface);
+	hr = pDevice->SetRenderTarget(0, pRTSurface);
 	//SAFE_RELEASE(pRTSurface);
-	pDevice->SetRenderTarget(1, NULL);
+	hr = pDevice->SetRenderTarget(1, NULL);
+	ASSERT(SUCCEEDED(hr));
 
 	if(pRTSurface)
 	{
@@ -108,9 +111,22 @@ bool CRenderEngine::SetRenderTarget( CVideoBuffer* pDest )
 		vp.Y        = 0;
 		vp.Width    = buffInfo.nWidth;
 		vp.Height   = buffInfo.nHeight;
-		pDevice->SetViewport(&vp);
+		hr = pDevice->SetViewport(&vp);
+		ASSERT(SUCCEEDED(hr));
 
-		pDevice->Clear(0, NULL, D3DCLEAR_TARGET|D3DCLEAR_ZBUFFER, 0, 1.0f, 0);
+		hr = pDevice->Clear(0, NULL, D3DCLEAR_TARGET|D3DCLEAR_ZBUFFER, 0, 1.0f, 0);	//no D3DCLEAR_STENCIL
+		//ASSERT(SUCCEEDED(hr));
+		if(FAILED(hr))
+		{
+			hr = pDevice->Clear(0, NULL, D3DCLEAR_TARGET, 0, 1.0f, 0);
+			if(FAILED(hr))
+			{
+				LPCTSTR pszErrorString = DXGetErrorString(hr);
+				LPCTSTR pszErrorDesc = DXGetErrorDescription(hr);
+				TRACE(pszErrorString);
+				TRACE(pszErrorDesc);
+			}
+		}
 	}
 	return !!pRTSurface;
 }
@@ -229,12 +245,13 @@ bool CRenderEngine::SetDepthBuffer(bool bUseDepthBuffer)
 //从下到上，两两合成，合成结果再和更上一层合成，根据上层的Blend模式决定是进行轨间合成还是 Alpha 混合
 //Alpha 混合时，CGBLEND 只考虑自身 ALPHA，不考虑全局 Alpha,全局 Alpha 按正常模式进行
 
-bool CRenderEngine::BlendCompose( CVideoBuffer* pDest, CVideoBuffer* pSrcA, CVideoBuffer* pSrcB, bool bInternal)
+bool CRenderEngine::BlendCompose( CVideoBuffer* pDest, CVideoBuffer* pSrcA, CVideoBuffer* pSrcB)
 {
 	int num = 2;	//pSrcA and pSrcB
 	//TP_VBufferDef *vBufferDst  = m_pResManager->GetBufferDef( hTarget ); 
 	const VideoBufferInfo& biDst = pDest->GetVideoBufferInfo();
 	CBaseMesh *pMesh           = m_pResMgr->CreateQuadMesh(m_pDevice);
+	ASSERT(NULL != pMesh);
 
 	//GAutoLock l(&m_D3Dcs);
 	D3DXVECTOR4 cMode;
@@ -350,6 +367,7 @@ bool CRenderEngine::BlendCompose( CVideoBuffer* pDest, CVideoBuffer* pSrcA, CVid
 		m_pDevice->SetPixelShaderConstantF(1,vAlphaValues,1);
 		m_pDevice->SetPixelShaderConstantF(2,fBlendValues,1);
 		CPixelShader* pShader = m_pResMgr->CreateBlendPixelShader(m_pDevice, vBufferSrc1_dwBlendOp);
+		ASSERT(NULL != pShader);
 		if(vBufferSrc1_dwBlendOp==BLENDMODE_ALPHA)
 		{
 			m_pDevice->SetPixelShaderConstantF(3,&fbCGBlended,1);
@@ -359,6 +377,7 @@ bool CRenderEngine::BlendCompose( CVideoBuffer* pDest, CVideoBuffer* pSrcA, CVid
 		if(SUCCEEDED(m_pDevice -> BeginScene())) 
 		{
 			CVertexShader* pVertexShader = m_pResMgr->CreateVertexShader(m_pDevice, _T("Shaders/VS_DirectOutV3.vsh"));
+			ASSERT(NULL != pVertexShader);
 			pMesh -> DrawMesh(0, pVertexShader->GetVertexShaderPtr());
 			m_pDevice -> EndScene(); 
 		}

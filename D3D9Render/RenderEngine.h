@@ -40,7 +40,7 @@ public:
 
 public:
 	bool EffectVideoCopy( CVideoBuffer* pSrc, CVideoBuffer* pDst  );
-	bool BlendCompose( CVideoBuffer* pDest, CVideoBuffer* pSrcA, CVideoBuffer* pSrcB, bool bInternal = false);
+	bool BlendCompose( CVideoBuffer* pDest, CVideoBuffer* pSrcA, CVideoBuffer* pSrcB);
 
 private:
 	LPDIRECT3D9                 m_pD3D;
