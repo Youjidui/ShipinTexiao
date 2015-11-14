@@ -17,7 +17,7 @@ public:
 private:
 	void GetWorldMatrix(D3DXMATRIX * mat,DWORD dwType,float fTranstion);
 	
-	bool BlendTwoBuffer(CVideoBuffer* bufferUp, CVideoBuffer* bufferDown, CVideoBuffer* bufferDest);
+	//bool BlendTwoBuffer(CVideoBuffer* bufferUp, CVideoBuffer* bufferDown, CVideoBuffer* bufferDest);
 
 private:
 	CRenderEngine* m_pEngine;

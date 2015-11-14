@@ -35,7 +35,7 @@ bool CSonySlideRender::Render(CVideoBuffer* pDst, CVideoBuffer* pSrc1,  CVideoBu
 
 	CVideoBuffer* pTempDef = m_pEngine->CreateRenderTargetBuffer();//CreateVideoBuffer(pDst->GetVideoBufferInfo());
 
-	if(m_pEngine->SetRenderTarget(pDst))
+	if(m_pEngine->SetRenderTarget(pTempDef))
 	{
 		//const Custom_Profile *pProfile = m_pEngine->GetCurProfile();
 
@@ -120,7 +120,8 @@ bool CSonySlideRender::Render(CVideoBuffer* pDst, CVideoBuffer* pSrc1,  CVideoBu
 			pDevice->EndScene();
 		}
 	}
-
+	m_pEngine->BlendCompose(pDst, pSrc2, pTempDef, false);
+	//BlendTwoBuffer(pSrc1, pSrc2, pDst);
 	return true;
 }
 
@@ -153,53 +154,4 @@ void CSonySlideRender::GetWorldMatrix(D3DXMATRIX * mat,DWORD dwType,float fTrans
 	float fTransX = fTranstion * vecDir.x;
 	float fTransY = fTranstion * vecDir.y;
 	D3DXMatrixTranslation(mat,fTransX,fTransY,0.f);
-}
-
-bool CSonySlideRender::BlendTwoBuffer(CVideoBuffer* bufferUp, CVideoBuffer* bufferDown, CVideoBuffer* bufferDest)
-{
-	/*
-	handle_tpr hSrc[2] = {bufferDown->handle,bufferUp->handle};
-	TP_VBufferDef* ppSrcDef[2] = {bufferDown, bufferUp};
-
-	bufferDest->bDiscardAlpha = FALSE;
-	switch(bufferDest->bufferFormat) {
-	case FMT_YUYV:
-		{
-			SetRect(&bufferDest->rcImage,0,0,bufferDest->BaseWidth,bufferDest->BaseHeight);
-			m_pEngine->Compose(bufferDest->handle,hSrc,2,FALSE,TRUE);
-
-			RECT rcSrc0,rcSrc1;
-			rcSrc0 = ppSrcDef[0]->rcImage;
-			rcSrc1 = ppSrcDef[1]->rcImage;
-
-			OffsetRect(&rcSrc0,( - rcSrc0.left + ppSrcDef[0]->OffsetX) / 2.0f,- rcSrc0.top + ppSrcDef[0]->OffsetY);
-			OffsetRect(&rcSrc1,(- rcSrc1.left + ppSrcDef[1]->OffsetX) / 2.0f,-rcSrc1.top + ppSrcDef[1]->OffsetY);
-
-
-			UnionRect(&bufferDest->rcImage,&rcSrc0,&rcSrc1);
-			bufferDest->OffsetX = bufferDest->rcImage.left * 2.0f;
-			bufferDest->OffsetY = bufferDest->rcImage.top;
-		}		
-		break;
-	case FMT_RGBA32:
-	case FMT_YUVA32:
-		{
-			RECT rcSrc0,rcSrc1;
-			rcSrc0 = ppSrcDef[0]->rcImage;
-			rcSrc1 = ppSrcDef[1]->rcImage;
-
-			OffsetRect(&rcSrc0, - rcSrc0.left + ppSrcDef[0]->OffsetX,- rcSrc0.top + ppSrcDef[0]->OffsetY);
-			OffsetRect(&rcSrc1,- rcSrc1.left + ppSrcDef[1]->OffsetX ,-rcSrc1.top +  ppSrcDef[1]->OffsetY);
-
-			UnionRect(&bufferDest->rcImage,&rcSrc0,&rcSrc1);
-			bufferDest->OffsetX = bufferDest->rcImage.left;
-			bufferDest->OffsetY = bufferDest->rcImage.top;
-
-			m_pEngine->CGCompose(bufferDest->handle,hSrc,2,TRUE);			
-		}
-		break;
-	}
-	*/
-	return true;
-
 }
