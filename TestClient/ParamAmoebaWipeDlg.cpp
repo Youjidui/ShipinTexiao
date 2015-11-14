@@ -25,7 +25,8 @@ CParamAmoebaWipeDlg::CParamAmoebaWipeDlg(CWnd* pParent /*=NULL*/)
 
 CParamAmoebaWipeDlg::~CParamAmoebaWipeDlg()
 {
-	delete m_pParam;
+	//deleted in CEffectBar::OnDestroy
+	//delete m_pParam;
 }
 
 void CParamAmoebaWipeDlg::DoDataExchange(CDataExchange* pDX)

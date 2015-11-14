@@ -16,13 +16,15 @@ IMPLEMENT_DYNAMIC(CParamChromaKeyDlg, CDialog)
 
 CParamChromaKeyDlg::CParamChromaKeyDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CParamChromaKeyDlg::IDD, pParent)
+	, m_pParam(NULL)
 {
 
 }
 
 CParamChromaKeyDlg::~CParamChromaKeyDlg()
 {
-	delete m_pParam;
+	//deleted in CEffectBar::OnDestroy
+	//delete m_pParam;
 }
 
 void CParamChromaKeyDlg::DoDataExchange(CDataExchange* pDX)

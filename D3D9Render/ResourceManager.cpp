@@ -44,6 +44,13 @@ CResourceManager::~CResourceManager(void)
 	delete m_matViewOrtho;
 	delete m_matPrjPersp;
 	delete m_matViewPersp;
+
+	delete m_pQuadMesh;
+	delete m_pQuadGridMesh;
+	delete m_pQuadWHMipmapMesh;
+	delete m_pQuadWMipmapMesh;
+	delete m_pQuadHMipmapMesh;
+	delete m_pQuadInstanceMesh;
 }
 
 

@@ -24,7 +24,8 @@ CParamColorKeyDlg::CParamColorKeyDlg(CWnd* pParent /*=NULL*/)
 
 CParamColorKeyDlg::~CParamColorKeyDlg()
 {
-	delete m_pParam;
+	//deleted in CEffectBar::OnDestroy
+	//delete m_pParam;
 }
 
 void CParamColorKeyDlg::DoDataExchange(CDataExchange* pDX)

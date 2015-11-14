@@ -11,3 +11,5 @@
 
 
 #include <Windows.h>
+
+#include <vld.h>

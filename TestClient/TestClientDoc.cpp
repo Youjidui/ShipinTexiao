@@ -213,6 +213,13 @@ bool CTestClientDoc::InitEffect(HWND hDeviceWnd, int nBackBufferWidth, int nBack
 
 void CTestClientDoc::UninitEffect()
 {
+	for(size_t i = 0; i < m_SrcImages.size(); ++i)
+	{
+		m_pBufferMgr->ReleaseVideoBuffer(m_SrcImages[i]);
+	}
+	m_SrcImages.clear();
+	m_pBufferMgr->ReleaseVideoBuffer(m_pDestImage);
+
 	ReleaseVideoBufferManager(m_pBufferMgr);
 	m_pBufferMgr = NULL;
 	m_pRenderEngine->SetVideoBufferManager(NULL);

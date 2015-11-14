@@ -45,3 +45,4 @@
 #pragma comment(lib, "d3dx9")
 #pragma comment(lib, "dxguid")
 
+#include <vld.h>

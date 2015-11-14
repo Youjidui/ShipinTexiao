@@ -18,13 +18,15 @@ IMPLEMENT_DYNAMIC(CParamBlurDlg, CDialog)
 
 CParamBlurDlg::CParamBlurDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CParamBlurDlg::IDD, pParent)
+	, m_pParam(NULL)
 {
 
 }
 
 CParamBlurDlg::~CParamBlurDlg()
 {
-	delete m_pParam;
+	//deleted in CEffectBar::OnDestroy
+	//delete m_pParam;
 }
 
 void CParamBlurDlg::DoDataExchange(CDataExchange* pDX)

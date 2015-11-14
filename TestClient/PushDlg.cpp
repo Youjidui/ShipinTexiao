@@ -12,13 +12,15 @@ IMPLEMENT_DYNAMIC(CPushDlg, CDialog)
 
 CPushDlg::CPushDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CPushDlg::IDD, pParent)
+	, m_pParam(NULL)
 {
 
 }
 
 CPushDlg::~CPushDlg()
 {
-	delete m_pParam;
+	//deleted in CEffectBar::OnDestroy
+	//delete m_pParam;
 }
 
 void CPushDlg::DoDataExchange(CDataExchange* pDX)

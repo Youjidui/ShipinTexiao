@@ -22,7 +22,8 @@ CParamBarmWipeDlg::CParamBarmWipeDlg(CWnd* pParent /*=NULL*/)
 
 CParamBarmWipeDlg::~CParamBarmWipeDlg()
 {
-	delete m_pParam;
+	//deleted in CEffectBar::OnDestroy
+	//delete m_pParam;
 }
 
 void CParamBarmWipeDlg::DoDataExchange(CDataExchange* pDX)

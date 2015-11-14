@@ -15,3 +15,5 @@
 #include <afxwin.h>         // MFC 核心组件和标准组件
 
 #define _TRANS
+
+#include <vld.h>
