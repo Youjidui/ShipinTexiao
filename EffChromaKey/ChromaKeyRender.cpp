@@ -240,8 +240,6 @@ void CALLBACK NSCE_ACK_CalcParams(OUT NSACKParamTmpData* pTmpData,		// 中间变量
 ChromaKeyRender::ChromaKeyRender(void)
 : m_pEngine(NULL)
 , m_pQuadMesh(NULL)
-, m_pDirectOutEffect(NULL)
-, m_pProcessMaskEffect(NULL)
 , m_PS_CRK_RGB32(NULL)
 {
 }
@@ -259,17 +257,17 @@ bool ChromaKeyRender::Init( CRenderEngine* pEngine )
 	m_pQuadMesh = pResMan->CreateQuadMesh(pDevice);
 	ASSERT(m_pQuadMesh);
 
-	m_pDirectOutEffect = pResMan->CreateEffect(pDevice, _T("NewEffects/fx_GDirectOut.fx"));
-	ASSERT(m_pDirectOutEffect);
-	m_pProcessMaskEffect = pResMan->CreateEffect(pDevice, _T("NewEffects/GProcessMask.fx"));
-	ASSERT(m_pProcessMaskEffect);
-
 	//TODO: no file. need to copy VS_DirectOut_2stages_V3.vsh
 	//m_VS_DirectOut_2stages_V3 = pResMan->CreateVertexShader(pDevice, _T("Shaders/VS_DirectOut_2stages_V3.vsh"));
 	m_VS_DirectOut_2stages_V3 = pResMan->CreateVertexShader(pDevice, _T("Shaders/VS_DirectOut_2stages_V2.vsh"));
 	m_PS_CRK_RGB32 = pResMan->CreatePixelShader(pDevice, _T("NewEffects/PS_CRK_RGBA_QUICK.psh"));
 	ASSERT(m_PS_CRK_RGB32);
 	return true;
+}
+
+void ChromaKeyRender::Uninit()
+{
+
 }
 
 bool ChromaKeyRender::Render(CVideoBuffer*pDstDef, CVideoBuffer *pSrcDef, FxParamBase* pParam)

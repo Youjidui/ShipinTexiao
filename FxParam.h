@@ -273,3 +273,37 @@ struct ChromaKeyFxParam : FxParamBase
 		ForegroundVideoAdjust() : fVGain(0.f), fYGain(0.f), fCGain(0.f), fHue(0.f) {}
 	}paramFGVAdj;
 };
+
+struct PageRollFxParam : public FxParamBase
+{	
+	struct Geometry
+	{
+		float fAngle;
+		float fRadius;
+	};
+	struct Lighting {
+		float fAnglePhi;
+		float fAngleTheta;
+		float fLightRatio;
+		float fFrontHighLight;
+		float fFrontSmoothness;
+		float fRearHighLight;
+		float fRearSmoothness;
+	};
+	struct Rear {
+		BOOL bUseForeGround;
+		float fMatteRatio;
+		D3DCOLOR crMaatte;
+	};
+	struct Transition {
+		float fTransition;
+		BOOL bReverse;
+	};
+
+	Geometry structGeometry;
+	Lighting structLight;
+	Rear     structRear;
+	Transition structTrans;
+	BOOL bPageRoll;
+} ;
+

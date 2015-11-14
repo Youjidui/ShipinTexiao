@@ -20,8 +20,6 @@ private:
 private:
 	CRenderEngine*	m_pEngine;
 	CBaseMesh*		m_pQuadMesh;
-	CBaseFx*		m_pDirectOutEffect;
-	CBaseFx*		m_pProcessMaskEffect;
 
 	CVertexShader*	m_VS_DirectOut_2stages_V3;
 	CPixelShader*	m_PS_CRK_RGB32;
