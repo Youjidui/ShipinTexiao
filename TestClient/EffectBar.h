@@ -6,6 +6,7 @@
 #include "ParamAmoebaWipeDlg.h"
 #include "ParamBarmWipeDlg.h"
 #include "PushDlg.h"
+#include "ParamChromaKeyDlg.h"
 
 // CEffectBar ¶Ô»°¿ò
 
@@ -34,6 +35,7 @@ public:
 	CParamAmoebaWipeDlg m_amoebaWipeDlg;
 	CParamBarmWipeDlg m_barmWipeDlg;
 	CPushDlg m_pushDlg;
+	CParamChromaKeyDlg m_chromaKeyDlg;
 
 	afx_msg void OnBnClickedParameters();
 	virtual BOOL OnInitDialog();

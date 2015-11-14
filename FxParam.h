@@ -194,7 +194,7 @@ struct SonyMaskFxParam : FxParamBase	//SONY_MASK_INFO
 	}
 };//SONY_MASK_INFO;
 
-struct ChromaKeyFxParam 
+struct ChromaKeyFxParam : FxParamBase
 {
 	struct ChromaKeyAdjust
 	{

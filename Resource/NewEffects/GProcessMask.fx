@@ -1,4 +1,4 @@
-#include"..\..\..\..\TPEngine\src\Common\TPRenderX\Shaders\ColorSpaceFunc.INC"
+#include"..\Shaders\ColorSpaceFunc.INC"
 
 // For Sony Mask
 float4x4 g_matWorldViewProj;

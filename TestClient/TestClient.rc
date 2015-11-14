@@ -423,6 +423,66 @@ BEGIN
     CONTROL         "",IDC_SLIDER_FIRSTCOLOR_A,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,68,159,100,15
 END
 
+IDD_PARAM_CHROMA_KEY DIALOGEX 0, 0, 170, 360
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Dialog"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "确定",IDOK,113,339,50,14
+    LTEXT           "基本参数",IDC_STATIC,7,11,33,8
+    CONTROL         "色键开关",IDC_CHECK_COLOR_KEY,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,62,10,48,10
+    LTEXT           "阈值",IDC_STATIC,7,22,17,8
+    CONTROL         "",IDC_SLIDER_CK_CLIP,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,57,21,100,13
+    LTEXT           "增益",IDC_STATIC,7,34,17,8
+    CONTROL         "",IDC_SLIDER_CK_GAIN,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,57,33,100,13
+    LTEXT           "相位",IDC_STATIC,7,46,17,8
+    CONTROL         "",IDC_SLIDER_CK_HUE,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,57,45,100,13
+    LTEXT           "素材",IDC_STATIC,7,58,17,8
+    CONTROL         "",IDC_SLIDER_CK_SAT_CROP,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,57,57,100,13
+    LTEXT           "宽度",IDC_STATIC,7,69,17,8
+    CONTROL         "",IDC_SLIDER_CK_ANGLE,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,57,68,100,13
+    LTEXT           "浓度",IDC_STATIC,7,81,17,8
+    CONTROL         "",IDC_SLIDER_DENSITY,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,57,80,100,13
+    LTEXT           "反向",IDC_STATIC,7,94,17,8
+    CONTROL         "色键反向",IDC_CHECK_CK_INVERT,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,62,92,48,10
+    LTEXT           "微调",IDC_STATIC,7,107,17,8
+    CONTROL         "亮度均衡开关",IDC_CHECK_YB_ON,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,62,105,64,10
+    LTEXT           "阈值",IDC_STATIC,7,118,17,8
+    CONTROL         "",IDC_SLIDER_YB_CLIP,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,57,115,100,13
+    LTEXT           "增益",IDC_STATIC,7,128,17,8
+    CONTROL         "",IDC_SLIDER_YB_GAIN,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,57,127,100,13
+    LTEXT           "亮度",IDC_STATIC,7,139,17,8
+    CONTROL         "",IDC_SLIDER_YB_LUM,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,57,138,100,13
+    LTEXT           "消色",IDC_STATIC,7,152,17,8
+    CONTROL         "消色开关",IDC_CHECK_CC_ON,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,62,150,48,10
+    LTEXT           "宽度",IDC_STATIC,7,163,17,8
+    CONTROL         "",IDC_SLIDER_CC_LUM,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,57,161,100,13
+    LTEXT           "饱和度",IDC_STATIC,7,174,25,8
+    CONTROL         "",IDC_SLIDER_CC_SAT,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,57,172,100,13
+    LTEXT           "相位",IDC_STATIC,7,185,17,8
+    CONTROL         "",IDC_SLIDER_CC_HUE,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,57,184,100,13
+    LTEXT           "阈值",IDC_STATIC,7,197,17,8
+    CONTROL         "",IDC_SLIDER_CC_CLIP,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,57,195,100,13
+    LTEXT           "增益",IDC_STATIC,7,208,17,8
+    CONTROL         "",IDC_SLIDER_CC_GAIN,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,57,207,100,13
+    LTEXT           "消色2  矢量窗口",IDC_STATIC,7,220,57,8
+    LTEXT           "素材",IDC_STATIC,7,231,17,8
+    CONTROL         "",IDC_SLIDER_VW_SAT_CROP,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,57,230,100,13
+    LTEXT           "宽度",IDC_STATIC,7,242,17,8
+    CONTROL         "",IDC_SLIDER_VW_ANGLE,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,57,241,100,13
+    LTEXT           "混合度",IDC_STATIC,7,253,25,8
+    CONTROL         "",IDC_SLIDER_VW_MIX,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,57,252,100,13
+    LTEXT           "前景增益",IDC_STATIC,7,265,33,8
+    LTEXT           "视频增益",IDC_STATIC,7,276,33,8
+    CONTROL         "",IDC_SLIDER_VA_VGAIN,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,57,275,100,13
+    LTEXT           "Y增益",IDC_STATIC,7,287,21,8
+    CONTROL         "",IDC_SLIDER_VA_yGAIN,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,57,286,100,13
+    LTEXT           "C增益",IDC_STATIC,7,298,22,8
+    CONTROL         "",IDC_SLIDER_VA_CGAIN,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,57,297,100,13
+    LTEXT           "相位",IDC_STATIC,7,310,17,8
+    CONTROL         "",IDC_SLIDER_VA_HUE,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,57,309,100,13
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -537,6 +597,14 @@ BEGIN
         RIGHTMARGIN, 185
         TOPMARGIN, 7
         BOTTOMMARGIN, 341
+    END
+
+    IDD_PARAM_CHROMA_KEY, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 163
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 353
     END
 END
 #endif    // APSTUDIO_INVOKED

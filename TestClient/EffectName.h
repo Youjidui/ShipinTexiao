@@ -9,3 +9,5 @@
 #define FX_PUSH _T("Push")
 #define FX_BARM_WIPE _T("Barm Wipe")
 #define FX_SONY_SLIDE _T("Sony Slide")
+#define FX_SONY_MASK _T("Sony Mask")
+#define FX_CHROMA_KEY _T("Chroma Key")

@@ -1,7 +1,7 @@
 #include "StdAfx.h"
 #include "ChromaKeyRender.h"
 
-
+#pragma warning(disable:4244)
 
 #define ACK_GAIN_COEF			2.097175f		// sqrt(log(1.0 + 256.0/224.0) / log(2.0)) / 0.5
 
@@ -265,8 +265,9 @@ bool ChromaKeyRender::Init( CRenderEngine* pEngine )
 	ASSERT(m_pProcessMaskEffect);
 
 	//TODO: no file. need to copy VS_DirectOut_2stages_V3.vsh
-	m_VS_DirectOut_2stages_V3 = pResMan->CreateVertexShader(pDevice, _T("Shaders/VS_DirectOut_2stages_V3.vsh"));
-	m_PS_CRK_RGB32 = pResMan->CreatePixelShader(pDevice, _T("NewEffects/PS_CRK_RGB32.psh"));
+	//m_VS_DirectOut_2stages_V3 = pResMan->CreateVertexShader(pDevice, _T("Shaders/VS_DirectOut_2stages_V3.vsh"));
+	m_VS_DirectOut_2stages_V3 = pResMan->CreateVertexShader(pDevice, _T("Shaders/VS_DirectOut_2stages_V2.vsh"));
+	m_PS_CRK_RGB32 = pResMan->CreatePixelShader(pDevice, _T("NewEffects/PS_CRK_RGBA_QUICK.psh"));
 	ASSERT(m_PS_CRK_RGB32);
 	return true;
 }
@@ -383,7 +384,6 @@ bool ChromaKeyRender::RenderArea(CVideoBuffer*pDstDef, CVideoBuffer *pSrcDef, Fx
 	pDevice->SetPixelShaderConstantF(29, fInvert, 1);
 	pDevice->SetPixelShaderConstantF(30, fInvCoef, 1);
 
-
 	// 2.2.2 texture
 	pDevice->SetTexture(0, pSrcDef->GetTexture());
 	pDevice->SetTextureStageState( 0, D3DTSS_TEXTURETRANSFORMFLAGS, D3DTTFF_DISABLE );
@@ -406,7 +406,8 @@ bool ChromaKeyRender::RenderArea(CVideoBuffer*pDstDef, CVideoBuffer *pSrcDef, Fx
 	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE,FALSE);
 
 	// 2.2.4 shader
-	CVertexShader* vertexshader = pResMan->CreateVertexShader(pDevice, _T("Shaders/VSDirectOut_2stages_V3"));
+	//CVertexShader* vertexshader = pResMan->CreateVertexShader(pDevice, _T("Shaders/VSDirectOut_2stages_V3.vsh"));
+	CVertexShader* vertexshader = m_VS_DirectOut_2stages_V3;
 	pDevice->SetPixelShader(pixelshader->GetPixelShader());
 
 	// 2.3 render

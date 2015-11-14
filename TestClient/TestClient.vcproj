@@ -392,6 +392,10 @@
 			ReferencedProjectIdentifier="{00F3B508-F9A8-47DA-9A2B-375D9ACA1F0B}"
 			RelativePathToProject=".\SonySlide\SonySlide.vcproj"
 		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{03AB2445-1468-4F52-8B33-F0CDE4D20D78}"
+			RelativePathToProject=".\EffChromaKey\EffChromaKey.vcproj"
+		/>
 	</References>
 	<Files>
 		<Filter
@@ -429,6 +433,10 @@
 			</File>
 			<File
 				RelativePath=".\ParamBlurDlg.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ParamChromaKeyDlg.cpp"
 				>
 			</File>
 			<File
@@ -531,6 +539,10 @@
 			</File>
 			<File
 				RelativePath=".\ParamBlurDlg.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ParamChromaKeyDlg.h"
 				>
 			</File>
 			<File

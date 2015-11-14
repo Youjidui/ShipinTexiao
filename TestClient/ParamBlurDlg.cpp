@@ -8,6 +8,9 @@
 #include "EffectName.h"
 #include "CommonMessage.h"
 
+#pragma warning(push)
+#pragma warning(disable:4996)
+
 
 // CParamBlurDlg 对话框
 
@@ -82,3 +85,5 @@ BOOL CParamBlurDlg::OnInitDialog()
 	return TRUE;  // return TRUE unless you set the focus to a control
 	// 异常: OCX 属性页应返回 FALSE
 }
+
+#pragma warning(pop)

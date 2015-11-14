@@ -99,6 +99,14 @@ void CEffectBar::OnBnClickedParameters()
 		{
 
 		}
+		else if(FX_CHROMA_KEY == str)
+		{
+			if(!m_chromaKeyDlg.GetSafeHwnd())
+			{
+				m_chromaKeyDlg.Create(m_chromaKeyDlg.IDD);
+			}
+			m_chromaKeyDlg.ShowWindow(SW_SHOW);
+		}
 	}
 }
 
@@ -175,6 +183,21 @@ BOOL CEffectBar::OnInitDialog()
 		ZeroMemory(pParam, sizeof(SonySlideFxParam));
 		m_ctrlEffects.SetItemDataPtr(i, pParam);
 	}
+	i = m_ctrlEffects.AddString(FX_SONY_MASK);
+	{
+		SonyMaskFxParam* p = new SonyMaskFxParam;
+		ZeroMemory(p, sizeof(SonyMaskFxParam));
+		m_ctrlEffects.SetItemDataPtr(i, p);
+		//m_blurDlg.SetParam(p);
+	}
+	i = m_ctrlEffects.AddString(FX_CHROMA_KEY);
+	{
+		ChromaKeyFxParam * p = new ChromaKeyFxParam;
+		ZeroMemory(p, sizeof(ChromaKeyFxParam ));
+		m_ctrlEffects.SetItemDataPtr(i, p);
+		m_chromaKeyDlg.SetParam(p);
+	}
+
 
 	m_ctrlEffects.SetCurSel(0);
 

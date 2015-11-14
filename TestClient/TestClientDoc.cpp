@@ -19,6 +19,7 @@
 #include "../EffPush/PushRender.h"
 #include "../SonySlide/SonySlideRender.h"
 #include "../BarmWipeTrans/BarmWipeRender.h"
+#include "../EffChromaKey/ChromaKeyRender.h"
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -42,7 +43,7 @@ CTestClientDoc::CTestClientDoc()
 , m_pEffectParam(NULL)
 {
 	memset(&m_DestVideoBufferInfo, 0, sizeof(VideoBufferInfo));
-	m_DestVideoBufferInfo.format = D3DFMT_A8B8G8R8;
+	m_DestVideoBufferInfo.format = D3DFMT_A8R8G8B8;
 	m_DestVideoBufferInfo.eType = VideoBufferInfo::VIDEO_MEM;
 	m_DestVideoBufferInfo.eUsage = VideoBufferInfo::_OUT;
 	m_DestVideoBufferInfo.nWidth = 1920;
@@ -172,7 +173,7 @@ bool CTestClientDoc::UpdateBuffer( UINT level, const BYTE* pBits, int w, int h, 
 	}
 	if(!pBuf)
 	{
-		VideoBufferInfo bi = {D3DFMT_A8B8G8R8, VideoBufferInfo::SYSTEM_MEM, VideoBufferInfo::_IN, w, h, 0, 0};
+		VideoBufferInfo bi = {D3DFMT_A8R8G8B8, VideoBufferInfo::SYSTEM_MEM, VideoBufferInfo::_IN, w, h, 0, 0};
 		pBuf = m_pBufferMgr->CreateVideoBuffer(bi);
 	}
 	if(pBuf)
@@ -280,6 +281,14 @@ bool CTestClientDoc::Render()
 						if(eff.Init(m_pRenderEngine))
 						{
 							bOK = eff.Render(pDest, pSrc, (ColorKeyParam*)m_pEffectParam);
+						}
+					}
+					else if(FX_CHROMA_KEY== m_strEffectName)
+					{
+						ChromaKeyRender eff;
+						if(eff.Init(m_pRenderEngine))
+						{
+							bOK = eff.Render(pDest, pSrc, (ChromaKeyFxParam*)m_pEffectParam);
 						}
 					}
 					else if(FX_SONY_BLUR == m_strEffectName)
