@@ -238,9 +238,9 @@ bool CRenderEngine::BlendCompose( CVideoBuffer* pDest, CVideoBuffer* pSrcA, CVid
 
 	//GAutoLock l(&m_D3Dcs);
 	D3DXVECTOR4 cMode;
-	float bAlphaOK[4] = {0.0,0.0,0.0,0.0};
-	float vAlphaValues[4] = {1.0,1.0,1.0,1.0};
-	float fBlendValues[4] ={1.0,1.0,1.0,1.0};
+	float bAlphaOK[4] = {0.0f, 0.0f, 0.0f, 0.0f};
+	float vAlphaValues[4] = {1.0f, 1.0f, 1.0f, 1.0f};
+	float fBlendValues[4] = {1.0f, 1.0f, 1.0f, 1.0f};
 
 	D3DXMATRIX matTexture;
 	GenerateMatrix(pSrcA, &matTexture, mat_Identity);
@@ -274,7 +274,7 @@ bool CRenderEngine::BlendCompose( CVideoBuffer* pDest, CVideoBuffer* pSrcA, CVid
 	//vBufferSrc1    = m_pResManager->GetBufferDef( pSrcHandles[1] );
 	const VideoBufferInfo& vBufferSrc0 = pSrcA->GetVideoBufferInfo();
 	const VideoBufferInfo& vBufferSrc1 = pSrcB->GetVideoBufferInfo();
-	float fbCGBlended =0.0f;
+	float fbCGBlended = 0.0f;
 
 	//for(int i=0;i<num-1;i++)
 	{		
@@ -301,7 +301,7 @@ bool CRenderEngine::BlendCompose( CVideoBuffer* pDest, CVideoBuffer* pSrcA, CVid
 		//}
 		//else 
 		{
-			bAlphaOK[0] = 0.0;
+			bAlphaOK[0] = 0.0f;
 			m_pDevice->SetTexture( 1, NULL );	
 		}	
 
@@ -315,14 +315,14 @@ bool CRenderEngine::BlendCompose( CVideoBuffer* pDest, CVideoBuffer* pSrcA, CVid
 		//}
 		//else 
 		{
-			bAlphaOK[1] = 0.0;
+			bAlphaOK[1] = 0.0f;
 			m_pDevice->SetTexture( 3, NULL ); 	
 		}	
-		vAlphaValues[0] = 0.f;//vBufferSrc0->fAlphaValue;
-		vAlphaValues[1] = 0.f;//vBufferSrc1->fAlphaValue;
+		vAlphaValues[0] = 1.f;//vBufferSrc0->fAlphaValue;
+		vAlphaValues[1] = 1.f;//vBufferSrc1->fAlphaValue;
 
-		fBlendValues[0] =  0.f;//vBufferSrc1->fBlendValueExtra;
-		fBlendValues[1] =  0.f;//vBufferSrc1->fBlendValue;	
+		fBlendValues[0] =  1.f;//vBufferSrc1->fBlendValueExtra;
+		fBlendValues[1] =  1.f;//vBufferSrc1->fBlendValue;	
 
 		//vBufferDst->bClearFullTarget    = true;
 		//vBufferDst->bRenderToFullTarget = true;
@@ -361,17 +361,11 @@ bool CRenderEngine::BlendCompose( CVideoBuffer* pDest, CVideoBuffer* pSrcA, CVid
 			CVertexShader* pVertexShader = m_pResMgr->CreateVertexShader(m_pDevice, _T("Shaders/VS_DirectOutV3.vsh"));
 			pMesh -> DrawMesh(0, pVertexShader->GetVertexShaderPtr());
 			m_pDevice -> EndScene(); 
-		} 
+		}
 
-		//m_pResManager->DumpResourceToFile(vBufferSrc0->handle,L"C:\\CS0.DDS",false,true);
-		//m_pResManager->DumpResourceToFile(vBufferSrc0->handle,L"C:\\CS0_A.DDS",true);
-
-		//m_pResManager->DumpResourceToFile(vBufferSrc1->handle,L"C:\\CS1.DDS",false,true);
-		//m_pResManager->DumpResourceToFile(vBufferSrc1->handle,L"C:\\CS1_A.DDS",true);
-
-		//m_pResManager->DumpResourceToFile(vBufferDst->handle,L"C:\\CV.DDS",false,true); 
-		//m_pResManager->DumpResourceToFile(vBufferDst->handle,L"C:\\CVA.DDS",true);
-
+		//D3DXSaveSurfaceToFile(_T("./BlendCompose_Src_A.dds"), D3DXIFF_DDS, pSrcA->GetSurface(), NULL, NULL);
+		//D3DXSaveSurfaceToFile(_T("./BlendCompose_Src_B.dds"), D3DXIFF_DDS, pSrcB->GetSurface(), NULL, NULL);
+		//D3DXSaveSurfaceToFile(_T("./BlendCompose_Dest.dds"), D3DXIFF_DDS, pDest->GetSurface(), NULL, NULL);
 	}
 	for( int i = 0;i< num*2;i++)
 	{
