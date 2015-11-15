@@ -24,7 +24,7 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)_$(PlatformName)"
 			IntermediateDirectory="$(ConfigurationName)_$(PlatformName)"
 			ConfigurationType="1"
-			InheritedPropertySheets="..\DXSDK.vsprops;..\FreeImage.vsprops;..\log4cpp.vsprops"
+			InheritedPropertySheets="..\DXSDK.vsprops;..\FreeImage.vsprops;..\log4cpp.vsprops;..\vld.vsprops"
 			UseOfMFC="2"
 			CharacterSet="1"
 			>
@@ -186,7 +186,7 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)_$(PlatformName)"
 			IntermediateDirectory="$(ConfigurationName)_$(PlatformName)"
 			ConfigurationType="1"
-			InheritedPropertySheets="..\DXSDK.vsprops;..\FreeImage.vsprops;..\log4cpp.vsprops"
+			InheritedPropertySheets="..\DXSDK.vsprops;..\FreeImage.vsprops;..\log4cpp.vsprops;..\vld.vsprops"
 			UseOfMFC="2"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
@@ -448,6 +448,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\SonySlideDlg.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\stdafx.cpp"
 				>
 				<FileConfiguration
@@ -555,6 +559,10 @@
 			</File>
 			<File
 				RelativePath=".\Resource.h"
+				>
+			</File>
+			<File
+				RelativePath=".\SonySlideDlg.h"
 				>
 			</File>
 			<File

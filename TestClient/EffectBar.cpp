@@ -97,7 +97,11 @@ void CEffectBar::OnBnClickedParameters()
 		}
 		else if(FX_SONY_SLIDE == str)
 		{
-
+			if (!m_SonySlideDlg.GetSafeHwnd())
+			{
+				m_SonySlideDlg.Create(m_SonySlideDlg.IDD);
+			}
+			m_SonySlideDlg.ShowWindow(SW_SHOW);
 		}
 		else if(FX_CHROMA_KEY == str)
 		{
@@ -182,6 +186,7 @@ BOOL CEffectBar::OnInitDialog()
 		SonySlideFxParam* pParam = new SonySlideFxParam;
 		ZeroMemory(pParam, sizeof(SonySlideFxParam));
 		m_ctrlEffects.SetItemDataPtr(i, pParam);
+		m_SonySlideDlg.SetParam(pParam);
 	}
 	i = m_ctrlEffects.AddString(FX_SONY_MASK);
 	{

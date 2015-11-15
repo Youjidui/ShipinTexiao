@@ -26,6 +26,7 @@
 #define IDD_DIALOG4                     316
 #define IDD_PARAM_PUSH                  317
 #define IDD_PARAM_CHROMA_KEY            318
+#define IDD_DIALOG_SONY_SLIDE           319
 #define IDC_EFFECTS                     1000
 #define IDC_PROGRESS                    1001
 #define IDC_BUTTON1                     1002
@@ -152,7 +153,7 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        319
+#define _APS_NEXT_RESOURCE_VALUE        320
 #define _APS_NEXT_COMMAND_VALUE         32771
 #define _APS_NEXT_CONTROL_VALUE         1023
 #define _APS_NEXT_SYMED_VALUE           310

@@ -7,6 +7,7 @@
 #include "ParamBarmWipeDlg.h"
 #include "PushDlg.h"
 #include "ParamChromaKeyDlg.h"
+#include "SonySlideDlg.h"
 
 // CEffectBar ¶Ô»°¿ò
 
@@ -36,6 +37,7 @@ public:
 	CParamBarmWipeDlg m_barmWipeDlg;
 	CPushDlg m_pushDlg;
 	CParamChromaKeyDlg m_chromaKeyDlg;
+	CSonySlideDlg m_SonySlideDlg;
 
 	afx_msg void OnBnClickedParameters();
 	virtual BOOL OnInitDialog();

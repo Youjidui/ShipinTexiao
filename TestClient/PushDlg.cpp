@@ -146,8 +146,8 @@ void CPushDlg::OnHScroll(UINT nSBCode, UINT uPos, CScrollBar* pScrollBar)
 		memcpy(&m_pParam->dwSecondColor, vColor, sizeof(vColor));
 		break;
 	}
-
 }
+
 void CPushDlg::OnCbnSelchangeComboDwtype()
 {
 	CComboBox* pCombolBox = (CComboBox*)GetDlgItem(IDC_COMBO_DWTYPE);

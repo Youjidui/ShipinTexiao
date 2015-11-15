@@ -24,7 +24,7 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)_$(PlatformName)"
 			IntermediateDirectory="$(ConfigurationName)_$(PlatformName)"
 			ConfigurationType="2"
-			InheritedPropertySheets="..\DXSDK.vsprops"
+			InheritedPropertySheets="..\DXSDK.vsprops;..\vld.vsprops"
 			UseOfMFC="2"
 			CharacterSet="1"
 			>
@@ -183,7 +183,7 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)_$(PlatformName)"
 			IntermediateDirectory="$(ConfigurationName)_$(PlatformName)"
 			ConfigurationType="2"
-			InheritedPropertySheets="..\DXSDK.vsprops"
+			InheritedPropertySheets="..\DXSDK.vsprops;..\vld.vsprops"
 			UseOfMFC="2"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
