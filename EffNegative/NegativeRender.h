@@ -15,9 +15,6 @@ public:
 	bool Render(CVideoBuffer* pDst, CVideoBuffer* pSrc, NegativeFxParam* pParam);
 
 private:
-	bool SetRenderTarget(CVideoBuffer* pDest);
-
-private:
 	CRenderEngine*	m_pEngine;
 	CBaseMesh*			m_pQuadMesh;
 	CBaseFx*			m_pNegativeEffect;

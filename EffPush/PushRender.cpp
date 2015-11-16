@@ -31,6 +31,8 @@ bool CPushRender::Render(CVideoBuffer* pDst, CVideoBuffer* pSrc1,  CVideoBuffer*
 {
 	LPDIRECT3DDEVICE9 pDevice = m_pEngine->GetDevice();
 	CResourceManager* pResMan = m_pEngine->GetResourceManager();
+	RESET_RENDER_TARGET(m_pEngine);
+
 	if (pParam->bReverse)
 	{
 		std::swap(pSrc1, pSrc2);
@@ -152,6 +154,7 @@ bool CPushRender::Render(CVideoBuffer* pDst, CVideoBuffer* pSrc1,  CVideoBuffer*
 		}
 		// dest标志位设定
 		//pDstDef->bContainedAlpha = true;
+		m_pPushEffect->SetTexture("g_txColor",NULL);
 	}
 
 	return true;

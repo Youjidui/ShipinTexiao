@@ -19,6 +19,7 @@ ColorKeyRender::ColorKeyRender(void)
 
 ColorKeyRender::~ColorKeyRender(void)
 {
+	delete[] m_pBuffer;
 }
 
 HRESULT ColorKeyRender::SetSourceTextureWithTrans( const DWORD dwSampler, CVideoBuffer* pTexDef, MAT_STYLE matStyle )
@@ -79,12 +80,12 @@ bool ColorKeyRender::Init(CRenderEngine* pEngine )
 	m_pBuffer[11]._Pos = D3DXVECTOR3(-0.5f+WIDTH, -0.5f, 0.0f);
 
 	int nMacroCount = 2;
-	const char** pMacro_YUYV = new const char*[nMacroCount];
-	pMacro_YUYV[0] = "FMT_YUYV";
-	pMacro_YUYV[1] = NULL;
-	const char** pMacro_UYVY = new const char*[nMacroCount];
-	pMacro_UYVY[0] = "FMT_UYVY";
-	pMacro_UYVY[1] = NULL;
+	//const char** pMacro_YUYV = new const char*[nMacroCount];
+	//pMacro_YUYV[0] = "FMT_YUYV";
+	//pMacro_YUYV[1] = NULL;
+	//const char** pMacro_UYVY = new const char*[nMacroCount];
+	//pMacro_UYVY[0] = "FMT_UYVY";
+	//pMacro_UYVY[1] = NULL;
 
 	m_PS_ColorKey_RGB32_NOMASK = pResMan->CreatePixelShader(pDevice, _T("NewEffects/PS_colorkey_PS3.PSH"));
 	ASSERT(m_PS_ColorKey_RGB32_NOMASK);
@@ -121,18 +122,20 @@ bool ColorKeyRender::Init(CRenderEngine* pEngine )
 
 	m_PS_FineTune_RGB32_EXPAND = pResMan->CreatePixelShader(pDevice, _T("NewEffects/PS_FineTune_RGB32.psh"), pMacro_EXPAND, nMacroCount);
 	ASSERT(m_PS_FineTune_RGB32_EXPAND);
-	m_PS_FineTune_YUV16_EXPAND = pResMan->CreatePixelShader(pDevice, _T("NewEffects/PS_FineTune_YUV16.psh"), pMacro_EXPAND, nMacroCount);
-	ASSERT(m_PS_FineTune_YUV16_EXPAND);
+	//m_PS_FineTune_YUV16_EXPAND = pResMan->CreatePixelShader(pDevice, _T("NewEffects/PS_FineTune_YUV16.psh"), pMacro_EXPAND, nMacroCount);
+	//ASSERT(m_PS_FineTune_YUV16_EXPAND);
 	m_PS_FineTune_RGB32_SHRINK = pResMan->CreatePixelShader(pDevice, _T("NewEffects/PS_FineTune_RGB32.psh"), pMacro_SHRINK, nMacroCount);
 	ASSERT(m_PS_FineTune_RGB32_SHRINK);
-	m_PS_FineTune_YUV16_SHRINK = pResMan->CreatePixelShader(pDevice, _T("NewEffects/PS_FineTune_YUV16.psh"), pMacro_SHRINK, nMacroCount);
-	ASSERT(m_PS_FineTune_YUV16_SHRINK);
+	//m_PS_FineTune_YUV16_SHRINK = pResMan->CreatePixelShader(pDevice, _T("NewEffects/PS_FineTune_YUV16.psh"), pMacro_SHRINK, nMacroCount);
+	//ASSERT(m_PS_FineTune_YUV16_SHRINK);
+	delete[] pMacro_EXPAND;
+	delete[] pMacro_SHRINK;
 
-	m_PS_ColorKey_YUVA_NOMASK = pResMan->CreatePixelShader(pDevice, _T("NewEffects/PS_colorkey_YUVA.psh"));
-	ASSERT(m_PS_ColorKey_YUVA_NOMASK);
+	//m_PS_ColorKey_YUVA_NOMASK = pResMan->CreatePixelShader(pDevice, _T("NewEffects/PS_colorkey_YUVA.psh"));
+	//ASSERT(m_PS_ColorKey_YUVA_NOMASK);
 
-	m_PS_ColorKey_YUVA_MASK = pResMan->CreatePixelShader(pDevice, _T("NewEffects/PS_colorkey_YUVA_MASK.psh"));
-	ASSERT(m_PS_ColorKey_YUVA_MASK);
+	//m_PS_ColorKey_YUVA_MASK = pResMan->CreatePixelShader(pDevice, _T("NewEffects/PS_colorkey_YUVA_MASK.psh"));
+	//ASSERT(m_PS_ColorKey_YUVA_MASK);
 
 	m_VS_DirectOut = pResMan->CreateVertexShader(pDevice, _T("Shaders/VS_DirectOut.VSH"));
 	ASSERT(m_VS_DirectOut);
@@ -162,6 +165,7 @@ bool ColorKeyRender::Render( CVideoBuffer* pDest, CVideoBuffer* pSrc, ColorKeyPa
 	LPDIRECT3DDEVICE9 pDevice = m_pEngine->GetDevice();
 	CResourceManager* pResMan = m_pEngine->GetResourceManager();
 	CVideoBufferManager* pBufMan = m_pEngine->GetVideoBufferManager();
+	RESET_RENDER_TARGET(m_pEngine);
 
 	// setup world/view/projection transformation
 	D3DXMATRIX  matWorld, *pMatView = NULL, *pMatProj = NULL;
@@ -249,14 +253,14 @@ void ColorKeyRender::_colorkey_pass(CVideoBuffer* pSrcDef, CVideoBuffer* pDstDef
 	shader_array[RGB32][NA][UYVY][MASK]     = m_PS_ColorKey_RGB32_MASK;
 	shader_array[RGB32][AP][YUYV][MASK]     = m_PS_ColorKey_RGB32_MASK;
 	shader_array[RGB32][AP][UYVY][MASK]     = m_PS_ColorKey_RGB32_MASK;
-	shader_array[YUV16][NA][YUYV][NOMASK]   = m_PS_ColorKey_YUV16_NA_YUYV_NOMASK;
-	shader_array[YUV16][NA][UYVY][NOMASK]   = m_PS_ColorKey_YUV16_NA_UYVY_NOMASK;
-	shader_array[YUV16][AP][YUYV][NOMASK]   = m_PS_ColorKey_YUV16_AP_YUYV_NOMASK;
-	shader_array[YUV16][AP][UYVY][NOMASK]   = m_PS_ColorKey_YUV16_AP_UYVY_NOMASK;
-	shader_array[YUV16][NA][YUYV][MASK]     = m_PS_ColorKey_YUV16_NA_YUYV_MASK;
-	shader_array[YUV16][NA][UYVY][MASK]     = m_PS_ColorKey_YUV16_NA_UYVY_MASK;
-	shader_array[YUV16][AP][YUYV][MASK]     = m_PS_ColorKey_YUV16_AP_YUYV_MASK;
-	shader_array[YUV16][AP][UYVY][MASK]     = m_PS_ColorKey_YUV16_AP_UYVY_MASK;
+	//shader_array[YUV16][NA][YUYV][NOMASK]   = m_PS_ColorKey_YUV16_NA_YUYV_NOMASK;
+	//shader_array[YUV16][NA][UYVY][NOMASK]   = m_PS_ColorKey_YUV16_NA_UYVY_NOMASK;
+	//shader_array[YUV16][AP][YUYV][NOMASK]   = m_PS_ColorKey_YUV16_AP_YUYV_NOMASK;
+	//shader_array[YUV16][AP][UYVY][NOMASK]   = m_PS_ColorKey_YUV16_AP_UYVY_NOMASK;
+	//shader_array[YUV16][NA][YUYV][MASK]     = m_PS_ColorKey_YUV16_NA_YUYV_MASK;
+	//shader_array[YUV16][NA][UYVY][MASK]     = m_PS_ColorKey_YUV16_NA_UYVY_MASK;
+	//shader_array[YUV16][AP][YUYV][MASK]     = m_PS_ColorKey_YUV16_AP_YUYV_MASK;
+	//shader_array[YUV16][AP][UYVY][MASK]     = m_PS_ColorKey_YUV16_AP_UYVY_MASK;
 
 	BOOL shader_yuv16 = FALSE;
 	BOOL shader_alpha = FALSE;
@@ -326,9 +330,9 @@ void ColorKeyRender::_colorkey_pass(CVideoBuffer* pSrcDef, CVideoBuffer* pDstDef
 		//m_pEngine->ApplyCurRenderState();
 		m_pQuadMesh->DrawMesh(0, vertexshader);
 		pDevice->EndScene();
-		m_pEngine->SetRenderTarget(NULL);
 	}
 	pDevice->SetPixelShader(NULL);
+	pDevice->SetTexture(0, NULL);
 	pDevice->SetTexture(1, NULL);
 	pDevice->SetRenderTarget(1, NULL);
 
@@ -341,6 +345,7 @@ void ColorKeyRender::_fine_tune_pass(CVideoBuffer* pSrcDef, CVideoBuffer* pDstDe
 {
 	LPDIRECT3DDEVICE9 pDevice = m_pEngine->GetDevice();
 	CResourceManager* pResMan = m_pEngine->GetResourceManager();
+
 	pDevice->SetRenderTarget(0, pDstDef->GetSurface());
 	SetSourceTextureWithTrans(0, pSrcDef, mat_Image);
 
@@ -359,8 +364,8 @@ void ColorKeyRender::_fine_tune_pass(CVideoBuffer* pSrcDef, CVideoBuffer* pDstDe
 		//pResMan->GetQuadMesh()->DrawMesh(m_pResMan->m_VSDirectOut);
 		m_pQuadMesh->DrawMesh(0, m_VS_DirectOut->GetVertexShaderPtr());
 		pDevice->EndScene();
-		m_pEngine->SetRenderTarget(NULL);
 	}
+	pDevice->SetTexture(0, NULL);
 	pDevice->SetRenderTarget(1, NULL);
 	//m_pResMan->DumpResourceToFile(pSrcDef->handle, L"c:\\finetune_src_alpha.dds", true);
 	//m_pResMan->DumpResourceToFile(pDstDef->handle, L"c:\\finetune_dest_alpha.dds", true);
@@ -371,11 +376,9 @@ void ColorKeyRender::_blur_pass(CVideoBuffer* pSrcDef, CVideoBuffer* pDstDef, Fx
 {
 	LPDIRECT3DDEVICE9 pDevice = m_pEngine->GetDevice();
 	CResourceManager* pResMan = m_pEngine->GetResourceManager();
-	{
-		pDevice->SetRenderTarget(0, pDstDef->GetSurface());
-		//pDevice->Clear()
-		SetSourceTextureWithTrans(0, pSrcDef, mat_Image);
-	}
+
+	pDevice->SetRenderTarget(0, pDstDef->GetSurface());
+	SetSourceTextureWithTrans(0, pSrcDef, mat_Image);
 
 	ColorKeyParam* m_pParam = (ColorKeyParam*)pFxParam;
 	float fBlurness = m_pParam->fBlurness;
@@ -391,11 +394,11 @@ void ColorKeyRender::_blur_pass(CVideoBuffer* pSrcDef, CVideoBuffer* pDstDef, Fx
 		//m_pEngine->ApplyCurRenderState();
 		m_pQuadMesh->DrawMesh(0, m_VS_DirectOut->GetVertexShaderPtr());
 		pDevice->EndScene();
-		m_pEngine->SetRenderTarget(NULL);
 	}
 	//m_pResMan->DumpResourceToFile(hDestID, L"c:\\dest.dds");
 	pDevice->SetRenderTarget(1, NULL);
 	pDevice->SetPixelShader( NULL );
 	pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
 	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
+	pDevice->SetTexture(0, NULL);
 }

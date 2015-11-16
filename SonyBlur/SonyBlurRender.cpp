@@ -71,6 +71,7 @@ bool CSonyBlurRender::Render( CVideoBuffer* pDest, CVideoBuffer* pSrc, SonyBlurF
 {
 	LPDIRECT3DDEVICE9 pDevice = m_pEngine->GetDevice();
 	CResourceManager* pResMan = m_pEngine->GetResourceManager();
+	RESET_RENDER_TARGET(m_pEngine);
 
 	// 参数调整
 	float blurPixelX = pParam->blurX;		// 1,2,3...31;   32,35,37...62 这个数字表示模糊的像素个数
@@ -102,6 +103,8 @@ bool CSonyBlurRender::Render( CVideoBuffer* pDest, CVideoBuffer* pSrc, SonyBlurF
 	D3DXMATRIX matCombined = (matWorld)*(*matView)*(*matPorj);
 	D3DXMATRIX matTextureSrc;
 	m_pEffect->SetMatrix("g_matWorldViewProj",&matCombined);
+
+	m_pEngine->SetRenderTarget(pDest);
 
 	if ( SUCCEEDED(pDevice->BeginScene()))
 	{
@@ -164,8 +167,8 @@ bool CSonyBlurRender::Render( CVideoBuffer* pDest, CVideoBuffer* pSrc, SonyBlurF
 				//}
 				m_pEffect->SetVector("g_vAlphaBlend",&vAlphaBlend);
 
-				// setRT
-				m_pEngine->SetRenderTarget(pDest);
+				// setRT == move up, out of loop
+				//m_pEngine->SetRenderTarget(pDest);
 
 				m_pEffect->CommitChanges();
 
@@ -179,8 +182,7 @@ bool CSonyBlurRender::Render( CVideoBuffer* pDest, CVideoBuffer* pSrc, SonyBlurF
 
 		m_pEffect->End();
 		pDevice->EndScene();
-		m_pEngine->SetRenderTarget(NULL);
-		//m_pEffect->SetTexture("g_txColor", NULL);
+		m_pEffect->SetTexture("g_txColor", NULL);
 	}
 	return true;
 }

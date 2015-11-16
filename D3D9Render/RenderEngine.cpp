@@ -73,16 +73,16 @@ HRESULT CRenderEngine::Create( HWND hDeviceWnd, UINT nBackBufferWidth, UINT nBac
 	return hr;
 }
 
-bool CRenderEngine::SetVertexShader( LPCTSTR lpszShaderName )
-{
-	HRESULT hr = E_FAIL;
-	CVertexShader* pShader = m_pResMgr->CreateVertexShader(m_pDevice, lpszShaderName);
-	if(pShader)
-	{
-		hr = m_pDevice->SetVertexShader(pShader->GetVertexShaderPtr());
-	}
-	return SUCCEEDED(hr);
-}
+//bool CRenderEngine::SetVertexShader( LPCTSTR lpszShaderName )
+//{
+//	HRESULT hr = E_FAIL;
+//	CVertexShader* pShader = m_pResMgr->CreateVertexShader(m_pDevice, lpszShaderName);
+//	if(pShader)
+//	{
+//		hr = m_pDevice->SetVertexShader(pShader->GetVertexShaderPtr());
+//	}
+//	return SUCCEEDED(hr);
+//}
 
 bool CRenderEngine::SetRenderTarget( CVideoBuffer* pDest )
 {
@@ -95,7 +95,15 @@ bool CRenderEngine::SetRenderTarget( CVideoBuffer* pDest )
 	}
 
 	// set render target
+	ASSERT(NULL != pRTSurface);
 	hr = pDevice->SetRenderTarget(0, pRTSurface);
+	if(FAILED(hr))
+	{
+		LPCTSTR pszErrorString = DXGetErrorString(hr);
+		LPCTSTR pszErrorDesc = DXGetErrorDescription(hr);
+		TRACE(pszErrorString);
+		TRACE(pszErrorDesc);
+	}
 	//SAFE_RELEASE(pRTSurface);
 	hr = pDevice->SetRenderTarget(1, NULL);
 	ASSERT(SUCCEEDED(hr));
@@ -216,7 +224,8 @@ bool CRenderEngine::EffectVideoCopy( CVideoBuffer* pSrc, CVideoBuffer* pDst  )
 	}
 
 	pDevice->SetPixelShader( NULL );
-	pDevice->SetRenderTarget(0,NULL);
+	//pDevice->SetRenderTarget(0,NULL);
+	pDevice->SetTexture( 0, NULL );
 	
 	return true;  
 }

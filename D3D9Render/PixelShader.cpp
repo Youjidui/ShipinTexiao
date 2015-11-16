@@ -100,7 +100,7 @@ HRESULT CPixelShader::Create (  LPDIRECT3DDEVICE9 pDevice,
 		TRACE(pszErrorDesc);
 	}
 
-	//delete[] PBuffer;
+	delete[] pMacros;
 	//CloseHandle( hFile );
 	return hr;
 }

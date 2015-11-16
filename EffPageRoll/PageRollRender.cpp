@@ -30,6 +30,7 @@ void CPageRollRender::Uninit()
 
 bool CPageRollRender::Render(CVideoBuffer*pDstDef, CVideoBuffer *pSrcDef, FxParamBase* pParam)
 {
+	RESET_RENDER_TARGET(m_pEngine);
 	return false;
 }
 

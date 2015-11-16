@@ -272,6 +272,7 @@ void ChromaKeyRender::Uninit()
 
 bool ChromaKeyRender::Render(CVideoBuffer*pDstDef, CVideoBuffer *pSrcDef, FxParamBase* pParam)
 {
+	RESET_RENDER_TARGET(m_pEngine);
 	return RenderArea(pDstDef, pSrcDef, pParam);
 }
 

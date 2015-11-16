@@ -39,21 +39,21 @@ private:
 
 	CPixelShader*	m_PS_ColorKey_RGB32_NOMASK;
 	CPixelShader*	m_PS_ColorKey_RGB32_MASK;
-	CPixelShader*	m_PS_ColorKey_YUV16_NA_YUYV_NOMASK;
-	CPixelShader*	m_PS_ColorKey_YUV16_NA_UYVY_NOMASK;
-	CPixelShader*	m_PS_ColorKey_YUV16_AP_YUYV_NOMASK;
-	CPixelShader*	m_PS_ColorKey_YUV16_AP_UYVY_NOMASK;
-	CPixelShader*	m_PS_ColorKey_YUV16_NA_YUYV_MASK;
-	CPixelShader*	m_PS_ColorKey_YUV16_NA_UYVY_MASK;
-	CPixelShader*	m_PS_ColorKey_YUV16_AP_YUYV_MASK;
-	CPixelShader*	m_PS_ColorKey_YUV16_AP_UYVY_MASK;
+	//CPixelShader*	m_PS_ColorKey_YUV16_NA_YUYV_NOMASK;
+	//CPixelShader*	m_PS_ColorKey_YUV16_NA_UYVY_NOMASK;
+	//CPixelShader*	m_PS_ColorKey_YUV16_AP_YUYV_NOMASK;
+	//CPixelShader*	m_PS_ColorKey_YUV16_AP_UYVY_NOMASK;
+	//CPixelShader*	m_PS_ColorKey_YUV16_NA_YUYV_MASK;
+	//CPixelShader*	m_PS_ColorKey_YUV16_NA_UYVY_MASK;
+	//CPixelShader*	m_PS_ColorKey_YUV16_AP_YUYV_MASK;
+	//CPixelShader*	m_PS_ColorKey_YUV16_AP_UYVY_MASK;
 	CPixelShader*	m_PS_Blur;
 	CPixelShader*	m_PS_FineTune_RGB32_EXPAND;
-	CPixelShader*	m_PS_FineTune_YUV16_EXPAND;
+	//CPixelShader*	m_PS_FineTune_YUV16_EXPAND;
 	CPixelShader*	m_PS_FineTune_RGB32_SHRINK;
-	CPixelShader*	m_PS_FineTune_YUV16_SHRINK;
-	CPixelShader*	m_PS_ColorKey_YUVA_NOMASK;
-	CPixelShader*	m_PS_ColorKey_YUVA_MASK;
+	//CPixelShader*	m_PS_FineTune_YUV16_SHRINK;
+	//CPixelShader*	m_PS_ColorKey_YUVA_NOMASK;
+	//CPixelShader*	m_PS_ColorKey_YUVA_MASK;
 
 	typedef void (ColorKeyRender::*PASS_FUNCTOR_T)(CVideoBuffer *pSrcDef, CVideoBuffer* pDstDef, FxParamBase* pParam);
 	void _colorkey_pass(CVideoBuffer *pSrcDef, CVideoBuffer* pDstDef, FxParamBase* pParam);

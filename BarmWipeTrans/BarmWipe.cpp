@@ -143,6 +143,8 @@ HRESULT CBarmWipe::Draw(CVideoBuffer* pMaskDef, void* pParamRaw)
 
 			pVM->ReleaseVideoBuffer(pMask0);
 			pVM->ReleaseVideoBuffer(pMask1);
+			m_pEffect->SetTexture("g_txMask0", NULL);
+			m_pEffect->SetTexture("g_txMask1", NULL);
 		}
 		break;
 	}
@@ -252,6 +254,7 @@ HRESULT CBarmWipe::Draw(CVideoBuffer* pMaskDef, void* pParamRaw, int nPattern,fl
 
 	bool bOK = m_pEngine->SetRenderTarget(pMaskDef);
 	ASSERT(bOK);
+
 	BOOL bDrawBorder = pParam->structPattern.fBorderWidth > 0.0f;
 	BOOL bDrawSoft = pParam->structPattern.fSoftWidth > 0.0f;
 

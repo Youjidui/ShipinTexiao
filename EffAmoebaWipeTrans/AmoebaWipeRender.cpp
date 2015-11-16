@@ -66,6 +66,8 @@ bool CAmoebaWipeRender::Render( CVideoBuffer* pDest, CVideoBuffer* pSrcA, CVideo
 {
 	LPDIRECT3DDEVICE9 pDevice = m_pEngine->GetDevice();
 	CResourceManager* pResMan = m_pEngine->GetResourceManager();
+	RESET_RENDER_TARGET(m_pEngine);
+
 	//float	fAspect = m_pResMan->GetAspect() * m_pEngine->GetCurProfile()->nEditWidth / (float) (m_pEngine->GetCurProfile()->nEditHeight  * m_pResMan->GetAspectVerifyCoef());
 	int nEditWidth, nEditHeight;
 	m_pEngine->GetTargetVideoSize(nEditWidth, nEditHeight);
@@ -198,9 +200,8 @@ void CAmoebaWipeRender::Resize(CVideoBuffer* pDest, CVideoBuffer* pSrc, AmoebaWi
 		m_pEffect->EndPass();
 		m_pEffect->End();
 		pDevice->EndScene();
-		m_pEngine->SetRenderTarget(NULL);
 	}
-	//m_pEffect->SetTexture("g_txColor", NULL);
+	m_pEffect->SetTexture("g_txColor", NULL);
 }
 
 void CAmoebaWipeRender::Light( CVideoBuffer* pDest, CVideoBuffer* pSrc, AmoebaWipeFxParam* pParam )
@@ -280,9 +281,8 @@ void CAmoebaWipeRender::Light( CVideoBuffer* pDest, CVideoBuffer* pSrc, AmoebaWi
 		m_pEffect->EndPass();
 		m_pEffect->End();
 		pDevice->EndScene();
-		m_pEngine->SetRenderTarget(NULL);
 	}
-	//m_pEffect->SetTexture("g_txKey", NULL);
+	m_pEffect->SetTexture("g_txKey", NULL);
 	//D3DXSaveSurfaceToFile(_T("./AmoebaWipe_Light_Render.bmp"), D3DXIFF_BMP, pDest->GetSurface(), NULL, NULL);
 }
 
@@ -329,7 +329,7 @@ void CAmoebaWipeRender::Last( CVideoBuffer* pDest, CVideoBuffer* pSrcA, CVideoBu
 	//	}
 	//}
 	//Draw Out
-	m_pEngine->SetRenderTarget(pDest);	
+	m_pEngine->SetRenderTarget(pDest);
 
 	m_pEffect->SetMatrix("g_matWorldViewProj",&matCombine);
 	m_pEffect->SetMatrix("g_matTex",&matTex);
@@ -350,11 +350,10 @@ void CAmoebaWipeRender::Last( CVideoBuffer* pDest, CVideoBuffer* pSrcA, CVideoBu
 		m_pEffect->EndPass();
 		m_pEffect->End();
 		pDevice->EndScene();
-		m_pEngine->SetRenderTarget(NULL);
 	}
-	//m_pEffect->SetTexture("g_txColor", NULL);
-	//m_pEffect->SetTexture("g_txColor1", NULL);
-	//m_pEffect->SetTexture("g_txKey", NULL);
-	//m_pEffect->SetTexture("g_txLight", NULL);
+	m_pEffect->SetTexture("g_txColor", NULL);
+	m_pEffect->SetTexture("g_txColor1", NULL);
+	m_pEffect->SetTexture("g_txKey", NULL);
+	m_pEffect->SetTexture("g_txLight", NULL);
 }
 

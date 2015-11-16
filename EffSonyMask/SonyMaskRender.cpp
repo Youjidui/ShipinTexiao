@@ -2,6 +2,8 @@
 #include "SonyMaskRender.h"
 #include "../Utility/mathmacros.h"
 
+#pragma warning(disable: 4244)
+
 CSonyMaskRender::CSonyMaskRender()
 : m_pEngine(NULL)
 , m_pQuadMesh(NULL)
@@ -39,6 +41,8 @@ void CSonyMaskRender::Uninit()
 bool CSonyMaskRender::Render(CVideoBuffer *pDstDef, CVideoBuffer *pSrcDef, CVideoBuffer* pMaskDef /*or alpha*/, FxParamBase* pParam)
 {
 	CVideoBufferManager* pVBM = m_pEngine->GetVideoBufferManager();
+	RESET_RENDER_TARGET(m_pEngine);
+
 	m_bProcessMask	= !!pMaskDef;	// && pMaskDef->bufferStyle == VBUFFER_STYLE_SONYMASK;
 	m_bOptimize		=	TRUE;
 	m_bRender		=	TRUE;
@@ -53,15 +57,17 @@ bool CSonyMaskRender::Render(CVideoBuffer *pDstDef, CVideoBuffer *pSrcDef, CVide
 		if(m_bOptimize)
 		{
 			//CZBufferManager zbuffer(m_pEngine,DEPTHSTENCIL_GENERAL);
-			m_pEngine->SetDepthBuffer(true);
+			//m_pEngine->SetDepthBuffer(true);
+			SET_DEPTH_STENCIL(m_pEngine);
 			BeginSonyMask(pSrcDef, pDstDef, pMaskDef, pParam);
 			RenderArea(pSrcDef, pTempDef, pParam);
 			EndSonyMask();
+			//m_pEngine->SetDepthBuffer(false);
 		}
 		else
 		{
 			//CZBufferManager zbuffer(m_pEngine,DEPTHSTENCIL_NONE);
-			m_pEngine->SetDepthBuffer(false);
+			//m_pEngine->SetDepthBuffer(false);
 			RenderArea(pSrcDef,pTempDef,pParam);
 		}
 		ProcessMask(pSrcDef, pTempDef, pDstDef, pMaskDef, pParam);
@@ -206,6 +212,7 @@ void CSonyMaskRender::BeginSonyMask(CVideoBuffer * pSrcDef,CVideoBuffer * pDstDe
 			pDevice->SetRenderState(D3DRS_ZWRITEENABLE,FALSE);
 			pDevice->SetRenderState(D3DRS_ZFUNC,D3DCMP_LESSEQUAL);
 
+			m_pDirectOutEffect->SetTexture("g_txColor", NULL);
 			//FreeRTBuffer(hTemp);
 			pVBM->ReleaseVideoBuffer(pTempDef);
 		}        
@@ -418,6 +425,9 @@ HRESULT CSonyMaskRender::ProcessMask(CVideoBuffer* pDestDef, CVideoBuffer* pSrcD
 	//pDestDef->fAlphaValue = 1.0f;      
 	//pDestDef->bContainedAlpha = true;
 	pDevice->SetRenderTarget(1,NULL);
+	m_pProcessMaskEffect->SetTexture("g_txMask", NULL);
+	m_pProcessMaskEffect->SetTexture("g_txSrcColor", NULL);
+	m_pProcessMaskEffect->SetTexture("g_txEffectColor", NULL);
 
 	//CalcBox(&matWorld,&m_matView,&m_matProj,&pDestDef->rcImage);    
 

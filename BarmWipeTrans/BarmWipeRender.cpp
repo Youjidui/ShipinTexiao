@@ -58,15 +58,22 @@ bool CBarmWipeRender::Init( CRenderEngine* pEngine)
 void CBarmWipeRender::Uninit()
 {
 	//m_blurRender.Uninit();
-	//CVideoBufferManager* pBufMgr = m_pEngine->GetVideoBufferManager();
-	//pBufMgr->ReleaseVideoBuffer(m_pNoiseTexture);
+	SAFE_DELETE(m_privateData.m_pWipe);
+
+	CVideoBufferManager* pBufMgr = m_pEngine->GetVideoBufferManager();
+	pBufMgr->ReleaseVideoBuffer(m_privateData.m_pDivideHorTexture);
+	m_privateData.m_pDivideHorTexture = NULL;
+	pBufMgr->ReleaseVideoBuffer(m_privateData.m_pDivideVertTexture);
+	m_privateData.m_pDivideVertTexture = NULL;
 }
 
 bool CBarmWipeRender::Render( CVideoBuffer* pDest, CVideoBuffer* pSrcA, CVideoBuffer* pSrcB, BarmWipeFxParam* pParam )
 {
 	LPDIRECT3DDEVICE9 pDevice = m_pEngine->GetDevice();
 	CResourceManager* pResMgr = m_pEngine->GetResourceManager();
-	m_pEngine->SetDepthBuffer(true);
+	RESET_RENDER_TARGET(m_pEngine);
+	//m_pEngine->SetDepthBuffer(true);
+	SET_DEPTH_STENCIL(m_pEngine);
 
 	if(pParam->structPattern.bInvert)
 	{
@@ -91,8 +98,9 @@ bool CBarmWipeRender::Render( CVideoBuffer* pDest, CVideoBuffer* pSrcA, CVideoBu
 	{
 		bool bOK = m_pEngine->SetRenderTarget(pMask);
 		ASSERT(bOK);
-		bOK = m_pEngine->SetDepthBuffer(true);
-		ASSERT(bOK);
+		//bOK = m_pEngine->SetDepthBuffer(true);
+		//ASSERT(bOK);
+		SET_DEPTH_STENCIL(m_pEngine);
 
 		if( SUCCEEDED( pDevice->BeginScene() ) )
 		{
@@ -111,7 +119,6 @@ bool CBarmWipeRender::Render( CVideoBuffer* pDest, CVideoBuffer* pSrcA, CVideoBu
 				//}
 			}
 
-			pDevice->SetTexture(0,NULL);
 			bool bOK = RenderMask(pMask, pParam);
 			ASSERT(bOK);
 			//D3DXSaveSurfaceToFile(_T("./BarmWipe_Mask.DDS"), D3DXIFF_DDS, pMask->GetSurface(), NULL, NULL);
@@ -125,11 +132,11 @@ bool CBarmWipeRender::Render( CVideoBuffer* pDest, CVideoBuffer* pSrcA, CVideoBu
 			//D3DXSaveSurfaceToFile(_T("./BarmWipe_.bmp"), D3DXIFF_BMP, pMask->GetSurface(), NULL, NULL);
 
 			pDevice->EndScene();
+			pDevice->SetTexture(0, NULL);
 		}
 
-		bOK = m_pEngine->SetDepthBuffer(false);
-		ASSERT(bOK);
-		pDevice->SetRenderTarget(0,NULL);
+		//bOK = m_pEngine->SetDepthBuffer(false);
+		//ASSERT(bOK);
 		CVideoBufferManager* pBufMgr = m_pEngine->GetVideoBufferManager();
 		pBufMgr->ReleaseVideoBuffer(pMask);
 	}
@@ -250,6 +257,7 @@ CVideoBuffer* CBarmWipeRender::RenderMultiple(CVideoBuffer* pMask, CVideoBuffer*
 	hr = m_pEffect->End();
 	ASSERT(SUCCEEDED(hr));
 
+	m_pEffect->SetTexture("g_txColor", NULL);
 	//pMaskDef = pMaskDef1;
 	//hMask = hMask1;
 	return pMaskDest;
@@ -364,6 +372,8 @@ CVideoBuffer* CBarmWipeRender::RenderDivide(CVideoBuffer* pMask, CVideoBuffer* p
 	}
 	hr = m_pEffect->End();
 	ASSERT(SUCCEEDED(hr));
+	m_pEffect->SetTexture("g_txColor", NULL);
+	m_pEffect->SetTexture("g_txDivide", NULL);
 
 	return pMaskDest;
 }
@@ -489,7 +499,7 @@ bool CBarmWipeRender::RenderDrawOut(CVideoBuffer* pSrcDefA, CVideoBuffer* pSrcDe
 	matTex._31 = 0.5f / biSrcA.nAllocWidth;
 	matTex._32 = 0.5f / biSrcA.nAllocHeight;
 
-	m_pEffect->SetTexture("g_txColor1", pSrcDefB->GetTexture());
+	//m_pEffect->SetTexture("g_txColor1", pSrcDefB->GetTexture());
 
 	//D3DXVECTOR4 vTransMisc(ppSrcDef[0]->fAlphaValue,ppSrcDef[1]->fAlphaValue,ppSrcDef[0]->pAlpha != NULL,ppSrcDef[1]->pAlpha != NULL);
 	float fAlphaValue4SrcA = 1.0f, fAlphaValue4SrcB = 1.0f;
@@ -591,6 +601,11 @@ bool CBarmWipeRender::RenderDrawOut(CVideoBuffer* pSrcDefA, CVideoBuffer* pSrcDe
 	ASSERT(SUCCEEDED(hr));
 	hr = m_pEffect->End();
 	ASSERT(SUCCEEDED(hr));
+
+	m_pEffect->SetTexture("g_txMask", NULL);
+	m_pEffect->SetTexture("g_txColor",NULL);
+	m_pEffect->SetTexture("g_txColor1",NULL);
+
 #ifndef _TRANS
 	//if(!pSrcDef->bIsCGBuffer)
 	//{

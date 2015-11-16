@@ -20,15 +20,20 @@ bool CNegativeRender::Init( CRenderEngine* pEngine)
 	LPDIRECT3DDEVICE9 pDevice = m_pEngine->GetDevice();
 	CResourceManager* pResMgr = m_pEngine->GetResourceManager();
 	m_pQuadMesh = pResMgr->CreateQuadMesh(pDevice);
+	ASSERT(NULL != m_pQuadMesh);
 	m_pNegativeEffect = pResMgr->CreateEffect(pDevice, _T("NewEffects/Negative.fx"));
+	ASSERT(NULL != m_pNegativeEffect);
 	return true;
 }
 
 bool CNegativeRender::Render( CVideoBuffer* pDest, CVideoBuffer* pSrc, NegativeFxParam* pParam )
 {
+	HRESULT hr = E_FAIL;
 	LPDIRECT3DDEVICE9 pDevice = m_pEngine->GetDevice();
 	CResourceManager* pResMan = m_pEngine->GetResourceManager();
-	if(SetRenderTarget(pDest))
+	RESET_RENDER_TARGET(m_pEngine);
+
+	if(m_pEngine->SetRenderTarget(pDest))
 	{
 		const VideoBufferInfo& srcBuffInfo = pSrc->GetVideoBufferInfo();
 		D3DXMATRIX	matImage;
@@ -46,10 +51,14 @@ bool CNegativeRender::Render( CVideoBuffer* pDest, CVideoBuffer* pSrc, NegativeF
 		LPDIRECT3DTEXTURE9 lpTex = pSrc->GetTexture();
 		if(lpTex)
 		{
-			m_pNegativeEffect->SetTexture("g_txColor", lpTex);
-			m_pNegativeEffect->SetMatrix("g_matWorldViewProj",&matWVP);
-			m_pNegativeEffect->SetMatrix("g_matTexture",&matImage);
-			m_pNegativeEffect->SetTechnique("Picture");	
+			hr = m_pNegativeEffect->SetTexture("g_txColor", lpTex);
+			ASSERT(SUCCEEDED(hr));
+			hr = m_pNegativeEffect->SetMatrix("g_matWorldViewProj",&matWVP);
+			ASSERT(SUCCEEDED(hr));
+			hr = m_pNegativeEffect->SetMatrix("g_matTexture",&matImage);
+			ASSERT(SUCCEEDED(hr));
+			hr = m_pNegativeEffect->SetTechnique("Picture");	
+			ASSERT(SUCCEEDED(hr));
 
 			UINT cPass = 0,uPass = 0;
 			switch(srcBuffInfo.format)
@@ -59,46 +68,30 @@ bool CNegativeRender::Render( CVideoBuffer* pDest, CVideoBuffer* pSrc, NegativeF
 			case FMT_YUYV:uPass = 2;break;
 			}
 
-			if ( SUCCEEDED(pDevice->BeginScene()) )
+			if ( SUCCEEDED(hr = pDevice->BeginScene()) )
 			{
-				m_pNegativeEffect->Begin(&cPass, 0);
-				m_pNegativeEffect->BeginPass(uPass);
-				m_pQuadMesh->DrawMeshFx();
-				m_pNegativeEffect->EndPass();
-				m_pNegativeEffect->End();
-				pDevice->EndScene();
-				m_pEngine->SetRenderTarget(NULL);
+				hr = m_pNegativeEffect->Begin(&cPass, 0);
+				ASSERT(SUCCEEDED(hr));
+				hr = m_pNegativeEffect->BeginPass(uPass);
+				ASSERT(SUCCEEDED(hr));
+				hr = m_pQuadMesh->DrawMeshFx();
+				ASSERT(SUCCEEDED(hr));
+				hr = m_pNegativeEffect->EndPass();
+				ASSERT(SUCCEEDED(hr));
+				hr = m_pNegativeEffect->End();
+				ASSERT(SUCCEEDED(hr));
+				hr = pDevice->EndScene();
+				ASSERT(SUCCEEDED(hr));
 			}
+			hr = m_pNegativeEffect->SetTexture("g_txColor", NULL);
+			ASSERT(SUCCEEDED(hr));
 			lpTex->Release();
-			m_pNegativeEffect->SetTexture("g_txColor", NULL);
 		}
+	}
+	else
+	{
+		ASSERT(false);
 	}
 	return true;
 }
-
-bool CNegativeRender::SetRenderTarget( CVideoBuffer* pDest )
-{
-	//LPDIRECT3DDEVICE9 pDevice = m_pEngine->GetDevice();
-	//LPDIRECT3DSURFACE9 pRTSurface = NULL;
-	//pRTSurface = pDest->GetSurface();
-	//// set render target
-	//pDevice->SetRenderTarget(0, pRTSurface);
-	//SAFE_RELEASE(pRTSurface);
-
-	//const VideoBufferInfo& buffInfo = pDest->GetVideoBufferInfo();
-	//// set view port
-	//D3DVIEWPORT9 vp;
-	//vp.MaxZ = 1.0f;
-	//vp.MinZ = 0.0f;
-	//	vp.X        = 0;
-	//	vp.Y        = 0;
-	//	vp.Width    = buffInfo.nWidth;
-	//	vp.Height   = buffInfo.nHeight;
-	//pDevice->SetViewport(&vp);
-
-	//pDevice->Clear(0, NULL, D3DCLEAR_TARGET|D3DCLEAR_ZBUFFER, 0, 1.0f, 0);
-	//return true;
-	return m_pEngine->SetRenderTarget(pDest);
-}
-
 

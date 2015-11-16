@@ -28,6 +28,8 @@ bool CSonySlideRender::Render(CVideoBuffer* pDst, CVideoBuffer* pSrc1,  CVideoBu
 {
 	LPDIRECT3DDEVICE9 pDevice = m_pEngine->GetDevice();
 	CResourceManager* pResMan = m_pEngine->GetResourceManager();
+	RESET_RENDER_TARGET(m_pEngine);
+
 	if (pParam->bReverse)
 	{
 		std::swap(pSrc1, pSrc2);
@@ -119,7 +121,8 @@ bool CSonySlideRender::Render(CVideoBuffer* pDst, CVideoBuffer* pSrc1,  CVideoBu
 
 			pDevice->EndScene();
 		}
-		//pDevice->SetRenderTarget(0, NULL);
+		m_pSonySliderEffect->SetTexture("g_txColor", NULL);
+		m_pSonySliderEffect->SetTexture("g_txAlpha", NULL);
 	}
 	//D3DXSaveSurfaceToFile(_T("./SonySlide_temp.dds"), D3DXIFF_DDS, pTempDef->GetSurface(), NULL, NULL);
 
