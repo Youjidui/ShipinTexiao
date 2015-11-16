@@ -6,3 +6,6 @@
 *.suo
 Debug*/
 Release*/
+*.zip
+*.rar
+*.7z
