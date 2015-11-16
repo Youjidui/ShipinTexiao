@@ -150,9 +150,8 @@ bool CVideoBuffer::Create(IDirect3DDevice9* pDevice, const VideoBufferInfo& info
 	return SUCCEEDED(hr);
 }
 
-bool CVideoBuffer::Delete( IDirect3DDevice9* pDevice )
+void CVideoBuffer::Delete( IDirect3DDevice9* pDevice )
 {
 	SAFE_RELEASE(m_pSurface);
 	SAFE_RELEASE(m_pTexture);
-	return true;
 }

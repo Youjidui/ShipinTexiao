@@ -85,7 +85,6 @@ bool CNegativeRender::Render( CVideoBuffer* pDest, CVideoBuffer* pSrc, NegativeF
 			}
 			hr = m_pNegativeEffect->SetTexture("g_txColor", NULL);
 			ASSERT(SUCCEEDED(hr));
-			lpTex->Release();
 		}
 	}
 	else

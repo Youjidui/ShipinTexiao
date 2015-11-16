@@ -11,7 +11,7 @@ public:
 
 private:
 	bool Create(IDirect3DDevice9* pDevice, const VideoBufferInfo& info);
-	bool Delete(IDirect3DDevice9* pDevice);
+	void Delete(IDirect3DDevice9* pDevice);
 
 public:
 	virtual const VideoBufferInfo& GetVideoBufferInfo() const;
