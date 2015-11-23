@@ -73,13 +73,17 @@ bool CVideoBuffer::Create(IDirect3DDevice9* pDevice, const VideoBufferInfo& info
 		}
 		break;
 	case  VideoBufferInfo::_IN_OUT:
+	case  VideoBufferInfo::_IN_OUT_WITH_MIPMAP:
 	default:
 		{
 			{
+				DWORD usage = D3DUSAGE_RENDERTARGET;// | D3DUSAGE_WRITEONLY;
+				if(VideoBufferInfo::_IN_OUT_WITH_MIPMAP == info.eUsage)
+					usage |= D3DUSAGE_AUTOGENMIPMAP;
 				hr = pDevice->CreateTexture( info.nWidth,
 					info.nHeight,
 					1,
-					D3DUSAGE_RENDERTARGET,// | D3DUSAGE_WRITEONLY,
+					usage,
 					info.format, //D3DFMT_A8R8G8B8,
 					D3DPOOL_DEFAULT,
 					&m_pTexture,

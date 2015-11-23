@@ -370,35 +370,38 @@ HRESULT CBarmWipe::Draw(CVideoBuffer* pMaskDef, void* pParamRaw, int nPattern,fl
 
 HRESULT CBarmWipe::InitMesh(CRenderEngine* pEngine)
 {
+	HRESULT hr = E_FAIL;
+	LPCTSTR pszMeshName = _T("BarmMesh");
 	m_pEngine = pEngine;
 	LPDIRECT3DDEVICE9 pDevice = m_pEngine->GetDevice();
 	CResourceManager* pResMgr = m_pEngine->GetResourceManager();
 
-	CBaseWipe::InitMesh(pEngine);
+	hr = CBaseWipe::InitMesh(pEngine);
+	ASSERT(SUCCEEDED(hr));
 
 	m_pEffect = pResMgr->CreateEffect(pDevice, _T("NewEffects/Barm_Mask.fx"));
 	ASSERT(m_pEffect);
 
-	m_pBarmMesh = pResMgr->FindMesh(_T("BarmMesh"));
+	m_pBarmMesh = pResMgr->FindMesh(pszMeshName);
 	if(!m_pBarmMesh)
 	{
 		LPD3DXMESH pMesh = NULL;
 
-		HRESULT hr = S_OK;
 		int nNumVertex = 4;
 		int nNumFace =  2;
 		// Create the vertex buffer.
-		if(FAILED(hr=D3DXCreateMesh(nNumFace,nNumVertex, D3DXMESH_MANAGED | D3DXMESH_WRITEONLY, declWipe, pDevice, &pMesh)))
-			return hr;
+		hr = D3DXCreateMesh(nNumFace,nNumVertex, D3DXMESH_MANAGED | D3DXMESH_WRITEONLY, declWipe, pDevice, &pMesh);
+		ASSERT(SUCCEEDED(hr));
+
 		D3DXVECTOR3* pVertices = NULL;
 		WORD*			pIB=NULL;
 		DWORD*			pAtt=NULL;
-		if(FAILED(hr=pMesh->LockVertexBuffer(0,(LPVOID*)&pVertices)))
-			return hr;
-		if(FAILED(hr=pMesh->LockIndexBuffer(0,(LPVOID*)&pIB)))
-			return hr;
-		if(FAILED(hr=pMesh->LockAttributeBuffer(0,&pAtt)))
-			return hr;
+		hr=pMesh->LockVertexBuffer(0,(LPVOID*)&pVertices);
+		ASSERT(SUCCEEDED(hr));
+		hr=pMesh->LockIndexBuffer(0,(LPVOID*)&pIB);
+		ASSERT(SUCCEEDED(hr));
+		hr=pMesh->LockAttributeBuffer(0,&pAtt);
+		ASSERT(SUCCEEDED(hr));
 
 		ZeroMemory(pVertices,sizeof(D3DXVECTOR3) * nNumVertex);
 
@@ -423,7 +426,7 @@ HRESULT CBarmWipe::InitMesh(CRenderEngine* pEngine)
 		pMesh->UnlockIndexBuffer();
 		pMesh->UnlockAttributeBuffer();
 
-		m_pBarmMesh = pResMgr->CreateMesh(pDevice, pMesh, _T("BarmMesh"));
+		m_pBarmMesh = pResMgr->CreateMesh(pDevice, pMesh, pszMeshName);
 		ASSERT(m_pBarmMesh);
 	}	
 

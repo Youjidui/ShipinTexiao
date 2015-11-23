@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="EffPageRoll"
+	Name="EffPageRollTrans"
 	ProjectGUID="{6E2278E6-9BDB-47D2-98C8-A640BFC7E8EA}"
 	RootNamespace="EffPageRoll"
 	Keyword="Win32Proj"
@@ -153,6 +153,10 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath=".\MipMapGenerator.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\PageRollRender.cpp"
 				>
 			</File>
@@ -182,6 +186,10 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
+			<File
+				RelativePath=".\MipMapGenerator.h"
+				>
+			</File>
 			<File
 				RelativePath=".\PageRollRender.h"
 				>

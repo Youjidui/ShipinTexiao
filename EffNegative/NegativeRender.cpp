@@ -26,7 +26,7 @@ bool CNegativeRender::Init( CRenderEngine* pEngine)
 	return true;
 }
 
-bool CNegativeRender::Render( CVideoBuffer* pDest, CVideoBuffer* pSrc, NegativeFxParam* pParam )
+bool CNegativeRender::Render( CVideoBuffer* pDest, CVideoBuffer* pSrc, FxParamBase* )
 {
 	HRESULT hr = E_FAIL;
 	LPDIRECT3DDEVICE9 pDevice = m_pEngine->GetDevice();

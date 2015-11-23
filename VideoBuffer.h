@@ -20,7 +20,8 @@ struct VideoBufferInfo
 	{
 		_IN,
 		_IN_OUT,
-		_OUT
+		_OUT,
+		_IN_OUT_WITH_MIPMAP
 	};
 
 	//DWORD format;				//IN
