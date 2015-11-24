@@ -506,6 +506,45 @@ BEGIN
     CONTROL         "bReverse",IDC_CHECK_REVERSE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,71,44,47,10
 END
 
+IDD_DIALOG5 DIALOGEX 0, 0, 178, 282
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Dialog"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "È·¶¨",IDOK,121,261,50,14
+    LTEXT           "fAngle",IDC_STATIC,7,10,22,8
+    CONTROL         "",IDC_SLIDER_ANGLE,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,66,7,100,15
+    LTEXT           "fRadius",IDC_STATIC,7,25,25,8
+    CONTROL         "",IDC_SLIDER_RADIUS,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,66,22,100,15
+    LTEXT           "fAnglePhi",IDC_STATIC,7,40,31,8
+    CONTROL         "",IDC_SLIDER_ANGLE_PHI,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,66,37,100,15
+    LTEXT           "fAngleTheta",IDC_STATIC,7,55,40,8
+    CONTROL         "",IDC_SLIDER_ANGLE_THETA,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,66,52,100,15
+    LTEXT           "fLightRatio",IDC_STATIC,7,71,36,8
+    CONTROL         "",IDC_SLIDER_LIGHT_RATIO,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,66,68,100,15
+    LTEXT           "fFrontHighLight",IDC_STATIC,7,87,50,8
+    CONTROL         "",IDC_SLIDER_FRONT_HIGH_LIGHT,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,66,84,100,15
+    LTEXT           "fFrontSmoothness",IDC_STATIC,7,103,60,8
+    CONTROL         "",IDC_SLIDER_FRONT_SMOOTHNESS,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,66,100,100,15
+    LTEXT           "fRearHighLight",IDC_STATIC,7,119,48,8
+    CONTROL         "",IDC_SLIDER_REAR_HIGH_LIGHT,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,66,116,100,15
+    LTEXT           "fRearSmoothness",IDC_STATIC,7,135,58,8
+    CONTROL         "",IDC_SLIDER_REAR_SMOOTHNESS,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,66,132,100,15
+    CONTROL         "bUseForeGround",IDC_CHECK_USE_FORE_GROUND,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,151,70,10
+    LTEXT           "fMatteRatio",IDC_STATIC,7,165,39,8
+    CONTROL         "",IDC_SLIDER_MATTE_RATIO,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,66,161,100,15
+    LTEXT           "crMaatte",IDC_STATIC,7,181,30,8
+    CONTROL         "",IDC_SLIDER_MATTE_R,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,66,177,100,15
+    CONTROL         "",IDC_SLIDER_MATTE_G,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,66,192,100,15
+    CONTROL         "",IDC_SLIDER_MATTE_B,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,66,207,100,15
+    LTEXT           "R",IDC_STATIC,47,181,8,8
+    LTEXT           "G",IDC_STATIC,47,196,8,8
+    LTEXT           "B",IDC_STATIC,47,211,8,8
+    LTEXT           "fTransition",IDC_STATIC,7,226,35,8
+    CONTROL         "",IDC_SLIDER_TRANSITION,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,66,223,100,15
+    CONTROL         "bReverse",IDC_CHECK_REVERSE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,239,47,10
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -636,6 +675,14 @@ BEGIN
         RIGHTMARGIN, 183
         TOPMARGIN, 7
         BOTTOMMARGIN, 82
+    END
+
+    IDD_DIALOG5, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 171
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 275
     END
 END
 #endif    // APSTUDIO_INVOKED

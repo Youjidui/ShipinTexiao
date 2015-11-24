@@ -111,6 +111,14 @@ void CEffectBar::OnBnClickedParameters()
 			}
 			m_chromaKeyDlg.ShowWindow(SW_SHOW);
 		}
+		else if(FX_PAGE_ROLL == str)
+		{
+			if(!m_PageRollDlg.GetSafeHwnd())
+			{
+				m_PageRollDlg.Create(m_PageRollDlg.IDD);
+			}
+			m_PageRollDlg.ShowWindow(SW_SHOW);
+		}
 	}
 }
 
@@ -200,6 +208,12 @@ BOOL CEffectBar::OnInitDialog()
 		m_ctrlEffects.SetItemDataPtr(i, p);
 		m_chromaKeyDlg.SetParam(p);
 	}
+	i = m_ctrlEffects.AddString(FX_PAGE_ROLL);
+	{
+		PageRollFxParam* p = new PageRollFxParam;
+		m_ctrlEffects.SetItemDataPtr(i, p);
+		m_PageRollDlg.SetParam(p);
+	}
 
 
 	m_ctrlEffects.SetCurSel(0);
@@ -283,6 +297,12 @@ void CEffectBar::OnProgressChange( int nPos )
 			pParam->fTransition = nPos / 10000.f;
 			AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)(LPCTSTR)str, (LPARAM)pParam);
 		}
+		else if (FX_PAGE_ROLL == str)
+		{
+			PageRollFxParam* pParam = (PageRollFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
+			pParam->structTrans.fTransition = nPos / 10000.f;
+			AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)(LPCTSTR)str, (LPARAM)pParam);
+		}
 	}
 }
 
@@ -312,6 +332,11 @@ void CEffectBar::SetProgress(CSliderCtrl* pCtrl)
 		{
 			SonySlideFxParam* pParam = (SonySlideFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
 			if(pParam)	pCtrl->SetPos(pParam->fTransition * 10000);
+		}
+		else if (FX_PAGE_ROLL == str)
+		{
+			PageRollFxParam* pParam = (PageRollFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
+			if(pParam)	pCtrl->SetPos(pParam->structTrans.fTransition * 10000);
 		}
 	}
 }

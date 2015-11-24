@@ -20,6 +20,9 @@
 #include "../SonySlide/SonySlideRender.h"
 #include "../BarmWipeTrans/BarmWipeRender.h"
 #include "../EffChromaKey/ChromaKeyRender.h"
+#include "../EffPageRoll/PageRollRender.h"
+
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -352,6 +355,18 @@ bool CTestClientDoc::Render()
 							if(eff.Init(m_pRenderEngine))
 							{
 								bOK = eff.Render(pDest, pSrc, pSrc2, (BarmWipeFxParam*)m_pEffectParam);
+							}
+						}
+					}
+					else if(FX_PAGE_ROLL == m_strEffectName)
+					{
+						if(m_SrcImages.size() >= 2)
+						{
+							CVideoBuffer* pSrc2 = m_SrcImages[1];
+							CPageRollRender eff;
+							if(eff.Init(m_pRenderEngine))
+							{
+								bOK = eff.Render(pDest, pSrc, pSrc2, (PageRollFxParam*)m_pEffectParam);
 							}
 						}
 					}

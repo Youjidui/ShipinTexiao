@@ -105,9 +105,14 @@ void CPushDlg::OnHScroll(UINT nSBCode, UINT uPos, CScrollBar* pScrollBar)
 	case IDC_SLIDER_SECONDSOFTNESS:
 		m_pParam->fSecondSoftness = nPos / 100.f;
 		break;
+	case IDC_SLIDER_FIRSTCOLOR_A:
+		memcpy(vColor, &m_pParam->dwFirstColor, sizeof(vColor));
+		vColor[3] = nPos;
+		memcpy(&m_pParam->dwFirstColor, vColor, sizeof(vColor));
+		break;
 	case IDC_SLIDER_FIRSTCOLOR_R:
 		memcpy(vColor, &m_pParam->dwFirstColor, sizeof(vColor));
-		vColor[0] = nPos;
+		vColor[2] = nPos;
 		memcpy(&m_pParam->dwFirstColor, vColor, sizeof(vColor));
 		break;
 	case IDC_SLIDER_FIRSTCOLOR_G:
@@ -117,17 +122,17 @@ void CPushDlg::OnHScroll(UINT nSBCode, UINT uPos, CScrollBar* pScrollBar)
 		break;
 	case IDC_SLIDER_FIRSTCOLOR_B:
 		memcpy(vColor, &m_pParam->dwFirstColor, sizeof(vColor));
-		vColor[2] = nPos;
+		vColor[0] = nPos;
 		memcpy(&m_pParam->dwFirstColor, vColor, sizeof(vColor));
 		break;
-	case IDC_SLIDER_FIRSTCOLOR_A:
-		memcpy(vColor, &m_pParam->dwFirstColor, sizeof(vColor));
+	case IDC_SLIDER_SECONDCOLOR_A:
+		memcpy(vColor, &m_pParam->dwSecondColor, sizeof(vColor));
 		vColor[3] = nPos;
-		memcpy(&m_pParam->dwFirstColor, vColor, sizeof(vColor));
+		memcpy(&m_pParam->dwSecondColor, vColor, sizeof(vColor));
 		break;
 	case IDC_SLIDER_SECONDCOLOR_R:
 		memcpy(vColor, &m_pParam->dwSecondColor, sizeof(vColor));
-		vColor[0] = nPos;
+		vColor[2] = nPos;
 		memcpy(&m_pParam->dwSecondColor, vColor, sizeof(vColor));
 		break;
 	case IDC_SLIDER_SECONDCOLOR_G:
@@ -137,12 +142,7 @@ void CPushDlg::OnHScroll(UINT nSBCode, UINT uPos, CScrollBar* pScrollBar)
 		break;
 	case IDC_SLIDER_SECONDCOLOR_B:
 		memcpy(vColor, &m_pParam->dwSecondColor, sizeof(vColor));
-		vColor[2] = nPos;
-		memcpy(&m_pParam->dwSecondColor, vColor, sizeof(vColor));
-		break;
-	case IDC_SLIDER_SECONDCOLOR_A:
-		memcpy(vColor, &m_pParam->dwSecondColor, sizeof(vColor));
-		vColor[3] = nPos;
+		vColor[0] = nPos;
 		memcpy(&m_pParam->dwSecondColor, vColor, sizeof(vColor));
 		break;
 	}

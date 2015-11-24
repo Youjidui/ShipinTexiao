@@ -77,31 +77,31 @@ BOOL CParamAmoebaWipeDlg::OnInitDialog()
 	if(m_pParam)	pCtrl->SetPos(m_pParam->fLightAngle * 100);
 	char vColor[4];
 	memcpy(&vColor, &m_pParam->crHColor, sizeof(vColor));
+	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_HIGH_COLOR_A);
+	pCtrl->SetRange(0, 255);
+	if(m_pParam)	pCtrl->SetPos(vColor[3]);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_HIGH_COLOR_R);
 	pCtrl->SetRange(0, 255);
-	if(m_pParam)	pCtrl->SetPos(vColor[0]);
+	if(m_pParam)	pCtrl->SetPos(vColor[2]);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_HIGH_COLOR_G);
 	pCtrl->SetRange(0, 255);
 	if(m_pParam)	pCtrl->SetPos(vColor[1]);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_HIGH_COLOR_B);
 	pCtrl->SetRange(0, 255);
-	if(m_pParam)	pCtrl->SetPos(vColor[2]);
-	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_HIGH_COLOR_A);
+	if(m_pParam)	pCtrl->SetPos(vColor[0]);
+	memcpy(&vColor, &m_pParam->crLColor, sizeof(vColor));
+	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_LOW_COLOR_A);
 	pCtrl->SetRange(0, 255);
 	if(m_pParam)	pCtrl->SetPos(vColor[3]);
-	memcpy(&vColor, &m_pParam->crLColor, sizeof(vColor));
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_LOW_COLOR_R);
 	pCtrl->SetRange(0, 255);
-	if(m_pParam)	pCtrl->SetPos(vColor[0]);
+	if(m_pParam)	pCtrl->SetPos(vColor[2]);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_LOW_COLOR_G);
 	pCtrl->SetRange(0, 255);
 	if(m_pParam)	pCtrl->SetPos(vColor[1]);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_LOW_COLOR_B);
 	pCtrl->SetRange(0, 255);
-	if(m_pParam)	pCtrl->SetPos(vColor[2]);
-	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_LOW_COLOR_A);
-	pCtrl->SetRange(0, 255);
-	if(m_pParam)	pCtrl->SetPos(vColor[3]);
+	if(m_pParam)	pCtrl->SetPos(vColor[0]);
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 	// 异常: OCX 属性页应返回 FALSE
@@ -148,9 +148,14 @@ void CParamAmoebaWipeDlg::OnHScroll(UINT nSBCode, UINT uPos, CScrollBar* pScroll
 	case IDC_SLIDER_LIGHT_ANGLE:
 		m_pParam->fLightAngle = nPos / 100.f;
 		break;
+	case IDC_SLIDER_HIGH_COLOR_A:
+		memcpy(vColor, &m_pParam->crHColor, sizeof(vColor));
+		vColor[3] = nPos;
+		memcpy(&m_pParam->crHColor, vColor, sizeof(vColor));
+		break;
 	case IDC_SLIDER_HIGH_COLOR_R:
 		memcpy(vColor, &m_pParam->crHColor, sizeof(vColor));
-		vColor[0] = nPos;
+		vColor[2] = nPos;
 		memcpy(&m_pParam->crHColor, vColor, sizeof(vColor));
 		break;
 	case IDC_SLIDER_HIGH_COLOR_G:
@@ -160,17 +165,17 @@ void CParamAmoebaWipeDlg::OnHScroll(UINT nSBCode, UINT uPos, CScrollBar* pScroll
 		break;
 	case IDC_SLIDER_HIGH_COLOR_B:
 		memcpy(vColor, &m_pParam->crHColor, sizeof(vColor));
-		vColor[2] = nPos;
+		vColor[0] = nPos;
 		memcpy(&m_pParam->crHColor, vColor, sizeof(vColor));
 		break;
-	case IDC_SLIDER_HIGH_COLOR_A:
-		memcpy(vColor, &m_pParam->crHColor, sizeof(vColor));
+	case IDC_SLIDER_LOW_COLOR_A:
+		memcpy(vColor, &m_pParam->crLColor, sizeof(vColor));
 		vColor[3] = nPos;
-		memcpy(&m_pParam->crHColor, vColor, sizeof(vColor));
+		memcpy(&m_pParam->crLColor, vColor, sizeof(vColor));
 		break;
 	case IDC_SLIDER_LOW_COLOR_R:
 		memcpy(vColor, &m_pParam->crLColor, sizeof(vColor));
-		vColor[0] = nPos;
+		vColor[2] = nPos;
 		memcpy(&m_pParam->crLColor, vColor, sizeof(vColor));
 		break;
 	case IDC_SLIDER_LOW_COLOR_G:
@@ -180,12 +185,7 @@ void CParamAmoebaWipeDlg::OnHScroll(UINT nSBCode, UINT uPos, CScrollBar* pScroll
 		break;
 	case IDC_SLIDER_LOW_COLOR_B:
 		memcpy(vColor, &m_pParam->crLColor, sizeof(vColor));
-		vColor[2] = nPos;
-		memcpy(&m_pParam->crLColor, vColor, sizeof(vColor));
-		break;
-	case IDC_SLIDER_LOW_COLOR_A:
-		memcpy(vColor, &m_pParam->crLColor, sizeof(vColor));
-		vColor[3] = nPos;
+		vColor[0] = nPos;
 		memcpy(&m_pParam->crLColor, vColor, sizeof(vColor));
 		break;
 	}

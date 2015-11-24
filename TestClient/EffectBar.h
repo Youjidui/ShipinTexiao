@@ -8,6 +8,7 @@
 #include "PushDlg.h"
 #include "ParamChromaKeyDlg.h"
 #include "SonySlideDlg.h"
+#include "PageRollParamDlg.h"
 
 // CEffectBar ¶Ô»°¿ò
 
@@ -38,6 +39,7 @@ public:
 	CPushDlg m_pushDlg;
 	CParamChromaKeyDlg m_chromaKeyDlg;
 	CSonySlideDlg m_SonySlideDlg;
+	CPageRollParamDlg m_PageRollDlg;
 
 	afx_msg void OnBnClickedParameters();
 	virtual BOOL OnInitDialog();

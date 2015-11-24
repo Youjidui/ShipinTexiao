@@ -1,9 +1,11 @@
 #include "StdAfx.h"
 #include "MipMapGenerator.h"
 
+#pragma warning(disable: 4244 4018)
+
 CMipMapGenerator::CMipMapGenerator(void)
 : m_pEngine(NULL)
-, m_pMesh(NULL)
+//, m_pMesh(NULL)
 , m_pEffect(NULL)
 {
 	memset(m_pMesh, 0, sizeof(m_pMesh));
@@ -27,6 +29,7 @@ bool CMipMapGenerator::Init(CRenderEngine* pEngine)
 	ASSERT(m_pMesh[1]);
 	m_pMesh[2] = pResMan->CreateQuadHMipmapMesh(pDevice);
 	ASSERT(m_pMesh[2]);
+	return true;
 }
 
 void CMipMapGenerator::Uninit()
@@ -99,7 +102,7 @@ HRESULT CMipMapGenerator::GenerateMipMap(CVideoBuffer* pMipMap, CVideoBuffer* pS
 
 	m_pEffect->SetMatrix("g_matWorldViewProj",&matCombine);
 	m_pEffect->SetMatrix("g_matTexture",&matTex);
-	m_pEffect->SetTexture("g_txColor",pSrcDef);
+	m_pEffect->SetTexture("g_txColor",pSrcDef->GetTexture());
 	m_pEffect->SetTechnique("Picture");
 
 	if(SUCCEEDED(pDevice->BeginScene()))

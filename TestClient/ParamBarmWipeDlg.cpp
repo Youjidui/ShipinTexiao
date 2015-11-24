@@ -87,19 +87,18 @@ BOOL CParamBarmWipeDlg::OnInitDialog()
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_OVERLAP);
 	pCtrl->SetRange(-36000, 72000);	//720.0f, -360.0f, 0.01f
 	if(m_pParam)	pCtrl->SetPos(m_pParam->structModify.bOverlap * 100);
-	char vColor[4];
+
+	char vColor[4];	//D3DCOLOR_XRGB
 	memcpy(&vColor, &m_pParam->structPattern.crBorderColor, sizeof(vColor));
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_BORDER_COLOR_R);
 	pCtrl->SetRange(0, 255);
-	if(m_pParam)	pCtrl->SetPos(vColor[0]);
+	if(m_pParam)	pCtrl->SetPos(vColor[2]);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_BORDER_COLOR_g);
 	pCtrl->SetRange(0, 255);
 	if(m_pParam)	pCtrl->SetPos(vColor[1]);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_BORDER_COLOR_B);
 	pCtrl->SetRange(0, 255);
-	if(m_pParam)	pCtrl->SetPos(vColor[2]);
-	//pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_HIGH_COLOR_A);
-	//pCtrl->SetRange(0, 255);
+	if(m_pParam)	pCtrl->SetPos(vColor[0]);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_BORDER_WIDTH);
 	pCtrl->SetRange(0, 50000);	//5.0f, 0.0f,  0.0001f
 	if(m_pParam)	pCtrl->SetPos(m_pParam->structPattern.fBorderWidth * 10000);
@@ -167,7 +166,7 @@ void CParamBarmWipeDlg::OnHScroll(UINT nSBCode, UINT uPos, CScrollBar* pScrollBa
 		break;
 	case IDC_SLIDER_BORDER_COLOR_R:
 		memcpy(vColor, &m_pParam->structPattern.crBorderColor, sizeof(vColor));
-		vColor[0] = nPos;
+		vColor[2] = nPos;
 		memcpy(&m_pParam->structPattern.crBorderColor, vColor, sizeof(vColor));
 		break;
 	case IDC_SLIDER_BORDER_COLOR_g:
@@ -177,7 +176,7 @@ void CParamBarmWipeDlg::OnHScroll(UINT nSBCode, UINT uPos, CScrollBar* pScrollBa
 		break;
 	case IDC_SLIDER_BORDER_COLOR_B:
 		memcpy(vColor, &m_pParam->structPattern.crBorderColor, sizeof(vColor));
-		vColor[2] = nPos;
+		vColor[0] = nPos;
 		memcpy(&m_pParam->structPattern.crBorderColor, vColor, sizeof(vColor));
 		break;
 	//case IDC_SLIDER_BORDER_COLOR_A:

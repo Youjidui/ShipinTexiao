@@ -396,6 +396,10 @@
 			ReferencedProjectIdentifier="{03AB2445-1468-4F52-8B33-F0CDE4D20D78}"
 			RelativePathToProject=".\EffChromaKey\EffChromaKey.vcproj"
 		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{6E2278E6-9BDB-47D2-98C8-A640BFC7E8EA}"
+			RelativePathToProject=".\EffPageRoll\EffPageRoll.vcproj"
+		/>
 	</References>
 	<Files>
 		<Filter
@@ -421,6 +425,10 @@
 			</File>
 			<File
 				RelativePath=".\MainFrm.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\PageRollParamDlg.cpp"
 				>
 			</File>
 			<File
@@ -531,6 +539,10 @@
 			</File>
 			<File
 				RelativePath=".\MainFrm.h"
+				>
+			</File>
+			<File
+				RelativePath=".\PageRollParamDlg.h"
 				>
 			</File>
 			<File

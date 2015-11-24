@@ -11,3 +11,4 @@
 #define FX_SONY_SLIDE _T("Sony Slide")
 #define FX_SONY_MASK _T("Sony Mask")
 #define FX_CHROMA_KEY _T("Chroma Key")
+#define FX_PAGE_ROLL _T("Page Roll")

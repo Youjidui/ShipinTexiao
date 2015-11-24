@@ -27,6 +27,7 @@
 #define IDD_PARAM_PUSH                  317
 #define IDD_PARAM_CHROMA_KEY            318
 #define IDD_DIALOG_SONY_SLIDE           319
+#define IDD_DIALOG5                     320
 #define IDC_EFFECTS                     1000
 #define IDC_PROGRESS                    1001
 #define IDC_BUTTON1                     1002
@@ -91,48 +92,64 @@
 #define IDC_SLIDER_FLIP                 1023
 #define IDC_SLIDER_SECONDCOLOR_B        1023
 #define IDC_SLIDER_CK_GAIN              1023
+#define IDC_SLIDER_ANGLE                1023
 #define IDC_SLIDER_A                    1024
 #define IDC_SLIDER_LOW_COLOR_R          1024
 #define IDC_SLIDER_OVERLAP              1024
 #define IDC_SLIDER_SECONDCOLOR4         1024
 #define IDC_SLIDER_SECONDCOLOR_A        1024
 #define IDC_SLIDER_CK_HUE               1024
+#define IDC_SLIDER_RADIUS               1024
 #define IDC_SLIDER_ANGLE1               1025
 #define IDC_SLIDER_LOW_COLOR_G          1025
 #define IDC_SLIDER_BORDER_COLOR_R       1025
 #define IDC_SLIDER_FIRSTCOLOR_A         1025
 #define IDC_SLIDER_CK_SAT_CROP          1025
+#define IDC_SLIDER_ANGLE_PHI            1025
 #define IDC_SLIDER_LENGTH1              1026
 #define IDC_SLIDER_LOW_COLOR_B          1026
 #define IDC_SLIDER_BORDER_COLOR_g       1026
 #define IDC_SLIDER_CK_ANGLE             1026
+#define IDC_SLIDER_ANGLE_THETA          1026
 #define IDC_SLIDER_ANGLE2               1027
 #define IDC_SLIDER_LOW_COLOR_A          1027
 #define IDC_SLIDER_BORDER_COLOR_B       1027
 #define IDC_SLIDER_DENSITY              1027
+#define IDC_SLIDER_LIGHT_RATIO          1027
 #define IDC_SLIDER_LENGTH2              1028
 #define IDC_SLIDER_OFFSET               1028
 #define IDC_SLIDER_BORDER_WIDTH         1028
 #define IDC_CHECK_CK_INVERT             1028
+#define IDC_SLIDER_FRONT_HIGH_LIGHT     1028
 #define IDC_SLIDER_SOFTNESS             1029
 #define IDC_SLIDER18                    1029
 #define IDC_SLIDER_SOFT_WIDTH           1029
 #define IDC_CHECK_YB_ON                 1029
+#define IDC_SLIDER_FRONT_SMOOTHNESS     1029
 #define IDC_SLIDER_BLURNESS             1030
 #define IDC_SLIDER_FLIP2                1030
 #define IDC_SLIDER_SLANT2               1030
 #define IDC_SLIDER_YB_CLIP              1030
+#define IDC_SLIDER_REAR_HIGH_LIGHT      1030
 #define IDC_SLIDER_FINE_TUNE            1031
 #define IDC_SLIDER_YB_GAIN              1031
+#define IDC_SLIDER_REAR_SMOOTHNESS      1031
 #define IDC_SLIDER_GRAY_MIN             1032
 #define IDC_SLIDER_YB_LUM               1032
+#define IDC_CHECK_USE_FORE_GROUND       1032
 #define IDC_SLIDER_GRAY_MAX             1033
 #define IDC_CHECK_CC_ON                 1033
+#define IDC_SLIDER_MATTE_RATIO          1033
 #define IDC_SLIDER_CC_LUM               1034
+#define IDC_SLIDER_MATTE_R              1034
 #define IDC_SLIDER_CC_SAT               1035
+#define IDC_SLIDER_MATTE_G              1035
 #define IDC_SLIDER_CC_HUE               1036
+#define IDC_SLIDER_MATTE_B              1036
 #define IDC_SLIDER_CC_CLIP              1037
+#define IDC_SLIDER_TRANSITION           1037
 #define IDC_SLIDER_CC_GAIN              1038
+#define IDC_CHECK2                      1038
 #define IDC_SLIDER_VW_SAT_CROP          1039
 #define IDC_SLIDER_VW_ANGLE             1040
 #define IDC_SLIDER_VW_MIX               1041
@@ -153,9 +170,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        320
+#define _APS_NEXT_RESOURCE_VALUE        321
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1023
+#define _APS_NEXT_CONTROL_VALUE         1033
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif
