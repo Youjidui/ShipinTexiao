@@ -24,6 +24,7 @@ CPageRollRender::CPageRollRender(void)
 
 CPageRollRender::~CPageRollRender(void)
 {
+	Uninit();
 }
 
 bool CPageRollRender::Init( CRenderEngine* pEngine )
@@ -161,7 +162,16 @@ bool CPageRollRender::Render(CVideoBuffer*pDstDef, CVideoBuffer *pSrcA, CVideoBu
 	//	m_pEngine->ConvertYUVA_YUYV(pYUVA,&rcImage,pDstDef);
 	//}
 
-	D3DXSaveSurfaceToFile(L"trans_draw_bg.bmp",D3DXIFF_BMP,pYUVA->GetSurface(), NULL, NULL);
+	//D3DXSaveSurfaceToFile(L"trans_draw_bg.bmp",D3DXIFF_BMP,pYUVA->GetSurface(), NULL, NULL);
+
+	for(int i = 0; i < sizeof(pMipMap)/sizeof(pMipMap[0]); ++i)
+	{
+		if(pMipMap[i])
+		{
+			pVM->ReleaseVideoBuffer(pMipMap[i]);
+			pMipMap[i] = NULL;
+		}
+	}
 
 	return true;
 }
@@ -224,7 +234,7 @@ bool CPageRollRender::Draw(PageRollFxParam* pParam, D3DXMATRIX*	matTex)
 		D3DXVECTOR4 vEyeDir = D3DXVECTOR4(cosf(D3DXToRadian( pParam->structLight.fAngleTheta)),
 			0.0f,sinf(D3DXToRadian( pParam->structLight.fAngleTheta)),0.0f);
 		m_pEffect->SetVector("g_vLightDir",&vLightDir);
-		m_pEffect->SetVector("g_vEyeDir",&vEyeDir);				
+		m_pEffect->SetVector("g_vEyeDir",&vEyeDir);
 
 		//matTexRear = matTexFront = *matTex;
 		//m_pEffect->SetMatrix("g_matTexFront",&matTexFront);

@@ -150,6 +150,7 @@ VS_OUTPUT VS(float4 Pos:POSITION,
 
 float4 PS(VS_OUTPUT In,float fFace:VFACE,uniform int nFmt):COLOR0
 {
+	//return float4(1,1,1,1);	for testing
 
 	float4 fColor=(float4)0;
 	

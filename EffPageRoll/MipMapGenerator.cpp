@@ -130,8 +130,8 @@ HRESULT CMipMapGenerator::GenerateMipMap(CVideoBuffer* pMipMap, CVideoBuffer* pS
 		pDevice->EndScene();		
 	}	
 
-	TCHAR szCurDir[MAX_PATH];
-	GetCurrentDirectory(MAX_PATH, szCurDir);
-	D3DXSaveTextureToFile(L"mipmap.bmp",D3DXIFF_BMP,pMipMap->GetTexture(),NULL);
+	//TCHAR szCurDir[MAX_PATH];
+	//GetCurrentDirectory(MAX_PATH, szCurDir);
+	//D3DXSaveTextureToFile(L"mipmap.bmp",D3DXIFF_BMP,pMipMap->GetTexture(),NULL);
 	return hr;
 }
