@@ -12,22 +12,34 @@ public:
 	{
 		LPDIRECT3DDEVICE9 m_pDevice;
 		LPD3DXMESH m_pMesh;
+		LPDIRECT3DVERTEXDECLARATION9 m_pVertexDecl;
 		LPCTSTR m_pszResFileName;
 
 		CreateByMeshFunction(LPDIRECT3DDEVICE9 pDevice, LPD3DXMESH pMesh, LPCTSTR pszResFileName)
-			: m_pDevice(pDevice), m_pMesh(pMesh), m_pszResFileName(pszResFileName)
+			: m_pDevice(pDevice), m_pMesh(pMesh), m_pVertexDecl(NULL), m_pszResFileName(pszResFileName)
+		{
+		}
+
+		CreateByMeshFunction(LPDIRECT3DDEVICE9 pDevice, LPD3DXMESH pMesh, LPDIRECT3DVERTEXDECLARATION9 pVertexDecl, LPCTSTR pszResFileName)
+			: m_pDevice(pDevice), m_pMesh(pMesh), m_pVertexDecl(pVertexDecl), m_pszResFileName(pszResFileName)
 		{
 		}
 
 		HRESULT operator()(CBaseMesh* pMesh, LPCTSTR pszResFileName)
 		{
-			return pMesh->Create(m_pDevice, m_pMesh, pszResFileName);
+			return pMesh->Create(m_pDevice, m_pMesh, m_pVertexDecl, pszResFileName);
 		}
 	};
 
 	CBaseMesh* Create(LPDIRECT3DDEVICE9 pDevice, LPD3DXMESH pMesh, LPCTSTR pszResFileName)
 	{
 		CreateByMeshFunction creator(pDevice, pMesh, pszResFileName);
+		return _baseclass::Create(creator, pszResFileName);
+	}
+
+	CBaseMesh* Create(LPDIRECT3DDEVICE9 pDevice, LPD3DXMESH pMesh, LPDIRECT3DVERTEXDECLARATION9 pVertexDecl, LPCTSTR pszResFileName)
+	{
+		CreateByMeshFunction creator(pDevice, pMesh, pVertexDecl, pszResFileName);
 		return _baseclass::Create(creator, pszResFileName);
 	}
 

@@ -19,7 +19,7 @@ private:
 	CRenderEngine*	m_pEngine;
 	CBaseMesh*		m_pQuadMesh;
 	CBaseMesh*		m_pMesh;
-	LPDIRECT3DVERTEXDECLARATION9 m_pVertexDecl;
+	//LPDIRECT3DVERTEXDECLARATION9 m_pVertexDecl;
 	CBaseFx*		m_pEffect;
 	CBaseFx*		m_pTrans_Draw_BG_Effect;
 	D3DXMATRIXA16	m_matProject;

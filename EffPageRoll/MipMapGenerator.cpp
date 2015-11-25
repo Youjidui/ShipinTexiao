@@ -70,7 +70,7 @@ HRESULT CMipMapGenerator::GenerateMipMap(CVideoBuffer* pMipMap, CVideoBuffer* pS
 	vPort.Width = min(nEditWidth + 64,vPort.Width);
 	vPort.Height = min(nEditHeight + 64,vPort.Height);
 	pDevice->SetViewport(&vPort);
-	pDevice->Clear(0,NULL,D3DCLEAR_TARGET, 0, 1.0, 0L); 
+	pDevice->Clear(0,NULL,D3DCLEAR_TARGET|D3DCLEAR_ZBUFFER, 0, 1.0, 0L); 
 	pDevice->SetViewport(&vOldPort);
 
 	D3DXMATRIXA16 matCombine , matWorld, matTex;
@@ -130,7 +130,8 @@ HRESULT CMipMapGenerator::GenerateMipMap(CVideoBuffer* pMipMap, CVideoBuffer* pS
 		pDevice->EndScene();		
 	}	
 
-	//  	m_pResMan->DumpResourceToFile(pSrcDef->handle,L"c:\\src.dds");
-	//  	D3DXSaveTextureToFile(L"c:\\mipmap.bmp",D3DXIFF_BMP,pMipMap->GetTexture(),NULL);
+	TCHAR szCurDir[MAX_PATH];
+	GetCurrentDirectory(MAX_PATH, szCurDir);
+	D3DXSaveTextureToFile(L"mipmap.bmp",D3DXIFF_BMP,pMipMap->GetTexture(),NULL);
 	return hr;
 }

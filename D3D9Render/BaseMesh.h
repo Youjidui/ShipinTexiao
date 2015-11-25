@@ -29,7 +29,11 @@ public:
                     LPD3DXMESH pMesh,
 					LPCTSTR                pszResID);	
 
-	// added by xp [1/14/2009]
+	 HRESULT Create(LPDIRECT3DDEVICE9 pDevice,
+		 LPD3DXMESH pMesh,
+		 LPDIRECT3DVERTEXDECLARATION9 pVertexDecl,
+		 LPCTSTR                pszResID);	
+
 	// 建立一个专为点精灵创建vertex buffer的mesh
 	HRESULT CreatePointSpriteMesh(LPDIRECT3DDEVICE9 pDevice,
 								  const UINT          uVBufferSize,
@@ -52,6 +56,11 @@ public:
 	LPD3DXMESH GetMesh()
 	{
 		return m_pMesh;
+	}
+
+	LPDIRECT3DVERTEXDECLARATION9 GetVertexDeclarationPtr()
+	{
+		return m_pDecl;
 	}
 
 	//等把特技代码移植完了，这些Draw函数都要整理

@@ -534,6 +534,11 @@ CBaseMesh* CResourceManager::CreateMesh( LPDIRECT3DDEVICE9 pDevice, LPD3DXMESH p
 	return m_MeshRes.Create(pDevice, pMesh, lpszMeshName);
 }
 
+CBaseMesh* CResourceManager::CreateMesh( LPDIRECT3DDEVICE9 pDevice, LPD3DXMESH pMesh, LPDIRECT3DVERTEXDECLARATION9 pVertexDecl, LPCTSTR lpszMeshName )
+{
+	return m_MeshRes.Create(pDevice, pMesh, pVertexDecl, lpszMeshName);
+}
+
 CBaseMesh* CResourceManager::FindMesh( LPCTSTR pszResName )
 {
 	return m_MeshRes.Find(pszResName);

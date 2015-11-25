@@ -134,6 +134,18 @@ HRESULT CBaseMesh::Create(LPDIRECT3DDEVICE9 pDevice,
 }
 
 HRESULT CBaseMesh::Create(LPDIRECT3DDEVICE9 pDevice,
+						  LPD3DXMESH pMesh,
+						  LPDIRECT3DVERTEXDECLARATION9 pVertexDecl,
+						  LPCTSTR                pszResID)
+{
+	m_pDevice		  = pDevice;
+	m_pMesh = pMesh;
+	m_pDecl           = pVertexDecl;
+	m_strResID = pszResID;
+	return S_OK;
+}
+
+HRESULT CBaseMesh::Create(LPDIRECT3DDEVICE9 pDevice,
 			   LPDIRECT3DVERTEXBUFFER9* pVB,
 			   LPDIRECT3DINDEXBUFFER9  pIB,
 			   LPDIRECT3DVERTEXDECLARATION9 pDcl,

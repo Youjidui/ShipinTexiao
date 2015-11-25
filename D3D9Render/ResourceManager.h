@@ -42,6 +42,7 @@ public:
 	CBaseMesh* CreateQuadHMipmapMesh(LPDIRECT3DDEVICE9 pDevice);	//H = 2
 	CBaseMesh* CreateQuadInstanceMesh(LPDIRECT3DDEVICE9 pDevice);
 	CBaseMesh* CreateMesh(LPDIRECT3DDEVICE9 pDevice, LPD3DXMESH pMesh, LPCTSTR pszResFileName);
+	CBaseMesh* CreateMesh(LPDIRECT3DDEVICE9 pDevice, LPD3DXMESH pMesh, LPDIRECT3DVERTEXDECLARATION9 pVertexDecl, LPCTSTR pszResFileName);
 	CBaseMesh* FindMesh(LPCTSTR pszResName);
 	CBaseFx* CreateEffect(LPDIRECT3DDEVICE9 pDevice, LPCTSTR lpszEffectName, const char** ppszMacros = NULL, int nMacroCount = 0);
 	CVertexShader* CreateVertexShader(LPDIRECT3DDEVICE9 pDevice, LPCTSTR lpszShaderName, const char** ppszMacros = NULL, int nMacroCount = 0);

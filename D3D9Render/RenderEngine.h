@@ -3,6 +3,8 @@
 #include "ResourceManager.h"
 #include "VideoBufferManager.h"
 
+#include <DxErr.h>
+#pragma comment(lib, "DxErr")
 
 struct D3DDeviceSettings
 {
@@ -64,7 +66,14 @@ public:
 			: m_pDevice(pEngine->GetDevice()), m_pOldDepth(NULL)
 		{
 			HRESULT hr = m_pDevice->GetDepthStencilSurface(&m_pOldDepth);
-			ASSERT(SUCCEEDED(hr));
+			//ASSERT(SUCCEEDED(hr));
+			//if(FAILED(hr))
+			//{
+			//	LPCTSTR pszErrorString = DXGetErrorString(hr);
+			//	LPCTSTR pszErrorDesc = DXGetErrorDescription(hr);
+			//	TRACE(pszErrorString);
+			//	TRACE(pszErrorDesc);
+			//}
 			bool bOK = pEngine->SetDepthBuffer(true);
 			ASSERT(bOK);
 		}

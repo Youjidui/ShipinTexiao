@@ -15,7 +15,7 @@ CPageRollRender::CPageRollRender(void)
 : m_pEngine(NULL)
 , m_pQuadMesh(NULL)
 , m_pMesh(NULL)
-, m_pVertexDecl(NULL)
+//, m_pVertexDecl(NULL)
 , m_pEffect(NULL)
 , m_pTrans_Draw_BG_Effect(NULL)
 , m_pMipMapGenerator(NULL)
@@ -82,7 +82,7 @@ bool CPageRollRender::Render(CVideoBuffer*pDstDef, CVideoBuffer *pSrcA, CVideoBu
 	D3DXMatrixOrthoLH(&m_matProject,fAspect,1.0f,0.5f,100.0f);
 
 	CVideoBuffer* pMipMap[2] = {NULL,NULL};
-	CVideoBuffer* pYUVA = NULL;
+	CVideoBuffer* pYUVA = pDstDef;
 	//pMipMap[0] = m_pResMan->GetTemp_Video(0,TRUE);
 	VideoBufferInfo mipMapInfo = pDstDef->GetVideoBufferInfo();
 	mipMapInfo.eUsage = VideoBufferInfo::_IN_OUT_WITH_MIPMAP;
@@ -103,18 +103,19 @@ bool CPageRollRender::Render(CVideoBuffer*pDstDef, CVideoBuffer *pSrcA, CVideoBu
 		if(pMipMap[1])
 			m_pMipMapGenerator->Render(pMipMap[1], pSrcB, pParamBase);
 	}	
-	LPDIRECT3DSURFACE9 pRtSurf = NULL;
-	pYUVA->GetTexture()->GetSurfaceLevel(0,&pRtSurf);
-	hr = pDevice->SetRenderTarget(0,pRtSurf);
-	SAFE_RELEASE(pRtSurf);
-	hr = pDevice->Clear(0,NULL,D3DCLEAR_TARGET|D3DCLEAR_ZBUFFER|D3DCLEAR_STENCIL,0x00008080,1.0f,0);
-	D3DVIEWPORT9 vPort;
-	hr = pDevice->GetViewport(&vPort);
-	vPort.X = 0;
-	vPort.Y = 0;
-	vPort.Width = nEditWidth;
-	vPort.Height = nEditHeight;
-	hr = pDevice->SetViewport(&vPort);
+	//LPDIRECT3DSURFACE9 pRtSurf = NULL;
+	//pYUVA->GetTexture()->GetSurfaceLevel(0,&pRtSurf);
+	//hr = pDevice->SetRenderTarget(0,pRtSurf);
+	//SAFE_RELEASE(pRtSurf);
+	//hr = pDevice->Clear(0,NULL,D3DCLEAR_TARGET|D3DCLEAR_ZBUFFER|D3DCLEAR_STENCIL,0x00008080,1.0f,0);
+	//D3DVIEWPORT9 vPort;
+	//hr = pDevice->GetViewport(&vPort);
+	//vPort.X = 0;
+	//vPort.Y = 0;
+	//vPort.Width = nEditWidth;
+	//vPort.Height = nEditHeight;
+	//hr = pDevice->SetViewport(&vPort);
+	m_pEngine->SetRenderTarget(pYUVA);
 
 	m_pEffect->SetTexture("g_txFrontPicture",pMipMap[0]->GetTexture());
 	if(pMipMap[1])
@@ -149,13 +150,18 @@ bool CPageRollRender::Render(CVideoBuffer*pDstDef, CVideoBuffer *pSrcA, CVideoBu
 
 	Draw(pParam, &matTex);
 
+	D3DXSaveSurfaceToFile(L"draw.bmp",D3DXIFF_BMP,pYUVA->GetSurface(), NULL, NULL);
+
 	Trans_Draw_BG(pSrcB, 1);
+
 	//if(pSrcDef[0]->IsYUV16Buffer())
 	//{
 	//	RECT rcImage;
 	//	SetRect(&rcImage,0,0,pProfile->nEditWidth,pProfile->nEditHeight);
 	//	m_pEngine->ConvertYUVA_YUYV(pYUVA,&rcImage,pDstDef);
 	//}
+
+	D3DXSaveSurfaceToFile(L"trans_draw_bg.bmp",D3DXIFF_BMP,pYUVA->GetSurface(), NULL, NULL);
 
 	return true;
 }
@@ -166,7 +172,7 @@ bool CPageRollRender::Draw(PageRollFxParam* pParam, D3DXMATRIX*	matTex)
 	CResourceManager* pResMgr = m_pEngine->GetResourceManager();
 	CVideoBufferManager* pVM = m_pEngine->GetVideoBufferManager();
 
-	D3DXMATRIXA16 matWorld,matTexFront,matTexRear,matTrans,matPrevRotate,matAspect;
+	D3DXMATRIXA16 matWorld, matTrans, matAspect;
 
 	// Begin the scene
 	if( SUCCEEDED( pDevice->BeginScene() ) )
@@ -228,11 +234,13 @@ bool CPageRollRender::Draw(PageRollFxParam* pParam, D3DXMATRIX*	matTex)
 
 		LPDIRECT3DVERTEXBUFFER9 pVB = NULL;	
 		LPDIRECT3DINDEXBUFFER9	pIB = NULL;
-		IDirect3DVertexDeclaration9 * pVertexDecl = NULL;	
+		IDirect3DVertexDeclaration9 * pVertexDecl = NULL;
+		ASSERT(m_pMesh->GetMesh());
 		m_pMesh->GetMesh()->GetVertexBuffer(&pVB);
 		m_pMesh->GetMesh()->GetIndexBuffer(&pIB);
-		//pVertexDecl =  m_pVertexDecl->GetVertexDeclarationPtr();
-		pVertexDecl = m_pVertexDecl;
+		pVertexDecl =  m_pMesh->GetVertexDeclarationPtr();
+		ASSERT(NULL != pVertexDecl);
+		//pVertexDecl = m_pVertexDecl;
 
 		pDevice->SetStreamSource(0,pVB,0,sizeof(D3DXVECTOR3));	
 		pDevice->SetIndices(pIB);
@@ -257,6 +265,7 @@ bool CPageRollRender::Draw(PageRollFxParam* pParam, D3DXMATRIX*	matTex)
 		// End the scene
 		pDevice->EndScene();
 	}	
+
 	return TRUE;
 }
 
@@ -330,7 +339,7 @@ HRESULT CPageRollRender::CreateMesh()
 		LPDIRECT3DVERTEXDECLARATION9 pVertexDecl = NULL;
 		hr =  pDevice->CreateVertexDeclaration( VertexElem, &pVertexDecl );
 		ASSERT(SUCCEEDED(hr));
-		m_pVertexDecl = pVertexDecl;
+		//m_pVertexDecl = pVertexDecl;
 
 		ID3DXMesh	*pMesh = NULL;
 		hr = (D3DXCreateMesh((NumGrid - 1 ) * (NumGrid - 1) * 2,NumGrid * NumGrid,
@@ -371,8 +380,9 @@ HRESULT CPageRollRender::CreateMesh()
 		pMesh->UnlockVertexBuffer();
 		pMesh->UnlockIndexBuffer();
 
-		m_pMesh = pResMgr->CreateMesh(pDevice, pMesh, pszMeshName);
+		m_pMesh = pResMgr->CreateMesh(pDevice, pMesh, pVertexDecl, pszMeshName);
 		ASSERT(m_pMesh);
 	}
+	if(m_pMesh)	hr = S_OK;
 	return hr;
 }
