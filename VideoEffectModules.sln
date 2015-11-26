@@ -29,6 +29,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EffSonyMask", "EffSonyMask\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EffPageRoll", "EffPageRoll\EffPageRoll.vcproj", "{6E2278E6-9BDB-47D2-98C8-A640BFC7E8EA}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SonyDME3DTransform", "SonyDME3DTransform\SonyDME3DTransform.vcproj", "{EC561354-1224-4742-AE42-38CA5AE42320}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -137,6 +139,12 @@ Global
 		{6E2278E6-9BDB-47D2-98C8-A640BFC7E8EA}.Release|Win32.ActiveCfg = Release|Win32
 		{6E2278E6-9BDB-47D2-98C8-A640BFC7E8EA}.Release|Win32.Build.0 = Release|Win32
 		{6E2278E6-9BDB-47D2-98C8-A640BFC7E8EA}.Release|x64.ActiveCfg = Release|Win32
+		{EC561354-1224-4742-AE42-38CA5AE42320}.Debug|Win32.ActiveCfg = Debug|Win32
+		{EC561354-1224-4742-AE42-38CA5AE42320}.Debug|Win32.Build.0 = Debug|Win32
+		{EC561354-1224-4742-AE42-38CA5AE42320}.Debug|x64.ActiveCfg = Debug|Win32
+		{EC561354-1224-4742-AE42-38CA5AE42320}.Release|Win32.ActiveCfg = Release|Win32
+		{EC561354-1224-4742-AE42-38CA5AE42320}.Release|Win32.Build.0 = Release|Win32
+		{EC561354-1224-4742-AE42-38CA5AE42320}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
