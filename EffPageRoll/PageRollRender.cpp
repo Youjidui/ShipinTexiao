@@ -2,12 +2,6 @@
 #include "PageRollRender.h"
 #include "../Utility/SafeDelete.h"
 
-
-#define GRID 2
-#define FAN  8
-#define NumGrid 101
-
-
 #pragma warning(disable: 4244)
 
 

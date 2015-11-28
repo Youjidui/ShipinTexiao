@@ -400,6 +400,10 @@
 			ReferencedProjectIdentifier="{6E2278E6-9BDB-47D2-98C8-A640BFC7E8EA}"
 			RelativePathToProject=".\EffPageRoll\EffPageRoll.vcproj"
 		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{F1B471E0-BEA6-40B5-9414-2C9FA8756271}"
+			RelativePathToProject=".\EffQuadPageRollTrans\EffQuadPageRollTrans.vcproj"
+		/>
 	</References>
 	<Files>
 		<Filter
@@ -449,6 +453,10 @@
 			</File>
 			<File
 				RelativePath=".\ParamColorKeyDlg.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ParamQuadPageRollDlg.cpp"
 				>
 			</File>
 			<File
@@ -563,6 +571,10 @@
 			</File>
 			<File
 				RelativePath=".\ParamColorKeyDlg.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ParamQuadPageRollDlg.h"
 				>
 			</File>
 			<File

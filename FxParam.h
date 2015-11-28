@@ -280,8 +280,11 @@ struct PageRollFxParam : public FxParamBase
 	{
 		float fAngle;
 		float fRadius;
+
+		Geometry() : fAngle(160.f), fRadius(0.35f) 	{}
 	};
-	struct Lighting {
+	struct Lighting
+	{
 		float fAnglePhi;
 		float fAngleTheta;
 		float fLightRatio;
@@ -289,15 +292,21 @@ struct PageRollFxParam : public FxParamBase
 		float fFrontSmoothness;
 		float fRearHighLight;
 		float fRearSmoothness;
+
+		Lighting() : fAnglePhi(220.f), fAngleTheta(270.f), fLightRatio(0.2f), fFrontHighLight(10.f), fFrontSmoothness(15.f), fRearHighLight(70.f), fRearSmoothness(15.f) {}
 	};
 	struct Rear {
 		BOOL bUseForeGround;
 		float fMatteRatio;
 		D3DCOLOR crMaatte;
+
+		Rear() : bUseForeGround(TRUE), fMatteRatio(0.0f), crMaatte(0xffc0c0c0) {}
 	};
 	struct Transition {
 		float fTransition;
 		BOOL bReverse;
+
+		Transition() : fTransition(0.0f), bReverse(FALSE) {}
 	};
 
 	Geometry structGeometry;
@@ -305,5 +314,27 @@ struct PageRollFxParam : public FxParamBase
 	Rear     structRear;
 	Transition structTrans;
 	BOOL bPageRoll;
-} ;
 
+	PageRollFxParam()
+		: bPageRoll(true)
+	{
+	}
+};
+
+struct QuadPageRollFxParam : public PageRollFxParam
+{
+	float	fAngle[4];
+	int		nStepPattern;
+	int		nGroupPattern;
+
+	QuadPageRollFxParam()
+	{
+		fAngle[0] = 45.f;
+		fAngle[1] = 315.f;
+		fAngle[2] = 135.f;
+		fAngle[3] = 225.f;
+
+		nStepPattern = 0;
+		nGroupPattern = 0;
+	}
+};

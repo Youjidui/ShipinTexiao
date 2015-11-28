@@ -12,3 +12,4 @@
 #define FX_SONY_MASK _T("Sony Mask")
 #define FX_CHROMA_KEY _T("Chroma Key")
 #define FX_PAGE_ROLL _T("Page Roll")
+#define FX_QUAD_PAGE_ROLL _T("Quad Page Roll")

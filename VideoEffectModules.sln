@@ -27,7 +27,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EffChromaKey", "EffChromaKe
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EffSonyMask", "EffSonyMask\EffSonyMask.vcproj", "{19D5E421-1870-4C5F-BBD1-2E68C0248AAE}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EffPageRoll", "EffPageRoll\EffPageRoll.vcproj", "{6E2278E6-9BDB-47D2-98C8-A640BFC7E8EA}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EffPageRollTrans", "EffPageRoll\EffPageRoll.vcproj", "{6E2278E6-9BDB-47D2-98C8-A640BFC7E8EA}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EffQuadPageRollTrans", "EffQuadPageRollTrans\EffQuadPageRollTrans.vcproj", "{F1B471E0-BEA6-40B5-9414-2C9FA8756271}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -137,6 +139,12 @@ Global
 		{6E2278E6-9BDB-47D2-98C8-A640BFC7E8EA}.Release|Win32.ActiveCfg = Release|Win32
 		{6E2278E6-9BDB-47D2-98C8-A640BFC7E8EA}.Release|Win32.Build.0 = Release|Win32
 		{6E2278E6-9BDB-47D2-98C8-A640BFC7E8EA}.Release|x64.ActiveCfg = Release|Win32
+		{F1B471E0-BEA6-40B5-9414-2C9FA8756271}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F1B471E0-BEA6-40B5-9414-2C9FA8756271}.Debug|Win32.Build.0 = Debug|Win32
+		{F1B471E0-BEA6-40B5-9414-2C9FA8756271}.Debug|x64.ActiveCfg = Debug|Win32
+		{F1B471E0-BEA6-40B5-9414-2C9FA8756271}.Release|Win32.ActiveCfg = Release|Win32
+		{F1B471E0-BEA6-40B5-9414-2C9FA8756271}.Release|Win32.Build.0 = Release|Win32
+		{F1B471E0-BEA6-40B5-9414-2C9FA8756271}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

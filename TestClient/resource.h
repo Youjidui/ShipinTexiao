@@ -2,6 +2,7 @@
 // Microsoft Visual C++ generated include file.
 // Used by TestClient.rc
 //
+#define IDOK2                           2
 #define IDD_ABOUTBOX                    100
 #define IDP_OLE_INIT_FAILED             100
 #define IDD_DIALOGBAR                   103
@@ -27,7 +28,8 @@
 #define IDD_PARAM_PUSH                  317
 #define IDD_PARAM_CHROMA_KEY            318
 #define IDD_DIALOG_SONY_SLIDE           319
-#define IDD_DIALOG5                     320
+#define IDD_PAGE_ROLL                   320
+#define IDD_QUAD_PAGE_ROLL              321
 #define IDC_EFFECTS                     1000
 #define IDC_PROGRESS                    1001
 #define IDC_BUTTON1                     1002
@@ -149,13 +151,20 @@
 #define IDC_SLIDER_CC_CLIP              1037
 #define IDC_SLIDER_TRANSITION           1037
 #define IDC_SLIDER_CC_GAIN              1038
-#define IDC_CHECK2                      1038
+#define IDC_SLIDER_ANGLE_RT             1038
 #define IDC_SLIDER_VW_SAT_CROP          1039
+#define IDC_SLIDER_ANGLE_RB             1039
 #define IDC_SLIDER_VW_ANGLE             1040
+#define IDC_SLIDER_ANGLE_LB             1040
 #define IDC_SLIDER_VW_MIX               1041
+#define IDC_SLIDER_ANGLE_LB2            1041
 #define IDC_SLIDER_VA_VGAIN             1042
+#define IDC_SLIDER_ANGLE_LT             1042
 #define IDC_SLIDER_VA_yGAIN             1043
+#define IDC_SLIDER_STEP_PATTERN         1043
 #define IDC_SLIDER_VA_CGAIN             1044
+#define IDC_SLIDER_ANGLE_LB4            1044
+#define IDC_SLIDER_GROUP_PATTERN        1044
 #define IDC_SLIDER22                    1045
 #define IDC_SLIDER_VA_HUE               1045
 #define IDC_SLIDER_CKP_LEFT             1046
@@ -172,7 +181,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        321
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1033
+#define _APS_NEXT_CONTROL_VALUE         1043
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif

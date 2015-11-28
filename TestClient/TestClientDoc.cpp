@@ -21,6 +21,7 @@
 #include "../BarmWipeTrans/BarmWipeRender.h"
 #include "../EffChromaKey/ChromaKeyRender.h"
 #include "../EffPageRoll/PageRollRender.h"
+#include "../EffQuadPageRollTrans/QuadPageRollRender.h"
 
 
 #ifdef _DEBUG
@@ -367,6 +368,18 @@ bool CTestClientDoc::Render()
 							if(eff.Init(m_pRenderEngine))
 							{
 								bOK = eff.Render(pDest, pSrc, pSrc2, (PageRollFxParam*)m_pEffectParam);
+							}
+						}
+					}
+					else if(FX_QUAD_PAGE_ROLL == m_strEffectName)
+					{
+						if(m_SrcImages.size() >= 2)
+						{
+							CVideoBuffer* pSrc2 = m_SrcImages[1];
+							CQuadPageRollRender eff;
+							if(eff.Init(m_pRenderEngine))
+							{
+								bOK = eff.Render(pDest, pSrc, pSrc2, (QuadPageRollFxParam*)m_pEffectParam);
 							}
 						}
 					}

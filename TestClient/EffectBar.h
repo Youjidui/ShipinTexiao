@@ -9,6 +9,7 @@
 #include "ParamChromaKeyDlg.h"
 #include "SonySlideDlg.h"
 #include "PageRollParamDlg.h"
+#include "ParamQuadPageRollDlg.h"
 
 // CEffectBar ¶Ô»°¿ò
 
@@ -40,6 +41,7 @@ public:
 	CParamChromaKeyDlg m_chromaKeyDlg;
 	CSonySlideDlg m_SonySlideDlg;
 	CPageRollParamDlg m_PageRollDlg;
+	CParamQuadPageRollDlg m_QuadPageRollDlg;
 
 	afx_msg void OnBnClickedParameters();
 	virtual BOOL OnInitDialog();

@@ -119,6 +119,14 @@ void CEffectBar::OnBnClickedParameters()
 			}
 			m_PageRollDlg.ShowWindow(SW_SHOW);
 		}
+		else if(FX_QUAD_PAGE_ROLL == str)
+		{
+			if(!m_QuadPageRollDlg.GetSafeHwnd())
+			{
+				m_QuadPageRollDlg.Create(m_QuadPageRollDlg.IDD);
+			}
+			m_QuadPageRollDlg.ShowWindow(SW_SHOW);
+		}
 	}
 }
 
@@ -214,9 +222,14 @@ BOOL CEffectBar::OnInitDialog()
 		m_ctrlEffects.SetItemDataPtr(i, p);
 		m_PageRollDlg.SetParam(p);
 	}
+	i = m_ctrlEffects.AddString(FX_QUAD_PAGE_ROLL);
+	{
+		QuadPageRollFxParam* p = new QuadPageRollFxParam;
+		m_ctrlEffects.SetItemDataPtr(i, p);
+		m_QuadPageRollDlg.SetParam(p);
+	}
 
-
-	m_ctrlEffects.SetCurSel(0);
+	m_ctrlEffects.SetCurSel(i);
 
 	m_ctrlProgress.SetRange(0, 10000);	//1.f, 0, 0.0001f
 
@@ -303,6 +316,12 @@ void CEffectBar::OnProgressChange( int nPos )
 			pParam->structTrans.fTransition = nPos / 10000.f;
 			AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)(LPCTSTR)str, (LPARAM)pParam);
 		}
+		else if (FX_QUAD_PAGE_ROLL == str)
+		{
+			QuadPageRollFxParam* pParam = (QuadPageRollFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
+			pParam->structTrans.fTransition = nPos / 10000.f;
+			AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)(LPCTSTR)str, (LPARAM)pParam);
+		}
 	}
 }
 
@@ -336,6 +355,11 @@ void CEffectBar::SetProgress(CSliderCtrl* pCtrl)
 		else if (FX_PAGE_ROLL == str)
 		{
 			PageRollFxParam* pParam = (PageRollFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
+			if(pParam)	pCtrl->SetPos(pParam->structTrans.fTransition * 10000);
+		}
+		else if (FX_QUAD_PAGE_ROLL == str)
+		{
+			QuadPageRollFxParam* pParam = (QuadPageRollFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
 			if(pParam)	pCtrl->SetPos(pParam->structTrans.fTransition * 10000);
 		}
 	}
