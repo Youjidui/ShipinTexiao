@@ -338,3 +338,67 @@ struct QuadPageRollFxParam : public PageRollFxParam
 		nGroupPattern = 0;
 	}
 };
+
+struct SonyDME3DTransfromFxPrarm : public FxParamBase
+{
+	float fPreSizeX;
+	float fPreSizeY;
+	float fSkewX;
+	float fSkewY;
+
+	struct  _Local 
+	{
+		float fLocationX;
+		float fLocationY;
+		float fLocationZ;
+
+		float fSpinX;
+		float fSpinY;
+		float fSpinZ;
+
+		float fRotationX;
+		float fRotationY;
+		float fRotationZ;
+
+		float fSrcSpinX;
+		float fSrcSpinY;
+		float fSrcSpinZ;
+
+		float fAxisX;
+		float fAxisY;
+		float fAxisZ;
+
+	}sLocal;
+
+	struct _Global  
+	{
+		float fLocationX;
+		float fLocationY;
+		float fLocationZ;
+
+		float fSpinX;
+		float fSpinY;
+		float fSpinZ;
+
+		float fRotationX;
+		float fRotationY;
+		float fRotationZ;
+
+		float fSrcSpinX;
+		float fSrcSpinY;
+		float fSrcSpinZ;
+
+		float fAxisX;
+		float fAxisY;
+		float fAxisZ;
+
+	}sGlobal;
+
+	bool  bFilter;
+	float fPerspective;
+
+	float fPostSizeX;
+	float fPostSizeY;
+	float fPostLocationX;
+	float fPostLocationY;
+};
