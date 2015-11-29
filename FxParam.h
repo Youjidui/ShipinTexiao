@@ -402,3 +402,19 @@ struct SonyDME3DTransfromFxPrarm : public FxParamBase
 	float fPostLocationX;
 	float fPostLocationY;
 };
+
+struct RingsFxParam : public FxParamBase
+{
+	int			nPattern;
+	float		fTranslate;
+	float		fRandomTranslate;
+	float		fRotate;
+	float		fCenterX;
+	float		fCenterY;
+	float		fAspect;
+	float		fWidth;
+	float		fRandomWidth;
+	float		fSpiral;
+	float		fRandomPixel;		
+	int			nEffectNo;
+};
