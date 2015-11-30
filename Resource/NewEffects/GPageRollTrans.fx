@@ -160,7 +160,7 @@ float4 PS(VS_OUTPUT In,float fFace:VFACE,uniform int nFmt):COLOR0
 	if(In.texFront.z < 1.0f)
 		fDiffuse = max(fDiffuse,lerp(1.0f,fDiffuse,In.texFront.z));
 	fDiffuse = max(0,lerp(1.0f,fDiffuse,g_fDiffuseCo));
-	
+
 	if(fFace < 0.5)	//back
 	{
 		if(g_fUseGround)
@@ -188,7 +188,7 @@ float4 PS(VS_OUTPUT In,float fFace:VFACE,uniform int nFmt):COLOR0
 	}
 	se *= In.texFront.z;
 	se = max(0,se);
-	
+
 	if(nFmt == 0) //yuva	
 	{
 		fColor.rgb -= CS_YUVA_OFFSET;
