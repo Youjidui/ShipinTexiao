@@ -149,7 +149,7 @@ bool CPageRollRender::Render(CVideoBuffer*pDstDef, CVideoBuffer *pSrcA, CVideoBu
 
 	//D3DXSaveSurfaceToFile(L"draw.dds",D3DXIFF_DDS,pYUVA->GetSurface(), NULL, NULL);
 
-	//Trans_Draw_BG(pSrcB, 1);
+	Trans_Draw_BG(pSrcB, 1);
 
 	//if(pSrcDef[0]->IsYUV16Buffer())
 	//{
@@ -259,10 +259,11 @@ bool CPageRollRender::Draw(PageRollFxParam* pParam, D3DXMATRIX*	matTex)
 		else
 			m_pEffect->SetTechnique("PageTurn");
 
-		UINT cPass,uPass = 0;				
+		//UINT cPass,uPass = 0; pass 0 is for yuv
+		UINT cPass,uPass = 1;	//pass 1 is for rgb
 		m_pEffect->Begin(&cPass,0);
 
-		m_pEffect->BeginPass(uPass);				
+		m_pEffect->BeginPass(uPass);
 		pDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST,0,0,NumGrid * NumGrid,0,(NumGrid - 1) * (NumGrid - 1) * 2);
 		m_pEffect->EndPass();
 

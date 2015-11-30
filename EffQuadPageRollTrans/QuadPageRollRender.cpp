@@ -193,7 +193,8 @@ bool CQuadPageRollRender::Draw(PageRollFxParam* pParamBase, D3DXMATRIX*	matTex)
 			else
 				m_pEffect->SetTechnique("PageTurn");
 
-			UINT cPass,uPass = 0;				
+			//UINT cPass,uPass = 0; pass 0 is for yuv
+			UINT cPass,uPass = 1;	//pass 1 is for rgb
 			m_pEffect->Begin(&cPass,0);
 
 			m_pEffect->BeginPass(uPass);				
