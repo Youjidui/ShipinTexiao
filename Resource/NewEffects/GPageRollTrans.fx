@@ -66,19 +66,19 @@ struct VS_OUTPUT {
    float3 eyedir	:TEXCOORD4;     
 };
 
-VS_OUTPUT VS(float4 Pos:POSITION,												
+VS_OUTPUT VS(float4 Pos:POSITION,
 				uniform bool bPageRoll)
 {	
 	 VS_OUTPUT Out = (VS_OUTPUT)0;
 	 
 	float3 pos = 0;
-	pos.xy = Pos.xy;	
+	pos.xy = Pos.xy;
 // 	pos.x *= g_fAspect;
 // 	pos.xy = clamp(mul(float4(pos.xy * sqrt(1 + g_fAspect * g_fAspect),0.0f,1.0f),g_matPrevRotate),float2(-0.5f * g_fAspect,-0.5f),float2(0.5f * g_fAspect,0.5f));
 // 	
-// 	float2 vTex = pos  / float2(g_fAspect , 1.0f)+ 0.5f;
+// 	float2 vTex = pos / float2(g_fAspect, 1.0f)+ 0.5f;
 	
-	float2 vTex = pos + 0.5f;   	
+	float2 vTex = pos + 0.5f;
 	
 	pos.xy = mul(float4(pos,1.0f),g_matRotate).xy;
 	
@@ -126,19 +126,19 @@ VS_OUTPUT VS(float4 Pos:POSITION,
 				Out.texFront.z =1.0f -  smoothstep(radians(225.0f),radians(270.0f),fTheta);
 			if(fOverLen > 0)
 			{
-				 normal = float3( fOverLen ,0.0f,-g_fWrapRadius);				 
+				 normal = float3( fOverLen ,0.0f,-g_fWrapRadius);
 			}
 		}
 		
-		pos.z = s * g_fWrapRadius ; 					
+		pos.z = s * g_fWrapRadius ; 
 	}
 	
 		
 	Out.normal = mul(normal,g_matWorld);
-	Out.lightdir = mul(g_vLightDir,g_matWorld);		
+	Out.lightdir = mul(g_vLightDir,g_matWorld);	
 	Out.eyedir = mul(g_vEyeDir,g_matWorld);
 		
-   Out.Pos = mul(float4(pos,1.0f),g_matWVP);   
+   Out.Pos = mul(float4(pos,1.0f),g_matWVP);
    vTex.y = 1.0f - vTex.y;
    Out.texFront.xy = mul( float3(vTex,1.0f),g_matTexFront);
    Out.texRear.xy = mul( float3(vTex,1.0f),g_matTexRear);
@@ -150,15 +150,13 @@ VS_OUTPUT VS(float4 Pos:POSITION,
 
 float4 PS(VS_OUTPUT In,float fFace:VFACE,uniform int nFmt):COLOR0
 {
-	//return float4(1,1,1,1);	for testing
-
 	float4 fColor=(float4)0;
 	
 	float3 vReflectDir = normalize(reflect(normalize(In.lightdir),normalize(In.normal)));
 	float3 vViewDir = normalize(In.eyedir);
 	float se = 0.0f;
 		
-	float fDiffuse = dot(normalize(In.lightdir),normalize(In.normal));	
+	float fDiffuse = dot(normalize(In.lightdir),normalize(In.normal));
 	if(In.texFront.z < 1.0f)
 		fDiffuse = max(fDiffuse,lerp(1.0f,fDiffuse,In.texFront.z));
 	fDiffuse = max(0,lerp(1.0f,fDiffuse,g_fDiffuseCo));
@@ -175,10 +173,10 @@ float4 PS(VS_OUTPUT In,float fFace:VFACE,uniform int nFmt):COLOR0
 		  fColor = tex2D(g_samRearPicture,In.texRear);
 		  fColor.a *= g_fRearAlpha;
 		}
-		fColor =  lerp(fColor,g_vMatterColor,g_fMatterRatio);		
+		fColor =  lerp(fColor,g_vMatterColor,g_fMatterRatio);
 		
 		if(g_fRearPower * g_fRearCo > 0.0f)
-			se = pow(max(0,dot(-vReflectDir,vViewDir)),g_fRearPower) * g_fRearCo;	
+			se = pow(max(0,dot(-vReflectDir,vViewDir)),g_fRearPower) * g_fRearCo;
 	}
 	else //front
 	{	
@@ -192,7 +190,7 @@ float4 PS(VS_OUTPUT In,float fFace:VFACE,uniform int nFmt):COLOR0
 	se = max(0,se);
 	
 	if(nFmt == 0) //yuva	
-	{		
+	{
 		fColor.rgb -= CS_YUVA_OFFSET;
 		
 		fColor.rgb = ColorSpace_YUVToRGB(fColor.rgb);
@@ -237,7 +235,7 @@ technique PageRoll
 		//FillMode = WireFrame;	
 		StencilEnable = True;
 		StencilFunc = Always;
-		StencilPass = Incr;		
+		StencilPass = Incr;	
 	}
 }
 technique PageTurn
@@ -250,7 +248,7 @@ technique PageTurn
 		ZEnable = True;
 		ZFunc = LessEqual;
 		ZWriteEnable = True;
-		//FillMode = WireFrame;		
+		//FillMode = WireFrame;
 		StencilEnable = True;
 		StencilFunc = Always;
 		StencilPass = Incr;	
@@ -263,7 +261,7 @@ technique PageTurn
 		ZEnable = True;
 		ZFunc = LessEqual;
 		ZWriteEnable = True;
-		//FillMode = WireFrame;		
+		//FillMode = WireFrame;
 		StencilEnable = True;
 		StencilFunc = Always;
 		StencilPass = Incr;	

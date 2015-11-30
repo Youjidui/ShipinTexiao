@@ -55,6 +55,7 @@ void CPageRollRender::Uninit()
 bool CPageRollRender::Render(CVideoBuffer*pDstDef, CVideoBuffer *pSrcA, CVideoBuffer *pSrcB, FxParamBase* pParamBase)
 {
 	HRESULT hr = E_FAIL;
+
 	RESET_RENDER_TARGET(m_pEngine);
 	SET_DEPTH_STENCIL(m_pEngine);
 
@@ -98,10 +99,11 @@ bool CPageRollRender::Render(CVideoBuffer*pDstDef, CVideoBuffer *pSrcA, CVideoBu
 		if(pMipMap[1])
 			m_pMipMapGenerator->Render(pMipMap[1], pSrcB, pParamBase);
 	}	
-	//LPDIRECT3DSURFACE9 pRtSurf = NULL;
-	//pYUVA->GetTexture()->GetSurfaceLevel(0,&pRtSurf);
-	//hr = pDevice->SetRenderTarget(0,pRtSurf);
-	//SAFE_RELEASE(pRtSurf);
+	////LPDIRECT3DSURFACE9 pRtSurf = NULL;
+	////pYUVA->GetTexture()->GetSurfaceLevel(0,&pRtSurf);
+	////hr = pDevice->SetRenderTarget(0,pRtSurf);
+	////SAFE_RELEASE(pRtSurf);
+	//hr = pDevice->SetRenderTarget(0, pYUVA->GetSurface());
 	//hr = pDevice->Clear(0,NULL,D3DCLEAR_TARGET|D3DCLEAR_ZBUFFER|D3DCLEAR_STENCIL,0x00008080,1.0f,0);
 	//D3DVIEWPORT9 vPort;
 	//hr = pDevice->GetViewport(&vPort);
@@ -145,9 +147,9 @@ bool CPageRollRender::Render(CVideoBuffer*pDstDef, CVideoBuffer *pSrcA, CVideoBu
 
 	Draw(pParam, &matTex);
 
-	D3DXSaveSurfaceToFile(L"draw.bmp",D3DXIFF_BMP,pYUVA->GetSurface(), NULL, NULL);
+	//D3DXSaveSurfaceToFile(L"draw.dds",D3DXIFF_DDS,pYUVA->GetSurface(), NULL, NULL);
 
-	Trans_Draw_BG(pSrcB, 1);
+	//Trans_Draw_BG(pSrcB, 1);
 
 	//if(pSrcDef[0]->IsYUV16Buffer())
 	//{
