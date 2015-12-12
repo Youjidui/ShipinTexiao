@@ -3,17 +3,17 @@
 
 
 CWipeBase::CWipeBase(void)
+: m_pEngine(NULL)
+, m_pEffect(NULL)
+, m_pQuadMesh(NULL)
 {
-	m_pEngine = NULL;
-	m_pQuadMesh = NULL;
-	m_pEffect = NULL;
 }
 
 CWipeBase::~CWipeBase(void)
 {
 }
 
-HRESULT CWipeBase::InitMesh(CRenderEngine* pEngine) 
+HRESULT CWipeBase::Init(CRenderEngine* pEngine) 
 {
 	m_pEngine = pEngine;	
 	m_pQuadMesh = pEngine->GetResourceManager()->CreateQuadMesh(pEngine->GetDevice());	

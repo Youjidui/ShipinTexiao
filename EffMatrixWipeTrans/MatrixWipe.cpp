@@ -1,5 +1,10 @@
 #include "StdAfx.h"
 #include "MatrixWipe.h"
+#include <MMSystem.h>
+#pragma comment(lib, "winmm")
+#include <stdlib.h>
+
+#pragma warning(disable:4244)
 
 typedef enum
 {
@@ -13,13 +18,9 @@ int CMatrixWipe::sm_nTitleSize = 0;
 int CMatrixWipe::sm_nPattern = -1;
 int CMatrixWipe::sm_nSequence = -1;
 
-CMatrixWipe::CMatrixWipe(CRenderEngine* pEngine)
-: m_pEngine(pEngine)
-, m_pEffect(NULL)
-, m_pQuadMesh(NULL)
-, m_pTexture(NULL)
+CMatrixWipe::CMatrixWipe()
+: m_pTexture(NULL)
 {
-	ASSERT(pEngine);
 	D3DXMatrixIdentity(&m_matWorld);
 	D3DXVECTOR3 vEyePt( 0.0f, 0.0f,-0.5f/tanf(D3DX_PI/8) );
 	D3DXVECTOR3 vLookatPt( 0.0f, 0.0f, 0.0f );
@@ -41,15 +42,15 @@ CMatrixWipe::~CMatrixWipe(void)
 		m_pEngine->GetVideoBufferManager()->ReleaseVideoBuffer(m_pTexture);
 }
 
-HRESULT CMatrixWipe::InitMesh( LPDIRECT3DDEVICE9 pDevice )
+HRESULT CMatrixWipe::Init(CRenderEngine* pEngine)
 {
+	HRESULT hr = CWipeBase::Init(pEngine);
+	ASSERT(SUCCEEDED(hr));
 	ASSERT(m_pEngine);
+
 	LPDIRECT3DDEVICE9 pDevice = m_pEngine->GetDevice();
 	CResourceManager* pResMan = m_pEngine->GetResourceManager();
 	CVideoBufferManager* pVM = m_pEngine->GetVideoBufferManager();
-
-	m_pQuadMesh = pResMan->CreateQuadMesh();
-	ASSERT(m_pQuadMesh);
 
 	m_pEffect = pResMan->CreateEffect(pDevice, _T("NewEffects/GMatrix_Mask.fx"));
 	ASSERT(m_pEffect);
@@ -57,21 +58,22 @@ HRESULT CMatrixWipe::InitMesh( LPDIRECT3DDEVICE9 pDevice )
 	//m_pTexture = pResMan->CreateTexture(20,20,D3DUSAGE_DYNAMIC,D3DFMT_R32F,D3DPOOL_DEFAULT,&UUID_TEXTURE);
 	VideoBufferInfo bi = {D3DFMT_R32F, VideoBufferInfo::VIDEO_MEM, VideoBufferInfo::_IN, 20, 20, 0, 0 };
 	m_pTexture =  pVM->CreateVideoBuffer(bi);
+	ASSERT(m_pTexture);
+
+	return S_OK;
 }
 
 void CMatrixWipe::Ready( CVideoBuffer* pMaskDef )
 {
-	//m_fAspect = m_pResMan->GetAspect() * (pMaskDef->GetImageWidth() * (pMaskDef->IsYUV16Buffer() ? 2.0f : 1.0f))  / (float)(pMaskDef->GetImageHeight()  * m_pResMan->GetAspectVerifyCoef());
-	int nEditWidth, nEditHeight;
-	m_pEngine->GetTargetVideoSize(nEditWidth, nEditHeight);
-	m_fAspect = 1.0f * nEditWidth / nEditHeight;
+	CWipeBase::Ready(pMaskDef);
 }
 
-HRESULT CMatrixWipe::Draw( CVideoBuffer *pMaskDef, MatrixWipeFxParam* pParam )
+//HRESULT CMatrixWipe::Draw( CVideoBuffer *pMaskDef, MatrixWipeFxParam* pParam )
+HRESULT CMatrixWipe::Draw(CVideoBuffer* pMaskDef, BasicWipeFxParam* pParam)
 {
 	HRESULT hr = E_FAIL;
 
-	GenerateSequence(pParam);
+	GenerateSequence((MatrixWipeFxParam*)pParam);
 
 	float fAxisOffset = pParam->structPattern.fOffset * 2.0f - 1.0f;	
 
@@ -107,7 +109,7 @@ HRESULT CMatrixWipe::Draw( CVideoBuffer *pMaskDef, MatrixWipeFxParam* pParam )
 	ASSERT(SUCCEEDED(hr));
 	hr = m_pEffect->SetVector("g_vMisc",&vMisc);
 	ASSERT(SUCCEEDED(hr));
-	hr = m_pEffect->SetTexture("g_txSequence",m_pTexture);
+	hr = m_pEffect->SetTexture("g_txSequence",m_pTexture->GetTexture());
 	ASSERT(SUCCEEDED(hr));
 
 	BOOL bDrawBorder = pParam->structPattern.fBorderWidth > 0.0f;
@@ -264,7 +266,8 @@ void CMatrixWipe::Random()
 		for(int x = 0; x < m_nTitleSize ; x ++)
 		{
 			UINT uRand;
-			rand_s(&uRand);
+			//rand_s(&uRand);
+			uRand = rand();
 			int nIndex = uRand % array.GetCount();
 			pData[x] = array.GetAt(nIndex);						
 			array.RemoveAt(nIndex);
@@ -1802,7 +1805,7 @@ void CMatrixWipe::LeftVertical()
 {
 	ASSERT(m_pTexture);
 	LPDIRECT3DTEXTURE9 pTexture = m_pTexture->GetTexture();
-	ASSERT(pTex);
+	ASSERT(pTexture);
 	D3DLOCKED_RECT lr;
 	HRESULT hr = pTexture->LockRect(0,&lr,NULL,0);
 	ASSERT(SUCCEEDED(hr));
@@ -2148,7 +2151,7 @@ void CMatrixWipe::BottomHorizontal()
 {
 	ASSERT(m_pTexture);
 	LPDIRECT3DTEXTURE9 pTexture = m_pTexture->GetTexture();
-	ASSERT(pTex);
+	ASSERT(pTexture);
 	D3DLOCKED_RECT lr;
 	HRESULT hr = pTexture->LockRect(0,&lr,NULL,0);
 	ASSERT(SUCCEEDED(hr));
@@ -2490,7 +2493,7 @@ void CMatrixWipe::TopHorizontal()
 {
 	ASSERT(m_pTexture);
 	LPDIRECT3DTEXTURE9 pTexture = m_pTexture->GetTexture();
-	ASSERT(pTex);
+	ASSERT(pTexture);
 	D3DLOCKED_RECT lr;
 	HRESULT hr = pTexture->LockRect(0,&lr,NULL,0);
 	ASSERT(SUCCEEDED(hr));

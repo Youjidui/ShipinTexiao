@@ -2,9 +2,7 @@
 #include ".\BarmWipe.h"
 #include "../D3D9Render/BaseFx.h"
 #include "BarmWipeRender.h"
-
-
-#define SIGN(x) ((x) > 0.0f ?  1.0f : ((x) < 0.0f ? - 1.0f : 0.0f)  )
+#include "../Utility/mathmacros.h"
 
 
 CBarmWipe::CBarmWipe()
@@ -368,16 +366,23 @@ HRESULT CBarmWipe::Draw(CVideoBuffer* pMaskDef, BasicWipeFxParam* pParamRaw, int
 	return S_OK;
 }
 
-HRESULT CBarmWipe::InitMesh(CRenderEngine* pEngine)
+HRESULT CBarmWipe::Init(CRenderEngine* pEngine)
+{
+	HRESULT hr = CWipeBase::Init(pEngine);
+	ASSERT(SUCCEEDED(hr));
+
+	hr = CreateMesh();
+	ASSERT(SUCCEEDED(hr));
+
+	return hr;
+}
+
+HRESULT CBarmWipe::CreateMesh()
 {
 	HRESULT hr = E_FAIL;
 	LPCTSTR pszMeshName = _T("BarmMesh");
-	m_pEngine = pEngine;
 	LPDIRECT3DDEVICE9 pDevice = m_pEngine->GetDevice();
 	CResourceManager* pResMgr = m_pEngine->GetResourceManager();
-
-	hr = CWipeBase::InitMesh(pEngine);
-	ASSERT(SUCCEEDED(hr));
 
 	m_pEffect = pResMgr->CreateEffect(pDevice, _T("NewEffects/Barm_Mask.fx"));
 	ASSERT(m_pEffect);

@@ -31,23 +31,24 @@ void CBarmWipeRender::Uninit()
 
 bool CBarmWipeRender::Ready(CVideoBuffer* pSrcDef, BasicWipeFxParam* pParam)
 {
-	if(INSIDE(pParam->structPattern.nPattern, 0,5) && !INSIDE(m_privateData.m_nPattern, 0,5))
+	if(INSIDE(pParam->structPattern.nPattern, 0, 5) && !INSIDE(m_privateData.m_nPattern, 0, 5))
 	{
 		m_privateData.m_nPattern = pParam->structPattern.nPattern;
 
 		SAFE_DELETE(m_privateData.m_pWipe);
 		m_privateData.m_pWipe = new CBarmWipe;
-		m_privateData.m_pWipe->InitMesh(m_pEngine);
+		m_privateData.m_pWipe->Init(m_pEngine);
 	}
 
-	return TRUE;
+	return NULL != m_privateData.m_pWipe;
 }
 
 bool CBarmWipeRender::RenderMask(CVideoBuffer* pMaskDef, BasicWipeFxParam* pParam)
 {
 	bool bOK = false;
-	if(!m_privateData.m_pWipe)
-		Ready(pMaskDef, pParam);
+	ASSERT(m_privateData.m_pWipe);
+	//if(!m_privateData.m_pWipe)
+	//	Ready(pMaskDef, pParam);
 	if(m_privateData.m_pWipe)
 	{
 		m_privateData.m_pWipe->Ready(pMaskDef);

@@ -3,17 +3,19 @@
 #include "../D3D9Render/RenderEngine.h"
 #include "../D3D9Render/VideoBuffer.h"
 #include "../FxParam.h"
+#include "../BarmWipeTrans/WipeBase.h"
 
-class CMatrixWipe
+class CMatrixWipe : public CWipeBase
 {
 public:
-	CMatrixWipe(CRenderEngine* pEngine);
+	CMatrixWipe();
 	~CMatrixWipe(void);
 
-	virtual HRESULT InitMesh(LPDIRECT3DDEVICE9 pDevice);
-	virtual HRESULT Draw(CVideoBuffer *pMaskDef, MatrixWipeFxParam* pParam);
-	void    Ready(CVideoBuffer* pMaskDef);
+	virtual HRESULT Init(CRenderEngine* pEngine);
+	virtual HRESULT Draw(CVideoBuffer* pMask, BasicWipeFxParam* pParamRaw);
+	virtual void    Ready(CVideoBuffer* pMaskDef);
 
+protected:
 	void GenerateSequence(MatrixWipeFxParam* pParam);
 	void TopHorizontal();
 	void BottomHorizontal();
@@ -27,14 +29,10 @@ public:
 	void Random();
 
 protected:
-	CRenderEngine*		m_pEngine;
-	CBaseFx*			m_pEffect;
-	CBaseMesh*			m_pQuadMesh;
 	CVideoBuffer*		m_pTexture;
 
 public:
 	D3DXMATRIXA16		m_matWorld,m_matView,m_matProj;
-	float				m_fAspect;
 
 private:
 	int		m_nTitleSize;

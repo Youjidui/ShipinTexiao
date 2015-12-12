@@ -15,11 +15,12 @@ class CBarmWipe : public CWipeBase
 public:
 	CBarmWipe();
 	~CBarmWipe();
-	virtual HRESULT InitMesh(CRenderEngine* pEngine);
+	virtual HRESULT Init(CRenderEngine* pEngine);
 	virtual HRESULT Draw(CVideoBuffer* pMask, BasicWipeFxParam* pParam);
 	HRESULT Draw(CVideoBuffer* pMaskDef, BasicWipeFxParam* pParam, int nPattern, float fOffset);
 	float	CalcOffset(BasicWipeFxParam* pParam, int nPattern);
 protected:
-private:
+	HRESULT CreateMesh();
+
 	CBaseMesh* m_pBarmMesh;
 };

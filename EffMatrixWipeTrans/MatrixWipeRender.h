@@ -4,8 +4,9 @@
 #include "../D3D9Render/VideoBuffer.h"
 #include "../FxParam.h"
 #include "MatrixWipe.h"
+#include "../BarmWipeTrans/WipeRenderBase.h"
 
-class CMatrixWipeRender
+class CMatrixWipeRender : public CWipeRenderBase
 {
 public:
 	CMatrixWipeRender(void);
@@ -13,16 +14,9 @@ public:
 
 	bool Init(CRenderEngine* pEngine);
 	void Uninit();
-	bool Render(CVideoBuffer* pDest, CVideoBuffer *pSrcA, CVideoBuffer *pSrcB, FxParamBase* pParam);
+	//bool Render(CVideoBuffer* pDest, CVideoBuffer *pSrcA, CVideoBuffer *pSrcB, FxParamBase* pParam);
 
 protected:
-	CRenderEngine*	m_pEngine;
-	CBaseMesh* m_pQuadMesh;
-	CBaseFx*		m_pEffect;
-	CMatrixWipe* m_pWipe;
-	int			m_nPattern;
-
-protected:
-	virtual bool RenderMask(CVideoBuffer*pMaskDef, FxParamBase* pParam);
-	virtual bool Ready(CVideoBuffer* pSrcDef, FxParamBase* pParam);
+	virtual bool RenderMask(CVideoBuffer* pMaskDef, BasicWipeFxParam* pParam );
+	virtual bool Ready(CVideoBuffer* pSrcDef, BasicWipeFxParam* pParam);
 };

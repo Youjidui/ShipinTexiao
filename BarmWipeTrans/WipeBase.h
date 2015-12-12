@@ -17,10 +17,12 @@ class CWipeBase
 public:
 	CWipeBase(void);
 	virtual ~CWipeBase(void);
+
 public:
-	virtual HRESULT InitMesh(CRenderEngine* pEngine);
+	virtual HRESULT Init(CRenderEngine* pEngine);
 	virtual HRESULT Draw(CVideoBuffer* pMask, BasicWipeFxParam* pParamRaw) = 0;
     virtual void    Ready(CVideoBuffer* pMaskDef);
+
 protected:	
 	CRenderEngine*		m_pEngine;
 	CBaseMesh*			m_pQuadMesh;

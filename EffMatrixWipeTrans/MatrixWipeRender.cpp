@@ -1,13 +1,10 @@
 #include "StdAfx.h"
 #include "MatrixWipeRender.h"
+#include "../Utility/mathmacros.h"
+#include "../Utility/SafeDelete.h"
 
 CMatrixWipeRender::CMatrixWipeRender(void)
-: m_pEngine(NULL)
-, m_pQuadMesh(NULL)
-, m_pEffect(NULL)
 {
-	m_pWipe = NULL;
-	m_nPattern = 10000;
 }
 
 CMatrixWipeRender::~CMatrixWipeRender(void)
@@ -35,26 +32,24 @@ void CMatrixWipeRender::Uninit()
 
 }
 
-bool CMatrixWipeRender::Render( CVideoBuffer* pDest, CVideoBuffer *pSrcA, CVideoBuffer *pSrcB, FxParamBase* pParam )
-{
-
-}
 
 bool CMatrixWipeRender::RenderMask( CVideoBuffer*pMaskDef, BasicWipeFxParam* pParam )
 {
-	m_pWipe->Ready(pMaskDef);
-	return m_pWipe->Draw(pMaskDef, pParam);
+	ASSERT(m_privateData.m_pWipe);
+	m_privateData.m_pWipe->Ready(pMaskDef);
+	HRESULT hr = m_privateData.m_pWipe->Draw(pMaskDef, pParam);
+	return SUCCEEDED(hr);
 }
 
 bool CMatrixWipeRender::Ready( CVideoBuffer* pSrcDef, BasicWipeFxParam* pParam )
 {
-	if(INSIDE(pParam->structPattern.nPattern,0,15) && !INSIDE(m_nPattern,0,15))
+	if(INSIDE(pParam->structPattern.nPattern, 0, 15) && !INSIDE(m_privateData.m_nPattern, 0, 15))
 	{
-		m_nPattern = pParam->structPattern.nPattern;
+		m_privateData.m_nPattern = pParam->structPattern.nPattern;
 
-		SAFE_DELETE(m_pWipe);
-		m_pWipe = new CMatrixWipe(m_pEngine);
-		m_pWipe->InitMesh(m_pEngine->GetDevice());
-		//UpdateInstance();
+		SAFE_DELETE(m_privateData.m_pWipe);
+		m_privateData.m_pWipe = new CMatrixWipe;
+		m_privateData.m_pWipe->Init(m_pEngine);
 	}
+	return NULL != m_privateData.m_pWipe;
 }

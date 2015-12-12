@@ -11,3 +11,5 @@
 #define LERP(a,b,s)(a * ( 1 - s ) + b * s)
 #define INSIDE(x,Min,Max) (x >= Min && x <= Max)
 #define FRAC(a,b,c) {b = floor(a);c = 1.0f - ((a) - floor(a));}
+
+#define SIGN(x) ((x) > 0.0f ?  1.0f : ((x) < 0.0f ? - 1.0f : 0.0f)  )
