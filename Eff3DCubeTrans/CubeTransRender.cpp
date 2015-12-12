@@ -70,26 +70,38 @@ bool CCubeTransRender::Render( CVideoBuffer* pDest, CVideoBuffer *pSrcA, CVideoB
 	VideoBufferInfo mipMapInfo = pSrcDef->GetVideoBufferInfo();
 	mipMapInfo.eUsage = VideoBufferInfo::_IN_OUT_WITH_MIPMAP;
 	CVideoBuffer* pMipMap = pVM->CreateVideoBuffer(mipMapInfo);
+	ASSERT(pMipMap);
 
 #ifdef _3D_CUBE_TRANS
 	//GenerateMipMap(pSrcDef,pMipMap,TRUE);
 #else
 	//GenerateMipMap(pSrcDef,pMipMap);
 #endif
-	m_pMipMapGenerator->Render(pMipMap, pSrcA, pParamBase);
+	if(pMipMap)
+	{
+		bool bOK = m_pMipMapGenerator->Render(pMipMap, pSrcA, pParamBase);
+		ASSERT(bOK);
+	}
+	//D3DXSaveTextureToFile(_T("./Cube_Mipmap.bmp"), D3DXIFF_BMP, pMipMap->GetTexture(), NULL);
 	
 #ifdef _3D_CUBE_TRANS
 	//CBaseTexture * pMipMap1 = m_pResMan->GetTemp_Video(0,TRUE);
 	VideoBufferInfo mipMapInfo1 = pSrcB->GetVideoBufferInfo();
 	mipMapInfo1.eUsage = VideoBufferInfo::_IN_OUT_WITH_MIPMAP;
 	CVideoBuffer* pMipMap1 = pVM->CreateVideoBuffer(mipMapInfo1);
+	ASSERT(pMipMap1);
 	//if(ppSrcDef[1]->IsYUV16Buffer())
 	//	m_pEngine->ConvertYUYV_YUVA(ppSrcDef[1],pMipMap);
 	//else
 	//{
 	//	GenerateMipMap(ppSrcDef[1],pMipMap1,TRUE);		
 	//}
-	m_pMipMapGenerator->Render(pMipMap1, pSrcB, pParamBase);
+	if(pMipMap1)
+	{
+		bool bOK = m_pMipMapGenerator->Render(pMipMap1, pSrcB, pParamBase);
+		ASSERT(bOK);
+	}
+	//D3DXSaveTextureToFile(_T("./Cube_Mipmap_1.bmp"), D3DXIFF_BMP, pMipMap1->GetTexture(), NULL);
 #endif
 	//const Custom_Profile *pProfile = m_pEngine->GetCurProfile();
     //m_fAspect = m_pResMan->GetAspect() * m_pEngine->GetCurProfile()->nEditWidth / (float) (m_pEngine->GetCurProfile()->nEditHeight  * m_pResMan->GetAspectVerifyCoef());
@@ -132,7 +144,8 @@ bool CCubeTransRender::Render( CVideoBuffer* pDest, CVideoBuffer *pSrcA, CVideoB
     //matTex._32 = pParam->bOdd ? 0.5f / (float)pMipMap->GetImagesInfo()->Base_Height : 0.0f;
 
 	D3DVIEWPORT9 vPort;
-	pDevice->GetViewport(&vPort);
+	hr = pDevice->GetViewport(&vPort);
+	ASSERT(SUCCEEDED(hr));
 	vPort.Width = nEditWidth;
 	vPort.Height = nEditHeight;
 
@@ -208,11 +221,14 @@ bool CCubeTransRender::Render( CVideoBuffer* pDest, CVideoBuffer *pSrcA, CVideoB
 	
 	bool pParam_bOdd = false;
 	D3DXVECTOR4 vShape(pParam->shape.nDiveX,pParam->shape.nDiveY,pParam->shape.fIntervalX,pParam->shape.fIntervalY);
-	m_pEffect->SetVector("g_vShape",&vShape);
+	hr = m_pEffect->SetVector("g_vShape",&vShape);
+	ASSERT(SUCCEEDED(hr));
 	D3DXVECTOR4 vMisc(fAspect,pParam->light.fDiffuse,pParam->light.fAmbient,pParam_bOdd ? 0.0f : 0.5f * 2.0f  /  vPort.Height);
-	m_pEffect->SetVector("g_vMisc",&vMisc);
+	hr = m_pEffect->SetVector("g_vMisc",&vMisc);
+	ASSERT(SUCCEEDED(hr));
 	vAlpha.z = D3DCMP_LESS;
-	m_pEffect->SetVector("g_vAlpha",&vAlpha);		
+	hr = m_pEffect->SetVector("g_vAlpha",&vAlpha);
+	ASSERT(SUCCEEDED(hr));
 
 	pParam->light.fDirectionX = D3DXToRadian(pParam->light.fDirectionX );
 	pParam->light.fDirectionY = D3DXToRadian(pParam->light.fDirectionY );
@@ -222,26 +238,35 @@ bool CCubeTransRender::Render( CVideoBuffer* pDest, CVideoBuffer *pSrcA, CVideoB
 #ifdef _3D_CUBE_TRANS
 	vLightDir.w = pParam->shape.nDirecttion;
 #endif
-	m_pEffect->SetVector("g_vLightDir",&vLightDir);
+	hr = m_pEffect->SetVector("g_vLightDir",&vLightDir);
+	ASSERT(SUCCEEDED(hr));
 
 	D3DXVECTOR4 vSlideColor;
 	D3DXCOLOR crSlideColor = pParam->shape.crSlideColor;
 	//if(pSrcDef->bufferFormat != FMT_RGBA32)
 	//	m_pEngine->ColorConv_RGBA_YUVA(&crSlideColor,&crSlideColor);
 	vSlideColor = D3DXVECTOR4(crSlideColor.r,crSlideColor.g,crSlideColor.b,pParam->shape.fSlideTransparency);	
-	m_pEffect->SetVector("g_vSlideColor",&vSlideColor);
-	m_pEffect->SetMatrix("g_matWorldViewProj",&matCombine);
+	hr = m_pEffect->SetVector("g_vSlideColor",&vSlideColor);
+	ASSERT(SUCCEEDED(hr));
+	hr = m_pEffect->SetMatrix("g_matWorldViewProj",&matCombine);
+	ASSERT(SUCCEEDED(hr));
 	//m_pEffect->SetMatrix("g_matWorld",&matWorld);
-	m_pEffect->SetMatrix("g_matRot",&matRot);
-	m_pEffect->SetMatrix("g_matTex",&matTex);
+	hr = m_pEffect->SetMatrix("g_matRot",&matRot);
+	ASSERT(SUCCEEDED(hr));
+	hr = m_pEffect->SetMatrix("g_matTex",&matTex);
+	ASSERT(SUCCEEDED(hr));
 
-	m_pEffect->SetTexture("g_txColor",pMipMap->GetTexture());
+	hr = m_pEffect->SetTexture("g_txColor",pMipMap->GetTexture());
+	ASSERT(SUCCEEDED(hr));
 #ifdef _3D_CUBE_TRANS
-	m_pEffect->SetTexture("g_txColor1",pMipMap1->GetTexture());
+	hr = m_pEffect->SetTexture("g_txColor1",pMipMap1->GetTexture());
+	ASSERT(SUCCEEDED(hr));
 
-	m_pEffect->SetTechnique("Trans");
+	hr = m_pEffect->SetTechnique("Trans");
+	ASSERT(SUCCEEDED(hr));
 #else
-	m_pEffect->SetTechnique("Picture");
+	hr = m_pEffect->SetTechnique("Picture");
+	ASSERT(SUCCEEDED(hr));
 #endif
 
 	UINT cPass,uPass;
@@ -255,7 +280,7 @@ bool CCubeTransRender::Render( CVideoBuffer* pDest, CVideoBuffer *pSrcA, CVideoB
 
 	//handle_tpr hTemp[2] = {INVALID_RESID,INVALID_RESID};
 	CVideoBuffer* pTempBuffer[2] = {NULL, NULL};
-	const VideoBufferInfo& destBufInfo = pDest->GetVideoBufferInfo();
+	VideoBufferInfo destBufInfo = pDest->GetVideoBufferInfo();
 
 	LPDIRECT3DVERTEXBUFFER9		pVB = NULL,pVBInstance = NULL;
 	LPDIRECT3DINDEXBUFFER9		pIB = NULL;
@@ -271,37 +296,25 @@ bool CCubeTransRender::Render( CVideoBuffer* pDest, CVideoBuffer *pSrcA, CVideoB
 
 	for(int i = 0; i < 2;i ++)
 	{
-		//hTemp[i] = NewRTBuffer(0,0,pDstDef->GetImageWidth(),pDstDef->GetImageHeight());
-		//if( hTemp[i] == INVALID_RESID )
-		//{
-		//	pVB->Release();
-		//	pIB->Release();
-		//	pVBInstance->Release();
-		//	return false;
-		//}
-
-		pTempBuffer[i] = pVM->CreateVideoBuffer(destBufInfo);
+		destBufInfo.eUsage = VideoBufferInfo::_IN_OUT;
+		pTempBuffer[i] = pVM->CreateVideoBuffer(destBufInfo);	//or CreateRenderTargetBuffer
 		ASSERT(pTempBuffer[i]);
 		CVideoBuffer* pTempDef = pTempBuffer[i];
-		//pTempDef->bClearFullTarget = TRUE;
-		//pTempDef->bRenderToFullTarget = TRUE;
 			
 		if(i == 0)
 		{
-			//m_pEngine->SetRenderTarget(0,hTemp[i],pSrcDef->COLOR_BLACK(),0x0);
 		}
 		else
 		{
 			vAlpha.z = D3DCMP_GREATER;
-			m_pEffect->SetVector("g_vAlpha",&vAlpha);	
-			
-			//m_pEngine->SetRenderTarget(0,hTemp[i],D3DCLEAR_TARGET|D3DCLEAR_ZBUFFER,pSrcDef->COLOR_BLACK(),0x0,0.0f,1);
+			hr = m_pEffect->SetVector("g_vAlpha",&vAlpha);
+			ASSERT(SUCCEEDED(hr));
 		}
-		m_pEngine->SetRenderTarget(pTempDef);
+		bool bOK = m_pEngine->SetRenderTarget(pTempDef);
+		ASSERT(bOK);
 		hr = pDevice->SetViewport(&vPort);
 		ASSERT(SUCCEEDED(hr));
 
-		//BeginAntiAlias(pSrcDef->COLOR_BLACK());		
 		// Begin the scene
 		if( SUCCEEDED( pDevice->BeginScene() ) )
 		{
@@ -336,19 +349,32 @@ bool CCubeTransRender::Render( CVideoBuffer* pDest, CVideoBuffer *pSrcA, CVideoB
 			hr = pDevice->EndScene();
 			ASSERT(SUCCEEDED(hr));
 		}
-		//EndAntiAlias(pTempDef);
 	}
 	SAFE_RELEASE(pVB);
 	SAFE_RELEASE(pIB);
 	SAFE_RELEASE(pVBInstance);
-	//m_pEngine->SetRenderTarget(0,pDstDef->handle,pDstDef->COLOR_BLACK(),0x0);
-	m_pEngine->SetRenderTarget(pDest);
+	pVM->ReleaseVideoBuffer(pMipMap);
+#ifdef _3D_CUBE_TRANS
+	pVM->ReleaseVideoBuffer(pMipMap1);
+#endif
+
+	//hr = D3DXSaveTextureToFile(_T("./Cube_Temp_0.bmp"), D3DXIFF_BMP, pTempBuffer[0]->GetTexture(), NULL);
+	//ASSERT(SUCCEEDED(hr));
+	//hr = D3DXSaveTextureToFile(_T("./Cube_Temp_1.bmp"), D3DXIFF_BMP, pTempBuffer[1]->GetTexture(), NULL);
+	//ASSERT(SUCCEEDED(hr));
+
+
+
+	//next
+	bool bOK = m_pEngine->SetRenderTarget(pDest);
+	ASSERT(bOK);
 	{
 		D3DXMATRIX *matView = NULL, *matProj= NULL;
 		pResMgr->GetPerspectiveMatrix( &matView, &matProj);		//CGPURenderµÄ×ÓÀà
 		matCombine = *matView * *matProj;
 	}
-	GenerateMatrix(pTempBuffer[0], &matTex, mat_Image );
+	bOK = GenerateMatrix(pTempBuffer[0], &matTex, mat_Image );
+	ASSERT(bOK);
 	hr = m_pEffect->SetTechnique("Compose");
 	ASSERT(SUCCEEDED(hr));
 	hr = m_pEffect->SetMatrix("g_matWorldViewProj",&matCombine);
@@ -393,7 +419,8 @@ bool CCubeTransRender::Render( CVideoBuffer* pDest, CVideoBuffer *pSrcA, CVideoB
 			ASSERT(SUCCEEDED(hr));
 		}
 
-		m_pQuadMesh->DrawMeshFx();
+		bOK = m_pQuadMesh->DrawMeshFx();
+		ASSERT(bOK);
 		hr = m_pEffect->EndPass();
 		ASSERT(SUCCEEDED(hr));
 		hr = m_pEffect->End();
