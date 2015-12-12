@@ -8,6 +8,12 @@ struct NegativeFxParam : FxParamBase
 
 };
 
+struct ColorConvertFxParam : FxParamBase
+{
+	enum _color_convert_direction { RGBA2YUVA, YUVA2RGBA }
+	convert_dir;
+};
+
 struct SonyBlurFxParam : FxParamBase
 {
 	float blurX;
@@ -417,4 +423,117 @@ struct RingsFxParam : public FxParamBase
 	float		fSpiral;
 	float		fRandomPixel;		
 	int			nEffectNo;
+};
+
+#define _3D_CUBE_TRANS
+
+struct CubeFxParam : public FxParamBase
+{
+	struct _Transform
+	{
+		float fLocalTranslateX;
+		float fLocalTranslateY;
+		float fLocalTranslateZ;
+
+		float fLocalRotateX;
+		float fLocalRotateY;
+		float fLocalRotateZ;
+
+		float fScaleX;
+		float fScaleY;
+		float fScaleZ;
+
+		float fWorldTranslateX;
+		float fWorldTranslateY;
+		float fWorldTranslateZ;
+
+		float fWorldRotateX;
+		float fWorldRotateY;
+		float fWorldRotateZ;
+
+		_Transform() : 
+			fLocalTranslateX(0.f),
+			fLocalTranslateY(0.f),
+			fLocalTranslateZ(0.f),
+
+			fLocalRotateX(0.f),
+			fLocalRotateY(0.f),
+			fLocalRotateZ(0.f),
+
+			fScaleX(1.f),
+			fScaleY(1.f),
+			fScaleZ(1.f),
+
+			fWorldTranslateX(0.f),
+			fWorldTranslateY(0.f),
+			fWorldTranslateZ(0.f),
+
+			fWorldRotateX(0.f),
+			fWorldRotateY(0.f),
+			fWorldRotateZ(0.f)
+		{
+		}
+	};
+	struct _Light 
+	{
+		BOOL bEnable;
+		float fDirectionX;
+		float fDirectionY;
+		float fDiffuse;
+		float fAmbient;
+		_Light():
+			bEnable(FALSE),
+			fDirectionX(0.f),
+			fDirectionY(0.f),
+			fDiffuse(0.f),
+			fAmbient(1.f)
+		{
+		}
+	};
+	struct _Shape 
+	{
+		int			nDiveX;
+		int			nDiveY;
+		float		fIntervalX;
+		float		fIntervalY;
+		D3DCOLOR	crSlideColor;
+		float		fSlideTransparency;
+#ifdef _3D_CUBE_TRANS
+		int			nDirecttion;
+		int			nRotate;
+#endif
+		_Shape():
+			nDiveX(1),
+			nDiveY(1),
+			fIntervalX(1),
+			fIntervalY(1),
+			crSlideColor(0xff000000),
+			fSlideTransparency(1.f),
+#ifdef _3D_CUBE_TRANS
+			nDirecttion(0),
+			nRotate(1)
+#endif
+		{}
+	};
+
+	_Transform trans;
+	_Light light;
+	_Shape shape;
+
+	float fPerspective;
+#ifdef _3D_CUBE_TRANS
+	D3DCOLOR	crBackgroundColor;
+	float		fBackgroundTransparency;
+	float       fTransition;
+	BOOL		bReverse;
+#endif
+
+	CubeFxParam():
+		fPerspective(30.f),
+		crBackgroundColor(0xff000000),
+		fBackgroundTransparency(1.f),
+		fTransition(0.f),
+		bReverse(FALSE)
+	{
+	}
 };

@@ -213,15 +213,6 @@ BEGIN
     DEFPUSHBUTTON   "确定",IDOK,113,41,50,14,WS_GROUP
 END
 
-IDD_DIALOG1 DIALOGEX 0, 0, 316, 185
-STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "Dialog"
-FONT 8, "MS Shell Dlg", 400, 0, 0x1
-BEGIN
-    DEFPUSHBUTTON   "确定",IDOK,205,164,50,14
-    PUSHBUTTON      "取消",IDCANCEL,259,164,50,14
-END
-
 IDD_DIALOGBAR DIALOGEX 0, 0, 330, 16
 STYLE DS_SETFONT | WS_CHILD
 FONT 9, "宋体", 400, 0, 0x0
@@ -249,7 +240,7 @@ BEGIN
     EDITTEXT        IDC_HEIGHT,338,1,31,14,ES_AUTOHSCROLL
 END
 
-IDD_DIALOG2 DIALOGEX 0, 0, 134, 94
+IDD_BLUR DIALOGEX 0, 0, 134, 94
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Blur"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
@@ -261,7 +252,7 @@ BEGIN
     EDITTEXT        IDC_EDIT_BLUR_Y,29,30,40,14,ES_AUTOHSCROLL
 END
 
-IDD_DIALOG3 DIALOGEX 0, 0, 171, 307
+IDD_COLOR_KEY DIALOGEX 0, 0, 171, 307
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Color Key"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
@@ -294,6 +285,7 @@ BEGIN
     CONTROL         "",IDC_SLIDER_FINE_TUNE,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,57,187,100,15
     CONTROL         "",IDC_SLIDER_GRAY_MIN,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,57,205,100,15
     CONTROL         "",IDC_SLIDER_GRAY_MAX,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,57,223,100,15
+    PUSHBUTTON      "Get Key Color from Screen",IDC_BUTTON_GET_KEY_COLOR_FROM_SCREEN,7,249,109,14
 END
 
 IDD_AMOEBA_WIPE DIALOGEX 0, 0, 192, 280
@@ -381,15 +373,6 @@ BEGIN
     CONTROL         "",IDC_SLIDER_SOFT_WIDTH,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,67,273,100,15
     LTEXT           "fSlant",IDC_STATIC,7,170,20,8
     CONTROL         "",IDC_SLIDER_SLANT2,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,67,167,100,15
-END
-
-IDD_DIALOG4 DIALOGEX 0, 0, 316, 182
-STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "Dialog"
-FONT 8, "MS Shell Dlg", 400, 0, 0x1
-BEGIN
-    DEFPUSHBUTTON   "确定",IDOK,205,161,50,14
-    PUSHBUTTON      "取消",IDCANCEL,259,161,50,14
 END
 
 IDD_PARAM_PUSH DIALOGEX 0, 0, 192, 348
@@ -597,6 +580,86 @@ BEGIN
     CONTROL         "",IDC_SLIDER_GROUP_PATTERN,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,66,84,100,15
 END
 
+IDD_CUBE DIALOGEX 0, 0, 173, 505
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Dialog"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    PUSHBUTTON      "取消",IDCANCEL,116,484,50,14
+    CONTROL         "",IDC_SLIDER_fLocalTranslateX,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,66,7,100,13
+    LTEXT           "fLocalTranslateX",IDC_STATIC,7,8,54,8
+    CONTROL         "",IDC_SLIDER_fLocalTranslateY,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,66,18,100,13
+    LTEXT           "fLocalTranslateY",IDC_STATIC,7,19,54,8
+    CONTROL         "",IDC_SLIDER_fLocalTranslateZ,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,66,30,100,13
+    LTEXT           "fLocalTranslateZ",IDC_STATIC,7,31,54,8
+    CONTROL         "",IDC_SLIDER_fLocalRotateX,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,66,41,100,13
+    LTEXT           "fLocalRotateX",IDC_STATIC,7,42,46,8
+    CONTROL         "",IDC_SLIDER_fLocalRotateY,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,66,53,100,13
+    LTEXT           "fLocalRotateY",IDC_STATIC,7,54,46,8
+    CONTROL         "",IDC_SLIDER_fLocalRotateZ,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,66,64,100,13
+    LTEXT           "fLocalRotateZ",IDC_STATIC,7,65,46,8
+    CONTROL         "",IDC_SLIDER_fScaleX,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,66,76,100,13
+    LTEXT           "fScaleX",IDC_STATIC,7,78,24,8
+    CONTROL         "",IDC_SLIDER_fScaleY,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,66,89,100,13
+    LTEXT           "fScaleY",IDC_STATIC,7,91,24,8
+    CONTROL         "",IDC_SLIDER_fScaleZ,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,66,101,100,13
+    LTEXT           "fScaleZ",IDC_STATIC,7,103,24,8
+    CONTROL         "",IDC_SLIDER_fWorldTranslateX,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,66,114,100,13
+    LTEXT           "fWorldTranslateX",IDC_STATIC,7,116,56,8
+    CONTROL         "",IDC_SLIDER_fWorldTranslateY,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,66,127,100,13
+    LTEXT           "fWorldTranslateY",IDC_STATIC,7,129,56,8
+    CONTROL         "",IDC_SLIDER_fWorldTranslateZ,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,66,140,100,13
+    LTEXT           "fWorldTranslateZ",IDC_STATIC,7,143,56,8
+    CONTROL         "",IDC_SLIDER_fWorldRotateX,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,66,153,100,13
+    LTEXT           "fWorldRotateX",IDC_STATIC,7,156,48,8
+    CONTROL         "",IDC_SLIDER_fWorldRotateY,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,66,166,100,13
+    LTEXT           "fWorldRotateY",IDC_STATIC,7,169,48,8
+    CONTROL         "",IDC_SLIDER_fWorldRotateZ,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,66,180,100,13
+    LTEXT           "fWorldRotateZ",IDC_STATIC,7,182,48,8
+    CONTROL         "",IDC_SLIDER_fDirectionX,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,66,206,100,13
+    LTEXT           "fDirectionX",IDC_STATIC,7,209,36,8
+    CONTROL         "",IDC_SLIDER_fDirectionY,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,66,219,100,13
+    LTEXT           "fDirectionY",IDC_STATIC,7,222,36,8
+    CONTROL         "",IDC_SLIDER_fDiffuse,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,66,232,100,13
+    LTEXT           "fDiffuse",IDC_STATIC,7,235,26,8
+    CONTROL         "_Light",IDC_CHECK_Light,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,194,35,10
+    CONTROL         "",IDC_SLIDER_fAmbient,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,66,244,100,13
+    LTEXT           "fAmbient",IDC_STATIC,7,247,30,8
+    CONTROL         "",IDC_SLIDER_nDiveX,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,66,266,100,13
+    LTEXT           "nDiveX",IDC_STATIC,7,269,23,8
+    CONTROL         "",IDC_SLIDER_nDiveY,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,66,279,100,13
+    LTEXT           "nDiveY",IDC_STATIC,7,282,23,8
+    CONTROL         "",IDC_SLIDER_fIntervalX,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,66,291,100,13
+    LTEXT           "fIntervalX",IDC_STATIC,7,294,33,8
+    CONTROL         "",IDC_SLIDER_fIntervalY,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,66,304,100,13
+    LTEXT           "fIntervalY",IDC_STATIC,7,307,33,8
+    CONTROL         "",IDC_SLIDER_crSlideColor_R,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,66,316,100,13
+    LTEXT           "crSlideColor_R",IDC_STATIC,7,319,47,8
+    CONTROL         "",IDC_SLIDER_fSlideTransparency,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,66,354,100,13
+    LTEXT           "fSlideTransparency",IDC_STATIC,7,355,62,8
+    CONTROL         "",IDC_SLIDER_crSlideColor_B,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,66,341,100,13
+    LTEXT           "crSlideColor_B",IDC_STATIC,7,344,46,8
+    CONTROL         "",IDC_SLIDER_BackgroundColor_B,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,66,440,100,13
+    LTEXT           "BackgroundColor B",IDC_STATIC,7,442,61,8
+    CONTROL         "",IDC_SLIDER_crSlideColor_G,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,66,328,100,13
+    LTEXT           "crSlideColor_G",IDC_STATIC,7,331,47,8
+    CONTROL         "",IDC_SLIDER_nRotate,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,66,379,100,13
+    LTEXT           "nRotate",IDC_STATIC,7,381,27,8
+    CONTROL         "",IDC_SLIDER_BackgroundColor_R,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,66,416,100,13
+    LTEXT           "BackgroundColor R",IDC_STATIC,7,418,62,8
+    CONTROL         "",IDC_SLIDER_BackgroundColor_G,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,66,428,100,13
+    LTEXT           "BackgroundColor G",IDC_STATIC,7,431,62,8
+    CONTROL         "",IDC_SLIDER_fPerspective,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,66,403,100,13
+    LTEXT           "fPerspective",IDC_STATIC,7,406,41,8
+    CONTROL         "",IDC_SLIDER_nDirecttion,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,66,367,100,13
+    LTEXT           "nDirecttion",IDC_STATIC,7,368,36,8
+    CONTROL         "",IDC_SLIDER_fTransition,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,66,464,100,13
+    LTEXT           "fTransition",IDC_STATIC,7,465,35,8
+    CONTROL         "",IDC_SLIDER_fBackgroundTransparency,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,66,452,100,13
+    LTEXT           "BkgndTransparency",IDC_STATIC,7,454,64,8
+    CONTROL         "bReverse",IDC_CHECK_bReverse,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,393,47,10
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -653,20 +716,12 @@ BEGIN
         BOTTOMMARGIN, 55
     END
 
-    IDD_DIALOG1, DIALOG
-    BEGIN
-        LEFTMARGIN, 7
-        RIGHTMARGIN, 309
-        TOPMARGIN, 7
-        BOTTOMMARGIN, 178
-    END
-
     IDD_DIALOGBAR_IMAGE, DIALOG
     BEGIN
         RIGHTMARGIN, 330
     END
 
-    IDD_DIALOG2, DIALOG
+    IDD_BLUR, DIALOG
     BEGIN
         LEFTMARGIN, 7
         RIGHTMARGIN, 127
@@ -674,7 +729,7 @@ BEGIN
         BOTTOMMARGIN, 87
     END
 
-    IDD_DIALOG3, DIALOG
+    IDD_COLOR_KEY, DIALOG
     BEGIN
         LEFTMARGIN, 7
         RIGHTMARGIN, 164
@@ -695,14 +750,6 @@ BEGIN
         LEFTMARGIN, 7
         RIGHTMARGIN, 169
         BOTTOMMARGIN, 310
-    END
-
-    IDD_DIALOG4, DIALOG
-    BEGIN
-        LEFTMARGIN, 7
-        RIGHTMARGIN, 309
-        TOPMARGIN, 7
-        BOTTOMMARGIN, 175
     END
 
     IDD_PARAM_PUSH, DIALOG
@@ -743,6 +790,14 @@ BEGIN
         RIGHTMARGIN, 171
         TOPMARGIN, 7
         BOTTOMMARGIN, 360
+    END
+
+    IDD_CUBE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 166
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 498
     END
 END
 #endif    // APSTUDIO_INVOKED

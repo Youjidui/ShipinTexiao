@@ -1,4 +1,4 @@
-#include "..\..\..\..\TPEngine\src\Common\TPRenderX\Shaders\ColorSpaceFunc.inc"
+#include "..\Shaders\ColorSpaceFunc.inc"
 
 sampler2D texSrc	:register(s0);
 

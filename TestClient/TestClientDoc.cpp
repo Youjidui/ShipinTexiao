@@ -12,6 +12,9 @@
 #include <d3dx9.h>
 #include "../D3D9Render/VideoBuffer.h"
 #include "../D3D9Render/VideoBufferManager.h"
+
+#include "../BufferColorConvertor/BufferColorConvertor.h"
+
 #include "../EffNegative/NegativeRender.h"
 #include "../EffColorKey/ColorKeyRender.h"
 #include "../SonyBlur/SonyBlurRender.h"
@@ -22,6 +25,7 @@
 #include "../EffChromaKey/ChromaKeyRender.h"
 #include "../EffPageRoll/PageRollRender.h"
 #include "../EffQuadPageRollTrans/QuadPageRollRender.h"
+#include "../Eff3DCubeTrans/CubeTransRender.h"
 
 
 #ifdef _DEBUG
@@ -197,6 +201,24 @@ bool CTestClientDoc::UpdateBuffer( UINT level, const BYTE* pBits, int w, int h, 
 		pBuf->UnLockBuffer();
 		bOK = true;
 	}
+
+	//if(bOK)
+	//{
+	//	VideoBufferInfo bi = {D3DFMT_A8R8G8B8, VideoBufferInfo::VIDEO_MEM, VideoBufferInfo::_IN_OUT, w, h, 0, 0};
+	//	CVideoBuffer* pTemp = m_pBufferMgr->CreateVideoBuffer(bi);
+	//	ASSERT(pTemp);
+	//	if(ColorConvert(pTemp, pBuf, true))
+	//	{
+	//		m_pBufferMgr->ReleaseVideoBuffer(pBuf);
+	//		pBuf = pTemp;
+	//	}
+	//	else
+	//	{
+	//		m_pBufferMgr->ReleaseVideoBuffer(pTemp);
+	//		ASSERT(false);
+	//	}
+	//}
+
 	return bOK;
 }
 
@@ -273,118 +295,130 @@ bool CTestClientDoc::Render()
 				if(m_SrcImages[0])
 				{
 					CVideoBuffer* pSrc = m_SrcImages[0];
+					CVideoBuffer* pSrc2 = NULL;
+					if(m_SrcImages.size() >= 2)
+						pSrc2 = m_SrcImages[1];
 					CVideoBuffer* pDest = m_pDestImage;
 					const VideoBufferInfo& destBufferInfo = pDest->GetVideoBufferInfo();
 					const VideoBufferInfo& srcBufferInfo = pSrc->GetVideoBufferInfo();
-					//CopyBuffer(m_pDestImage, m_SrcImages[0]);
 
-					if(FX_NEGATIVE == m_strEffectName)
-					{
-						CNegativeRender eff;
-						if(eff.Init(m_pRenderEngine))
-						{
-							bOK = eff.Render(pDest, pSrc, (NegativeFxParam*)m_pEffectParam);
-						}
-					}
-					else if(FX_COLOR_KEY == m_strEffectName)
-					{
-						ColorKeyRender eff;
-						if(eff.Init(m_pRenderEngine))
-						{
-							bOK = eff.Render(pDest, pSrc, (ColorKeyParam*)m_pEffectParam);
-						}
-					}
-					else if(FX_CHROMA_KEY== m_strEffectName)
-					{
-						ChromaKeyRender eff;
-						if(eff.Init(m_pRenderEngine))
-						{
-							bOK = eff.Render(pDest, pSrc, (ChromaKeyFxParam*)m_pEffectParam);
-						}
-					}
-					else if(FX_SONY_BLUR == m_strEffectName)
-					{
-						CSonyBlurRender eff;
-						if(eff.Init(m_pRenderEngine))
-						{
-							bOK = eff.Render(pDest, pSrc, (SonyBlurFxParam*)m_pEffectParam);
-						}
-					}
-					else if(FX_AMOEBA_WIPE == m_strEffectName)
-					{
-						if(m_SrcImages.size() >= 2)
-						{
-							CVideoBuffer* pSrc2 = m_SrcImages[1];
-							CAmoebaWipeRender eff;
-							if(eff.Init(m_pRenderEngine))
-							{
-								bOK = eff.Render(pDest, pSrc, pSrc2, (AmoebaWipeFxParam*)m_pEffectParam);
-							}
-						}
-					}
-					else if(FX_PUSH == m_strEffectName)
-					{
-						if(m_SrcImages.size() >= 2)
-						{
-							CVideoBuffer* pSrc2 = m_SrcImages[1];
-							CPushRender eff;
-							if(eff.Init(m_pRenderEngine))
-							{
-								bOK = eff.Render(pDest, pSrc, pSrc2, (PushFxParam*)m_pEffectParam);
-							}
-						}
-					}
-					else if(FX_SONY_SLIDE == m_strEffectName)
-					{
-						if(m_SrcImages.size() >= 2)
-						{
-							CVideoBuffer* pSrc2 = m_SrcImages[1];
-							CSonySlideRender eff;
-							if(eff.Init(m_pRenderEngine))
-							{
-								bOK = eff.Render(pDest, pSrc, pSrc2, (SonySlideFxParam*)m_pEffectParam);
-							}
-						}
+					////src buffer for YUV2RGB
+					//VideoBufferInfo tempBI;
+					//memcpy(&tempBI, &destBufferInfo, sizeof(VideoBufferInfo));
+					//tempBI.eUsage = VideoBufferInfo::_IN_OUT;
+					//CVideoBuffer* pTemp = m_pBufferMgr->CreateVideoBuffer(tempBI);
+					//ASSERT(pTemp);
+					//pDest = pTemp;
 
-					}
-					else if(FX_BARM_WIPE == m_strEffectName)
-					{
-						if(m_SrcImages.size() >= 2)
-						{
-							CVideoBuffer* pSrc2 = m_SrcImages[1];
-							CBarmWipeRender eff;
-							if(eff.Init(m_pRenderEngine))
-							{
-								bOK = eff.Render(pDest, pSrc, pSrc2, (BarmWipeFxParam*)m_pEffectParam);
-							}
-						}
-					}
-					else if(FX_PAGE_ROLL == m_strEffectName)
-					{
-						if(m_SrcImages.size() >= 2)
-						{
-							CVideoBuffer* pSrc2 = m_SrcImages[1];
-							CPageRollRender eff;
-							if(eff.Init(m_pRenderEngine))
-							{
-								bOK = eff.Render(pDest, pSrc, pSrc2, (PageRollFxParam*)m_pEffectParam);
-							}
-						}
-					}
-					else if(FX_QUAD_PAGE_ROLL == m_strEffectName)
-					{
-						if(m_SrcImages.size() >= 2)
-						{
-							CVideoBuffer* pSrc2 = m_SrcImages[1];
-							CQuadPageRollRender eff;
-							if(eff.Init(m_pRenderEngine))
-							{
-								bOK = eff.Render(pDest, pSrc, pSrc2, (QuadPageRollFxParam*)m_pEffectParam);
-							}
-						}
-					}
+					//effect render
+					bOK = EffectRender(pDest, pSrc, pSrc2);
+
+					////YUV to RGB
+					//pDest = m_pDestImage;
+					//if(ColorConvert(pDest, pTemp, false))
+					//{
+					//}
+					//else
+					//{
+					//	ASSERT(false);
+					//}
+					//m_pBufferMgr->ReleaseVideoBuffer(pTemp);
 				}
 			}
+		}
+	}
+	return bOK;
+}
+
+bool CTestClientDoc::EffectRender(CVideoBuffer* pDest, CVideoBuffer* pSrc, CVideoBuffer* pSrc2)
+{
+	bool bOK = false;
+	if(FX_NEGATIVE == m_strEffectName)
+	{
+		CNegativeRender eff;
+		if(eff.Init(m_pRenderEngine))
+		{
+			bOK = eff.Render(pDest, pSrc, (NegativeFxParam*)m_pEffectParam);
+		}
+	}
+	else if(FX_COLOR_KEY == m_strEffectName)
+	{
+		ColorKeyRender eff;
+		if(eff.Init(m_pRenderEngine))
+		{
+			bOK = eff.Render(pDest, pSrc, (ColorKeyParam*)m_pEffectParam);
+		}
+	}
+	else if(FX_CHROMA_KEY== m_strEffectName)
+	{
+		ChromaKeyRender eff;
+		if(eff.Init(m_pRenderEngine))
+		{
+			bOK = eff.Render(pDest, pSrc, (ChromaKeyFxParam*)m_pEffectParam);
+		}
+	}
+	else if(FX_SONY_BLUR == m_strEffectName)
+	{
+		CSonyBlurRender eff;
+		if(eff.Init(m_pRenderEngine))
+		{
+			bOK = eff.Render(pDest, pSrc, (SonyBlurFxParam*)m_pEffectParam);
+		}
+	}
+	else if(FX_AMOEBA_WIPE == m_strEffectName)
+	{
+		CAmoebaWipeRender eff;
+		if(eff.Init(m_pRenderEngine))
+		{
+			bOK = eff.Render(pDest, pSrc, pSrc2, (AmoebaWipeFxParam*)m_pEffectParam);
+		}
+	}
+	else if(FX_PUSH == m_strEffectName)
+	{
+		CPushRender eff;
+		if(eff.Init(m_pRenderEngine))
+		{
+			bOK = eff.Render(pDest, pSrc, pSrc2, (PushFxParam*)m_pEffectParam);
+		}
+	}
+	else if(FX_SONY_SLIDE == m_strEffectName)
+	{
+		CSonySlideRender eff;
+		if(eff.Init(m_pRenderEngine))
+		{
+			bOK = eff.Render(pDest, pSrc, pSrc2, (SonySlideFxParam*)m_pEffectParam);
+		}
+	}
+	else if(FX_BARM_WIPE == m_strEffectName)
+	{
+		CBarmWipeRender eff;
+		if(eff.Init(m_pRenderEngine))
+		{
+			bOK = eff.Render(pDest, pSrc, pSrc2, (BarmWipeFxParam*)m_pEffectParam);
+		}
+	}
+	else if(FX_PAGE_ROLL == m_strEffectName)
+	{
+		CPageRollRender eff;
+		if(eff.Init(m_pRenderEngine))
+		{
+			bOK = eff.Render(pDest, pSrc, pSrc2, (PageRollFxParam*)m_pEffectParam);
+		}
+	}
+	else if(FX_QUAD_PAGE_ROLL == m_strEffectName)
+	{
+		CQuadPageRollRender eff;
+		if(eff.Init(m_pRenderEngine))
+		{
+			bOK = eff.Render(pDest, pSrc, pSrc2, (QuadPageRollFxParam*)m_pEffectParam);
+		}
+	}
+	else if(FX_CUBE_TRANS == m_strEffectName)
+	{
+		CCubeTransRender eff;
+		if(eff.Init(m_pRenderEngine))
+		{
+			bOK = eff.Render(pDest, pSrc, pSrc2, (CubeFxParam*)m_pEffectParam);
 		}
 	}
 	return bOK;
@@ -465,3 +499,29 @@ void CTestClientDoc::SetEffect( LPCTSTR pszEffectName, FxParamBase* pParam )
 	m_strEffectName = pszEffectName;
 	m_pEffectParam = pParam;
 }
+
+bool CTestClientDoc::ColorConvert(CVideoBuffer* pDest, CVideoBuffer* pSrc, bool bIsRGB2YUV )
+{
+	bool bOK = false;
+	//const VideoBufferInfo& srcBufferInfo = pSrc->GetVideoBufferInfo();
+	ASSERT(pSrc);
+	ColorConvertFxParam param;
+	if(bIsRGB2YUV)
+		param.convert_dir = ColorConvertFxParam::RGBA2YUVA;
+	else
+		param.convert_dir = ColorConvertFxParam::YUVA2RGBA;
+	CBufferColorConvertor cc;
+	bOK = cc.Init(m_pRenderEngine);
+	if(bOK)
+	{
+		//CVideoBuffer* pTemp = m_pBufferMgr->CreateVideoBuffer(srcBufferInfo);
+		ASSERT(pDest);
+		bOK = cc.Render(pDest, pSrc, &param);
+		cc.Uninit();
+	}
+	return bOK;
+}
+
+
+
+

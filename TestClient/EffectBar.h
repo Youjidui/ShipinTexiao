@@ -10,6 +10,7 @@
 #include "SonySlideDlg.h"
 #include "PageRollParamDlg.h"
 #include "ParamQuadPageRollDlg.h"
+#include "ParamCubeDlg.h"
 
 // CEffectBar ¶Ô»°¿ò
 
@@ -42,6 +43,7 @@ public:
 	CSonySlideDlg m_SonySlideDlg;
 	CPageRollParamDlg m_PageRollDlg;
 	CParamQuadPageRollDlg m_QuadPageRollDlg;
+	CParamCubeDlg m_cubeTransDlg;
 
 	afx_msg void OnBnClickedParameters();
 	virtual BOOL OnInitDialog();
