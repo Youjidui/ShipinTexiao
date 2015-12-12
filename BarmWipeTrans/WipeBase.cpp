@@ -1,31 +1,26 @@
 #include "stdafx.h"
-#include ".\basewipe.h"
+#include ".\WipeBase.h"
 
 
-CBaseWipe::CBaseWipe(void)
+CWipeBase::CWipeBase(void)
 {
 	m_pEngine = NULL;
 	m_pQuadMesh = NULL;
 	m_pEffect = NULL;
 }
 
-CBaseWipe::~CBaseWipe(void)
+CWipeBase::~CWipeBase(void)
 {
-    //if(m_pResMan && m_pMesh)
-    //{
-	   // m_pResMan->Release(m_pMesh->GetResID());
-    //    m_pMesh = NULL;
-    //}
 }
 
-HRESULT CBaseWipe::InitMesh(CRenderEngine* pEngine) 
+HRESULT CWipeBase::InitMesh(CRenderEngine* pEngine) 
 {
 	m_pEngine = pEngine;	
 	m_pQuadMesh = pEngine->GetResourceManager()->CreateQuadMesh(pEngine->GetDevice());	
 
 	return S_OK;
 }
-void CBaseWipe::Ready(CVideoBuffer* pMaskDef)
+void CWipeBase::Ready(CVideoBuffer* pMaskDef)
 {
 	int nEditWidth, nEditHeight;
 	m_pEngine->GetTargetVideoSize(nEditWidth, nEditHeight);

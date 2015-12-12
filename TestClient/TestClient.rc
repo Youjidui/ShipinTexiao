@@ -683,13 +683,13 @@ BEGIN
     BEGIN
         BLOCK "080403a8"
         BEGIN
-            VALUE "CompanyName", "TODO: <公司名>"
-            VALUE "FileDescription", "TODO: <文件说明>"
+            VALUE "CompanyName", "zhuo yuan"
+            VALUE "FileDescription", "Effect Test Client"
             VALUE "FileVersion", "1.0.0.1"
             VALUE "InternalName", "TestClient.exe"
-            VALUE "LegalCopyright", "TODO: (C) <公司名>。保留所有权利。"
+            VALUE "LegalCopyright", "(C) zhuo yuan。保留所有权利。"
             VALUE "OriginalFilename", "TestClient.exe"
-            VALUE "ProductName", "TODO: <产品名>"
+            VALUE "ProductName", "Effect"
             VALUE "ProductVersion", "1.0.0.1"
         END
     END

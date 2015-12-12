@@ -105,7 +105,7 @@ enum Push_Type{
 };
 // end push param
 
-struct BarmWipeFxParam : FxParamBase
+struct BasicWipeFxParam : FxParamBase
 {
 	struct Pattern
 	{
@@ -146,8 +146,18 @@ struct BarmWipeFxParam : FxParamBase
 
 	Pattern     structPattern;
 	Modify      structModify;
-	General     structGeneral;   
+	General     structGeneral;
+};
+
+struct BarmWipeFxParam : BasicWipeFxParam
+{
 	float fSlant;
+} ;
+
+struct MatrixWipeFxParam :public BasicWipeFxParam
+{
+	float	fTitleSize;
+	int		nSequence;
 } ;
 
 

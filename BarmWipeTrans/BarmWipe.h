@@ -6,19 +6,19 @@
 #include "../D3D9Render/RenderEngine.h"
 #include "../D3D9Render/VideoBuffer.h"
 #include "../D3D9Render/BaseMesh.h"
-#include "basewipe.h"
+#include "WipeBase.h"
 #include "../Utility/mathmacros.h"
 
 //extern const GUID UUID_FX;
-class CBarmWipe:public CBaseWipe
+class CBarmWipe : public CWipeBase
 {
 public:
 	CBarmWipe();
 	~CBarmWipe();
 	virtual HRESULT InitMesh(CRenderEngine* pEngine);
-	virtual HRESULT Draw(CVideoBuffer* pMaskDef, void* pParamRaw);
-	HRESULT Draw(CVideoBuffer* pMaskDef, void* pParamRaw, int nPattern, float fOffset);
-	float	CalcOffset(void* pParamRaw, int nPattern);
+	virtual HRESULT Draw(CVideoBuffer* pMask, BasicWipeFxParam* pParam);
+	HRESULT Draw(CVideoBuffer* pMaskDef, BasicWipeFxParam* pParam, int nPattern, float fOffset);
+	float	CalcOffset(BasicWipeFxParam* pParam, int nPattern);
 protected:
 private:
 	CBaseMesh* m_pBarmMesh;

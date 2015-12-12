@@ -12,14 +12,14 @@ const D3DVERTEXELEMENT9 declWipe[] =
 	D3DDECL_END()
 };
 
-class CBaseWipe
+class CWipeBase
 {
 public:
-	CBaseWipe(void);
-	virtual ~CBaseWipe(void);
+	CWipeBase(void);
+	virtual ~CWipeBase(void);
 public:
 	virtual HRESULT InitMesh(CRenderEngine* pEngine);
-	virtual HRESULT Draw(CVideoBuffer* pMask, void* pParamRaw) = 0;
+	virtual HRESULT Draw(CVideoBuffer* pMask, BasicWipeFxParam* pParamRaw) = 0;
     virtual void    Ready(CVideoBuffer* pMaskDef);
 protected:	
 	CRenderEngine*		m_pEngine;
