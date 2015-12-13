@@ -1,7 +1,6 @@
 #include "..\Shaders\ColorSpaceFunc.inc"
 
-sampler2D	texSrc	: register(s0);
-//sampler2D	texMask	: register(s2);
+sampler2D texSrc	:register(s0);
 
 float4		fCoefU		: register(c20);	// [ keyCos, -keySin, fvCos, fvSin ]
 float4		fCoefV		: register(c21);	// [ keySin, keyCos, -fvSin, fvCos ]
@@ -15,17 +14,9 @@ float4		fGain		: register(c28);	// [ -keyGain, -ccGain, 0.f, 0.f ]
 float4		fInvert		: register(c29);	// [ bInvert, -1.f, 0.f, 0.f ]
 float4		fInvCoef	: register(c30);	// [ (bInvert ? -1 : 1) * keyDensity, 1.f, 0.f, 0.f ]
 
-struct PSIN
+float4 main(float2 texSrcCoord : TEXCOORD0) : COLOR0
 {
-	float2 texSrcCoord :TEXCOORD0;
-// #ifndef NOMASK
-// 	float2 tc_mask		: TEXCOORD1;
-// #endif
-};
-
-float4 main(PSIN IN):COLOR0
-{
-	float4 srcColor = tex2D(texSrc, IN.texSrcCoord);
+	float4 srcColor = tex2D(texSrc, texSrcCoord);
 	float4 srcYUVA = CS_RGBA2YUVA(srcColor);	// UV Range [-0.5, 0.5]
 	srcYUVA.yz *= 2.f;
 	
@@ -41,7 +32,8 @@ float4 main(PSIN IN):COLOR0
 // 	float fUU	= fU * fvCos - fV * fvSin;
 //	float fVV	= fU * fvSin + fV * fvCos;
 	float4 fYB_Key = fCoefU * fU;	// [ fU * keyCos, -fU * keySin, fU * fvCos, fU * fvSin ]
-	float4 fQuatnTrans = fCoefV * fV + fYB_Key;	// [ fU * keyCos + fV * keySin, -fU * keySin + fV * keyCos, fU * fvCos - fV * fvSin, fU * fvSin + fV * fvCos ]
+	// [ fU * keyCos + fV * keySin, -fU * keySin + fV * keyCos, fU * fvCos - fV * fvSin, fU * fvSin + fV * fvCos ]
+	float4 fQuatnTrans = fCoefV * fV + fYB_Key;
 //	float fYY	= fY * fvYGain;
 //	float fYBal = (abs(fY - fYBalOffset) - fYBalClip) * fYBalGain;
 //	if (fYBal < 0.f)	fYBal = 0.f;
@@ -49,7 +41,8 @@ float4 main(PSIN IN):COLOR0
 //	if (fKeyTmp < 0.f)	fKeyTmp = 0.f;
 //	float fKeyTmpCC = fZ - ccSatCrop;
 //	if (fKeyTmpCC < 0.f)	fKeyTmpCC = 0.f;
-	float4 fQuatnY = fCoefY * fY + fCoefYBal;	// [ fY * keyYBalGain - keyYBalOffset * keyYBalGain, fY * fvYGain, 0.f, -keyYBalClip * keyYBalGain ]
+	// [ fY * keyYBalGain - keyYBalOffset * keyYBalGain, fY * fvYGain, 0.f, -keyYBalClip * keyYBalGain ]
+	float4 fQuatnY = fCoefY * fY + fCoefYBal;
 	fYB_Key.xy = abs(fQuatnY.x) + fQuatnY.w;
 	fYB_Key.zw = fZ + fSatCrop.zw;
 	fYB_Key = (fYB_Key < 0.f) ? 0.f : fYB_Key;		// [ fYBal, fYBal, fKeyTmp, fKeyTmpCC ]

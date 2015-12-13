@@ -241,6 +241,7 @@ ChromaKeyRender::ChromaKeyRender(void)
 : m_pEngine(NULL)
 , m_pQuadMesh(NULL)
 , m_PS_CRK_RGB32(NULL)
+, m_PS_CRK_YUVA(NULL)
 {
 }
 
@@ -260,8 +261,11 @@ bool ChromaKeyRender::Init( CRenderEngine* pEngine )
 	//TODO: no file. need to copy VS_DirectOut_2stages_V3.vsh
 	//m_VS_DirectOut_2stages_V3 = pResMan->CreateVertexShader(pDevice, _T("Shaders/VS_DirectOut_2stages_V3.vsh"));
 	m_VS_DirectOut_2stages_V3 = pResMan->CreateVertexShader(pDevice, _T("Shaders/VS_DirectOut_2stages_V2.vsh"));
+	ASSERT(m_VS_DirectOut_2stages_V3);
 	m_PS_CRK_RGB32 = pResMan->CreatePixelShader(pDevice, _T("NewEffects/PS_CRK_RGBA_QUICK.psh"));
 	ASSERT(m_PS_CRK_RGB32);
+	m_PS_CRK_YUVA = pResMan->CreatePixelShader(pDevice, _T("NewEffects/PS_CRK_YUVA.psh"));
+	ASSERT(m_PS_CRK_YUVA );
 	return true;
 }
 
@@ -289,8 +293,8 @@ bool ChromaKeyRender::RenderArea(CVideoBuffer*pDstDef, CVideoBuffer *pSrcDef, Fx
 	// 如果不需要特技处理
 	bool bYUYV = false;		//(pSrcDef->IsYUV16Buffer());
 	bool bAlpha = false;	//(pSrcDef->pAlpha);
-	bool bYUYVA = bYUYV&&bAlpha;
-	bool bYUVA = false;	//(pSrcDef->bufferFormat == FMT_YUVA32);
+	//bool bYUYVA = bYUYV&&bAlpha;
+	bool bYUVA = true;	//(pSrcDef->bufferFormat == FMT_YUVA32);
 
 	//if( pDstDef->IsYUV16Buffer() && pDstDef->pAlpha==NULL )
 	//{
@@ -302,24 +306,29 @@ bool ChromaKeyRender::RenderArea(CVideoBuffer*pDstDef, CVideoBuffer *pSrcDef, Fx
 	CPixelShader* pixelshader = m_PS_CRK_RGB32;
 	//if ( bYUYV )
 	//	pixelshader = bAlpha ? m_PS_CRK_YUYV_AP : m_PS_CRK_YUYV_NA;
-	//else if (bYUVA)
-	//	pixelshader = m_PS_CRK_YUVA;
+	//else 
+	if (bYUVA)
+		pixelshader = m_PS_CRK_YUVA;
 
 	// 2.1 setRT和标志位设定	
 	//pDstDef->bRenderToFullTarget = false;
 	//pDstDef->bDiscardAlpha = false;
 	//SetRenderTarget(0, pDstDef->handle, pDstDef->COLOR_BLACK(), 0x0);
-	m_pEngine->SetRenderTarget(pDstDef);
+	bool bOK = m_pEngine->SetRenderTarget(pDstDef);
+	ASSERT(bOK);
 
 	// 2.2.1 constant
 	//D3DXMATRIX matWVP = (m_matView * m_matProj);
 	D3DXMATRIX *matView = NULL, *matProj= NULL;
 	pResMan->GetPerspectiveMatrix( &matView, &matProj);
 	D3DXMATRIX matWVP = *matView * *matProj;	
-	pDevice->SetVertexShaderConstantF(0, (float*)&matWVP, 4);
+	HRESULT hr = pDevice->SetVertexShaderConstantF(0, (float*)&matWVP, 4);
+	ASSERT(SUCCEEDED(hr));
 	D3DXMATRIX matTexSrc;
-	::GenerateMatrix(pSrcDef, &matTexSrc, mat_Image);
-	pDevice->SetVertexShaderConstantF(4, (float*)&matTexSrc, 4);
+	bOK = ::GenerateMatrix(pSrcDef, &matTexSrc, mat_Image);
+	ASSERT(bOK);
+	hr = pDevice->SetVertexShaderConstantF(4, (float*)&matTexSrc, 4);
+	ASSERT(SUCCEEDED(hr));
 
 	// 参数传递
 	NSACKParamTmpData   tmpData;
@@ -368,29 +377,47 @@ bool ChromaKeyRender::RenderArea(CVideoBuffer*pDstDef, CVideoBuffer *pSrcDef, Fx
 		{
 			int pSrcDef_GetImageWidth = biSrc.nWidth;
 			D3DXVECTOR2 fPixWidth = D3DXVECTOR2(1.f / pSrcDef_GetImageWidth, 0.f);
-			pDevice->SetPixelShaderConstantF(31, fPixWidth, 1);
+			hr = pDevice->SetPixelShaderConstantF(31, fPixWidth, 1);
+			ASSERT(SUCCEEDED(hr));
 		}
 	}
-	pDevice->SetPixelShaderConstantF(20, fCoefU, 1);
-	pDevice->SetPixelShaderConstantF(21, fCoefV, 1);
-	pDevice->SetPixelShaderConstantF(22, fCoefY, 1);
-	pDevice->SetPixelShaderConstantF(23, fCoefYBal, 1);
-	pDevice->SetPixelShaderConstantF(24, fCoefCan, 1);
-	pDevice->SetPixelShaderConstantF(25, fSatCrop, 1);
-	pDevice->SetPixelShaderConstantF(26, fCoefYK, 1);
-	pDevice->SetPixelShaderConstantF(27, fYKOff, 1);
-	pDevice->SetPixelShaderConstantF(28, fGain, 1);
-	pDevice->SetPixelShaderConstantF(29, fInvert, 1);
-	pDevice->SetPixelShaderConstantF(30, fInvCoef, 1);
+	hr = pDevice->SetPixelShaderConstantF(20, fCoefU, 1);
+	ASSERT(SUCCEEDED(hr));
+	hr = pDevice->SetPixelShaderConstantF(21, fCoefV, 1);
+	ASSERT(SUCCEEDED(hr));
+	hr = pDevice->SetPixelShaderConstantF(22, fCoefY, 1);
+	ASSERT(SUCCEEDED(hr));
+	hr = pDevice->SetPixelShaderConstantF(23, fCoefYBal, 1);
+	ASSERT(SUCCEEDED(hr));
+	hr = pDevice->SetPixelShaderConstantF(24, fCoefCan, 1);
+	ASSERT(SUCCEEDED(hr));
+	hr = pDevice->SetPixelShaderConstantF(25, fSatCrop, 1);
+	ASSERT(SUCCEEDED(hr));
+	hr = pDevice->SetPixelShaderConstantF(26, fCoefYK, 1);
+	ASSERT(SUCCEEDED(hr));
+	hr = pDevice->SetPixelShaderConstantF(27, fYKOff, 1);
+	ASSERT(SUCCEEDED(hr));
+	hr = pDevice->SetPixelShaderConstantF(28, fGain, 1);
+	ASSERT(SUCCEEDED(hr));
+	hr = pDevice->SetPixelShaderConstantF(29, fInvert, 1);
+	ASSERT(SUCCEEDED(hr));
+	hr = pDevice->SetPixelShaderConstantF(30, fInvCoef, 1);
 
 	// 2.2.2 texture
-	pDevice->SetTexture(0, pSrcDef->GetTexture());
-	pDevice->SetTextureStageState( 0, D3DTSS_TEXTURETRANSFORMFLAGS, D3DTTFF_DISABLE );
-	pDevice->SetTextureStageState( 0, D3DTSS_TEXCOORDINDEX, 0 );
-	pDevice->SetSamplerState(0, D3DSAMP_ADDRESSU, D3DTADDRESS_CLAMP);
-	pDevice->SetSamplerState(0, D3DSAMP_ADDRESSV, D3DTADDRESS_CLAMP);
-	pDevice->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
-	pDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
+	hr = pDevice->SetTexture(0, pSrcDef->GetTexture());
+	ASSERT(SUCCEEDED(hr));
+	hr = pDevice->SetTextureStageState( 0, D3DTSS_TEXTURETRANSFORMFLAGS, D3DTTFF_DISABLE );
+	ASSERT(SUCCEEDED(hr));
+	hr = pDevice->SetTextureStageState( 0, D3DTSS_TEXCOORDINDEX, 0 );
+	ASSERT(SUCCEEDED(hr));
+	hr = pDevice->SetSamplerState(0, D3DSAMP_ADDRESSU, D3DTADDRESS_CLAMP);
+	ASSERT(SUCCEEDED(hr));
+	hr = pDevice->SetSamplerState(0, D3DSAMP_ADDRESSV, D3DTADDRESS_CLAMP);
+	ASSERT(SUCCEEDED(hr));
+	hr = pDevice->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
+	ASSERT(SUCCEEDED(hr));
+	hr = pDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
+	ASSERT(SUCCEEDED(hr));
 	//if( bYUYVA )
 	//{
 	//	pDevice->SetSourceTexture(1, pSrcDef->pAlpha);
@@ -401,25 +428,31 @@ bool ChromaKeyRender::RenderArea(CVideoBuffer*pDstDef, CVideoBuffer *pSrcDef, Fx
 	//}
 
 	// 2.2.3 render state
-	pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE,FALSE);
-	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE,FALSE);
+	hr = pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE,FALSE);
+	ASSERT(SUCCEEDED(hr));
+	hr = pDevice->SetRenderState(D3DRS_ALPHATESTENABLE,FALSE);
+	ASSERT(SUCCEEDED(hr));
 
 	// 2.2.4 shader
 	//CVertexShader* vertexshader = pResMan->CreateVertexShader(pDevice, _T("Shaders/VSDirectOut_2stages_V3.vsh"));
 	CVertexShader* vertexshader = m_VS_DirectOut_2stages_V3;
-	pDevice->SetPixelShader(pixelshader->GetPixelShader());
+	hr = pDevice->SetPixelShader(pixelshader->GetPixelShader());
+	ASSERT(SUCCEEDED(hr));
 
 	// 2.3 render
 	if ( SUCCEEDED(pDevice->BeginScene()) )
 	{
-		m_pQuadMesh->DrawMesh(0, vertexshader->GetVertexShaderPtr());
-		pDevice->EndScene();
+		bOK = m_pQuadMesh->DrawMesh(0, vertexshader->GetVertexShaderPtr());
+		ASSERT(bOK);
+		hr = pDevice->EndScene();
+		ASSERT(SUCCEEDED(hr));
 	}
 
 	pDevice->SetPixelShader(NULL);
 	pDevice->SetTexture(0, NULL);
 	pDevice->SetTexture(1, NULL);
 	pDevice->SetTexture(2, NULL);
+	pDevice->SetRenderTarget(0, NULL);
 	pDevice->SetRenderTarget(1, NULL);
 	pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
 	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
@@ -428,6 +461,9 @@ bool ChromaKeyRender::RenderArea(CVideoBuffer*pDstDef, CVideoBuffer *pSrcDef, Fx
 	//pDstDef->bIsCG_BlenedBuffer = pSrcDef->bIsCG_BlenedBuffer;
 	//  	m_pResMan->DumpResourceToFile(pDstDef->handle, L"c:\\crkdes_yuyv.dds");
 	//  	m_pResMan->DumpResourceToFile(pDstDef->handle, L"c:\\crkdes_alpha.dds", TRUE);	
+
+
+	D3DXSaveSurfaceToFile(_T("./ChromaKey.dds"), D3DXIFF_DDS, pDstDef->GetSurface(), NULL, NULL);
 
 	return true;
 }

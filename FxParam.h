@@ -227,6 +227,7 @@ struct SonyMaskFxParam : FxParamBase	//SONY_MASK_INFO
 
 struct ChromaKeyFxParam : FxParamBase
 {
+	//NSCEParamDef.cpp  line:990
 	struct ChromaKeyAdjust
 	{
 		bool bOn;
@@ -239,7 +240,7 @@ struct ChromaKeyFxParam : FxParamBase
 		float fDensity;
 		bool bInvert;
 		ChromaKeyAdjust()
-			: bOn(true), fClip(100.f), fGain(100.f), fHue(0.f), fAngle(97.6f), nFilter(1), fDensity(100.f), bInvert(false) {}
+			: bOn(true), fClip(100.f), fGain(100.f), fHue(0.f), fAngle(97.59578851f), nFilter(1), fSatCrop(20.3125f), fDensity(100.f), bInvert(false) {}
 	}paramCrkAdj;
 
 	struct ChromaKeyPosition
@@ -562,3 +563,39 @@ struct CubeFxParam : public FxParamBase
 	{
 	}
 };
+
+struct SonyPinPFxParam : public FxParamBase
+{
+	BOOL             bLink_Scale;
+	float			 fScaleX;
+	float			 fScaleY;
+	float			 fPositionX;
+	float			 fPositionY;
+	BOOL             bFilter;
+	float            fBorderWidth;
+	D3DCOLOR	     cBorderColor;
+	BOOL             bEnableShadow;
+	D3DCOLOR	     cShadowColor;
+	float            fShadowDropDistance;
+	float            fShadowDropLightAngle;
+	float            fShadowDropTransparency;
+	float            fShadowDropSoftness;
+	DWORD        	 dwTrailDecayType;
+	INT			     iTrailDecayTime;
+	DWORD	         dwBackGroundType;
+	D3DCOLOR		 cBackGroundSepiaColor;
+	float            fBackGoundDensity;
+	BOOL             bLinkCrop;
+	float            fBoundsLeft;
+	float            fBoundsBottom;
+	float            fBoundsRight;
+	float            fBoundsTop;
+	float            fTansparency;
+	//key
+	float			 fKeyScaleX[2];
+	float			 fKeyScaleY[2];
+	float			 fKeyPositionX[2];
+	float			 fKeyPositionY[2];
+	int				 nKeyCount;
+} ;
+
