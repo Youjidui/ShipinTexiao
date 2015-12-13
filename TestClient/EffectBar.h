@@ -5,6 +5,7 @@
 #include "ParamColorKeyDlg.h"
 #include "ParamAmoebaWipeDlg.h"
 #include "ParamBarmWipeDlg.h"
+#include "ParamMatrixWipeDlg.h"
 #include "PushDlg.h"
 #include "ParamChromaKeyDlg.h"
 #include "SonySlideDlg.h"
@@ -38,6 +39,7 @@ public:
 	CParamColorKeyDlg m_colorKeyDlg;
 	CParamAmoebaWipeDlg m_amoebaWipeDlg;
 	CParamBarmWipeDlg m_barmWipeDlg;
+	CParamMatrixWipeDlg m_matrixWipeDlg;
 	CPushDlg m_pushDlg;
 	CParamChromaKeyDlg m_chromaKeyDlg;
 	CSonySlideDlg m_SonySlideDlg;

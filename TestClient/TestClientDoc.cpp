@@ -22,6 +22,7 @@
 #include "../EffPush/PushRender.h"
 #include "../SonySlide/SonySlideRender.h"
 #include "../BarmWipeTrans/BarmWipeRender.h"
+#include "../EffMatrixWipeTrans/MatrixWipeRender.h"
 #include "../EffChromaKey/ChromaKeyRender.h"
 #include "../EffPageRoll/PageRollRender.h"
 #include "../EffQuadPageRollTrans/QuadPageRollRender.h"
@@ -395,6 +396,14 @@ bool CTestClientDoc::EffectRender(CVideoBuffer* pDest, CVideoBuffer* pSrc, CVide
 		if(eff.Init(m_pRenderEngine))
 		{
 			bOK = eff.Render(pDest, pSrc, pSrc2, (BarmWipeFxParam*)m_pEffectParam);
+		}
+	}
+	else if(FX_MATRIX_WIPE == m_strEffectName)
+	{
+		CMatrixWipeRender eff;
+		if(eff.Init(m_pRenderEngine))
+		{
+			bOK = eff.Render(pDest, pSrc, pSrc2, (MatrixWipeFxParam*)m_pEffectParam);
 		}
 	}
 	else if(FX_PAGE_ROLL == m_strEffectName)

@@ -16,7 +16,14 @@ CBarmWipeRender::~CBarmWipeRender(void)
 
 bool CBarmWipeRender::Init( CRenderEngine* pEngine)
 {
-	return CWipeRenderBase::Init(pEngine);
+	bool bOK = CWipeRenderBase::Init(pEngine);
+	ASSERT(bOK);
+
+	LPDIRECT3DDEVICE9 pDevice = m_pEngine->GetDevice();
+	CResourceManager* pResMgr = m_pEngine->GetResourceManager();
+	m_pMaskEffect = pResMgr->CreateEffect(pDevice, _T("NewEffects/Barm_Mask.fx"));
+	ASSERT(m_pMaskEffect);
+	return m_pMaskEffect && bOK;
 }
 
 

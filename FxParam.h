@@ -134,6 +134,17 @@ struct BasicWipeFxParam : FxParamBase
 		BOOL	bOverlap;
 		int		nDivideType;
 		float   fDivideWidth;
+
+		Modify() :
+			nMultipleType(0),
+			bFlip(FALSE),
+			nMultipleNumberX(1),
+			nMultipleNumberY(1),
+			bOverlap(FALSE),
+			nDivideType(1),
+			fDivideWidth(0.f)
+		{
+		}
 	};
 	struct General
 	{
@@ -152,12 +163,16 @@ struct BasicWipeFxParam : FxParamBase
 struct BarmWipeFxParam : BasicWipeFxParam
 {
 	float fSlant;
+
+	BarmWipeFxParam() : fSlant(0.f) {}
 } ;
 
 struct MatrixWipeFxParam :public BasicWipeFxParam
 {
 	float	fTitleSize;
 	int		nSequence;
+
+	MatrixWipeFxParam() : fTitleSize(0.5f), nSequence(0) {}
 } ;
 
 

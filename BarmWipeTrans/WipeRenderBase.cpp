@@ -29,8 +29,7 @@ bool CWipeRenderBase::Init( CRenderEngine* pEngine )
 	ASSERT(m_pInstanceMesh);
 	m_pEffect = pResMgr->CreateEffect(pDevice, _T("NewEffects/BasicWipe.fx"));
 	ASSERT(m_pEffect);
-	m_pMaskEffect = pResMgr->CreateEffect(pDevice, _T("NewEffects/Barm_Mask.fx"));
-	ASSERT(m_pMaskEffect);
+
 	CVideoBufferManager* pBufMgr = m_pEngine->GetVideoBufferManager();
 	int w, h;
 	m_pEngine->GetTargetVideoSize(w, h);
@@ -479,9 +478,10 @@ bool CWipeRenderBase::RenderDrawOut(CVideoBuffer* pDstDef, CVideoBuffer* pSrcDef
 	//D3DXVECTOR4 vTransMisc(ppSrcDef[0]->fAlphaValue,ppSrcDef[1]->fAlphaValue,ppSrcDef[0]->pAlpha != NULL,ppSrcDef[1]->pAlpha != NULL);
 	float fAlphaValue4SrcA = 1.0f, fAlphaValue4SrcB = 1.0f;
 	D3DXVECTOR4 vTransMisc(fAlphaValue4SrcA, fAlphaValue4SrcB, false, false);
-	m_pEffect->SetVector("g_vTransMisc",&vTransMisc);
-
-	m_pEffect->SetTechnique("Trans");
+	hr = m_pEffect->SetVector("g_vTransMisc",&vTransMisc);
+	ASSERT(SUCCEEDED(hr));
+	hr = m_pEffect->SetTechnique("Trans");
+	ASSERT(SUCCEEDED(hr));
 #else
 	//if(!pSrcDef->bIsCGBuffer)	
 	{

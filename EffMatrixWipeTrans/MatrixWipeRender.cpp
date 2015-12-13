@@ -15,16 +15,16 @@ CMatrixWipeRender::~CMatrixWipeRender(void)
 bool CMatrixWipeRender::Init( CRenderEngine* pEngine )
 {
 	HRESULT hr = E_FAIL;
-	m_pEngine = pEngine;
+
+	bool bOK = CWipeRenderBase::Init(pEngine);
+	ASSERT(bOK);
+
 	LPDIRECT3DDEVICE9 pDevice = pEngine->GetDevice();
 	CResourceManager* pResMan = pEngine->GetResourceManager();
+	m_pMaskEffect = pResMan->CreateEffect(pDevice, _T("NewEffects/GMatrix_Mask.fx"));
+	ASSERT(m_pMaskEffect);
 
-	m_pQuadMesh = pResMan->CreateQuadMesh(pDevice);
-	ASSERT(m_pQuadMesh);
-	m_pEffect = pResMan->CreateEffect(pDevice, _T("NewEffects/GMatrix_Mask.fx"));
-	ASSERT(m_pEffect);
-
-	return true;
+	return m_pMaskEffect && bOK;
 }
 
 void CMatrixWipeRender::Uninit()

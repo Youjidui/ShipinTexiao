@@ -7,7 +7,7 @@ class CParamBasicWipeDlg : public CDialog
 	DECLARE_DYNAMIC(CParamBasicWipeDlg)
 
 public:
-	CParamBasicWipeDlg(CWnd* pParent = NULL);   // 标准构造函数
+	CParamBasicWipeDlg(LPCTSTR pEffectName, CWnd* pParent = NULL);   // 标准构造函数
 	virtual ~CParamBasicWipeDlg();
 
 	// 对话框数据
@@ -15,7 +15,7 @@ public:
 
 protected:
 	void SetParam(BasicWipeFxParam* pParam) {m_pParam = pParam;}
-	void SetEffectName(LPCTSTR pEffectName){m_EffectName = pEffectName;}
+	//void SetEffectName(LPCTSTR pEffectName){m_EffectName = pEffectName;}
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持

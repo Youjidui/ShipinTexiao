@@ -87,6 +87,14 @@ void CEffectBar::OnBnClickedParameters()
 			}
 			m_barmWipeDlg.ShowWindow(SW_SHOW);
 		}
+		else if(FX_MATRIX_WIPE == str)
+		{
+			if(!m_matrixWipeDlg.GetSafeHwnd())
+			{
+				m_matrixWipeDlg.Create(CParamMatrixWipeDlg::IDD);
+			}
+			m_matrixWipeDlg.ShowWindow(SW_SHOW);
+		}
 		else if(FX_PUSH == str)
 		{
 			if(!m_pushDlg.GetSafeHwnd())
@@ -198,13 +206,17 @@ BOOL CEffectBar::OnInitDialog()
 	i = m_ctrlEffects.AddString(FX_BARM_WIPE);
 	{
 		BarmWipeFxParam* pParam = new BarmWipeFxParam;
-		ZeroMemory(pParam, sizeof(BarmWipeFxParam));
 		pParam->cbSize = sizeof(BarmWipeFxParam);
-		pParam->fSlant = 1.0f;
 		m_ctrlEffects.SetItemDataPtr(i, pParam);
 		m_barmWipeDlg.SetParam(pParam);
 	}
-
+	i = m_ctrlEffects.AddString(FX_MATRIX_WIPE);
+	{
+		MatrixWipeFxParam* pParam = new MatrixWipeFxParam;
+		pParam->cbSize = sizeof(MatrixWipeFxParam);
+		m_ctrlEffects.SetItemDataPtr(i, pParam);
+		m_matrixWipeDlg.SetParam(pParam);
+	}
 	i = m_ctrlEffects.AddString(FX_SONY_SLIDE);
 	{
 		SonySlideFxParam* pParam = new SonySlideFxParam;
@@ -308,7 +320,12 @@ void CEffectBar::OnProgressChange( int nPos )
 		if(FX_BARM_WIPE == str)
 		{
 			BarmWipeFxParam* pParam = (BarmWipeFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
-			//pParam->fProgress = nPos / 100.f;
+			pParam->structPattern.fOffset = nPos / 10000.f;
+			AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)(LPCTSTR)str, (LPARAM)pParam);
+		}
+		if(FX_MATRIX_WIPE == str)
+		{
+			MatrixWipeFxParam* pParam = (MatrixWipeFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
 			pParam->structPattern.fOffset = nPos / 10000.f;
 			AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)(LPCTSTR)str, (LPARAM)pParam);
 		}
@@ -360,6 +377,11 @@ void CEffectBar::SetProgress(CSliderCtrl* pCtrl)
 		else if(FX_BARM_WIPE == str)
 		{
 			BarmWipeFxParam* pParam = (BarmWipeFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
+			if(pParam)	pCtrl->SetPos(pParam->structPattern.fOffset * 10000);
+		}
+		else if(FX_MATRIX_WIPE == str)
+		{
+			MatrixWipeFxParam* pParam = (MatrixWipeFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
 			if(pParam)	pCtrl->SetPos(pParam->structPattern.fOffset * 10000);
 		}
 		else if (FX_PUSH == str)

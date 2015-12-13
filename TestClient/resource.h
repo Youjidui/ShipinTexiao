@@ -139,10 +139,10 @@
 #define IDC_SLIDER_FINE_TUNE            1031
 #define IDC_SLIDER_YB_GAIN              1031
 #define IDC_SLIDER_REAR_SMOOTHNESS      1031
-#define IDC_SLIDER_SLANT3               1031
 #define IDC_SLIDER_GRAY_MIN             1032
 #define IDC_SLIDER_YB_LUM               1032
 #define IDC_CHECK_USE_FORE_GROUND       1032
+#define IDC_SLIDER_nSequence            1032
 #define IDC_SLIDER_GRAY_MAX             1033
 #define IDC_CHECK_CC_ON                 1033
 #define IDC_SLIDER_MATTE_RATIO          1033
@@ -198,7 +198,9 @@
 #define IDC_SLIDER_fDiffuse             1061
 #define IDC_CHECK_Light                 1062
 #define IDC_SLIDER_fAmbient             1063
+#define IDC_STATIC_fSlant               1063
 #define IDC_SLIDER_nDiveX               1064
+#define IDC_STATIC_nSequence            1064
 #define IDC_SLIDER_nDiveY               1065
 #define IDC_SLIDER_fIntervalX           1066
 #define IDC_SLIDER_fIntervalY           1067
@@ -222,7 +224,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        324
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1063
+#define _APS_NEXT_CONTROL_VALUE         1065
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif

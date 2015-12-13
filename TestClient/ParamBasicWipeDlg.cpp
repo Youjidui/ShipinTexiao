@@ -11,11 +11,12 @@
 
 IMPLEMENT_DYNAMIC(CParamBasicWipeDlg, CDialog)
 
-CParamBasicWipeDlg::CParamBasicWipeDlg(CWnd* pParent /*=NULL*/)
+CParamBasicWipeDlg::CParamBasicWipeDlg(LPCTSTR pEffectName, CWnd* pParent /*=NULL*/)
 : CDialog(CParamBasicWipeDlg::IDD, pParent)
 , m_pParam(NULL)
+, m_EffectName(pEffectName)
 {
-
+	ASSERT(m_EffectName);
 }
 
 CParamBasicWipeDlg::~CParamBasicWipeDlg()
@@ -41,7 +42,8 @@ BOOL CParamBasicWipeDlg::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 
-	// TODO:  在此添加额外的初始化
+	ASSERT(m_EffectName);
+
 	CSliderCtrl* pCtrl = NULL;
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_OFFSET1);		//Progress
 	pCtrl->SetRange(0, 10000);	//1.f, 0, 0.0001f
@@ -190,5 +192,6 @@ void CParamBasicWipeDlg::OnHScroll(UINT nSBCode, UINT uPos, CScrollBar* pScrollB
 		break;
 	}
 
+	ASSERT(m_EffectName);
 	AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)m_EffectName, (LPARAM)m_pParam);
 }

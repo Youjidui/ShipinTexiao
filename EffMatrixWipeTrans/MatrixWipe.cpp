@@ -942,6 +942,207 @@ void CMatrixWipe::TopLeftSpiral()
 	pTex->UnlockRect(0);
 }
 
+void CMatrixWipe::BottomRightSpiral()
+{
+	ASSERT(m_pTexture);
+	LPDIRECT3DTEXTURE9 pTex = m_pTexture->GetTexture();
+	ASSERT(pTex);
+	D3DLOCKED_RECT lr;
+	HRESULT hr = pTex->LockRect(0,&lr,NULL,0);
+	ASSERT(SUCCEEDED(hr));
+	float * pData = NULL; 
+
+	int nSeq = 0;
+	int nDir = DIR_Y_N;
+	int x = m_nTitleSize - 1,y = m_nTitleSize - 1;				
+	int xMax = m_nTitleSize - 1,yMax = m_nTitleSize,xMin = -1,yMin = -1;
+	int nStep = 1;
+	switch(m_nSequence)
+	{
+	case 0://Normal
+	case 1://BirDirection				
+		for(int i = 0; i < 2;i ++)
+		{			
+			while ( m_nSequence == 0 && nSeq < m_nTitleSize * m_nTitleSize
+				|| m_nSequence == 1 && nSeq < m_nTitleSize * m_nTitleSize / 2 && nSeq > -1) 
+			{	
+				pData = (float*)((byte*)lr.pBits + lr.Pitch * y);	
+
+				pData[x] = nSeq;
+
+				nSeq += nStep;	
+
+				switch(nDir) 
+				{
+				case DIR_Y_N://y -
+					y --;
+					if(y - 1 <= yMin)
+					{
+						yMin ++;
+						nDir = DIR_X_N;
+					}
+					break;
+				case DIR_X_N:// x -
+					x --;
+					if(x - 1 <= xMin)
+					{
+						xMin ++;
+						nDir = DIR_Y_P;
+					}
+					break;
+				case DIR_Y_P://y +
+					y++;
+					if(y + 1 >= yMax)
+					{
+						yMax --;
+						nDir = DIR_X_P;
+					}
+					break;		
+				case DIR_X_P: //x +
+					x ++;
+					if(x + 1 >= xMax)
+					{
+						xMax --;
+						nDir = DIR_Y_N;
+					}
+					break;
+				}
+			}
+			if(m_nSequence == 1)
+			{
+				nStep = -1;
+				nSeq = m_nTitleSize * m_nTitleSize / 2 - 1;
+				m_nOffset = m_nTitleSize * m_nTitleSize / 2;
+			}
+			else
+				break;
+		}
+		break;	
+	case 2://Checker	
+	case 3://Checker Reverse
+		while (nSeq < m_nTitleSize * m_nTitleSize) 
+		{	
+			pData = (float*)((byte*)lr.pBits + lr.Pitch * y);	
+
+			pData[x] = nSeq / 2;
+
+			if(nSeq % 2)
+			{
+				if(m_nSequence == 2)
+					pData[x] += m_nTitleSize * m_nTitleSize / 2;											
+				else //3
+					pData[x] = m_nTitleSize * m_nTitleSize - 1 - pData[x];
+			}
+
+			nSeq += nStep;			
+
+			switch(nDir) 
+			{
+			case DIR_Y_N://y -
+				y --;
+				if(y - 1 <= yMin)
+				{
+					yMin ++;
+					nDir = DIR_X_N;
+				}
+				break;
+			case DIR_X_N:// x -
+				x --;
+				if(x - 1 <= xMin)
+				{
+					xMin ++;
+					nDir = DIR_Y_P;
+				}
+				break;
+			case DIR_Y_P://y +
+				y++;
+				if(y + 1 >= yMax)
+				{
+					yMax --;
+					nDir = DIR_X_P;
+				}
+				break;		
+			case DIR_X_P: //x +
+				x ++;
+				if(x + 1 >= xMax)
+				{
+					xMax --;
+					nDir = DIR_Y_N;
+				}
+				break;
+			}
+		}
+		break;
+	case 4://Bidir Checker
+	case 5://Bidir Checker Rev
+		//
+		for( int i = 0; i < 2 ; i ++)
+		{
+
+			while (nSeq < m_nTitleSize * m_nTitleSize / 2  && nSeq > -1) 
+			{	
+				pData = (float*)((byte*)lr.pBits + lr.Pitch * y);	
+
+				pData[x] = nSeq / 2;
+
+
+				if((nSeq % 2) && i == 0 || (nSeq % 2) == 0 && i == 1)
+				{
+					if(m_nSequence == 4)
+						pData[x] += m_nTitleSize * m_nTitleSize / 4;											
+					else //5
+						pData[x] = m_nTitleSize * m_nTitleSize / 2 - 1 - pData[x];
+				}
+
+				nSeq += nStep;			
+
+				switch(nDir) 
+				{
+				case DIR_Y_N://y -
+					y --;
+					if(y - 1 <= yMin)
+					{
+						yMin ++;
+						nDir = DIR_X_N;
+					}
+					break;
+				case DIR_X_N:// x -
+					x --;
+					if(x - 1 <= xMin)
+					{
+						xMin ++;
+						nDir = DIR_Y_P;
+					}
+					break;
+				case DIR_Y_P://y +
+					y++;
+					if(y + 1 >= yMax)
+					{
+						yMax --;
+						nDir = DIR_X_P;
+					}
+					break;		
+				case DIR_X_P: //x +
+					x ++;
+					if(x + 1 >= xMax)
+					{
+						xMax --;
+						nDir = DIR_Y_N;
+					}
+					break;
+				}													
+			}
+			nStep = -1;
+			nSeq = m_nTitleSize * m_nTitleSize / 2 - 1;
+			m_nOffset = m_nTitleSize * m_nTitleSize / 2;
+		}
+		break;
+	}				
+
+
+	pTex->UnlockRect(0);
+}
+
 void CMatrixWipe::DiagonalTopLeft()
 {
 	ASSERT(m_pTexture);

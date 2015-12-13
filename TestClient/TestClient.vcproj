@@ -412,6 +412,10 @@
 			ReferencedProjectIdentifier="{45ADC5D5-B7AC-43C5-A114-5DDACBB7EC08}"
 			RelativePathToProject=".\Eff3DCubeTrans\Eff3DCubeTrans.vcproj"
 		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{B0D7DD53-F02C-4270-A62A-62A5209B3B97}"
+			RelativePathToProject=".\EffMatrixWipeTrans\EffMatrixWipeTrans.vcproj"
+		/>
 	</References>
 	<Files>
 		<Filter
@@ -469,6 +473,10 @@
 			</File>
 			<File
 				RelativePath=".\ParamCubeDlg.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ParamMatrixWipeDlg.cpp"
 				>
 			</File>
 			<File
@@ -595,6 +603,10 @@
 			</File>
 			<File
 				RelativePath=".\ParamCubeDlg.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ParamMatrixWipeDlg.h"
 				>
 			</File>
 			<File
