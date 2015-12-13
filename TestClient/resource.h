@@ -25,6 +25,7 @@
 #define IDD_COLOR_KEY                   313
 #define IDD_AMOEBA_WIPE                 314
 #define IDD_PARAM_BARM_WIPE             315
+#define IDD_PARAM_BASIC_WIPE            315
 #define IDD_PARAM_PUSH                  317
 #define IDD_PARAM_CHROMA_KEY            318
 #define IDD_DIALOG_SONY_SLIDE           319
@@ -138,6 +139,7 @@
 #define IDC_SLIDER_FINE_TUNE            1031
 #define IDC_SLIDER_YB_GAIN              1031
 #define IDC_SLIDER_REAR_SMOOTHNESS      1031
+#define IDC_SLIDER_SLANT3               1031
 #define IDC_SLIDER_GRAY_MIN             1032
 #define IDC_SLIDER_YB_LUM               1032
 #define IDC_CHECK_USE_FORE_GROUND       1032
@@ -210,7 +212,6 @@
 #define IDC_SLIDER_BackgroundColor_G    1075
 #define IDC_SLIDER_fPerspective         1076
 #define IDC_SLIDER_nDirecttion          1079
-#define IDC_SLIDER30                    1080
 #define IDC_SLIDER_fTransition          1080
 #define IDC_SLIDER_fBackgroundTransparency 1081
 #define IDC_CHECK_bReverse              1082
