@@ -43,4 +43,5 @@ private:
 	
 	BOOL m_bRotate;
 	SonyDME3DTransfromFxPrarm* m_pParam;
+	D3DXMATRIXA16	m_matWorld,m_matView,m_matProj;
 };

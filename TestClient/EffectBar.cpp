@@ -242,6 +242,15 @@ BOOL CEffectBar::OnInitDialog()
 		m_ctrlEffects.SetItemDataPtr(i, p);
 		m_PageRollDlg.SetParam(p);
 	}
+	i = m_ctrlEffects.AddString(FX_SONY_DME_3D_TRANSFORM);
+	{
+		SonyDME3DTransfromFxPrarm* p = new SonyDME3DTransfromFxPrarm;
+		m_ctrlEffects.SetItemDataPtr(i, p);
+		//m_PageRollDlg.SetParam(p);
+
+	}
+
+	m_ctrlEffects.SetCurSel(0);
 	i = m_ctrlEffects.AddString(FX_QUAD_PAGE_ROLL);
 	{
 		QuadPageRollFxParam* p = new QuadPageRollFxParam;
@@ -346,6 +355,11 @@ void CEffectBar::OnProgressChange( int nPos )
 			PageRollFxParam* pParam = (PageRollFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
 			pParam->structTrans.fTransition = nPos / 10000.f;
 			AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)(LPCTSTR)str, (LPARAM)pParam);
+		}
+
+		else if (FX_SONY_DME_3D_TRANSFORM == str)
+		{
+			SonyDME3DTransfromFxPrarm* pParam = (SonyDME3DTransfromFxPrarm*)m_ctrlEffects.GetItemDataPtr(nSel);
 		}
 		else if (FX_QUAD_PAGE_ROLL == str)
 		{

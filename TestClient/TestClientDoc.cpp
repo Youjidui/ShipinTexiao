@@ -25,9 +25,9 @@
 #include "../EffMatrixWipeTrans/MatrixWipeRender.h"
 #include "../EffChromaKey/ChromaKeyRender.h"
 #include "../EffPageRoll/PageRollRender.h"
+#include "../SonyDME3DTransform/SonyDME3DTransformRender.h"
 #include "../EffQuadPageRollTrans/QuadPageRollRender.h"
 #include "../Eff3DCubeTrans/CubeTransRender.h"
-
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -447,6 +447,14 @@ bool CTestClientDoc::EffectRender(CVideoBuffer* pDest, CVideoBuffer* pSrc, CVide
 		if(eff.Init(m_pRenderEngine))
 		{
 			bOK = eff.Render(pDest, pSrc, pSrc2, (CubeFxParam*)m_pEffectParam);
+		}
+	}
+	else if(FX_SONY_DME_3D_TRANSFORM == m_strEffectName)
+	{
+		CSonyDME3DTransformRender eff;
+		if(eff.Init(m_pRenderEngine))
+		{
+			bOK = eff.Render(pDest, pSrc, (SonyDME3DTransfromFxPrarm*)m_pEffectParam);
 		}
 	}
 	return bOK;
