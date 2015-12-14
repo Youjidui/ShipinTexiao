@@ -4,6 +4,7 @@
 #include "FxEffectResource.h"
 #include "PixelShaderResource.h"
 #include "VertexShaderResource.h"
+#include "BaseTexture.h"
 #include "VideoBuffer.h"
 
 

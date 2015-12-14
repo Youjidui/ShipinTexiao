@@ -1,7 +1,8 @@
 #include "StdAfx.h"
-#include ".\pixelshader.h"
+#include "pixelshader.h"
 #include "../Utility/SafeDelete.h"
 #include "../Utility/PathSettings.h"
+#include "../Utility/ColorConvertor.h"
 #include <DxErr.h>
 #pragma comment(lib, "DxErr")
 #include <Shlwapi.h>
@@ -123,4 +124,43 @@ HRESULT CPixelShader::Destroy()
 	SAFE_RELEASE(m_pShader);
 	SAFE_RELEASE(m_pConstTable);
 	return S_OK;
+}
+
+HRESULT CPixelShader::SetYUVA2RGBAMatrix(int VideoStandard /*= 0*/)
+{
+	HRESULT hr = E_FAIL;
+	LPD3DXCONSTANTTABLE pConstTable = m_pConstTable;
+	ASSERT(pConstTable);
+	D3DXHANDLE hMatRGB2YUV = pConstTable->GetConstantByName(NULL,"matRGBA2YUVA");
+	ASSERT(hMatRGB2YUV);
+	D3DXHANDLE hMatYUV2RGB = pConstTable->GetConstantByName(NULL,"matYUVA2RGBA");
+	ASSERT(hMatYUV2RGB);
+	//if(m_pResManager->m_dwVideoMode == VM_SD)
+	if(VideoStandard)
+	{	
+		if(hMatRGB2YUV)
+		{
+			hr = pConstTable->SetMatrix(m_pDevice, hMatRGB2YUV, &g_matRGBA2YUVA_SD);
+			ASSERT(SUCCEEDED(hr));
+		}
+		if(hMatYUV2RGB)
+		{
+			hr = pConstTable->SetMatrix(m_pDevice, hMatYUV2RGB, &g_matYUVA2RGBA_SD);
+			ASSERT(SUCCEEDED(hr));
+		}
+	}		
+	else
+	{			
+		if(hMatRGB2YUV)
+		{
+			hr = pConstTable->SetMatrix(m_pDevice, hMatRGB2YUV, &g_matRGBA2YUVA_HD);
+			ASSERT(SUCCEEDED(hr));
+		}
+		if(hMatYUV2RGB)
+		{
+			hr = pConstTable->SetMatrix(m_pDevice, hMatYUV2RGB, &g_matYUVA2RGBA_HD);
+			ASSERT(SUCCEEDED(hr));
+		}
+	}
+	return hr;
 }

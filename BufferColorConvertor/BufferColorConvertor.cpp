@@ -26,6 +26,7 @@ bool CBufferColorConvertor::Init( CRenderEngine* pEngine )
 	ASSERT(m_pQuadMesh);
 	m_pEffect = pResMan->CreateEffect(pDevice, _T("NewEffects/YUVA2RGBA.fx"));
 	ASSERT(m_pEffect);
+	m_pEffect->SetYUVA2RGBAMatrix();
 
 	return SUCCEEDED(hr);
 }

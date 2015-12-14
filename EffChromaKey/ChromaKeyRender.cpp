@@ -294,7 +294,7 @@ bool ChromaKeyRender::RenderArea(CVideoBuffer*pDstDef, CVideoBuffer *pSrcDef, Fx
 	bool bYUYV = false;		//(pSrcDef->IsYUV16Buffer());
 	bool bAlpha = false;	//(pSrcDef->pAlpha);
 	//bool bYUYVA = bYUYV&&bAlpha;
-	bool bYUVA = true;	//(pSrcDef->bufferFormat == FMT_YUVA32);
+	bool bYUVA = false;	//(pSrcDef->bufferFormat == FMT_YUVA32);
 
 	//if( pDstDef->IsYUV16Buffer() && pDstDef->pAlpha==NULL )
 	//{
@@ -309,6 +309,7 @@ bool ChromaKeyRender::RenderArea(CVideoBuffer*pDstDef, CVideoBuffer *pSrcDef, Fx
 	//else 
 	if (bYUVA)
 		pixelshader = m_PS_CRK_YUVA;
+	pixelshader->SetYUVA2RGBAMatrix();
 
 	// 2.1 setRT和标志位设定	
 	//pDstDef->bRenderToFullTarget = false;
@@ -456,11 +457,6 @@ bool ChromaKeyRender::RenderArea(CVideoBuffer*pDstDef, CVideoBuffer *pSrcDef, Fx
 	pDevice->SetRenderTarget(1, NULL);
 	pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
 	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
-
-	//pDstDef->bContainedAlpha = true;
-	//pDstDef->bIsCG_BlenedBuffer = pSrcDef->bIsCG_BlenedBuffer;
-	//  	m_pResMan->DumpResourceToFile(pDstDef->handle, L"c:\\crkdes_yuyv.dds");
-	//  	m_pResMan->DumpResourceToFile(pDstDef->handle, L"c:\\crkdes_alpha.dds", TRUE);	
 
 
 	D3DXSaveSurfaceToFile(_T("./ChromaKey.dds"), D3DXIFF_DDS, pDstDef->GetSurface(), NULL, NULL);

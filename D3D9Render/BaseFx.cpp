@@ -362,3 +362,43 @@ void	CBaseFx::CheckParamName(LPCSTR pName)
 #endif
 }
 
+HRESULT CBaseFx::SetYUVA2RGBAMatrix(int VideoStandard/* = 0*/)
+{
+	HRESULT hr = E_FAIL;
+	LPD3DXEFFECT pEffect = GetFxPtr();
+	if( pEffect )
+	{
+		D3DXHANDLE hMatRGB2YUV = pEffect->GetParameterByName(NULL,"matRGBA2YUVA");
+		ASSERT( hMatRGB2YUV != NULL );
+		D3DXHANDLE hMatYUV2RGB = pEffect->GetParameterByName(NULL,"matYUVA2RGBA");
+		ASSERT(hMatYUV2RGB);
+
+		if(VideoStandard)	// == 0 (HD)
+		{
+			if(hMatRGB2YUV)
+			{
+				hr = pEffect->SetMatrix(hMatRGB2YUV,&g_matRGBA2YUVA_SD);
+				ASSERT(SUCCEEDED(hr));
+			}
+			if(hMatYUV2RGB)
+			{
+				hr = pEffect->SetMatrix(hMatYUV2RGB,&g_matYUVA2RGBA_SD);
+				ASSERT(SUCCEEDED(hr));
+			}
+		}		
+		else
+		{		
+			if(hMatRGB2YUV)
+			{
+				hr = pEffect->SetMatrix(hMatRGB2YUV,&g_matRGBA2YUVA_HD);
+				ASSERT(SUCCEEDED(hr));
+			}
+			if(hMatYUV2RGB)
+			{
+				hr = pEffect->SetMatrix(hMatYUV2RGB,&g_matYUVA2RGBA_HD);
+				ASSERT(SUCCEEDED(hr));
+			}
+		}		
+	}
+	return hr;
+}

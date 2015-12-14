@@ -1,6 +1,6 @@
 #pragma once
 
-#include "BaseTexture.h"
+//#include "BaseTexture.h"
 
 class  CBaseFx
 {
@@ -12,7 +12,7 @@ public:
 	HRESULT GetFunction(void* pData, UINT* pSizeOfData){return S_OK;};
 
 public:
-	//HRESULT SetTexture(LPCSTR pName, CBaseTexture* pBaseTex);
+	//wrap of D3DXEFFECT
 	HRESULT SetTexture(LPCSTR pName, LPDIRECT3DTEXTURE9 pTex);
 	HRESULT SetMatrix(LPCSTR pName, D3DXMATRIX* pMat);
 	HRESULT SetMatrixArray(LPCSTR pName, D3DXMATRIX* pMat, UINT uCount);
@@ -24,8 +24,6 @@ public:
 	HRESULT SetFloat(LPCSTR pName, FLOAT fValue);
 	HRESULT SetFloatArray(LPCSTR pName, FLOAT* pf, UINT Count);
 	void	CheckParamName(LPCSTR pName);
-
-
 	HRESULT SetTechnique(LPCSTR pName);
 
 	HRESULT Begin(UINT *pPasses, DWORD Flags);
@@ -36,7 +34,8 @@ public:
 
 	HRESULT CommitChanges();
 
-	//HRESULT SetYUVA2RGBAMatrix();
+	//special function
+	HRESULT SetYUVA2RGBAMatrix(int VideoStandard = 0);
 
 protected:
 	HRESULT Destroy();

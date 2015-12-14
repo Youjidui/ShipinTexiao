@@ -462,6 +462,3 @@ bool CRenderEngine::BlendCompose( CVideoBuffer* pDest, CVideoBuffer* pSrcA, CVid
 	//}
 	return true;
 }
-
-
-
