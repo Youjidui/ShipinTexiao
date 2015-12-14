@@ -21,7 +21,7 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)_$(PlatformName)"
 			IntermediateDirectory="$(ConfigurationName)_$(PlatformName)"
 			ConfigurationType="4"
-			InheritedPropertySheets="..\DXSDK.vsprops;..\vld.vsprops"
+			InheritedPropertySheets="..\DXSDK.vsprops;..\vld.vsprops;..\log4cpp.vsprops"
 			UseOfMFC="2"
 			CharacterSet="1"
 			>
@@ -84,6 +84,7 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="4"
+			InheritedPropertySheets="..\DXSDK.vsprops;..\log4cpp.vsprops;..\vld.vsprops"
 			UseOfMFC="2"
 			CharacterSet="1"
 			WholeProgramOptimization="1"

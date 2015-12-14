@@ -445,11 +445,11 @@ bool CRenderEngine::BlendCompose( CVideoBuffer* pDest, CVideoBuffer* pSrcA, CVid
 		//D3DXSaveSurfaceToFile(_T("./BlendCompose_Src_B.dds"), D3DXIFF_DDS, pSrcB->GetSurface(), NULL, NULL);
 		//D3DXSaveSurfaceToFile(_T("./BlendCompose_Dest.dds"), D3DXIFF_DDS, pDest->GetSurface(), NULL, NULL);
 	}
-	for( int i = 0;i< num*2;i++)
+	for( int i = 0; i < num * 2; i++)
 	{
-		m_pDevice->SetTexture( i,NULL );
+		m_pDevice->SetTexture( i, NULL );
 	}	 
-	m_pDevice->SetRenderTarget(1,NULL);
+	m_pDevice->SetRenderTarget(1, NULL);
 	m_pDevice->SetPixelShader(NULL); 
 
 	//if(vBufferDst->handle!=hTarget )

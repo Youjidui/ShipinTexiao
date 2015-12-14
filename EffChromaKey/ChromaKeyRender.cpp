@@ -459,7 +459,7 @@ bool ChromaKeyRender::RenderArea(CVideoBuffer*pDstDef, CVideoBuffer *pSrcDef, Fx
 	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
 
 
-	D3DXSaveSurfaceToFile(_T("./ChromaKey.dds"), D3DXIFF_DDS, pDstDef->GetSurface(), NULL, NULL);
+	//D3DXSaveSurfaceToFile(_T("./ChromaKey.dds"), D3DXIFF_DDS, pDstDef->GetSurface(), NULL, NULL);
 
 	return true;
 }

@@ -294,8 +294,15 @@ BOOL CMainFrame::LoadFrame(UINT nIDResource, DWORD dwDefaultStyle, CWnd* pParent
 LRESULT CMainFrame::OnSetImage( WPARAM w, LPARAM l )
 {
 	CTestClientDoc* pDoc = (CTestClientDoc*)GetActiveDocument();
-	pDoc->SetImage(w, (LPCTSTR)l);
-	pDoc->UpdateBuffer(w);
+	LPCTSTR pszFilename = (LPCTSTR)l;
+	pDoc->SetImage(w, pszFilename);
+	bool bOK = pDoc->UpdateBuffer(w);
+	if(!bOK)
+	{
+		CString str;
+		str.Format(_T("图像文件 %s 没有加载成功，请检查"), pszFilename);
+		AfxMessageBox(str);
+	}
 	pDoc->UpdateAllViews(NULL);
 	return 0;
 }

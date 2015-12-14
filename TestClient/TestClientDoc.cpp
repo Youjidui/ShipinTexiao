@@ -119,6 +119,8 @@ void CTestClientDoc::Dump(CDumpContext& dc) const
 {
 	CDocument::Dump(dc);
 }
+#endif	//_DEBUG
+
 
 void CTestClientDoc::SetImage( UINT level, LPCTSTR pszFilename )
 {
@@ -141,7 +143,9 @@ bool CTestClientDoc::UpdateBuffer( UINT level )
 		if(fif == FIF_UNKNOWN) 
 			fif = FreeImage_GetFIFFromFilenameU(filename);
 		if(fif == FIF_UNKNOWN)
+		{
 			return false;
+		}
 
 		FIBITMAP* pBmp = NULL;
 		if(FreeImage_FIFSupportsReading(fif))
@@ -229,7 +233,6 @@ bool CTestClientDoc::InitEffect(HWND hDeviceWnd, int nBackBufferWidth, int nBack
 	if(m_pRenderEngine)
 	{
 		m_pBufferMgr = CreateVideoBufferManager(m_pRenderEngine);
-		//m_pRenderEngine->SetVideoBufferManager(m_pBufferMgr);
 	}
 	if(m_pBufferMgr)
 	{
@@ -272,8 +275,6 @@ bool CTestClientDoc::SetBackBufferSize( UINT w, UINT h )
 	return !!m_pDestImage;
 }
 
-#endif //_DEBUG
-
 
 // CTestClientDoc 命令
 
@@ -291,40 +292,58 @@ bool CTestClientDoc::Render()
 	{
 		if(m_pDestImage)
 		{
-			if(!m_SrcImages.empty())
+			size_t sz = m_SrcImages.size();
+			if(sz == 2)
 			{
-				if(m_SrcImages[0])
+				if(m_SrcImages[0] && m_SrcImages[1])
 				{
 					CVideoBuffer* pSrc = m_SrcImages[0];
-					CVideoBuffer* pSrc2 = NULL;
-					if(m_SrcImages.size() >= 2)
-						pSrc2 = m_SrcImages[1];
+					CVideoBuffer* pSrc2 = m_SrcImages[1];
 					CVideoBuffer* pDest = m_pDestImage;
-					const VideoBufferInfo& destBufferInfo = pDest->GetVideoBufferInfo();
-					const VideoBufferInfo& srcBufferInfo = pSrc->GetVideoBufferInfo();
+
+					//alpha
+					VideoBufferInfo tempBI = pDest->GetVideoBufferInfo();
+					tempBI.eUsage = VideoBufferInfo::_IN_OUT;
+					CVideoBuffer* pTemp = m_pBufferMgr->CreateVideoBuffer(tempBI);
+					ASSERT(pTemp);
+					pDest = pTemp;
+					ASSERT(pDest == pTemp);
 
 					////src buffer for YUV2RGB
-					//VideoBufferInfo tempBI;
-					//memcpy(&tempBI, &destBufferInfo, sizeof(VideoBufferInfo));
-					//tempBI.eUsage = VideoBufferInfo::_IN_OUT;
-					//CVideoBuffer* pTemp = m_pBufferMgr->CreateVideoBuffer(tempBI);
-					//ASSERT(pTemp);
-					//pDest = pTemp;
+					//CVideoBuffer* pYUV = m_pBufferMgr->CreateVideoBuffer(tempBI);
+					//ASSERT(pYUV);
+					//pDest = pYUV;
 
 					//effect render
 					bOK = EffectRender(pDest, pSrc, pSrc2);
+					ASSERT(bOK);
 
 					////YUV to RGB
-					//pDest = m_pDestImage;
-					//if(ColorConvert(pDest, pTemp, false))
-					//{
-					//}
-					//else
-					//{
-					//	ASSERT(false);
-					//}
-					//m_pBufferMgr->ReleaseVideoBuffer(pTemp);
+					//pDest = pTemp;
+					//bOK = ColorConvert(pDest, pYUV, false);
+					//ASSERT(bOK);
+					//m_pBufferMgr->ReleaseVideoBuffer(pYUV);
+
+					pDest = m_pDestImage;
+					ASSERT(pDest != pTemp);
+					bOK = m_pRenderEngine->BlendCompose(pDest, pSrc2, pTemp);
+					ASSERT(bOK);
+					//D3DXSaveSurfaceToFile(_T("./Blend_src_a.dds"), D3DXIFF_DDS, pTemp->GetSurface(), NULL, NULL);
+					//D3DXSaveSurfaceToFile(_T("./Blend_src_B.dds"), D3DXIFF_DDS, pSrc2->GetSurface(), NULL, NULL);
+					//D3DXSaveSurfaceToFile(_T("./Blend.dds"), D3DXIFF_DDS, pDest->GetSurface(), NULL, NULL);
+					m_pBufferMgr->ReleaseVideoBuffer(pTemp);
 				}
+				else
+				{
+					CString str;
+					bool bSecond = (m_SrcImages[1] == NULL);
+					str.Format(_T("发现第 %d 层的图像文件加载失败，请检查"), bSecond ? 2 : 1);
+					AfxMessageBox(str);
+				}
+			}
+			else
+			{
+				AfxMessageBox(_T("请确保 2 个图层的图像文件都正确指定了"));
 			}
 		}
 	}
