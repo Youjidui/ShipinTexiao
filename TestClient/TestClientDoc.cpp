@@ -21,7 +21,7 @@
 #include "../BarmWipeTrans/BarmWipeRender.h"
 #include "../EffChromaKey/ChromaKeyRender.h"
 #include "../EffPageRoll/PageRollRender.h"
-
+#include "../SonyDME3DTransform/SonyDME3DTransformRender.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -368,6 +368,14 @@ bool CTestClientDoc::Render()
 							{
 								bOK = eff.Render(pDest, pSrc, pSrc2, (PageRollFxParam*)m_pEffectParam);
 							}
+						}
+					}
+					else if(FX_SONY_DME_3D_TRANSFORM == m_strEffectName)
+					{
+						CSonyDME3DTransformRender eff;
+						if(eff.Init(m_pRenderEngine))
+						{
+							bOK = eff.Render(pDest, pSrc, (SonyDME3DTransfromFxPrarm*)m_pEffectParam);
 						}
 					}
 				}

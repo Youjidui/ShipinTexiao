@@ -400,6 +400,10 @@
 			ReferencedProjectIdentifier="{6E2278E6-9BDB-47D2-98C8-A640BFC7E8EA}"
 			RelativePathToProject=".\EffPageRoll\EffPageRoll.vcproj"
 		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{EC561354-1224-4742-AE42-38CA5AE42320}"
+			RelativePathToProject=".\SonyDME3DTransform\SonyDME3DTransform.vcproj"
+		/>
 	</References>
 	<Files>
 		<Filter
