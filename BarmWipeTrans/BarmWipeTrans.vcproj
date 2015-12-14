@@ -160,10 +160,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\BaseWipe.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\stdafx.cpp"
 				>
 				<FileConfiguration
@@ -183,6 +179,14 @@
 					/>
 				</FileConfiguration>
 			</File>
+			<File
+				RelativePath=".\WipeBase.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\WipeRenderBase.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Í·ÎÄ¼þ"
@@ -198,15 +202,19 @@
 				>
 			</File>
 			<File
-				RelativePath=".\BaseWipe.h"
-				>
-			</File>
-			<File
 				RelativePath=".\stdafx.h"
 				>
 			</File>
 			<File
 				RelativePath=".\targetver.h"
+				>
+			</File>
+			<File
+				RelativePath=".\WipeBase.h"
+				>
+			</File>
+			<File
+				RelativePath=".\WipeRenderBase.h"
 				>
 			</File>
 		</Filter>

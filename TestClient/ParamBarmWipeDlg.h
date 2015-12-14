@@ -1,11 +1,14 @@
 #pragma once
 
 #include "../FxParam.h"
+#include "ParamBasicWipeDlg.h"
 
 // CParamBarmWipeDlg 对话框
 
-class CParamBarmWipeDlg : public CDialog
+class CParamBarmWipeDlg : public CParamBasicWipeDlg
 {
+	typedef CParamBasicWipeDlg _baseClass;
+
 	DECLARE_DYNAMIC(CParamBarmWipeDlg)
 
 public:
@@ -13,12 +16,12 @@ public:
 	virtual ~CParamBarmWipeDlg();
 
 // 对话框数据
-	enum { IDD = IDD_PARAM_BARM_WIPE };
+	//enum { IDD = IDD_PARAM_BARM_WIPE };
 	void SetParam(BarmWipeFxParam* pParam) {m_pParam = pParam;}
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
-	BarmWipeFxParam* m_pParam;
+	//BarmWipeFxParam* m_pParam;
 
 	DECLARE_MESSAGE_MAP()
 public:

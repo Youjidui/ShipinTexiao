@@ -73,16 +73,62 @@ HRESULT CRenderEngine::Create( HWND hDeviceWnd, UINT nBackBufferWidth, UINT nBac
 	return hr;
 }
 
-//bool CRenderEngine::SetVertexShader( LPCTSTR lpszShaderName )
-//{
-//	HRESULT hr = E_FAIL;
-//	CVertexShader* pShader = m_pResMgr->CreateVertexShader(m_pDevice, lpszShaderName);
-//	if(pShader)
-//	{
-//		hr = m_pDevice->SetVertexShader(pShader->GetVertexShaderPtr());
-//	}
-//	return SUCCEEDED(hr);
-//}
+bool CRenderEngine::SetRenderTarget( CVideoBuffer* pDest, bool bSetDepthStencil )
+{
+	HRESULT hr = E_FAIL;
+	LPDIRECT3DDEVICE9 pDevice = GetDevice();
+	LPDIRECT3DSURFACE9 pRTSurface = NULL;
+	if(pDest)
+	{
+		pRTSurface = pDest->GetSurface();
+	}
+
+	// set render target
+	ASSERT(NULL != pRTSurface);
+	hr = pDevice->SetRenderTarget(0, pRTSurface);
+	if(FAILED(hr))
+	{
+		LPCTSTR pszErrorString = DXGetErrorString(hr);
+		LPCTSTR pszErrorDesc = DXGetErrorDescription(hr);
+		TRACE(pszErrorString);
+		TRACE(pszErrorDesc);
+	}
+	//SAFE_RELEASE(pRTSurface);
+	hr = pDevice->SetRenderTarget(1, NULL);
+	ASSERT(SUCCEEDED(hr));
+
+	if(pRTSurface)
+	{
+		const VideoBufferInfo& buffInfo = pDest->GetVideoBufferInfo();
+		// set view port
+		D3DVIEWPORT9 vp;
+		vp.MaxZ = 1.0f;
+		vp.MinZ = 0.0f;
+		vp.X        = 0;
+		vp.Y        = 0;
+		vp.Width    = buffInfo.nWidth;
+		vp.Height   = buffInfo.nHeight;
+		hr = pDevice->SetViewport(&vp);
+		ASSERT(SUCCEEDED(hr));
+
+		DWORD flag = D3DCLEAR_TARGET;
+		if(bSetDepthStencil)
+		{
+			SetDepthStencilBuffer(true);
+			flag = D3DCLEAR_TARGET|D3DCLEAR_ZBUFFER|D3DCLEAR_STENCIL;
+		}
+		hr = pDevice->Clear(0, NULL, flag, 0, 1.0f, 0);
+		if(FAILED(hr))
+		{
+			LPCTSTR pszErrorString = DXGetErrorString(hr);
+			LPCTSTR pszErrorDesc = DXGetErrorDescription(hr);
+			TRACE(pszErrorString);
+			TRACE(pszErrorDesc);
+		}
+	}
+	return !!pRTSurface;
+}
+
 
 bool CRenderEngine::SetRenderTarget( CVideoBuffer* pDest )
 {
@@ -122,18 +168,22 @@ bool CRenderEngine::SetRenderTarget( CVideoBuffer* pDest )
 		hr = pDevice->SetViewport(&vp);
 		ASSERT(SUCCEEDED(hr));
 
-		hr = pDevice->Clear(0, NULL, D3DCLEAR_TARGET|D3DCLEAR_ZBUFFER, 0, 1.0f, 0);	//no D3DCLEAR_STENCIL
+		DWORD flag = D3DCLEAR_TARGET;
+		LPDIRECT3DSURFACE9 pDepthStencilBuffer = NULL;
+		hr = pDevice->GetDepthStencilSurface(&pDepthStencilBuffer);
 		//ASSERT(SUCCEEDED(hr));
+		if(pDepthStencilBuffer)
+		{
+			flag = D3DCLEAR_TARGET|D3DCLEAR_ZBUFFER|D3DCLEAR_STENCIL;
+			pDepthStencilBuffer->Release();
+		}
+		hr = pDevice->Clear(0, NULL, flag, 0, 1.0f, 0);
 		if(FAILED(hr))
 		{
-			hr = pDevice->Clear(0, NULL, D3DCLEAR_TARGET, 0, 1.0f, 0);
-			if(FAILED(hr))
-			{
-				LPCTSTR pszErrorString = DXGetErrorString(hr);
-				LPCTSTR pszErrorDesc = DXGetErrorDescription(hr);
-				TRACE(pszErrorString);
-				TRACE(pszErrorDesc);
-			}
+			LPCTSTR pszErrorString = DXGetErrorString(hr);
+			LPCTSTR pszErrorDesc = DXGetErrorDescription(hr);
+			TRACE(pszErrorString);
+			TRACE(pszErrorDesc);
 		}
 	}
 	return !!pRTSurface;
@@ -240,7 +290,7 @@ CVideoBuffer* CRenderEngine::CreateRenderTargetBuffer()
 	return pMask;
 }
 
-bool CRenderEngine::SetDepthBuffer(bool bUseDepthBuffer)
+bool CRenderEngine::SetDepthStencilBuffer(bool bUseDepthBuffer)
 {
 	HRESULT hr = E_FAIL;
 	if(bUseDepthBuffer)

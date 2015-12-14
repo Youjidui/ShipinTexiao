@@ -2,12 +2,6 @@
 #include "PageRollRender.h"
 #include "../Utility/SafeDelete.h"
 
-
-#define GRID 2
-#define FAN  8
-#define NumGrid 101
-
-
 #pragma warning(disable: 4244)
 
 
@@ -61,6 +55,7 @@ void CPageRollRender::Uninit()
 bool CPageRollRender::Render(CVideoBuffer*pDstDef, CVideoBuffer *pSrcA, CVideoBuffer *pSrcB, FxParamBase* pParamBase)
 {
 	HRESULT hr = E_FAIL;
+
 	RESET_RENDER_TARGET(m_pEngine);
 	SET_DEPTH_STENCIL(m_pEngine);
 
@@ -84,38 +79,30 @@ bool CPageRollRender::Render(CVideoBuffer*pDstDef, CVideoBuffer *pSrcA, CVideoBu
 
 	CVideoBuffer* pMipMap[2] = {NULL,NULL};
 	CVideoBuffer* pYUVA = pDstDef;
-	//pMipMap[0] = m_pResMan->GetTemp_Video(0,TRUE);
-	VideoBufferInfo mipMapInfo = pDstDef->GetVideoBufferInfo();
-	mipMapInfo.eUsage = VideoBufferInfo::_IN_OUT_WITH_MIPMAP;
-	pMipMap[0] = pVM->CreateVideoBuffer(mipMapInfo);
-	//Generate MipMap Is Very Slower,don't need don't generate
-	if(!pParam->structRear.bUseForeGround && pParam->structRear.fMatteRatio < 1.0f)
-	{
-		//pMipMap[1] = m_pResMan->GetTemp_Video(1,TRUE);
-		pMipMap[1] = pVM->CreateVideoBuffer(mipMapInfo);
-	}
-	{
+	////pMipMap[0] = m_pResMan->GetTemp_Video(0,TRUE);
+	//VideoBufferInfo mipMapInfo = pDstDef->GetVideoBufferInfo();
+	//mipMapInfo.eUsage = VideoBufferInfo::_IN_OUT_WITH_MIPMAP;
+	//pMipMap[0] = pVM->CreateVideoBuffer(mipMapInfo);
+	////Generate MipMap Is Very Slower,don't need don't generate
+	//if(!pParam->structRear.bUseForeGround && pParam->structRear.fMatteRatio < 1.0f)
+	//{
+	//	//pMipMap[1] = m_pResMan->GetTemp_Video(1,TRUE);
+	//	pMipMap[1] = pVM->CreateVideoBuffer(mipMapInfo);
+	//}
+	//{
 
-		//pYUVA = (CBaseTexture*)pDstDef->pContainer;
-		//GenerateMipMap(pSrcDef[0],pMipMap[0],TRUE);
-		//if(pMipMap[1])
-		//	GenerateMipMap(pSrcDef[1],pMipMap[1],TRUE);
-		m_pMipMapGenerator->Render(pMipMap[0], pSrcA, pParamBase);
-		if(pMipMap[1])
-			m_pMipMapGenerator->Render(pMipMap[1], pSrcB, pParamBase);
-	}	
-	//LPDIRECT3DSURFACE9 pRtSurf = NULL;
-	//pYUVA->GetTexture()->GetSurfaceLevel(0,&pRtSurf);
-	//hr = pDevice->SetRenderTarget(0,pRtSurf);
-	//SAFE_RELEASE(pRtSurf);
-	//hr = pDevice->Clear(0,NULL,D3DCLEAR_TARGET|D3DCLEAR_ZBUFFER|D3DCLEAR_STENCIL,0x00008080,1.0f,0);
-	//D3DVIEWPORT9 vPort;
-	//hr = pDevice->GetViewport(&vPort);
-	//vPort.X = 0;
-	//vPort.Y = 0;
-	//vPort.Width = nEditWidth;
-	//vPort.Height = nEditHeight;
-	//hr = pDevice->SetViewport(&vPort);
+	//	//pYUVA = (CBaseTexture*)pDstDef->pContainer;
+	//	//GenerateMipMap(pSrcDef[0],pMipMap[0],TRUE);
+	//	//if(pMipMap[1])
+	//	//	GenerateMipMap(pSrcDef[1],pMipMap[1],TRUE);
+	//	m_pMipMapGenerator->Render(pMipMap[0], pSrcA, pParamBase);
+	//	if(pMipMap[1])
+	//		m_pMipMapGenerator->Render(pMipMap[1], pSrcB, pParamBase);
+	//}
+	VideoBufferInfo mipMapInfo = pSrcA->GetVideoBufferInfo();
+	pMipMap[0] = pSrcA;
+	pMipMap[1] = pSrcB;
+
 	m_pEngine->SetRenderTarget(pYUVA);
 
 	m_pEffect->SetTexture("g_txFrontPicture",pMipMap[0]->GetTexture());
@@ -151,27 +138,18 @@ bool CPageRollRender::Render(CVideoBuffer*pDstDef, CVideoBuffer *pSrcA, CVideoBu
 
 	Draw(pParam, &matTex);
 
-	D3DXSaveSurfaceToFile(L"draw.bmp",D3DXIFF_BMP,pYUVA->GetSurface(), NULL, NULL);
+	//D3DXSaveSurfaceToFile(L"draw.dds",D3DXIFF_DDS,pYUVA->GetSurface(), NULL, NULL);
 
 	Trans_Draw_BG(pSrcB, 1);
 
-	//if(pSrcDef[0]->IsYUV16Buffer())
+	//for(int i = 0; i < sizeof(pMipMap)/sizeof(pMipMap[0]); ++i)
 	//{
-	//	RECT rcImage;
-	//	SetRect(&rcImage,0,0,pProfile->nEditWidth,pProfile->nEditHeight);
-	//	m_pEngine->ConvertYUVA_YUYV(pYUVA,&rcImage,pDstDef);
+	//	if(pMipMap[i])
+	//	{
+	//		pVM->ReleaseVideoBuffer(pMipMap[i]);
+	//		pMipMap[i] = NULL;
+	//	}
 	//}
-
-	//D3DXSaveSurfaceToFile(L"trans_draw_bg.bmp",D3DXIFF_BMP,pYUVA->GetSurface(), NULL, NULL);
-
-	for(int i = 0; i < sizeof(pMipMap)/sizeof(pMipMap[0]); ++i)
-	{
-		if(pMipMap[i])
-		{
-			pVM->ReleaseVideoBuffer(pMipMap[i]);
-			pMipMap[i] = NULL;
-		}
-	}
 
 	return true;
 }
@@ -263,10 +241,11 @@ bool CPageRollRender::Draw(PageRollFxParam* pParam, D3DXMATRIX*	matTex)
 		else
 			m_pEffect->SetTechnique("PageTurn");
 
-		UINT cPass,uPass = 0;				
+		//UINT cPass,uPass = 0; pass 0 is for yuv
+		UINT cPass,uPass = 1;	//pass 1 is for rgb
 		m_pEffect->Begin(&cPass,0);
 
-		m_pEffect->BeginPass(uPass);				
+		m_pEffect->BeginPass(uPass);
 		pDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST,0,0,NumGrid * NumGrid,0,(NumGrid - 1) * (NumGrid - 1) * 2);
 		m_pEffect->EndPass();
 

@@ -13,7 +13,7 @@ public:
 	virtual ~CPageRollParamDlg();
 
 // 对话框数据
-	enum { IDD = IDD_DIALOG5 };
+	enum { IDD = IDD_PAGE_ROLL };
 	void SetParam(PageRollFxParam* pParam) {m_pParam = pParam;}
 
 protected:

@@ -87,6 +87,14 @@ void CEffectBar::OnBnClickedParameters()
 			}
 			m_barmWipeDlg.ShowWindow(SW_SHOW);
 		}
+		else if(FX_MATRIX_WIPE == str)
+		{
+			if(!m_matrixWipeDlg.GetSafeHwnd())
+			{
+				m_matrixWipeDlg.Create(CParamMatrixWipeDlg::IDD);
+			}
+			m_matrixWipeDlg.ShowWindow(SW_SHOW);
+		}
 		else if(FX_PUSH == str)
 		{
 			if(!m_pushDlg.GetSafeHwnd())
@@ -118,6 +126,22 @@ void CEffectBar::OnBnClickedParameters()
 				m_PageRollDlg.Create(m_PageRollDlg.IDD);
 			}
 			m_PageRollDlg.ShowWindow(SW_SHOW);
+		}
+		else if(FX_QUAD_PAGE_ROLL == str)
+		{
+			if(!m_QuadPageRollDlg.GetSafeHwnd())
+			{
+				m_QuadPageRollDlg.Create(m_QuadPageRollDlg.IDD);
+			}
+			m_QuadPageRollDlg.ShowWindow(SW_SHOW);
+		}
+		else if(FX_CUBE_TRANS == str)
+		{
+			if(!m_cubeTransDlg.GetSafeHwnd())
+			{
+				m_cubeTransDlg.Create(m_cubeTransDlg.IDD);
+			}
+			m_cubeTransDlg.ShowWindow(SW_SHOW);
 		}
 	}
 }
@@ -182,13 +206,17 @@ BOOL CEffectBar::OnInitDialog()
 	i = m_ctrlEffects.AddString(FX_BARM_WIPE);
 	{
 		BarmWipeFxParam* pParam = new BarmWipeFxParam;
-		ZeroMemory(pParam, sizeof(BarmWipeFxParam));
 		pParam->cbSize = sizeof(BarmWipeFxParam);
-		pParam->fSlant = 1.0f;
 		m_ctrlEffects.SetItemDataPtr(i, pParam);
 		m_barmWipeDlg.SetParam(pParam);
 	}
-
+	i = m_ctrlEffects.AddString(FX_MATRIX_WIPE);
+	{
+		MatrixWipeFxParam* pParam = new MatrixWipeFxParam;
+		pParam->cbSize = sizeof(MatrixWipeFxParam);
+		m_ctrlEffects.SetItemDataPtr(i, pParam);
+		m_matrixWipeDlg.SetParam(pParam);
+	}
 	i = m_ctrlEffects.AddString(FX_SONY_SLIDE);
 	{
 		SonySlideFxParam* pParam = new SonySlideFxParam;
@@ -223,6 +251,20 @@ BOOL CEffectBar::OnInitDialog()
 	}
 
 	m_ctrlEffects.SetCurSel(0);
+	i = m_ctrlEffects.AddString(FX_QUAD_PAGE_ROLL);
+	{
+		QuadPageRollFxParam* p = new QuadPageRollFxParam;
+		m_ctrlEffects.SetItemDataPtr(i, p);
+		m_QuadPageRollDlg.SetParam(p);
+	}
+	i = m_ctrlEffects.AddString(FX_CUBE_TRANS);
+	{
+		CubeFxParam* p = new CubeFxParam;
+		m_ctrlEffects.SetItemDataPtr(i, p);
+		m_cubeTransDlg.SetParam(p);
+	}
+
+	m_ctrlEffects.SetCurSel(i);
 
 	m_ctrlProgress.SetRange(0, 10000);	//1.f, 0, 0.0001f
 
@@ -287,7 +329,12 @@ void CEffectBar::OnProgressChange( int nPos )
 		if(FX_BARM_WIPE == str)
 		{
 			BarmWipeFxParam* pParam = (BarmWipeFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
-			//pParam->fProgress = nPos / 100.f;
+			pParam->structPattern.fOffset = nPos / 10000.f;
+			AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)(LPCTSTR)str, (LPARAM)pParam);
+		}
+		if(FX_MATRIX_WIPE == str)
+		{
+			MatrixWipeFxParam* pParam = (MatrixWipeFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
 			pParam->structPattern.fOffset = nPos / 10000.f;
 			AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)(LPCTSTR)str, (LPARAM)pParam);
 		}
@@ -309,9 +356,21 @@ void CEffectBar::OnProgressChange( int nPos )
 			pParam->structTrans.fTransition = nPos / 10000.f;
 			AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)(LPCTSTR)str, (LPARAM)pParam);
 		}
+
 		else if (FX_SONY_DME_3D_TRANSFORM == str)
 		{
 			SonyDME3DTransfromFxPrarm* pParam = (SonyDME3DTransfromFxPrarm*)m_ctrlEffects.GetItemDataPtr(nSel);
+		}
+		else if (FX_QUAD_PAGE_ROLL == str)
+		{
+			QuadPageRollFxParam* pParam = (QuadPageRollFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
+			pParam->structTrans.fTransition = nPos / 10000.f;
+			AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)(LPCTSTR)str, (LPARAM)pParam);
+		}
+		else if (FX_CUBE_TRANS == str)
+		{
+			CubeFxParam* pParam = (CubeFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
+			pParam->fTransition = nPos / 10000.f;
 			AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)(LPCTSTR)str, (LPARAM)pParam);
 		}
 	}
@@ -334,6 +393,11 @@ void CEffectBar::SetProgress(CSliderCtrl* pCtrl)
 			BarmWipeFxParam* pParam = (BarmWipeFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
 			if(pParam)	pCtrl->SetPos(pParam->structPattern.fOffset * 10000);
 		}
+		else if(FX_MATRIX_WIPE == str)
+		{
+			MatrixWipeFxParam* pParam = (MatrixWipeFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
+			if(pParam)	pCtrl->SetPos(pParam->structPattern.fOffset * 10000);
+		}
 		else if (FX_PUSH == str)
 		{
 			PushFxParam* pParam = (PushFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
@@ -348,6 +412,16 @@ void CEffectBar::SetProgress(CSliderCtrl* pCtrl)
 		{
 			PageRollFxParam* pParam = (PageRollFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
 			if(pParam)	pCtrl->SetPos(pParam->structTrans.fTransition * 10000);
+		}
+		else if (FX_QUAD_PAGE_ROLL == str)
+		{
+			QuadPageRollFxParam* pParam = (QuadPageRollFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
+			if(pParam)	pCtrl->SetPos(pParam->structTrans.fTransition * 10000);
+		}
+		else if (FX_CUBE_TRANS == str)
+		{
+			CubeFxParam* pParam = (CubeFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
+			if(pParam)	pCtrl->SetPos(pParam->fTransition * 10000);
 		}
 	}
 }

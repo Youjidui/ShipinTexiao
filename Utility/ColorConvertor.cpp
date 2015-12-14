@@ -116,12 +116,14 @@ void ColorConvertor::RGBA2(const Buffer_Color_Format fmt,D3DXCOLOR *crSrc,D3DXCO
 {
 	switch(fmt)
 	{
-	case FMT_RGBA32:*crDest = *crSrc;break;
+	case FMT_RGBA32:
+		*crDest = *crSrc;
+		break;
 	case FMT_YUVA32:
-		RGBA2YUVA(crSrc,  crDest);		
+		RGBA2YUVA(crSrc,  crDest);
 		break;
 	case FMT_YUYV:
-		RGBA2YUYV(crSrc,  crDest);		
+		RGBA2YUYV(crSrc,  crDest);
 		break;
 	default:
 		assert(0);

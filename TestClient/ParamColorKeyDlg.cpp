@@ -18,6 +18,7 @@ IMPLEMENT_DYNAMIC(CParamColorKeyDlg, CDialog)
 CParamColorKeyDlg::CParamColorKeyDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CParamColorKeyDlg::IDD, pParent)
 	, m_pParam(NULL)
+	, m_hOldCursor(NULL)
 {
 
 }
@@ -36,6 +37,9 @@ void CParamColorKeyDlg::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CParamColorKeyDlg, CDialog)
 	ON_WM_HSCROLL()
+	ON_BN_CLICKED(IDC_BUTTON_GET_KEY_COLOR_FROM_SCREEN, &CParamColorKeyDlg::OnBnClickedButtonGetKeyColorFromScreen)
+	ON_WM_LBUTTONDOWN()
+	ON_WM_RBUTTONDOWN()
 END_MESSAGE_MAP()
 
 
@@ -146,4 +150,51 @@ BOOL CParamColorKeyDlg::OnInitDialog()
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 	// 异常: OCX 属性页应返回 FALSE
+}
+
+void CParamColorKeyDlg::OnBnClickedButtonGetKeyColorFromScreen()
+{
+	m_hOldCursor = SetCursor(LoadCursor(NULL, IDC_CROSS));
+	SetCapture();
+}
+
+void CParamColorKeyDlg::OnLButtonDown(UINT nFlags, CPoint point)
+{
+	if(m_hOldCursor)
+	{
+		SetCursor(m_hOldCursor);
+		m_hOldCursor = NULL;
+
+		CPoint pt;
+		GetCursorPos(&pt);
+		HDC pDC = ::GetDC(NULL);
+		//CDC dc;
+		//dc.CreateCompatibleDC(pDC);
+		COLORREF clr = ::GetPixel(pDC, pt.x, pt.y);
+		::ReleaseDC(NULL, pDC);
+		ReleaseCapture();
+
+		CSliderCtrl* pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_R);
+		if(m_pParam)	pCtrl->SetPos(GetRValue(clr));
+		m_pParam->fKeyColor[0] = GetRValue(clr);
+		pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_G);
+		if(m_pParam)	pCtrl->SetPos(GetGValue(clr));
+		m_pParam->fKeyColor[1] = GetGValue(clr);
+		pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_B);
+		if(m_pParam)	pCtrl->SetPos(GetBValue(clr));
+		m_pParam->fKeyColor[2] = GetBValue(clr);
+		//pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_A);
+	}
+
+	CDialog::OnLButtonDown(nFlags, point);
+}
+
+void CParamColorKeyDlg::OnRButtonDown(UINT nFlags, CPoint point)
+{
+	SetCursor(m_hOldCursor);
+	m_hOldCursor = NULL;
+
+	ReleaseCapture();
+
+	CDialog::OnRButtonDown(nFlags, point);
 }

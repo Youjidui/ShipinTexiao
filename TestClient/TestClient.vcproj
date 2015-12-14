@@ -403,6 +403,22 @@
 		<ProjectReference
 			ReferencedProjectIdentifier="{EC561354-1224-4742-AE42-38CA5AE42320}"
 			RelativePathToProject=".\SonyDME3DTransform\SonyDME3DTransform.vcproj"
+    />
+    <ProjectReference
+			ReferencedProjectIdentifier="{F1B471E0-BEA6-40B5-9414-2C9FA8756271}"
+			RelativePathToProject=".\EffQuadPageRollTrans\EffQuadPageRollTrans.vcproj"
+		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{FB4E5563-29CD-4780-8518-68962D43EF33}"
+			RelativePathToProject=".\BufferColorConvertor\BufferColorConvertor.vcproj"
+		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{45ADC5D5-B7AC-43C5-A114-5DDACBB7EC08}"
+			RelativePathToProject=".\Eff3DCubeTrans\Eff3DCubeTrans.vcproj"
+		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{B0D7DD53-F02C-4270-A62A-62A5209B3B97}"
+			RelativePathToProject=".\EffMatrixWipeTrans\EffMatrixWipeTrans.vcproj"
 		/>
 	</References>
 	<Files>
@@ -444,6 +460,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ParamBasicWipeDlg.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\ParamBlurDlg.cpp"
 				>
 			</File>
@@ -453,6 +473,18 @@
 			</File>
 			<File
 				RelativePath=".\ParamColorKeyDlg.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ParamCubeDlg.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ParamMatrixWipeDlg.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ParamQuadPageRollDlg.cpp"
 				>
 			</File>
 			<File
@@ -558,6 +590,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ParamBasicWipeDlg.h"
+				>
+			</File>
+			<File
 				RelativePath=".\ParamBlurDlg.h"
 				>
 			</File>
@@ -567,6 +603,18 @@
 			</File>
 			<File
 				RelativePath=".\ParamColorKeyDlg.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ParamCubeDlg.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ParamMatrixWipeDlg.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ParamQuadPageRollDlg.h"
 				>
 			</File>
 			<File

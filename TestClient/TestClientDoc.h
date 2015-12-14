@@ -26,7 +26,6 @@ public:
 	bool InitEffect(HWND hDeviceWnd, int nBackBufferWidth, int nBackBufferHeight);
 	void UninitEffect();
 	bool UpdateBuffer(UINT level);
-	bool UpdateBuffer(UINT level, const BYTE* pBits, int w, int h, int pitch);
 	bool Render();
 	bool Draw(HWND hWnd);
 	bool CopyBuffer(CVideoBuffer* pDest, CVideoBuffer* pSrc);
@@ -43,6 +42,10 @@ public:
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;
 #endif
+
+	bool UpdateBuffer(UINT level, const BYTE* pBits, int w, int h, int pitch);
+	bool ColorConvert(CVideoBuffer* pDest, CVideoBuffer* pSrc, bool bIsRGB2YUV );
+	bool EffectRender(CVideoBuffer* pDestImage, CVideoBuffer* pSrc, CVideoBuffer* pSrc2);
 
 protected:
 	CRenderEngine* m_pRenderEngine;

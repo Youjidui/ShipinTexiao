@@ -5,6 +5,14 @@
 #include "../FxParam.h"
 #include "MipMapGenerator.h"
 
+
+
+#define GRID 2
+#define FAN  8
+#define NumGrid 101
+
+
+
 class CPageRollRender
 {
 public:
@@ -15,7 +23,7 @@ public:
 	void Uninit();
 	bool Render(CVideoBuffer* pDest, CVideoBuffer *pSrcA, CVideoBuffer *pSrcB, FxParamBase* pParam);
 
-private:
+protected:
 	CRenderEngine*	m_pEngine;
 	CBaseMesh*		m_pQuadMesh;
 	CBaseMesh*		m_pMesh;
@@ -27,7 +35,8 @@ private:
 
 protected:
 	HRESULT CreateMesh();
-	bool Draw(PageRollFxParam* pParam, D3DXMATRIX*	matTex);
 	void  Trans_Draw_BG(CVideoBuffer* pBGDef,const BOOL bForPageRoll);
 	void GenerateWorld(int nSrcWidth, int nSrcHeight, const D3DXVECTOR2 * pOffset, const D3DXVECTOR2 * pDstSize, D3DXMATRIXA16 * pMatWorld);
+
+	virtual bool Draw(PageRollFxParam* pParam, D3DXMATRIX*	matTex);
 };

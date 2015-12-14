@@ -109,8 +109,6 @@ BOOL CParamAmoebaWipeDlg::OnInitDialog()
 
 void CParamAmoebaWipeDlg::OnHScroll(UINT nSBCode, UINT uPos, CScrollBar* pScrollBar)
 {
-	// TODO: 在此添加消息处理程序代码和/或调用默认值
-
 	CDialog::OnHScroll(nSBCode, uPos, pScrollBar);
 
 	CSliderCtrl* pCtrl = (CSliderCtrl*)pScrollBar;

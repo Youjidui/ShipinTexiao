@@ -249,7 +249,7 @@ void CParamChromaKeyDlg::OnHScroll(UINT nSBCode, UINT uPos, CScrollBar* pScrollB
 		break;
 	}
 
-	AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)FX_COLOR_KEY, (LPARAM)m_pParam);
+	AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)FX_CHROMA_KEY, (LPARAM)m_pParam);
 }
 
 void CParamChromaKeyDlg::OnBnClickedCheckCcOn()

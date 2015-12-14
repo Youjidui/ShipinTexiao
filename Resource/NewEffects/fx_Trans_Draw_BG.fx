@@ -60,7 +60,7 @@ technique BG
 		StencilEnable = True;
 		StencilFunc = Greater;
 		StencilRef = 1;
-	}	
+	}
 	PASS P1 //P0
 	{
 		VertexShader = compile vs_2_0 VS_BG();
@@ -70,5 +70,5 @@ technique BG
 		AlphaBlendEnable = True;
 		SrcBlend = One;
 		DestBlend = InvSrcAlpha;
-	}	
+	}
 }

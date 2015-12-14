@@ -8,6 +8,12 @@ struct NegativeFxParam : FxParamBase
 
 };
 
+struct ColorConvertFxParam : FxParamBase
+{
+	enum _color_convert_direction { RGBA2YUVA, YUVA2RGBA }
+	convert_dir;
+};
+
 struct SonyBlurFxParam : FxParamBase
 {
 	float blurX;
@@ -99,7 +105,7 @@ enum Push_Type{
 };
 // end push param
 
-struct BarmWipeFxParam : FxParamBase
+struct BasicWipeFxParam : FxParamBase
 {
 	struct Pattern
 	{
@@ -128,6 +134,17 @@ struct BarmWipeFxParam : FxParamBase
 		BOOL	bOverlap;
 		int		nDivideType;
 		float   fDivideWidth;
+
+		Modify() :
+			nMultipleType(0),
+			bFlip(FALSE),
+			nMultipleNumberX(1),
+			nMultipleNumberY(1),
+			bOverlap(FALSE),
+			nDivideType(1),
+			fDivideWidth(0.f)
+		{
+		}
 	};
 	struct General
 	{
@@ -140,8 +157,22 @@ struct BarmWipeFxParam : FxParamBase
 
 	Pattern     structPattern;
 	Modify      structModify;
-	General     structGeneral;   
+	General     structGeneral;
+};
+
+struct BarmWipeFxParam : BasicWipeFxParam
+{
 	float fSlant;
+
+	BarmWipeFxParam() : fSlant(0.f) {}
+} ;
+
+struct MatrixWipeFxParam :public BasicWipeFxParam
+{
+	float	fTitleSize;
+	int		nSequence;
+
+	MatrixWipeFxParam() : fTitleSize(0.5f), nSequence(0) {}
 } ;
 
 
@@ -196,6 +227,7 @@ struct SonyMaskFxParam : FxParamBase	//SONY_MASK_INFO
 
 struct ChromaKeyFxParam : FxParamBase
 {
+	//NSCEParamDef.cpp  line:990
 	struct ChromaKeyAdjust
 	{
 		bool bOn;
@@ -208,7 +240,7 @@ struct ChromaKeyFxParam : FxParamBase
 		float fDensity;
 		bool bInvert;
 		ChromaKeyAdjust()
-			: bOn(true), fClip(100.f), fGain(100.f), fHue(0.f), fAngle(97.6f), nFilter(1), fDensity(100.f), bInvert(false) {}
+			: bOn(true), fClip(100.f), fGain(100.f), fHue(0.f), fAngle(97.59578851f), nFilter(1), fSatCrop(20.3125f), fDensity(100.f), bInvert(false) {}
 	}paramCrkAdj;
 
 	struct ChromaKeyPosition
@@ -280,8 +312,11 @@ struct PageRollFxParam : public FxParamBase
 	{
 		float fAngle;
 		float fRadius;
+
+		Geometry() : fAngle(160.f), fRadius(0.35f) 	{}
 	};
-	struct Lighting {
+	struct Lighting
+	{
 		float fAnglePhi;
 		float fAngleTheta;
 		float fLightRatio;
@@ -289,15 +324,21 @@ struct PageRollFxParam : public FxParamBase
 		float fFrontSmoothness;
 		float fRearHighLight;
 		float fRearSmoothness;
+
+		Lighting() : fAnglePhi(220.f), fAngleTheta(270.f), fLightRatio(0.2f), fFrontHighLight(10.f), fFrontSmoothness(15.f), fRearHighLight(70.f), fRearSmoothness(15.f) {}
 	};
 	struct Rear {
 		BOOL bUseForeGround;
 		float fMatteRatio;
 		D3DCOLOR crMaatte;
+
+		Rear() : bUseForeGround(TRUE), fMatteRatio(0.0f), crMaatte(0xffc0c0c0) {}
 	};
 	struct Transition {
 		float fTransition;
 		BOOL bReverse;
+
+		Transition() : fTransition(0.0f), bReverse(FALSE) {}
 	};
 
 	Geometry structGeometry;
@@ -305,9 +346,31 @@ struct PageRollFxParam : public FxParamBase
 	Rear     structRear;
 	Transition structTrans;
 	BOOL bPageRoll;
-} ;
 
-// Begin SonyDME3DTransformFxParam
+	PageRollFxParam()
+		: bPageRoll(true)
+	{
+	}
+};
+
+struct QuadPageRollFxParam : public PageRollFxParam
+{
+	float	fAngle[4];
+	int		nStepPattern;
+	int		nGroupPattern;
+
+	QuadPageRollFxParam()
+	{
+		fAngle[0] = 45.f;
+		fAngle[1] = 315.f;
+		fAngle[2] = 135.f;
+		fAngle[3] = 225.f;
+
+		nStepPattern = 0;
+		nGroupPattern = 0;
+	}
+};
+
 struct SonyDME3DTransfromFxPrarm : public FxParamBase
 {
 	float fPreSizeX;
@@ -372,5 +435,167 @@ struct SonyDME3DTransfromFxPrarm : public FxParamBase
 	float fPostLocationY;
 };
 
+struct RingsFxParam : public FxParamBase
+{
+	int			nPattern;
+	float		fTranslate;
+	float		fRandomTranslate;
+	float		fRotate;
+	float		fCenterX;
+	float		fCenterY;
+	float		fAspect;
+	float		fWidth;
+	float		fRandomWidth;
+	float		fSpiral;
+	float		fRandomPixel;		
+	int			nEffectNo;
+};
 
-// End SonyDME3DTransformFxParam
+#define _3D_CUBE_TRANS
+
+struct CubeFxParam : public FxParamBase
+{
+	struct _Transform
+	{
+		float fLocalTranslateX;
+		float fLocalTranslateY;
+		float fLocalTranslateZ;
+
+		float fLocalRotateX;
+		float fLocalRotateY;
+		float fLocalRotateZ;
+
+		float fScaleX;
+		float fScaleY;
+		float fScaleZ;
+
+		float fWorldTranslateX;
+		float fWorldTranslateY;
+		float fWorldTranslateZ;
+
+		float fWorldRotateX;
+		float fWorldRotateY;
+		float fWorldRotateZ;
+
+		_Transform() : 
+			fLocalTranslateX(0.f),
+			fLocalTranslateY(0.f),
+			fLocalTranslateZ(0.f),
+
+			fLocalRotateX(0.f),
+			fLocalRotateY(0.f),
+			fLocalRotateZ(0.f),
+
+			fScaleX(1.f),
+			fScaleY(1.f),
+			fScaleZ(1.f),
+
+			fWorldTranslateX(0.f),
+			fWorldTranslateY(0.f),
+			fWorldTranslateZ(0.f),
+
+			fWorldRotateX(0.f),
+			fWorldRotateY(0.f),
+			fWorldRotateZ(0.f)
+		{
+		}
+	};
+	struct _Light 
+	{
+		BOOL bEnable;
+		float fDirectionX;
+		float fDirectionY;
+		float fDiffuse;
+		float fAmbient;
+		_Light():
+			bEnable(FALSE),
+			fDirectionX(0.f),
+			fDirectionY(0.f),
+			fDiffuse(0.f),
+			fAmbient(1.f)
+		{
+		}
+	};
+	struct _Shape 
+	{
+		int			nDiveX;
+		int			nDiveY;
+		float		fIntervalX;
+		float		fIntervalY;
+		D3DCOLOR	crSlideColor;
+		float		fSlideTransparency;
+#ifdef _3D_CUBE_TRANS
+		int			nDirecttion;
+		int			nRotate;
+#endif
+		_Shape():
+			nDiveX(1),
+			nDiveY(1),
+			fIntervalX(1),
+			fIntervalY(1),
+			crSlideColor(0xff000000),
+			fSlideTransparency(1.f),
+#ifdef _3D_CUBE_TRANS
+			nDirecttion(0),
+			nRotate(1)
+#endif
+		{}
+	};
+
+	_Transform trans;
+	_Light light;
+	_Shape shape;
+
+	float fPerspective;
+#ifdef _3D_CUBE_TRANS
+	D3DCOLOR	crBackgroundColor;
+	float		fBackgroundTransparency;
+	float       fTransition;
+	BOOL		bReverse;
+#endif
+
+	CubeFxParam():
+		fPerspective(30.f),
+		crBackgroundColor(0xff000000),
+		fBackgroundTransparency(1.f),
+		fTransition(0.f),
+		bReverse(FALSE)
+	{
+	}
+};
+
+struct SonyPinPFxParam : public FxParamBase
+{
+	BOOL             bLink_Scale;
+	float			 fScaleX;
+	float			 fScaleY;
+	float			 fPositionX;
+	float			 fPositionY;
+	BOOL             bFilter;
+	float            fBorderWidth;
+	D3DCOLOR	     cBorderColor;
+	BOOL             bEnableShadow;
+	D3DCOLOR	     cShadowColor;
+	float            fShadowDropDistance;
+	float            fShadowDropLightAngle;
+	float            fShadowDropTransparency;
+	float            fShadowDropSoftness;
+	DWORD        	 dwTrailDecayType;
+	INT			     iTrailDecayTime;
+	DWORD	         dwBackGroundType;
+	D3DCOLOR		 cBackGroundSepiaColor;
+	float            fBackGoundDensity;
+	BOOL             bLinkCrop;
+	float            fBoundsLeft;
+	float            fBoundsBottom;
+	float            fBoundsRight;
+	float            fBoundsTop;
+	float            fTansparency;
+	//key
+	float			 fKeyScaleX[2];
+	float			 fKeyScaleY[2];
+	float			 fKeyPositionX[2];
+	float			 fKeyPositionY[2];
+	int				 nKeyCount;
+} ;
+

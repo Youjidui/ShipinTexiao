@@ -5,10 +5,13 @@
 #include "ParamColorKeyDlg.h"
 #include "ParamAmoebaWipeDlg.h"
 #include "ParamBarmWipeDlg.h"
+#include "ParamMatrixWipeDlg.h"
 #include "PushDlg.h"
 #include "ParamChromaKeyDlg.h"
 #include "SonySlideDlg.h"
 #include "PageRollParamDlg.h"
+#include "ParamQuadPageRollDlg.h"
+#include "ParamCubeDlg.h"
 
 // CEffectBar ¶Ô»°¿ò
 
@@ -36,10 +39,13 @@ public:
 	CParamColorKeyDlg m_colorKeyDlg;
 	CParamAmoebaWipeDlg m_amoebaWipeDlg;
 	CParamBarmWipeDlg m_barmWipeDlg;
+	CParamMatrixWipeDlg m_matrixWipeDlg;
 	CPushDlg m_pushDlg;
 	CParamChromaKeyDlg m_chromaKeyDlg;
 	CSonySlideDlg m_SonySlideDlg;
 	CPageRollParamDlg m_PageRollDlg;
+	CParamQuadPageRollDlg m_QuadPageRollDlg;
+	CParamCubeDlg m_cubeTransDlg;
 
 	afx_msg void OnBnClickedParameters();
 	virtual BOOL OnInitDialog();

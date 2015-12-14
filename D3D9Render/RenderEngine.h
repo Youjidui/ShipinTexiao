@@ -39,8 +39,10 @@ public:
 	CVideoBuffer* CreateSourceBuffer(int nWidth, int nHeight);
 
 private:
-	bool SetDepthBuffer(bool bUseDepthBuffer);
+	bool SetDepthStencilBuffer(bool bUseDepthBuffer);
 public:
+	bool SetRenderTarget( CVideoBuffer* pDest, bool bSetDepthStencil );	//new format should be
+	//old format
 	bool SetRenderTarget( CVideoBuffer* pDest );
 	struct ResetRenderTarget
 	{
@@ -74,7 +76,7 @@ public:
 			//	TRACE(pszErrorString);
 			//	TRACE(pszErrorDesc);
 			//}
-			bool bOK = pEngine->SetDepthBuffer(true);
+			bool bOK = pEngine->SetDepthStencilBuffer(true);
 			ASSERT(bOK);
 		}
 		//SetDepthStencil(CRenderEngine* pEngine, CVideoBuffer* pDepth)

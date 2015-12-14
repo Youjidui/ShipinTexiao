@@ -39,6 +39,9 @@ void CMipMapGenerator::Uninit()
 
 bool CMipMapGenerator::Render(CVideoBuffer* pDest, CVideoBuffer *pSrc, FxParamBase* pParam)
 {
+	RESET_RENDER_TARGET(m_pEngine);
+	SET_DEPTH_STENCIL(m_pEngine);
+
 	HRESULT hr = GenerateMipMap(pDest, pSrc);
 	ASSERT(SUCCEEDED(hr));
 	return SUCCEEDED(hr);
@@ -49,9 +52,6 @@ HRESULT CMipMapGenerator::GenerateMipMap(CVideoBuffer* pMipMap, CVideoBuffer* pS
 	HRESULT hr = E_FAIL;
 	LPDIRECT3DDEVICE9 pDevice = m_pEngine->GetDevice();
 	CResourceManager* pResMan = m_pEngine->GetResourceManager();
-
-	RESET_RENDER_TARGET(m_pEngine);
-	SET_DEPTH_STENCIL(m_pEngine);
 
 	D3DSURFACE_DESC desc;
 	LPDIRECT3DSURFACE9 pRT = pMipMap->GetSurface();

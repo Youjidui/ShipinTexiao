@@ -1,4 +1,4 @@
-#include "..\..\..\..\TPEngine\src\Common\TPRenderX\Shaders\ColorSpaceFunc.inc"
+#include "..\Shaders\ColorSpaceFunc.inc"
 
 sampler2D texSrc	:register(s0);
 
@@ -14,24 +14,25 @@ float4		fGain		: register(c28);	// [ -keyGain, -ccGain, 0.f, 0.f ]
 float4		fInvert		: register(c29);	// [ bInvert, -1.f, bInvert, -1.f ]
 float4		fInvCoef	: register(c30);	// [ (bInvert ? -1 : 1) * keyDensity, 1.f, (bInvert ? -1 : 1) * keyDensity, 1.f ]
 
-float4 main(float2 TexSrc:TEXCOORD0):COLOR0
+float4 main(float2 texSrcCoord : TEXCOORD0) : COLOR0
 {
-	float4 srcYUVA = tex2D(texSrc, TexSrc);
+	float4 srcYUVA = tex2D(texSrc, texSrcCoord);
 	srcYUVA = srcYUVA * float4(1.f, 2.f, 2.f, 1.f) + float4(0.f,-CS_UV_OFFSET_2,-CS_UV_OFFSET_2,0.f);
 
 #define fY		srcYUVA.xx			//[0,1]
 #define fU		srcYUVA.y			//[-1,1]
 #define fV		srcYUVA.z			//[-1,1]
+#define fK		srcYUVA.w		// [0, 1]
 #define	fX		fQuatnTrans.x
 #define fZ		fQuatnTrans.yy
 
-// 	float fX	= fU * keyCos + fV * keySin;
-//	float fZ	= abs(-fU * keySin + fV * keyCos);
+// 	float fx	= fU * keyCos + fV * keySin;
+//	float fz	= abs(-fU * keySin + fV * keyCos);
 // 	float fUU	= fU * fvCos - fV * fvSin;
 //	float fVV	= fU * fvSin + fV * fvCos;
-	float4 fUTmp = fCoefU * fU;	// [ fU * keyCos, -fU * keySin, fU * fvCos, fU * fvSin ]
+	float4 fYB_Key = fCoefU * fU;	// [ fU * keyCos, -fU * keySin, fU * fvCos, fU * fvSin ]
 	// [ fU * keyCos + fV * keySin, -fU * keySin + fV * keyCos, fU * fvCos - fV * fvSin, fU * fvSin + fV * fvCos ]
-	float4 fQuatnTrans = fCoefV * fV + fUTmp;	// [ fX, fZ, fUU, fVV ]
+	float4 fQuatnTrans = fCoefV * fV + fYB_Key;	// [ fX, fZ, fUU, fVV ]
 //	float fYY	= fY * fvYGain;
 //	float fYBal = (abs(fY - fYBalOffset) - fYBalClip) * fYBalGain;
 //	if (fYBal < 0.f)	fYBal = 0.f;
@@ -51,7 +52,7 @@ float4 main(float2 TexSrc:TEXCOORD0):COLOR0
 	fYB_K = fYB_K * fCoefYK + fYKOff;
 	// [ (fYBal * keyYBalMix + keyClip - fX) * keyGain, (fYBal * ccYBalMix + ccClip - fX ) * ccGain, fKeyTmp * keySlopeInv * keyGain, fKeyTmpCC * ccSlopeInv * ccGain ]
 	fYB_K = fX * fGain + fYB_K;
-	float2 fKeyTmp2 = saturate(fYB_K.xy + fYB_K.zw) * float2(srcYUVA.a, 1.f);	// [ fKeyTmp, fKeyTmpCC]
+	float2 fKeyTmp2 = saturate(fYB_K.xy + fYB_K.zw) * float2(fK, 1.f);	// [ fKeyTmp, fKeyTmpCC]
 	//fKeyTmp *= keyInput * keyDensity;
 	//float fKeyTempCC = fKeyTmp2.yw;
 	//if (bInvert)	fKeyTmp2.x = 1.f - fKeyTmp2.x;

@@ -25,5 +25,5 @@ private:
 	CPixelShader*	m_PS_CRK_RGB32;
 	//CPixelShader*	m_PS_CRK_YUYV_NA;
 	//CPixelShader*	m_PS_CRK_YUYV_AP;
-	//CPixelShader*	m_PS_CRK_YUVA;
+	CPixelShader*	m_PS_CRK_YUVA;
 };
