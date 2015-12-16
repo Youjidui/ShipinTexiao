@@ -18,7 +18,7 @@ CSonyDME3DTransformRender::CSonyDME3DTransformRender(void)
 
 CSonyDME3DTransformRender::~CSonyDME3DTransformRender(void)
 {
-
+	Uninit();
 }
 
 bool CSonyDME3DTransformRender::Init(CRenderEngine* pEngine)
@@ -27,7 +27,9 @@ bool CSonyDME3DTransformRender::Init(CRenderEngine* pEngine)
 	LPDIRECT3DDEVICE9 pDevice = m_pEngine->GetDevice();
 	CResourceManager* pResMgr = m_pEngine->GetResourceManager();
 	m_pQuadMesh = pResMgr->CreateQuadMesh(pDevice);
+	ASSERT(m_pQuadMesh);
 	m_pSonyDME3DEffect = pResMgr->CreateEffect(pDevice, _T("NewEffects/SonyDME3DTransformfx.fx"));
+	ASSERT(m_pSonyDME3DEffect);
 	return true;
 }
 
@@ -38,6 +40,11 @@ void CSonyDME3DTransformRender::Uninit()
 
 bool CSonyDME3DTransformRender::Render(CVideoBuffer* pDst, CVideoBuffer* pSrc, SonyDME3DTransfromFxPrarm* pParam)
 {
+	HRESULT hr = E_FAIL;
+
+	RESET_RENDER_TARGET(m_pEngine);
+	SET_DEPTH_STENCIL(m_pEngine);
+
 	//TODO: only support RGBA
 	bool bYUYV = false;
 	m_pParam = pParam;
@@ -103,7 +110,7 @@ void CSonyDME3DTransformRender::RenderScene(CVideoBuffer* pDst, CVideoBuffer* pS
 	D3DXVECTOR3 vUpVec( 0.0f, 1.0f, 0.0f );
 
 	D3DXMatrixLookAtLH( &matView, &vEyePt, &vLookatPt, &vUpVec );
-
+		
 	//D3DXMatrixPerspectiveFovLH( &matProj,D3DXToRadian(m_pParam->fPerspective), m_fPixelAspect, 0.001f, 1000.0f );
 
 	D3DXMATRIX matWorld;
