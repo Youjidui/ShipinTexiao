@@ -258,8 +258,6 @@ BOOL CEffectBar::OnInitDialog()
 		m_sonyDME3DDlg.SetParam(p);
 
 	}
-
-	m_ctrlEffects.SetCurSel(0);
 	i = m_ctrlEffects.AddString(FX_QUAD_PAGE_ROLL);
 	{
 		QuadPageRollFxParam* p = new QuadPageRollFxParam;
@@ -433,5 +431,10 @@ void CEffectBar::SetProgress(CSliderCtrl* pCtrl)
 			CubeFxParam* pParam = (CubeFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
 			if(pParam)	pCtrl->SetPos(pParam->fTransition * 10000);
 		}
+		//else if(FX_SONY_DME_3D_TRANSFORM == str)
+		//{
+		//	SonyDME3DTransfromFxPrarm* pParam = (SonyDME3DTransfromFxPrarm*)m_ctrlEffects.GetItemDataPtr(nSel);
+		//	if(pParam)	pCtrl->SetPos(pParam->fPerspective * 10000);
+		//}
 	}
 }
