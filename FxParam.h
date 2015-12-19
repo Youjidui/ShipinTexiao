@@ -567,31 +567,31 @@ struct CubeFxParam : public FxParamBase
 struct SonyPinPFxParam : public FxParamBase
 {
 	BOOL             bLink_Scale;
-	float			 fScaleX;
-	float			 fScaleY;
-	float			 fPositionX;
-	float			 fPositionY;
-	BOOL             bFilter;
-	float            fBorderWidth;
-	D3DCOLOR	     cBorderColor;
-	BOOL             bEnableShadow;
-	D3DCOLOR	     cShadowColor;
-	float            fShadowDropDistance;
-	float            fShadowDropLightAngle;
-	float            fShadowDropTransparency;
-	float            fShadowDropSoftness;
+	float			 fScaleX;		//100, 0.01, 0.01, 70
+	float			 fScaleY;		//as above
+	float			 fPositionX;	//2.0000, -2.0000, 0.0001, 0
+	float			 fPositionY;	//as above
+	BOOL             bFilter;		//true
+	float            fBorderWidth;	//(23):    TPPARAM_FLOAT_FMT     gFloatDefault0     = { 0, 1.f, 0, 0.0001f, 5, 4, 0.f};
+	D3DCOLOR	     cBorderColor;	//(37):    TPPARAM_SINGLECOLOR_FMT  gColor235 = { 0, D3DCOLOR_RGBA(235, 235, 235, 255) };
+	BOOL             bEnableShadow;	//false
+	D3DCOLOR	     cShadowColor;	//(38):    TPPARAM_SINGLECOLOR_FMT  gColor16 = { 0, D3DCOLOR_RGBA(16, 16, 16, 255) };
+	float            fShadowDropDistance;		// 2.f, 0.f, 0.0001f,5, 4, 0.15f
+	float            fShadowDropLightAngle;		//720.f, -720.f, 0.01f,5, 2, 135.f
+	float            fShadowDropTransparency;	//1.f, 0.f, 0.0001f,5, 4, 0.3f
+	float            fShadowDropSoftness;		//(23):    TPPARAM_FLOAT_FMT     gFloatDefault0     = { 0, 1.f, 0, 0.0001f, 5, 4, 0.f};
 	DWORD        	 dwTrailDecayType;
-	INT			     iTrailDecayTime;
+	INT			     iTrailDecayTime;			//30, 0, 1, 0
 	DWORD	         dwBackGroundType;
-	D3DCOLOR		 cBackGroundSepiaColor;
-	float            fBackGoundDensity;
+	D3DCOLOR		 cBackGroundSepiaColor;		//0xff4b3e15  };	// a,r,g,b
+	float            fBackGoundDensity;			//100.f, 0.f, 0.01f,5, 2, 100.f
 	BOOL             bLinkCrop;
-	float            fBoundsLeft;
-	float            fBoundsBottom;
-	float            fBoundsRight;
-	float            fBoundsTop;
-	float            fTansparency;
-	//key
+	float            fBoundsLeft;		//(24):    TPPARAM_FLOAT_FMT     gFloat2Default0     = { 0, 2.f, 0, 0.0001f, 5, 4, 0.f};
+	float            fBoundsBottom;		//as above
+	float            fBoundsRight;		//as above
+	float            fBoundsTop;		//as above
+	float            fTansparency;		////1.f, 0.f, 0.0001f,5, 4, 0.3f
+	//key TODO: remove them or change them?
 	float			 fKeyScaleX[2];
 	float			 fKeyScaleY[2];
 	float			 fKeyPositionX[2];
