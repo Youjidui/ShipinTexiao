@@ -143,6 +143,14 @@ void CEffectBar::OnBnClickedParameters()
 			}
 			m_cubeTransDlg.ShowWindow(SW_SHOW);
 		}
+		else if(FX_SONY_DME_3D_TRANSFORM == str)
+		{
+			if(!m_sonyDME3DDlg.GetSafeHwnd())
+			{
+				m_sonyDME3DDlg.Create(m_sonyDME3DDlg.IDD);
+			}
+			m_sonyDME3DDlg.ShowWindow(SW_SHOW);
+		}
 	}
 }
 
@@ -245,8 +253,9 @@ BOOL CEffectBar::OnInitDialog()
 	i = m_ctrlEffects.AddString(FX_SONY_DME_3D_TRANSFORM);
 	{
 		SonyDME3DTransfromFxPrarm* p = new SonyDME3DTransfromFxPrarm;
+		memset(p, 0, sizeof(SonyDME3DTransfromFxPrarm));
 		m_ctrlEffects.SetItemDataPtr(i, p);
-		//m_PageRollDlg.SetParam(p);
+		m_sonyDME3DDlg.SetParam(p);
 
 	}
 	i = m_ctrlEffects.AddString(FX_QUAD_PAGE_ROLL);
@@ -358,6 +367,7 @@ void CEffectBar::OnProgressChange( int nPos )
 		else if (FX_SONY_DME_3D_TRANSFORM == str)
 		{
 			SonyDME3DTransfromFxPrarm* pParam = (SonyDME3DTransfromFxPrarm*)m_ctrlEffects.GetItemDataPtr(nSel);
+			AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)(LPCTSTR)str, (LPARAM)pParam);
 		}
 		else if (FX_QUAD_PAGE_ROLL == str)
 		{

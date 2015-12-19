@@ -492,6 +492,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\SonyDME3DDlg.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\SonySlideDlg.cpp"
 				>
 			</File>
@@ -623,6 +627,10 @@
 			</File>
 			<File
 				RelativePath=".\Resource.h"
+				>
+			</File>
+			<File
+				RelativePath=".\SonyDME3DDlg.h"
 				>
 			</File>
 			<File

@@ -32,6 +32,7 @@
 #define IDD_PAGE_ROLL                   320
 #define IDD_QUAD_PAGE_ROLL              321
 #define IDD_CUBE                        323
+#define IDD_PARAM_SONY_DME3D            324
 #define IDC_EFFECTS                     1000
 #define IDC_PROGRESS                    1001
 #define IDC_BUTTON1                     1002
@@ -202,29 +203,73 @@
 #define IDC_SLIDER_nDiveX               1064
 #define IDC_STATIC_nSequence            1064
 #define IDC_SLIDER_nDiveY               1065
+#define IDC_PRESIZE_X                   1065
 #define IDC_SLIDER_fIntervalX           1066
+#define IDC_POST_SIZE_X                 1066
 #define IDC_SLIDER_fIntervalY           1067
+#define IDC_PRESIZE_Y                   1067
 #define IDC_SLIDER_crSlideColor_R       1068
+#define IDC_SKEW_X                      1068
 #define IDC_SLIDER_fSlideTransparency   1069
+#define IDC_POST_LOCATION_X             1069
 #define IDC_SLIDER_crSlideColor_B       1070
+#define IDC_SKEW_Y                      1070
 #define IDC_SLIDER_BackgroundColor_B    1071
+#define IDC_PERSPECTIVE                 1071
 #define IDC_SLIDER_crSlideColor_G       1072
+#define IDC_POST_LOCATION_Y             1072
 #define IDC_SLIDER_nRotate              1073
+#define IDC_L_LOCATION_X                1073
 #define IDC_SLIDER_BackgroundColor_R    1074
+#define IDC_POST_SIZE_Y                 1074
 #define IDC_SLIDER_BackgroundColor_G    1075
+#define IDC__L_LOCATION_Z               1075
+#define IDC_L_LOCATION_Z                1075
 #define IDC_SLIDER_fPerspective         1076
+#define IDC_CHECK_BFLITER               1076
+#define IDC__L_LOCATION_Y               1077
+#define IDC_L_LOCATION_Y                1077
 #define IDC_SLIDER_nDirecttion          1079
+#define IDC_L_SPIN_X                    1079
 #define IDC_SLIDER_fTransition          1080
 #define IDC_SLIDER_fBackgroundTransparency 1081
+#define IDC_L_SPIN_Y                    1081
 #define IDC_CHECK_bReverse              1082
+#define IDC_L_ROTATION_X                1083
+#define IDC_L_SPIN_Z                    1085
+#define IDC_L_ROTATION_Y                1087
+#define IDC_L_ROTATION_Z                1089
+#define IDC_L_SRC_SPIN_Y                1091
+#define IDC_L_SRC_SPIN_X                1093
+#define IDC_L_SRC_SPIN_Z                1095
+#define IDC_L_AXIS_X                    1097
+#define IDC_L_AXIS_Z                    1099
+#define IDC_L_AXIS_Y                    1101
+#define IDC_L_LOCATION_X2               1137
+#define IDC__L_LOCATION_Z2              1138
+#define IDC_L_LOCATION_Z2               1138
+#define IDC__L_LOCATION_Y2              1139
+#define IDC_L_LOCATION_Y2               1139
+#define IDC_L_SPIN_X2                   1140
+#define IDC_L_SPIN_Y2                   1141
+#define IDC_L_ROTATION_X2               1142
+#define IDC_L_SPIN_Z2                   1143
+#define IDC_L_ROTATION_Y2               1144
+#define IDC_L_ROTATION_Z2               1145
+#define IDC_L_SRC_SPIN_Y2               1146
+#define IDC_L_SRC_SPIN_X2               1147
+#define IDC_L_SRC_SPIN_Z2               1148
+#define IDC_L_AXIS_X2                   1149
+#define IDC_L_AXIS_Z2                   1150
+#define IDC_L_AXIS_Y2                   1151
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        324
+#define _APS_NEXT_RESOURCE_VALUE        325
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1065
+#define _APS_NEXT_CONTROL_VALUE         1077
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif

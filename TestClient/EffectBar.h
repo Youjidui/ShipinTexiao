@@ -12,6 +12,8 @@
 #include "PageRollParamDlg.h"
 #include "ParamQuadPageRollDlg.h"
 #include "ParamCubeDlg.h"
+#include "SonyDME3DDlg.h"
+
 
 // CEffectBar ¶Ô»°¿ò
 
@@ -46,6 +48,7 @@ public:
 	CPageRollParamDlg m_PageRollDlg;
 	CParamQuadPageRollDlg m_QuadPageRollDlg;
 	CParamCubeDlg m_cubeTransDlg;
+	CSonyDME3DDlg m_sonyDME3DDlg;
 
 	afx_msg void OnBnClickedParameters();
 	virtual BOOL OnInitDialog();
