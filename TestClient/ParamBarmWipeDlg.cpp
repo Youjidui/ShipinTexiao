@@ -46,7 +46,7 @@ BOOL CParamBarmWipeDlg::OnInitDialog()
 	pWnd->ShowWindow(SW_SHOW);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_SLANT2);
 	pCtrl->ShowWindow(SW_SHOW);
-	pCtrl->SetRange(-45*1000, 45*1000);
+	pCtrl->SetRange(-45*1000, 45*1000, TRUE);
 	if(m_pParam)	pCtrl->SetPos(pParam->fSlant * 1000);
 
 	return TRUE;  // return TRUE unless you set the focus to a control

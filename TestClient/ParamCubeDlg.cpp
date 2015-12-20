@@ -47,22 +47,22 @@ BOOL CParamCubeDlg::OnInitDialog()
 
 	float decimal_point = 1000.f;
 	CSliderCtrl* pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_fLocalTranslateX);
-	pCtrl->SetRange(-10*decimal_point, 10*decimal_point);
+	pCtrl->SetRange(-10*decimal_point, 10*decimal_point, TRUE);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->trans.fLocalTranslateX * decimal_point);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_fLocalTranslateY);
-	pCtrl->SetRange(-10*decimal_point, 10*decimal_point);
+	pCtrl->SetRange(-10*decimal_point, 10*decimal_point, TRUE);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->trans.fLocalTranslateY * decimal_point);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_fLocalTranslateZ);
-	pCtrl->SetRange(-5*100.f, 300*100.f);
+	pCtrl->SetRange(-5*100.f, 300*100.f, TRUE);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->trans.fLocalTranslateZ * 100.f);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_fLocalRotateX);
-	pCtrl->SetRange(-5*10000.f, 5*10000.f);
+	pCtrl->SetRange(-5*10000.f, 5*10000.f, TRUE);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->trans.fLocalRotateX*10000.f);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_fLocalRotateY);
-	pCtrl->SetRange(-5*10000.f, 5*10000.f);
+	pCtrl->SetRange(-5*10000.f, 5*10000.f, TRUE);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->trans.fLocalRotateY*10000.f);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_fLocalRotateZ);
-	pCtrl->SetRange(-5*10000.f, 5*10000.f);
+	pCtrl->SetRange(-5*10000.f, 5*10000.f, TRUE);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->trans.fLocalRotateZ*10000.f);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_fScaleX);
 	pCtrl->SetRange(0, 10*decimal_point);
@@ -74,31 +74,31 @@ BOOL CParamCubeDlg::OnInitDialog()
 	pCtrl->SetRange(0, 10*decimal_point);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->trans.fScaleZ*decimal_point);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_fWorldTranslateX);
-	pCtrl->SetRange(-10*decimal_point, 10*decimal_point);
+	pCtrl->SetRange(-10*decimal_point, 10*decimal_point, TRUE);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->trans.fWorldTranslateX * decimal_point);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_fWorldTranslateY);
-	pCtrl->SetRange(-10*decimal_point, 10*decimal_point);
+	pCtrl->SetRange(-10*decimal_point, 10*decimal_point, TRUE);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->trans.fWorldTranslateY * decimal_point);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_fWorldTranslateZ);
-	pCtrl->SetRange(-5*100.f, 300*100.f);
+	pCtrl->SetRange(-5*100.f, 300*100.f, TRUE);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->trans.fWorldTranslateZ * 100.f);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_fWorldRotateX);
-	pCtrl->SetRange(-5*10000.f, 5*10000.f);
+	pCtrl->SetRange(-5*10000.f, 5*10000.f, TRUE);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->trans.fWorldRotateX*10000.f);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_fWorldRotateY);
-	pCtrl->SetRange(-5*10000.f, 5*10000.f);
+	pCtrl->SetRange(-5*10000.f, 5*10000.f, TRUE);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->trans.fWorldRotateY*10000.f);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_fWorldRotateZ);
-	pCtrl->SetRange(-5*10000.f, 5*10000.f);
+	pCtrl->SetRange(-5*10000.f, 5*10000.f, TRUE);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->trans.fWorldRotateZ*10000.f);
 
 	CButton* pBtn = (CButton*)GetDlgItem(IDC_CHECK_Light);
 	pBtn->SetCheck(m_pParam->light.bEnable);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_fDirectionX);
-	pCtrl->SetRange(-90*decimal_point, 90*decimal_point);
+	pCtrl->SetRange(-90*decimal_point, 90*decimal_point, TRUE);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->light.fDirectionX*decimal_point);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_fDirectionY);
-	pCtrl->SetRange(-90*decimal_point, 90*decimal_point);
+	pCtrl->SetRange(-90*decimal_point, 90*decimal_point, TRUE);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->light.fDirectionY*decimal_point);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_fDiffuse);
 	pCtrl->SetRange(0, 2*10000.f);
@@ -108,16 +108,16 @@ BOOL CParamCubeDlg::OnInitDialog()
 	if(m_pParam)	pCtrl->SetPos(m_pParam->light.fAmbient*10000.f);
 
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_nDiveX);
-	pCtrl->SetRange(1, 20);
+	pCtrl->SetRange(1, 20, TRUE);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->shape.nDiveX);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_nDiveY);
-	pCtrl->SetRange(1, 20);
+	pCtrl->SetRange(1, 20, TRUE);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->shape.nDiveY);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_fIntervalX);
-	pCtrl->SetRange(1*decimal_point, 10*decimal_point);
+	pCtrl->SetRange(1*decimal_point, 10*decimal_point, TRUE);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->shape.fIntervalX*decimal_point);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_fIntervalY);
-	pCtrl->SetRange(1*decimal_point, 10*decimal_point);
+	pCtrl->SetRange(1*decimal_point, 10*decimal_point, TRUE);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->shape.fIntervalY*decimal_point);
 
 	char vColor[4];
@@ -139,14 +139,14 @@ BOOL CParamCubeDlg::OnInitDialog()
 	pCtrl->SetRange(0, 3);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->shape.nDirecttion);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_nRotate);
-	pCtrl->SetRange(1, 2);
+	pCtrl->SetRange(1, 2, TRUE);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->shape.nRotate);
 
 	pBtn = (CButton*)GetDlgItem(IDC_CHECK_bReverse);
 	pBtn->SetCheck(m_pParam->bReverse);
 
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_fPerspective);
-	pCtrl->SetRange(10*100.f, 120*100.f);
+	pCtrl->SetRange(10*100.f, 120*100.f, TRUE);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->fPerspective*100.f);
 
 	memcpy(&vColor, &m_pParam->crBackgroundColor, sizeof(vColor));

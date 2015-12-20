@@ -55,10 +55,10 @@ BOOL CParamAmoebaWipeDlg::OnInitDialog()
 	pCtrl->SetRange(0, 18000);	//1800.0f, 0.0f,  0.1f
 	if(m_pParam)	pCtrl->SetPos(m_pParam->fPhase * 10);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_BUMP_DENSITY);
-	pCtrl->SetRange(2000, 10000);	//1.0f, 0.20f, 0.0001f
+	pCtrl->SetRange(2000, 10000, TRUE);	//1.0f, 0.20f, 0.0001f
 	if(m_pParam)	pCtrl->SetPos(m_pParam->fBumpDensity * 10000);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_SLANT);
-	pCtrl->SetRange(-100000, 100000);	//1.0f, -1.0f, 0.00001f
+	pCtrl->SetRange(-100000, 100000, TRUE);	//1.0f, -1.0f, 0.00001f
 	if(m_pParam)	pCtrl->SetPos(m_pParam->fSlant * 100000);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_HEIGHT);
 	pCtrl->SetRange(0, 100000);	//1.0f, 0.0f, 0.00001f
@@ -73,7 +73,7 @@ BOOL CParamAmoebaWipeDlg::OnInitDialog()
 	pCtrl->SetRange(0, 10000);	//1.0f, 0.0f,  0.0001f
 	if(m_pParam)	pCtrl->SetPos(m_pParam->fBrightness * 10000);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_LIGHT_ANGLE);
-	pCtrl->SetRange(-36000, 72000);	//720.0f, -360.0f, 0.01f
+	pCtrl->SetRange(-36000, 72000, TRUE);	//720.0f, -360.0f, 0.01f
 	if(m_pParam)	pCtrl->SetPos(m_pParam->fLightAngle * 100);
 	char vColor[4];
 	memcpy(&vColor, &m_pParam->crHColor, sizeof(vColor));

@@ -139,7 +139,7 @@ BOOL CParamColorKeyDlg::OnInitDialog()
 	pCtrl->SetRange(0, 255);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->fBlurness* MaxValue);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_FINE_TUNE);
-	pCtrl->SetRange(-255, 255);
+	pCtrl->SetRange(-255, 255, TRUE);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->fFineTune* MaxValue);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_GRAY_MIN);
 	pCtrl->SetRange(0, 255);

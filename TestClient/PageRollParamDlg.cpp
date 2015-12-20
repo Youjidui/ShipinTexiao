@@ -44,50 +44,50 @@ BOOL CPageRollParamDlg::OnInitDialog()
 
 	CSliderCtrl* pCtrl = NULL;
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_TRANSITION);		//Progress
-	pCtrl->SetRange(0, 10000);	//1.f, 0, 0.0001f
+	pCtrl->SetRange(0, 10000, TRUE);	//1.f, 0, 0.0001f
 	if(m_pParam)	pCtrl->SetPos(m_pParam->structTrans.fTransition * 10000);
 
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_ANGLE);
-	pCtrl->SetRange(-36000, 72000);	//720.f, 360, 0.01f
+	pCtrl->SetRange(-36000, 72000, TRUE);	//720.f, 360, 0.01f
 	if(m_pParam)	pCtrl->SetPos(m_pParam->structGeometry.fAngle * 100);
 
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_RADIUS);
-	pCtrl->SetRange(1000, 10000);	//1.0f, 0.1f, 0.0001f
+	pCtrl->SetRange(1000, 10000, TRUE);	//1.0f, 0.1f, 0.0001f
 	if(m_pParam)	pCtrl->SetPos(m_pParam->structGeometry.fRadius * 10000);
 
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_ANGLE_PHI);
-	pCtrl->SetRange(0, 360000);	////360.0f, 0.0f,  0.001f
+	pCtrl->SetRange(0, 360000, TRUE);	////360.0f, 0.0f,  0.001f
 	if(m_pParam)	pCtrl->SetPos(m_pParam->structLight.fAnglePhi * 1000);
 	
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_ANGLE_THETA);
-	pCtrl->SetRange(0, 36000);	////360.0f, 0.0f,  0.01f
+	pCtrl->SetRange(0, 36000, TRUE);	////360.0f, 0.0f,  0.01f
 	if(m_pParam)	pCtrl->SetPos(m_pParam->structLight.fAngleTheta * 100);
 
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_LIGHT_RATIO);
-	pCtrl->SetRange(0, 10000);	//1.0f, 0.0f,  0.0001f
+	pCtrl->SetRange(0, 10000, TRUE);	//1.0f, 0.0f,  0.0001f
 	if(m_pParam)	pCtrl->SetPos(m_pParam->structLight.fLightRatio * 10000);
 
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_FRONT_HIGH_LIGHT);
-	pCtrl->SetRange(0, 20000);	//200.0f, 0.0f,  0.01f
+	pCtrl->SetRange(0, 20000, TRUE);	//200.0f, 0.0f,  0.01f
 	if(m_pParam)	pCtrl->SetPos(m_pParam->structLight.fFrontHighLight * 100);
 
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_FRONT_SMOOTHNESS);
-	pCtrl->SetRange(0, 20000);	//20.0f, 0.0f,  0.001f
+	pCtrl->SetRange(0, 20000, TRUE);	//20.0f, 0.0f,  0.001f
 	if(m_pParam)	pCtrl->SetPos(m_pParam->structLight.fFrontSmoothness * 1000);
 
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_REAR_HIGH_LIGHT);
-	pCtrl->SetRange(0, 20000);	//200.0f, 0.0f,  0.01f
+	pCtrl->SetRange(0, 20000, TRUE);	//200.0f, 0.0f,  0.01f
 	if(m_pParam)	pCtrl->SetPos(m_pParam->structLight.fRearHighLight * 100);
 
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_REAR_SMOOTHNESS);
-	pCtrl->SetRange(0, 20000);	//20.0f, 0.0f,  0.001f
+	pCtrl->SetRange(0, 20000, TRUE);	//20.0f, 0.0f,  0.001f
 	if(m_pParam)	pCtrl->SetPos(m_pParam->structLight.fRearSmoothness * 1000);
 
 	CButton* pBtn = (CButton*)GetDlgItem(IDC_CHECK_USE_FORE_GROUND);
 	if(m_pParam)	pBtn->SetCheck(m_pParam->structRear.bUseForeGround);
 		
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_MATTE_RATIO);
-	pCtrl->SetRange(0, 10000);	//1.0f, 0.0f,  0.0001f
+	pCtrl->SetRange(0, 10000, TRUE);	//1.0f, 0.0f,  0.0001f
 	if(m_pParam)	pCtrl->SetPos(m_pParam->structRear.fMatteRatio * 10000);
 
 	char vColor[4];

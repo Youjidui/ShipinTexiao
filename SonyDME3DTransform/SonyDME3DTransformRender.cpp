@@ -218,8 +218,7 @@ void CSonyDME3DTransformRender::RenderScene(CVideoBuffer* pDst, CVideoBuffer* pS
 	BOOL bAntiAlias = D3DXVec3Dot(&vNormal, &vNewNormal) < cosf(1e-3f);
 
 	CVideoBuffer* pTemp = NULL;
-	//if(bAntiAlias && (m_pParam->bFilter))
-	if(0)
+	if(bAntiAlias && (m_pParam->bFilter))
 	{
 		CVideoBufferManager* pBufMgr = m_pEngine->GetVideoBufferManager();
 		//VideoBufferInfo bi = biSrc;
@@ -287,7 +286,7 @@ void CSonyDME3DTransformRender::RenderScene(CVideoBuffer* pDst, CVideoBuffer* pS
 		hr = m_pSonyDME3DEffect->SetMatrix("g_matTexture", &matSrcImage);
 		ASSERT(SUCCEEDED(hr));
 		
-		D3DXSaveSurfaceToFile(_T("./filter.dds"), D3DXIFF_DDS, pTemp->GetSurface(), NULL, NULL);
+		//D3DXSaveSurfaceToFile(_T("./filter.dds"), D3DXIFF_DDS, pTemp->GetSurface(), NULL, NULL);
 	}
 
 

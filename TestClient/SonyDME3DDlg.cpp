@@ -44,135 +44,135 @@ BOOL CSonyDME3DDlg::OnInitDialog()
 
 	CSliderCtrl* pCtrl = NULL;
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_PRESIZE_X);		//Progress
-	pCtrl->SetRange(0, 10000);
+	pCtrl->SetRange(0, 10000, TRUE);
 	pCtrl->SetPos(m_pParam->fPreSizeX * 1000);
 
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_PRESIZE_Y);		//Progress
-	pCtrl->SetRange(0, 10000);
+	pCtrl->SetRange(0, 10000, TRUE);
 	pCtrl->SetPos(m_pParam->fPreSizeY * 1000);
 
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SKEW_X);
-	pCtrl->SetRange(-10000, 10000);
+	pCtrl->SetRange(-10000, 10000, TRUE);
 	pCtrl->SetPos(m_pParam->fSkewX * 1000.f);
 
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SKEW_Y);
-	pCtrl->SetRange(-10000, 10000);
+	pCtrl->SetRange(-10000, 10000, TRUE);
 	pCtrl->SetPos(m_pParam->fSkewY * 1000.f);
 
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_L_LOCATION_X);
-	pCtrl->SetRange(-30000, 30000);
+	pCtrl->SetRange(-30000, 30000, TRUE);
 	pCtrl->SetPos(m_pParam->sLocal.fLocationX *100.f);
 
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_L_LOCATION_Y);
-	pCtrl->SetRange(-30000, 30000);
+	pCtrl->SetRange(-30000, 30000, TRUE);
 	pCtrl->SetPos(m_pParam->sLocal.fLocationY *100.f);
 
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_L_LOCATION_Z);
-	pCtrl->SetRange(-30000, 30000);
+	pCtrl->SetRange(-30000, 30000, TRUE);
 	pCtrl->SetPos(m_pParam->sLocal.fLocationZ *100.f);
 
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_L_SPIN_X);
-	pCtrl->SetRange(-5000, 5000);
+	pCtrl->SetRange(-5000, 5000, TRUE);
 	pCtrl->SetPos(m_pParam->sLocal.fSpinX *1000.f);
 
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_L_SPIN_Y);
-	pCtrl->SetRange(-5000, 5000);
+	pCtrl->SetRange(-5000, 5000, TRUE);
 	pCtrl->SetPos(m_pParam->sLocal.fSpinY *1000.f);
 
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_L_SPIN_Z);
-	pCtrl->SetRange(-5000, 5000);
+	pCtrl->SetRange(-5000, 5000, TRUE);
 	pCtrl->SetPos(m_pParam->sLocal.fSpinZ *1000.f);
 
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_L_ROTATION_X);
-	pCtrl->SetRange(-5000, 5000);
+	pCtrl->SetRange(-5000, 5000, TRUE);
 	pCtrl->SetPos(m_pParam->sLocal.fRotationX *1000.f);
 
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_L_ROTATION_Y);
-	pCtrl->SetRange(-5000, 5000);
+	pCtrl->SetRange(-5000, 5000, TRUE);
 	pCtrl->SetPos(m_pParam->sLocal.fRotationY *1000.f);
 
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_L_ROTATION_Z);
-	pCtrl->SetRange(-5000, 5000);
+	pCtrl->SetRange(-5000, 5000, TRUE);
 	pCtrl->SetPos(m_pParam->sLocal.fRotationZ *1000.f);
 
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_L_AXIS_X);
-	pCtrl->SetRange(-10000, 10000);
+	pCtrl->SetRange(-10000, 10000, TRUE);
 	pCtrl->SetPos(m_pParam->sLocal.fAxisX *1000.f);
 
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_L_AXIS_Y);
-	pCtrl->SetRange(-10000, 10000);
+	pCtrl->SetRange(-10000, 10000, TRUE);
 	pCtrl->SetPos(m_pParam->sLocal.fAxisY *1000.f);
 
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_L_AXIS_Z);
-	pCtrl->SetRange(-10000, 10000);
+	pCtrl->SetRange(-10000, 10000, TRUE);
 	pCtrl->SetPos(m_pParam->sLocal.fAxisZ *1000.f);
 
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_L_LOCATION_X2);
-	pCtrl->SetRange(-30000, 30000);
+	pCtrl->SetRange(-30000, 30000, TRUE);
 	pCtrl->SetPos(m_pParam->sGlobal.fLocationX *100.f);
 
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_L_LOCATION_Y2);
-	pCtrl->SetRange(-30000, 30000);
+	pCtrl->SetRange(-30000, 30000, TRUE);
 	pCtrl->SetPos(m_pParam->sGlobal.fLocationY *100.f);
 
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_L_LOCATION_Z2);
-	pCtrl->SetRange(-30000, 30000);
+	pCtrl->SetRange(-30000, 30000, TRUE);
 	pCtrl->SetPos(m_pParam->sGlobal.fLocationZ *100.f);
 
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_L_SPIN_X2);
-	pCtrl->SetRange(-5000, 5000);
+	pCtrl->SetRange(-5000, 5000, TRUE);
 	pCtrl->SetPos(m_pParam->sGlobal.fSpinX *1000.f);
 
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_L_SPIN_Y2);
-	pCtrl->SetRange(-5000, 5000);
+	pCtrl->SetRange(-5000, 5000, TRUE);
 	pCtrl->SetPos(m_pParam->sGlobal.fSpinY *1000.f);
 
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_L_SPIN_Z2);
-	pCtrl->SetRange(-5000, 5000);
+	pCtrl->SetRange(-5000, 5000, TRUE);
 	pCtrl->SetPos(m_pParam->sGlobal.fSpinZ *1000.f);
 
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_L_ROTATION_X2);
-	pCtrl->SetRange(-5000, 5000);
+	pCtrl->SetRange(-5000, 5000, TRUE);
 	pCtrl->SetPos(m_pParam->sGlobal.fRotationX *1000.f);
 
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_L_ROTATION_Y2);
-	pCtrl->SetRange(-5000, 5000);
+	pCtrl->SetRange(-5000, 5000, TRUE);
 	pCtrl->SetPos(m_pParam->sGlobal.fRotationY *1000.f);
 
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_L_ROTATION_Z2);
-	pCtrl->SetRange(-5000, 5000);
+	pCtrl->SetRange(-5000, 5000, TRUE);
 	pCtrl->SetPos(m_pParam->sGlobal.fRotationZ *1000.f);
 
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_L_AXIS_X2);
-	pCtrl->SetRange(-10000, 10000);
+	pCtrl->SetRange(-10000, 10000, TRUE);
 	pCtrl->SetPos(m_pParam->sGlobal.fAxisX *1000.f);
 
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_L_AXIS_Y2);
-	pCtrl->SetRange(-10000, 10000);
+	pCtrl->SetRange(-10000, 10000, TRUE);
 	pCtrl->SetPos(m_pParam->sGlobal.fAxisY *1000.f);
 
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_L_AXIS_Z2);
-	pCtrl->SetRange(-10000, 10000);
+	pCtrl->SetRange(-10000, 10000, TRUE);
 	pCtrl->SetPos(m_pParam->sGlobal.fAxisZ *1000.f);
 
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_PERSPECTIVE);
-	pCtrl->SetRange(1000, 12000);
+	pCtrl->SetRange(1000, 12000, TRUE);
 	pCtrl->SetPos(m_pParam->fPerspective *100.f);
 
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_POST_SIZE_X);
-	pCtrl->SetRange(0, 10000);
+	pCtrl->SetRange(0, 10000, TRUE);
 	pCtrl->SetPos(m_pParam->fPostSizeX *1000.f);
 
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_POST_SIZE_Y);
-	pCtrl->SetRange(0, 10000);
+	pCtrl->SetRange(0, 10000, TRUE);
 	pCtrl->SetPos(m_pParam->fPostSizeY *1000.f);
 
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_POST_LOCATION_X);
-	pCtrl->SetRange(-30000, 30000);
+	pCtrl->SetRange(-30000, 30000, TRUE);
 	pCtrl->SetPos(m_pParam->fPostLocationX *100.f);
 
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_POST_LOCATION_Y);
-	pCtrl->SetRange(-30000, 30000);
+	pCtrl->SetRange(-30000, 30000, TRUE);
 	pCtrl->SetPos(m_pParam->fPostLocationY *100.f);
 
 	return TRUE;

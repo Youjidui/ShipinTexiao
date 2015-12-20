@@ -46,19 +46,19 @@ BOOL CParamBasicWipeDlg::OnInitDialog()
 
 	CSliderCtrl* pCtrl = NULL;
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_OFFSET1);		//Progress
-	pCtrl->SetRange(0, 10000);	//1.f, 0, 0.0001f
+	pCtrl->SetRange(0, 10000, TRUE);	//1.f, 0, 0.0001f
 	if(m_pParam)	pCtrl->SetPos(m_pParam->structPattern.fOffset * 10000);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_DIVIDE_WIDTH);
-	pCtrl->SetRange(0, 10000);	//1.f, 0, 0.0001f
+	pCtrl->SetRange(0, 10000, TRUE);	//1.f, 0, 0.0001f
 	if(m_pParam)	pCtrl->SetPos(m_pParam->structModify.fDivideWidth * 10000);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_DIVIDE_TYPE);
-	pCtrl->SetRange(1, 5);	//5, 1,  1
+	pCtrl->SetRange(1, 5, TRUE);	//5, 1,  1
 	if(m_pParam)	pCtrl->SetPos(m_pParam->structModify.nDivideType);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_CENTER_X);
-	pCtrl->SetRange(-20000, 20000);	//2.0f, -2.0f, 0.0001f
+	pCtrl->SetRange(-20000, 20000, TRUE);	//2.0f, -2.0f, 0.0001f
 	if(m_pParam)	pCtrl->SetPos(m_pParam->structPattern.fCenterX * 10000);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_CENTER_Y);
-	pCtrl->SetRange(-20000, 20000);	//2.0f, -2.0f, 0.0001f
+	pCtrl->SetRange(-20000, 20000, TRUE);	//2.0f, -2.0f, 0.0001f
 	if(m_pParam)	pCtrl->SetPos(m_pParam->structPattern.fCenterY * 10000);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_INVERT);
 	pCtrl->SetRange(0, 1);	//1, 0
@@ -70,10 +70,10 @@ BOOL CParamBasicWipeDlg::OnInitDialog()
 	pCtrl->SetRange(0, 3);	//3, 0, 1	??
 	if(m_pParam)	pCtrl->SetPos(m_pParam->structModify.nMultipleType);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_MULTIPLE_NUMBER_X);
-	pCtrl->SetRange(1, 20);	//20, 1, 1
+	pCtrl->SetRange(1, 20, TRUE);	//20, 1, 1
 	if(m_pParam)	pCtrl->SetPos(m_pParam->structModify.nMultipleNumberX);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_MULTIPLE_NUMBER_Y);
-	pCtrl->SetRange(1, 20);	//20, 1, 1
+	pCtrl->SetRange(1, 20, TRUE);	//20, 1, 1
 	if(m_pParam)	pCtrl->SetPos(m_pParam->structModify.nMultipleNumberY);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_PATTERN);
 	pCtrl->SetRange(0, 5);	//5, 0, 1
@@ -85,7 +85,7 @@ BOOL CParamBasicWipeDlg::OnInitDialog()
 	pCtrl->SetRange(0, 1);	//
 	if(m_pParam)	pCtrl->SetPos(m_pParam->structModify.bFlip);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_OVERLAP);
-	pCtrl->SetRange(-36000, 72000);	//720.0f, -360.0f, 0.01f
+	pCtrl->SetRange(-36000, 72000, TRUE);	//720.0f, -360.0f, 0.01f
 	if(m_pParam)	pCtrl->SetPos(m_pParam->structModify.bOverlap * 100);
 
 	char vColor[4];	//D3DCOLOR_XRGB

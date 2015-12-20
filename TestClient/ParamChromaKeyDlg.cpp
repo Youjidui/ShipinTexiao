@@ -57,7 +57,7 @@ BOOL CParamChromaKeyDlg::OnInitDialog()
 	pCtrl->SetRange(0, 100*decimal_point);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->paramCrkAdj.fClip * decimal_point);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_CK_GAIN);
-	pCtrl->SetRange(-100*decimal_point, 100*decimal_point);
+	pCtrl->SetRange(-100*decimal_point, 100*decimal_point, TRUE);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->paramCrkAdj.fGain * decimal_point);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_CK_HUE);
 	pCtrl->SetRange(0, 360*decimal_point);
@@ -77,10 +77,10 @@ BOOL CParamChromaKeyDlg::OnInitDialog()
 	pBtn = (CButton*)GetDlgItem(IDC_CHECK_CK_INVERT);
 	pBtn->SetCheck(m_pParam->paramCrkAdj.bInvert);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_CKP_LEFT);
-	pCtrl->SetRange(-4 * 10000,  4 * 10000);
+	pCtrl->SetRange(-4 * 10000,  4 * 10000, TRUE);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->paramCrkPos.fLeft*10000);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_CKP_RIGHT);
-	pCtrl->SetRange(-4 * 10000, 4 * 10000);
+	pCtrl->SetRange(-4 * 10000, 4 * 10000, TRUE);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->paramCrkPos.fRight*10000);
 
 
@@ -91,7 +91,7 @@ BOOL CParamChromaKeyDlg::OnInitDialog()
 	pCtrl->SetRange(0, 100*decimal_point);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->paramYBal.fClip*decimal_point);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_YB_GAIN);
-	pCtrl->SetRange(-100*decimal_point, 100*decimal_point);
+	pCtrl->SetRange(-100*decimal_point, 100*decimal_point, TRUE);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->paramYBal.fGain*decimal_point);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_YB_LUM);
 	pCtrl->SetRange(0, 100*decimal_point);
@@ -116,14 +116,14 @@ BOOL CParamChromaKeyDlg::OnInitDialog()
 	pCtrl->SetRange(0, 100*decimal_point);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->paramCcKey.fClip*decimal_point);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_CC_GAIN);
-	pCtrl->SetRange(-100*decimal_point, 100*decimal_point);
+	pCtrl->SetRange(-100*decimal_point, 100*decimal_point, TRUE);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->paramCcKey.fGain*decimal_point);
 
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_CCP_LEFT);
-	pCtrl->SetRange(-3 * 10000,  3 * 10000);
+	pCtrl->SetRange(-3 * 10000,  3 * 10000, TRUE);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->paramCckPos.fLeft*10000);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_CCP_RIGHT);
-	pCtrl->SetRange(-3 * 10000, 3 * 10000);
+	pCtrl->SetRange(-3 * 10000, 3 * 10000, TRUE);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->paramCckPos.fRight*10000);
 
 
@@ -138,16 +138,16 @@ BOOL CParamChromaKeyDlg::OnInitDialog()
 	if(m_pParam)	pCtrl->SetPos(m_pParam->paramYBalMix.fMix*decimal_point);
 
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_VA_VGAIN);
-	pCtrl->SetRange(-100*decimal_point, 100*decimal_point);
+	pCtrl->SetRange(-100*decimal_point, 100*decimal_point, TRUE);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->paramFGVAdj.fVGain*decimal_point);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_VA_yGAIN);
-	pCtrl->SetRange(-100*decimal_point, 100*decimal_point);
+	pCtrl->SetRange(-100*decimal_point, 100*decimal_point, TRUE);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->paramFGVAdj.fYGain*decimal_point);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_VA_CGAIN);
-	pCtrl->SetRange(-100*decimal_point, 100*decimal_point);
+	pCtrl->SetRange(-100*decimal_point, 100*decimal_point, TRUE);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->paramFGVAdj.fCGain*decimal_point);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_VA_HUE);
-	pCtrl->SetRange(-180*decimal_point, 180*decimal_point);
+	pCtrl->SetRange(-180*decimal_point, 180*decimal_point, TRUE);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->paramFGVAdj.fHue*decimal_point);
 
 
