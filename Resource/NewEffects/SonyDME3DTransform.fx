@@ -30,50 +30,48 @@ sampler_state
 };
 
 
-void VertScene(float3 vPos:POSITION,				
-				float2 vTex:TEXCOORD0,				
-				out float4 oPos:POSITION,				
+void VertScene(float3 vPos:POSITION,
+				float2 vTex:TEXCOORD0,
+				out float4 oPos:POSITION,
 				out float2 oTex:TEXCOORD0)
 {	
 
 	
 	oPos=mul(float4(vPos,1.f),g_matWorldViewProj);
 	oPos.y += g_vMisc.x * oPos.w;
-	oTex=mul(float4(vTex,1.0f,0.0f),g_matTexture);		
+	oTex=mul(float4(vTex,1.0f,0.0f),g_matTexture);
 }	
-
 
 float4 PixScene(float2 Tex:TEXCOORD0):COLOR0
 {
-	float4 fColor=(float4)0;		
-	fColor=tex2D(g_samColor,Tex);		
+	float4 fColor=(float4)0;
+	fColor=tex2D(g_samColor,Tex);
 	return fColor;
 }
+
 //AntiAlias
-void VS(float3 vPos:POSITION,				
-				float2 vTex:TEXCOORD0,				
-				out float4 oPos:POSITION,				
+void VS(float3 vPos:POSITION,
+				float2 vTex:TEXCOORD0,
+				out float4 oPos:POSITION,
 				out float2 oTex:TEXCOORD0,
 				out float2 oSrcTex:TEXCOORD1)
 {	
-
-	
-	oPos=mul(float4(vPos,1.f),g_matWorldViewProj);	
+	oPos=mul(float4(vPos,1.f),g_matWorldViewProj);
 	oTex=mul(float4(vTex,1.0f,0.0f),g_matTexture);
-	oSrcTex = vTex;		
+	oSrcTex = vTex;
 }	
+
 float4 PS(float2 Tex:TEXCOORD0,float2 oSrcTex:TEXCOORD1):COLOR0
 {
-	float4 fColor=(float4)0;		
+	float4 fColor=(float4)0;
 	fColor=tex2D(g_samColor,Tex);	
 		
 	float2 fTex = 0.5f - abs(oSrcTex - 0.5f);
 	fTex /= g_vSoft.xy;
 	fTex = saturate(fTex);
+
 	float a = fTex.x * fTex.y;
-	
 	fColor.a *= a;
-	
 	return fColor;
 }
 
@@ -84,7 +82,7 @@ technique DME
 		VertexShader=compile vs_1_1 VertScene();
 		PixelShader=compile  ps_2_0 PixScene();
 		CullMode=None;
-		AlphaBlendEnable = False;		
+		AlphaBlendEnable = False;
 	}
 	PASS P1
 	{

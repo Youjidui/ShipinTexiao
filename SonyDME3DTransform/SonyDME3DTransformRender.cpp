@@ -28,7 +28,7 @@ bool CSonyDME3DTransformRender::Init(CRenderEngine* pEngine)
 	CResourceManager* pResMgr = m_pEngine->GetResourceManager();
 	m_pQuadMesh = pResMgr->CreateQuadMesh(pDevice);
 	ASSERT(m_pQuadMesh);
-	m_pSonyDME3DEffect = pResMgr->CreateEffect(pDevice, _T("NewEffects/SonyDME3DTransformfx.fx"));
+	m_pSonyDME3DEffect = pResMgr->CreateEffect(pDevice, _T("NewEffects/SonyDME3DTransform.fx"));
 	ASSERT(m_pSonyDME3DEffect);
 	return true;
 }
@@ -62,7 +62,7 @@ bool CSonyDME3DTransformRender::Render(CVideoBuffer* pDst, CVideoBuffer* pSrc, S
 
 void CSonyDME3DTransformRender::RenderRGBA(CVideoBuffer* pDst, CVideoBuffer* pSrc)
 {
-	LPDIRECT3DDEVICE9 pDevice = m_pEngine->GetDevice();
+	//LPDIRECT3DDEVICE9 pDevice = m_pEngine->GetDevice();
 	//CResourceManager* pResMan = m_pEngine->GetResourceManager();
 	if(m_pEngine->SetRenderTarget(pDst))
 	{
@@ -74,44 +74,37 @@ void CSonyDME3DTransformRender::RenderScene(CVideoBuffer* pDst, CVideoBuffer* pS
 {
 	LPDIRECT3DDEVICE9 pDevice = m_pEngine->GetDevice();
 	CResourceManager* pResMan = m_pEngine->GetResourceManager();
+	HRESULT hr = E_FAIL;
 
-	//TODO
 	//m_fPixelAspect = m_pResMan->GetAspect() * m_pEngine->GetCurProfile()->nEditWidth / (float) (m_pEngine->GetCurProfile()->nEditHeight  * m_pResMan->GetAspectVerifyCoef());    
-	float fPixelAspect = 0;
-	
+	int nEditWidth, nEditHeight;
+	m_pEngine->GetTargetVideoSize(nEditWidth, nEditHeight);
+	float fPixelAspect = nEditWidth * 1.0f / nEditHeight;	
+
+	const VideoBufferInfo& biSrc = pSrc->GetVideoBufferInfo();
 
 	D3DXMATRIX matSrcImage;	
 	D3DXMatrixIdentity( &matSrcImage );
+	float fu = 0.5f/(float)(biSrc.nAllocWidth);
+	float fv = 0.5f/(float)(biSrc.nAllocHeight);
+	//if(!m_pParam->bOdd)
+	//	fv -= 0.5f / (float)(biSrc.nAllocHeight);
 
-	int nEditWidth, nEditHeight;
-	m_pEngine->GetTargetVideoSize(nEditWidth, nEditHeight);
-	const float pSrcDef0_OffsetX = 0.f, pSrcDef0_OffsetY = 0.f;
-	float fu = 0.5f/(float)(nEditWidth);
-	float fv = 0.5f/(float)(nEditHeight); 
-
-	RECT rcImage;
-	rcImage.top = 0;
-	rcImage.left = 0;
-	rcImage.right = nEditWidth;
-	rcImage.bottom = nEditHeight;
-
+	CRect rcImage(0, 0, biSrc.nWidth, biSrc.nHeight);
 	int iWidth = rcImage.right- rcImage.left,iHeight = rcImage.bottom-rcImage.top;
-	matSrcImage._11   =  iWidth /((float)nEditWidth);
-	matSrcImage._22   =  iHeight/((float)nEditHeight); 
-	matSrcImage._31 =  fu + rcImage.left/((float)nEditWidth);
-	matSrcImage._32 =  fv + rcImage.top/((float)nEditHeight); 
+	matSrcImage._11   =  iWidth /((float)biSrc.nAllocWidth);
+	matSrcImage._22   =  iHeight/((float)biSrc.nAllocHeight); 
+	matSrcImage._31 =  fu + rcImage.left/((float)biSrc.nAllocWidth);
+	matSrcImage._32 =  fv + rcImage.top/((float)biSrc.nAllocHeight); 
 
 	//CSetEffectParam _E(m_pSonyDME3DEffect);
 
 	D3DXMATRIXA16 matView,matProj;
-
 	D3DXVECTOR3 vEyePt( 0.0f, 0.0f,-0.5f/tan(D3DXToRadian(m_pParam->fPerspective) / 2.0f) );
 	D3DXVECTOR3 vLookatPt( 0.0f, 0.0f, 0.0f );
 	D3DXVECTOR3 vUpVec( 0.0f, 1.0f, 0.0f );
-
 	D3DXMatrixLookAtLH( &matView, &vEyePt, &vLookatPt, &vUpVec );
-		
-	//D3DXMatrixPerspectiveFovLH( &matProj,D3DXToRadian(m_pParam->fPerspective), m_fPixelAspect, 0.001f, 1000.0f );
+	D3DXMatrixPerspectiveFovLH( &matProj,D3DXToRadian(m_pParam->fPerspective), fPixelAspect, 0.001f, 1000.0f );
 
 	D3DXMATRIX matWorld;
 	D3DXMatrixIdentity(&matWorld);
@@ -119,45 +112,41 @@ void CSonyDME3DTransformRender::RenderScene(CVideoBuffer* pDst, CVideoBuffer* pS
 
 
 	D3DVIEWPORT9 vPort;
-	pDevice->GetViewport(&vPort);
+	hr = pDevice->GetViewport(&vPort);
+	ASSERT(SUCCEEDED(hr));
 	vPort.Width = nEditWidth;
 	vPort.Height = nEditHeight;
-	pDevice->SetViewport(&vPort);
+	hr = pDevice->SetViewport(&vPort);
+	ASSERT(SUCCEEDED(hr));
 
 	D3DXMATRIX matScale, matTransition;
-
-	float fxZoom = (float)pSrc->GetVideoBufferInfo().nWidth * 1.0f  / (float)nEditWidth;
-	float fyZoom = (float)pSrc->GetVideoBufferInfo().nHeight / (float)nEditHeight;
-
-	// TODO offset
+	float fxZoom = biSrc.nWidth * 1.0f  / (float)nEditWidth;
+	float fyZoom = biSrc.nHeight / (float)nEditHeight;
 	D3DXVECTOR2 srcOffset(0, 0);
 	//if ( pSrcDef->IsYUV16Buffer() )
 	//	srcOffset.x /= 2.0f;
 	float ofx = -0.5f + fxZoom*0.5f + srcOffset.x / (float)nEditWidth;
 	float ofy =  0.5f - fyZoom*0.5f - srcOffset.y / (float)nEditHeight;
-
 	D3DXMatrixScaling(&matScale, fxZoom, fyZoom , 1.0f);
 	D3DXMatrixTranslation(&matTransition, ofx*fPixelAspect, ofy, 0.0f);
 
 	D3DXMATRIX matAspect,matShift;
-	// 	if(D3DXMatrixIsIdentity(&matWorld))
-	//   	     D3DXMatrixIdentity(&matShift);
-	//	else 
-	///D3DXMatrixTranslation(&matShift,0.0f,m_pParam->bOdd?0.0f: 0.5f / m_fPixelAspect /  vPort.Height,0.0f);
-
 	D3DXVECTOR4 vMisc;
-	vMisc.x = 1.0f / vPort.Height;//m_pParam->bOdd?0.0f: 1.0f
-	m_pSonyDME3DEffect->SetVector("g_vMisc", &vMisc);
+	//vMisc.x = m_pParam->bOdd?0.0f: 1.0f / vPort.Height;
+	vMisc.x = 1.0f / vPort.Height;
+	hr = m_pSonyDME3DEffect->SetVector("g_vMisc", &vMisc);
+	ASSERT(SUCCEEDED(hr));
 
-	D3DXMatrixIdentity(&matAspect) ;
-	//     matAspect._22 = 1.f/m_fPixelAspect;	
+	D3DXMatrixIdentity(&matAspect);
 	matAspect._11 = fPixelAspect;	
 
 	D3DXMATRIX matWVP =  matAspect  * matScale * matWorld * matTransition * matView * matProj;
-
-	m_pSonyDME3DEffect->SetMatrix("g_matTexture", &matSrcImage);
-	m_pSonyDME3DEffect->SetMatrix("g_matWorldViewProj", &matWVP);
-	m_pSonyDME3DEffect->SetTexture("g_txColor", pDst->GetTexture());
+	hr = m_pSonyDME3DEffect->SetMatrix("g_matTexture", &matSrcImage);
+	ASSERT(SUCCEEDED(hr));
+	hr = m_pSonyDME3DEffect->SetMatrix("g_matWorldViewProj", &matWVP);
+	ASSERT(SUCCEEDED(hr));
+	hr = m_pSonyDME3DEffect->SetTexture("g_txColor", pSrc->GetTexture());
+	ASSERT(SUCCEEDED(hr));
 
 
 	/* allways false
@@ -226,19 +215,27 @@ void CSonyDME3DTransformRender::RenderScene(CVideoBuffer* pDst, CVideoBuffer* pS
 	D3DXVECTOR3 vNormal(1,0,0),vNewNormal;
 	D3DXVec3TransformCoord(&vNewNormal,&vNormal,&matWorld);
 	D3DXVec3Normalize(&vNewNormal,&vNewNormal);
+	BOOL bAntiAlias = D3DXVec3Dot(&vNormal, &vNewNormal) < cosf(1e-3f);
 
-	BOOL bAntiAlias = D3DXVec3Dot(&vNormal,&vNewNormal) < cosf(1e-3);
-	//handle_tpr hTemp = INVALID_RESID;
-	if(bAntiAlias && (m_pParam->bFilter))
+	CVideoBuffer* pTemp = NULL;
+	//if(bAntiAlias && (m_pParam->bFilter))
+	if(0)
 	{
 		CVideoBufferManager* pBufMgr = m_pEngine->GetVideoBufferManager();
-		CVideoBuffer* pTemp = pBufMgr->CreateVideoBuffer(pDst->GetVideoBufferInfo());
-		m_pEngine->SetRenderTarget(pTemp);
+		//VideoBufferInfo bi = biSrc;
+		VideoBufferInfo bi = pDst->GetVideoBufferInfo();
+		bi.eUsage = VideoBufferInfo::_IN_OUT;	//must set this
+		pTemp = pBufMgr->CreateVideoBuffer(bi);
+		ASSERT(pTemp);
+		bool bOK = m_pEngine->SetRenderTarget(pTemp);
+		ASSERT(bOK);
 
 		D3DXVECTOR4 vSoft(3.0f / nEditWidth,3.0f / nEditHeight,0,0);
-		m_pSonyDME3DEffect->SetVector("g_vSoft", &vSoft);
+		hr = m_pSonyDME3DEffect->SetVector("g_vSoft", &vSoft);
+		ASSERT(SUCCEEDED(hr));
 		D3DXMATRIXA16 matCombine = m_matView * m_matProj;
-		m_pSonyDME3DEffect->SetMatrix("g_matWorldViewProj",&matCombine);
+		hr = m_pSonyDME3DEffect->SetMatrix("g_matWorldViewProj",&matCombine);
+		ASSERT(SUCCEEDED(hr));
 
 
 		//add by szm. 旋转变模糊
@@ -248,29 +245,37 @@ void CSonyDME3DTransformRender::RenderScene(CVideoBuffer* pDst, CVideoBuffer* pS
 		//m_pSonyDME3DEffect->SetTexture("g_matTexture", &matTex);
 		//end by szm. 旋转变模糊
 
-		m_pSonyDME3DEffect->SetTechnique("DME");
+		hr = m_pSonyDME3DEffect->SetTechnique("DME");
+		ASSERT(SUCCEEDED(hr));
 		if ( SUCCEEDED(pDevice->BeginScene()))                                   // begin tech 
 		{
 			UINT cPass;
-			m_pSonyDME3DEffect->Begin(&cPass,0);
-
-			m_pSonyDME3DEffect->BeginPass(1);
-			m_pQuadMesh-> DrawMeshFx();
-			m_pSonyDME3DEffect->EndPass();
-
-			m_pSonyDME3DEffect->End();
-			pDevice->EndScene();
+			hr = m_pSonyDME3DEffect->Begin(&cPass,0);
+			ASSERT(SUCCEEDED(hr));
+			hr = m_pSonyDME3DEffect->BeginPass(1);
+			ASSERT(SUCCEEDED(hr));
+			bool bOK = m_pQuadMesh-> DrawMeshFx();
+			ASSERT(bOK);
+			hr = m_pSonyDME3DEffect->EndPass();
+			ASSERT(SUCCEEDED(hr));
+			hr = m_pSonyDME3DEffect->End();
+			ASSERT(SUCCEEDED(hr));
+			hr = pDevice->EndScene();
+			ASSERT(SUCCEEDED(hr));
 		}
-		m_pEngine->SetRenderTarget(pDst);		
-		m_pSonyDME3DEffect->SetMatrix("g_matWorldViewProj",&matWVP);
+
+		bOK = m_pEngine->SetRenderTarget(pDst);
+		ASSERT(bOK);
+		hr = m_pSonyDME3DEffect->SetMatrix("g_matWorldViewProj",&matWVP);
+		ASSERT(SUCCEEDED(hr));
 
 		//TP_VBufferDef* pTempDef = m_pResMan->GetBufferDef(hTemp);
-		CVideoBuffer* pTempDef = pBufMgr->CreateVideoBuffer(pDst->GetVideoBufferInfo());
-		
-		m_pSonyDME3DEffect->SetTexture("g_txColor", pTempDef->GetTexture());
+		//CVideoBuffer* pTempDef = pBufMgr->CreateVideoBuffer(pDst->GetVideoBufferInfo());
+		hr = m_pSonyDME3DEffect->SetTexture("g_txColor", pTemp->GetTexture());
+		ASSERT(SUCCEEDED(hr));
 
 		// wxb,wsp add
-		GenerateMatrix(pTempDef,&matSrcImage,mat_Image);
+		GenerateMatrix(pTemp, &matSrcImage, mat_Image);
 
 		//add by szm. 旋转变模糊
 		fv = 0.f;
@@ -279,56 +284,50 @@ void CSonyDME3DTransformRender::RenderScene(CVideoBuffer* pDst, CVideoBuffer* pS
 		matSrcImage._32 += fv;
 		//end by szm. 旋转变模糊
 	
-		m_pSonyDME3DEffect->SetMatrix("g_matTexture", &matSrcImage);
-		//_E("g_matTexture", &matSrcImage);
-		// wxb,wsp add end
+		hr = m_pSonyDME3DEffect->SetMatrix("g_matTexture", &matSrcImage);
+		ASSERT(SUCCEEDED(hr));
+		
+		D3DXSaveSurfaceToFile(_T("./filter.dds"), D3DXIFF_DDS, pTemp->GetSurface(), NULL, NULL);
 	}
 
 
-	m_pSonyDME3DEffect->SetTechnique("DME");
+	hr = m_pSonyDME3DEffect->SetTechnique("DME");
+	ASSERT(SUCCEEDED(hr));
 	//BeginAntiAlias();
 	if ( SUCCEEDED(pDevice->BeginScene()))                                   // begin tech 
 	{
 		UINT cPass;
-		m_pSonyDME3DEffect->Begin(&cPass,0);
-
-		m_pSonyDME3DEffect->BeginPass(0);
-		m_pQuadMesh-> DrawMeshFx();
-		m_pSonyDME3DEffect->EndPass();
-
-		m_pSonyDME3DEffect->End();
-
-		pDevice->EndScene();
+		hr = m_pSonyDME3DEffect->Begin(&cPass,0);
+		ASSERT(SUCCEEDED(hr));
+		hr = m_pSonyDME3DEffect->BeginPass(0);
+		ASSERT(SUCCEEDED(hr));
+		bool bOK = m_pQuadMesh-> DrawMeshFx();
+		ASSERT(bOK);
+		hr = m_pSonyDME3DEffect->EndPass();
+		ASSERT(SUCCEEDED(hr));
+		hr = m_pSonyDME3DEffect->End();
+		ASSERT(SUCCEEDED(hr));
+		hr = pDevice->EndScene();
+		ASSERT(SUCCEEDED(hr));
 	}
 	//EndAntiAlias(m_pDstDef);
-	/*
-	if(hFilterBuffer != INVALID_RESID)
+
+	//D3DXSaveSurfaceToFile(_T("./dme.dds"), D3DXIFF_DDS, pDst->GetSurface(), NULL, NULL);
+
+	if(pTemp)
 	{
-		m_pResMan->FreeRTBuffer(hFilterBuffer);
+		CVideoBufferManager* pVM = m_pEngine->GetVideoBufferManager();
+		pVM->ReleaseVideoBuffer(pTemp);
+		pTemp = NULL;
 	}
-	if(hTemp != INVALID_RESID)
-	{
-		m_pResMan->FreeRTBuffer(hTemp);
-	}
-	*/
-	// m_pResMan->DumpResourceToFile(pDstDef->handle, L"c:\\tempBuffer.dds");
 }
 
 void CSonyDME3DTransformRender::GetWorldMatrix(D3DXMATRIX * matWorld)
 {
-	m_pParam->sLocal.fLocationX *= 0.5f;
-	m_pParam->sLocal.fLocationY *= 0.5f;
-// 	m_pParam->sLocal.fLocationX /= m_fPixelAspect*2.f;
-	m_pParam->sLocal.fLocationZ *= 0.5f;
-	m_pParam->sGlobal.fLocationX *= 0.5f;
-	m_pParam->sGlobal.fLocationY *= 0.5f;
-// 	m_pParam->sGlobal.fLocationX /= m_fPixelAspect*2.f;
-    m_pParam->sGlobal.fLocationZ *= 0.5f;
-    
 	//post
-     D3DXMATRIX matPost;
-  	//location
+    D3DXMATRIX matPost;
 
+	//location
 	float  fPostLocationX = m_pParam->fPostLocationX;
 	float  fPostLocationY = m_pParam->fPostLocationY;
 	D3DXMATRIX matPostLoc;
@@ -356,6 +355,12 @@ void CSonyDME3DTransformRender::GetWorldMatrix(D3DXMATRIX * matWorld)
 // 	float fLocationY = m_pParam->sGlobal.fLocationY / m_fPixelAspect;
 	float fLocationY = m_pParam->sGlobal.fLocationY;
 	float fLocationZ = m_pParam->sGlobal.fLocationZ;
+
+	fLocationX *= 0.5f;
+	fLocationY *= 0.5f;
+	// 	m_pParam->sGlobal.fLocationX /= m_fPixelAspect*2.f;
+	fLocationZ *= 0.5f;
+
 	D3DXMATRIX matLocation_Global;
 	D3DXMatrixTranslation(&matLocation_Global,fLocationX,fLocationY/* / m_fPixelAspect*/,fLocationZ);
 	//spin
@@ -397,10 +402,16 @@ void CSonyDME3DTransformRender::GetWorldMatrix(D3DXMATRIX * matWorld)
 	// Local
     D3DXMATRIX matLocal;
 	//location
-	 fLocationX =  m_pParam->sLocal.fLocationX;
+	fLocationX =  m_pParam->sLocal.fLocationX;
 // 	 fLocationY = m_pParam->sLocal.fLocationY / m_fPixelAspect;
-	 fLocationY = m_pParam->sLocal.fLocationY;
-	 fLocationZ = m_pParam->sLocal.fLocationZ;
+	fLocationY = m_pParam->sLocal.fLocationY;
+	fLocationZ = m_pParam->sLocal.fLocationZ;
+
+	fLocationX *= 0.5f;
+	fLocationY *= 0.5f;
+	// 	m_pParam->sLocal.fLocationX /= m_fPixelAspect*2.f;
+	fLocationZ *= 0.5f;
+
 	D3DXMATRIX matLocation_Local;
 	D3DXMatrixTranslation(&matLocation_Local,fLocationX,fLocationY/* / m_fPixelAspect*/,fLocationZ);
 	//spin

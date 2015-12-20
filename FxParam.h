@@ -400,6 +400,12 @@ struct SonyDME3DTransfromFxPrarm : public FxParamBase
 		float fAxisY;
 		float fAxisZ;
 
+		_Local() : fLocationX(0.f), fLocationY(0.f), fLocationZ(0.f)
+		, fSpinX(0.f), fSpinY(0.f), fSpinZ(0.f)
+		, fRotationX(0.f), fRotationY(0.f), fRotationZ(0.f)
+		, fSrcSpinX(0.f), fSrcSpinY(0.f), fSrcSpinZ(0.f)
+		, fAxisX(0.f), fAxisY(0.f), fAxisZ(0.f)
+		{}
 	}sLocal;
 
 	struct _Global  
@@ -424,6 +430,12 @@ struct SonyDME3DTransfromFxPrarm : public FxParamBase
 		float fAxisY;
 		float fAxisZ;
 
+		_Global() : fLocationX(0.f), fLocationY(0.f), fLocationZ(0.f)
+			, fSpinX(0.f), fSpinY(0.f), fSpinZ(0.f)
+			, fRotationX(0.f), fRotationY(0.f), fRotationZ(0.f)
+			, fSrcSpinX(0.f), fSrcSpinY(0.f), fSrcSpinZ(0.f)
+			, fAxisX(0.f), fAxisY(0.f), fAxisZ(0.f)
+		{}
 	}sGlobal;
 
 	bool  bFilter;
@@ -433,6 +445,11 @@ struct SonyDME3DTransfromFxPrarm : public FxParamBase
 	float fPostSizeY;
 	float fPostLocationX;
 	float fPostLocationY;
+
+	SonyDME3DTransfromFxPrarm()
+		: fPreSizeX(1.0f), fPreSizeY(1.0f), fSkewX(0.f), fSkewY(0.f), bFilter(TRUE), fPerspective(30.f)
+		, fPostSizeX(1.f), fPostSizeY(1.f), fPostLocationX(0.f), fPostLocationY(0.f)
+	{	}
 };
 
 struct RingsFxParam : public FxParamBase

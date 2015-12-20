@@ -253,7 +253,6 @@ BOOL CEffectBar::OnInitDialog()
 	i = m_ctrlEffects.AddString(FX_SONY_DME_3D_TRANSFORM);
 	{
 		SonyDME3DTransfromFxPrarm* p = new SonyDME3DTransfromFxPrarm;
-		memset(p, 0, sizeof(SonyDME3DTransfromFxPrarm));
 		m_ctrlEffects.SetItemDataPtr(i, p);
 		m_sonyDME3DDlg.SetParam(p);
 
