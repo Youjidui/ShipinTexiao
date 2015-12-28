@@ -616,3 +616,13 @@ struct SonyPinPFxParam : public FxParamBase
 	int				 nKeyCount;
 } ;
 
+struct DiffuseWipeFxParam : public FxParamBase
+{
+	float		fWidth;
+	float		fAngle;
+	float		fTranslate;
+	
+	int nBlockWidth;
+	int nBlockHeight;
+};
+
