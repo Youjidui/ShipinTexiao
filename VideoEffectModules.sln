@@ -45,7 +45,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EffMatrixWipeTrans", "EffMa
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EffSonyPinP", "EffSonyPinP\EffSonyPinP.vcproj", "{66B6CD60-FFAB-4E2B-97A9-16183748BF77}"
 EndProject
+<<<<<<< HEAD
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EffDiffuseWipe", "EffDiffuseWipe\EffDiffuseWipe.vcproj", "{5F47538A-8631-4D82-82A8-5CEF9850AA24}"
+=======
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Sony3DBrokenGlass", "Sony3DBrokenGlass\Sony3DBrokenGlass.vcproj", "{C5D64DE7-EFFE-4975-AB44-0BAD646E804D}"
+>>>>>>> origin/develop
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -247,6 +251,7 @@ Global
 		{66B6CD60-FFAB-4E2B-97A9-16183748BF77}.Release|Win32.ActiveCfg = Release|Win32
 		{66B6CD60-FFAB-4E2B-97A9-16183748BF77}.Release|Win32.Build.0 = Release|Win32
 		{66B6CD60-FFAB-4E2B-97A9-16183748BF77}.Release|x64.ActiveCfg = Release|Win32
+<<<<<<< HEAD
 		{5F47538A-8631-4D82-82A8-5CEF9850AA24}.Debug|Pocket PC 2003 (ARMV4).ActiveCfg = Debug|Win32
 		{5F47538A-8631-4D82-82A8-5CEF9850AA24}.Debug|Win32.ActiveCfg = Debug|Win32
 		{5F47538A-8631-4D82-82A8-5CEF9850AA24}.Debug|Win32.Build.0 = Debug|Win32
@@ -255,6 +260,16 @@ Global
 		{5F47538A-8631-4D82-82A8-5CEF9850AA24}.Release|Win32.ActiveCfg = Release|Win32
 		{5F47538A-8631-4D82-82A8-5CEF9850AA24}.Release|Win32.Build.0 = Release|Win32
 		{5F47538A-8631-4D82-82A8-5CEF9850AA24}.Release|x64.ActiveCfg = Release|Win32
+=======
+		{C5D64DE7-EFFE-4975-AB44-0BAD646E804D}.Debug|Pocket PC 2003 (ARMV4).ActiveCfg = Debug|Win32
+		{C5D64DE7-EFFE-4975-AB44-0BAD646E804D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C5D64DE7-EFFE-4975-AB44-0BAD646E804D}.Debug|Win32.Build.0 = Debug|Win32
+		{C5D64DE7-EFFE-4975-AB44-0BAD646E804D}.Debug|x64.ActiveCfg = Debug|Win32
+		{C5D64DE7-EFFE-4975-AB44-0BAD646E804D}.Release|Pocket PC 2003 (ARMV4).ActiveCfg = Release|Win32
+		{C5D64DE7-EFFE-4975-AB44-0BAD646E804D}.Release|Win32.ActiveCfg = Release|Win32
+		{C5D64DE7-EFFE-4975-AB44-0BAD646E804D}.Release|Win32.Build.0 = Release|Win32
+		{C5D64DE7-EFFE-4975-AB44-0BAD646E804D}.Release|x64.ActiveCfg = Release|Win32
+>>>>>>> origin/develop
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
