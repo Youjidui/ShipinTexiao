@@ -624,8 +624,7 @@ struct SonyPinPFxParam : public FxParamBase
 		fKeyPositionX[0] = fKeyPositionX[1] = fKeyPositionY[0] = fKeyPositionY[1] = 0.f;
 		nKeyCount = 0;
 	}
-} ;
-
+};
 
 struct SonyFilterFxParam : public FxParamBase
 {
@@ -652,3 +651,104 @@ struct SonyFilterFxParam : public FxParamBase
 	//float vector4[4];
 	D3DXVECTOR4 vector4;
 };
+
+struct DiffuseWipeFxParam : public FxParamBase
+{
+	float		fWidth;
+	float		fAngle;
+	float		fTranslate;
+	
+	int nBlockWidth;
+	int nBlockHeight;
+};
+
+// begin Sony3DBrokenGlassEffect Param
+
+struct TransformParam{
+	float fLocalTranslateX;
+	float fLocalTranslateY;
+	float fLocalTranslateZ;
+
+	float fLocalRotateX;
+	float fLocalRotateY;
+	float fLocalRotateZ;
+
+	float fScaleX;
+	float fScaleY;
+	float fScaleZ;
+
+	float fWorldTranslateX;
+	float fWorldTranslateY;
+	float fWorldTranslateZ;
+
+	float fWorldRotateX;
+	float fWorldRotateY;
+	float fWorldRotateZ;
+
+	void identity()
+	{
+		fLocalRotateX = fLocalRotateY = fLocalRotateZ = 0.f;
+		fLocalTranslateX = fLocalTranslateY = fLocalTranslateZ = 0.f;
+		fScaleX = fScaleY = fScaleZ = 1.f;
+		fWorldTranslateX = fWorldTranslateY = fWorldTranslateZ = 0.f;
+		fWorldRotateX = fWorldRotateY = fWorldRotateZ = 0.f;
+	}
+};
+
+struct LightingParam
+{
+	bool	bEnabled;
+	float	lightXDegree,lightYDegree;
+	float	diffuse2;
+	float	ambient1;
+};
+
+struct PerspectiveParam
+{
+	float fovDegree;
+};
+
+struct Sony3DBrokenGlassEffectParam : public FxParamBase
+{
+	static const UINT maxSizeX = 40;
+	static const UINT maxSizeY = 40;
+
+	int divideX, divideY;
+	float time;
+
+	TransformParam	transformPackParam;
+	LightingParam	lightingPackParam;
+	PerspectiveParam	perspPackParam;
+
+	int fallingDirestion;
+	BOOL bReverse;
+
+	float centerX, centerY;
+
+	void computeTransformParamForTrans(int rotateType, float progress)	// 0 none 1 clockwise -1 counter clockwise
+	{
+		transformPackParam.identity();
+		float fDir = 0.0f;
+		switch (rotateType)
+		{
+		case 1:
+			fDir = 1.0f;
+			break;
+		case 2:
+			fDir = -1.0f;
+			break;
+		default:
+			break;
+		}
+		transformPackParam.fLocalRotateY = progress * fDir;
+	}
+	
+	void computeTransfromParamIdentity()
+	{
+		transformPackParam.identity();
+	}
+
+};
+
+
+// end Sony3DBrokenGlassEffect Param

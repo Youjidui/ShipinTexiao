@@ -47,6 +47,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EffSonyPinP", "EffSonyPinP\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SonyFilter", "SonyFilter\SonyFilter.vcproj", "{B987B948-559E-491D-ACCB-09C88820A675}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EffDiffuseWipe", "EffDiffuseWipe\EffDiffuseWipe.vcproj", "{5F47538A-8631-4D82-82A8-5CEF9850AA24}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Sony3DBrokenGlass", "Sony3DBrokenGlass\Sony3DBrokenGlass.vcproj", "{C5D64DE7-EFFE-4975-AB44-0BAD646E804D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Pocket PC 2003 (ARMV4) = Debug|Pocket PC 2003 (ARMV4)
@@ -255,6 +259,22 @@ Global
 		{B987B948-559E-491D-ACCB-09C88820A675}.Release|Win32.ActiveCfg = Release|Win32
 		{B987B948-559E-491D-ACCB-09C88820A675}.Release|Win32.Build.0 = Release|Win32
 		{B987B948-559E-491D-ACCB-09C88820A675}.Release|x64.ActiveCfg = Release|Win32
+		{5F47538A-8631-4D82-82A8-5CEF9850AA24}.Debug|Pocket PC 2003 (ARMV4).ActiveCfg = Debug|Win32
+		{5F47538A-8631-4D82-82A8-5CEF9850AA24}.Debug|Win32.ActiveCfg = Debug|Win32
+		{5F47538A-8631-4D82-82A8-5CEF9850AA24}.Debug|Win32.Build.0 = Debug|Win32
+		{5F47538A-8631-4D82-82A8-5CEF9850AA24}.Debug|x64.ActiveCfg = Debug|Win32
+		{5F47538A-8631-4D82-82A8-5CEF9850AA24}.Release|Pocket PC 2003 (ARMV4).ActiveCfg = Release|Win32
+		{5F47538A-8631-4D82-82A8-5CEF9850AA24}.Release|Win32.ActiveCfg = Release|Win32
+		{5F47538A-8631-4D82-82A8-5CEF9850AA24}.Release|Win32.Build.0 = Release|Win32
+		{5F47538A-8631-4D82-82A8-5CEF9850AA24}.Release|x64.ActiveCfg = Release|Win32
+		{C5D64DE7-EFFE-4975-AB44-0BAD646E804D}.Debug|Pocket PC 2003 (ARMV4).ActiveCfg = Debug|Win32
+		{C5D64DE7-EFFE-4975-AB44-0BAD646E804D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C5D64DE7-EFFE-4975-AB44-0BAD646E804D}.Debug|Win32.Build.0 = Debug|Win32
+		{C5D64DE7-EFFE-4975-AB44-0BAD646E804D}.Debug|x64.ActiveCfg = Debug|Win32
+		{C5D64DE7-EFFE-4975-AB44-0BAD646E804D}.Release|Pocket PC 2003 (ARMV4).ActiveCfg = Release|Win32
+		{C5D64DE7-EFFE-4975-AB44-0BAD646E804D}.Release|Win32.ActiveCfg = Release|Win32
+		{C5D64DE7-EFFE-4975-AB44-0BAD646E804D}.Release|Win32.Build.0 = Release|Win32
+		{C5D64DE7-EFFE-4975-AB44-0BAD646E804D}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
