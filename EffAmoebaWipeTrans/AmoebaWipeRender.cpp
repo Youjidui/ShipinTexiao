@@ -4,7 +4,7 @@
 
 #define		NOISE_BITMAP_SIZE	32
 
-
+static 
 VOID WINAPI ColorFill (D3DXVECTOR4* pOut, const D3DXVECTOR2* pTexCoord, 
 					   const D3DXVECTOR2* pTexelSize, LPVOID pData)
 {

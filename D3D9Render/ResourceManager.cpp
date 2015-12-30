@@ -539,6 +539,28 @@ CBaseMesh* CResourceManager::CreateMesh( LPDIRECT3DDEVICE9 pDevice, LPD3DXMESH p
 	return m_MeshRes.Create(pDevice, pMesh, pVertexDecl, lpszMeshName);
 }
 
+CBaseMesh* CResourceManager::CreateMesh(LPDIRECT3DDEVICE9 pDevice,
+										void*               pVertexInfo,
+										UINT                uVBufferSize,
+										UINT                uVertexStride,
+										D3DPRIMITIVETYPE    ePrimitiveType,
+										UINT                uPrimitiveCount,
+										DWORD               dwFVF,
+										const D3DVERTEXELEMENT9*  pVertexElement,
+										const unsigned short**     ppIndexInfo,
+										UINT                 uIBufferSize,
+										UINT                 uIBNum,
+										LPCTSTR          pszMeshName)
+{
+	return m_MeshRes.Create(
+		pDevice, pVertexInfo, uVBufferSize, uVertexStride
+		, ePrimitiveType, uPrimitiveCount, dwFVF, pVertexElement
+		, ppIndexInfo, uIBufferSize, uIBNum, pszMeshName
+		);
+}
+
+
+
 CBaseMesh* CResourceManager::FindMesh( LPCTSTR pszResName )
 {
 	return m_MeshRes.Find(pszResName);

@@ -75,5 +75,65 @@ public:
 		CreateByVertexBufferFunction creator(pDevice, ppVB, pIB, pDcl, pszResID);
 		return _baseclass::Create(creator, pszResID);
 	}
+
+	struct CreateByVertexMemoryFunction
+	{
+		LPDIRECT3DDEVICE9 m_pDevice;
+		void*               m_pVertexInfo;
+		UINT                m_uVBufferSize;
+		UINT                m_uVertexStride;
+		D3DPRIMITIVETYPE    m_ePrimitiveType;
+		UINT                m_uPrimitiveCount;
+		DWORD               m_dwFVF;
+		const D3DVERTEXELEMENT9*  m_pVertexElement;
+		const unsigned short**    m_ppIndexInfo;
+		UINT                m_uIBufferSize;
+		UINT                m_uIBNum;
+		LPCTSTR             m_pszResID;
+
+		CreateByVertexMemoryFunction(LPDIRECT3DDEVICE9 pDevice,
+			void*               pVertexInfo,
+			UINT                uVBufferSize,
+			UINT                uVertexStride,
+			D3DPRIMITIVETYPE    ePrimitiveType,
+			UINT                uPrimitiveCount,
+			DWORD               dwFVF,
+			const D3DVERTEXELEMENT9*  pVertexElement,
+			const unsigned short**     ppIndexInfo,
+			UINT                 uIBufferSize,
+			UINT                 uIBNum,
+			LPCTSTR                pszResID)
+			: m_pDevice(pDevice), m_pVertexInfo(pVertexInfo), m_uVBufferSize(uVBufferSize), m_uVertexStride(uVertexStride)
+			, m_ePrimitiveType(ePrimitiveType), m_uPrimitiveCount(uPrimitiveCount), m_dwFVF(dwFVF), m_pVertexElement(pVertexElement)
+			, m_ppIndexInfo(ppIndexInfo), m_uIBufferSize(uIBufferSize), m_uIBNum(uIBNum), m_pszResID(pszResID)
+		{
+		}
+
+		HRESULT operator()(CBaseMesh* pMesh, LPCTSTR pszResFileName)
+		{
+			return pMesh->Create(m_pDevice, m_pVertexInfo, m_uVBufferSize, m_uVertexStride
+				, m_ePrimitiveType, m_uPrimitiveCount, m_dwFVF, m_pVertexElement
+				, m_ppIndexInfo, m_uIBufferSize, m_uIBNum, pszResFileName);
+		}
+	};
+
+	CBaseMesh* Create(LPDIRECT3DDEVICE9 pDevice,
+		void*               pVertexInfo,
+		UINT                uVBufferSize,
+		UINT                uVertexStride,
+		D3DPRIMITIVETYPE    ePrimitiveType,
+		UINT                uPrimitiveCount,
+		DWORD               dwFVF,
+		const D3DVERTEXELEMENT9*  pVertexElement,
+		const unsigned short**     ppIndexInfo,
+		UINT                 uIBufferSize,
+		UINT                 uIBNum,
+		LPCTSTR          pszResID)
+	{
+		CreateByVertexMemoryFunction creator(pDevice, pVertexInfo, uVBufferSize, uVertexStride
+			, ePrimitiveType, uPrimitiveCount, dwFVF, pVertexElement
+			, ppIndexInfo, uIBufferSize, uIBNum, pszResID);
+		return _baseclass::Create(creator, pszResID);
+	}
 };
 

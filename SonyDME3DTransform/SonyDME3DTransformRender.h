@@ -30,11 +30,11 @@ public:
 	void Uninit();
 	bool Render(CVideoBuffer* pDst, CVideoBuffer* pSrc, SonyDME3DTransfromFxPrarm* pParam);
 
+protected:
 	void RenderRGBA(CVideoBuffer* pDst, CVideoBuffer* pSrc);
 	void RenderScene(CVideoBuffer* pDst, CVideoBuffer* pSrc);
 
 	void GetWorldMatrix(D3DXMATRIX * matWorld);
-
 
 private:
 	CRenderEngine* m_pEngine;
@@ -43,5 +43,5 @@ private:
 	
 	BOOL m_bRotate;
 	SonyDME3DTransfromFxPrarm* m_pParam;
-	D3DXMATRIXA16	m_matWorld,m_matView,m_matProj;
+	D3DXMATRIXA16	m_matView, m_matProj;
 };

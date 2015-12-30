@@ -28,6 +28,7 @@
 #include "../SonyDME3DTransform/SonyDME3DTransformRender.h"
 #include "../EffQuadPageRollTrans/QuadPageRollRender.h"
 #include "../Eff3DCubeTrans/CubeTransRender.h"
+#include "../EffSonyPinP/SonyPinpRender.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -455,6 +456,14 @@ bool CTestClientDoc::EffectRender(CVideoBuffer* pDest, CVideoBuffer* pSrc, CVide
 		if(eff.Init(m_pRenderEngine))
 		{
 			bOK = eff.Render(pDest, pSrc, (SonyDME3DTransfromFxPrarm*)m_pEffectParam);
+		}
+	}
+	else if(FX_SONY_PINP == m_strEffectName)
+	{
+		CSonyPinpRender eff;
+		if(eff.Init(m_pRenderEngine))
+		{
+			bOK = eff.Render(pDest, pSrc, m_pEffectParam);
 		}
 	}
 	return bOK;

@@ -24,7 +24,7 @@ struct VideoBufferInfo
 		_IN_OUT_WITH_MIPMAP
 	};
 
-	D3DFORMAT format;				//IN
+	D3DFORMAT format;				//IN D3DFMT_A8R8G8B8
 	MemType eType;		//IN
 	Usage eUsage;	//IN
 	int nWidth;					//IN

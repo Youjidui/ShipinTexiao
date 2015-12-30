@@ -44,6 +44,18 @@ public:
 	CBaseMesh* CreateQuadInstanceMesh(LPDIRECT3DDEVICE9 pDevice);
 	CBaseMesh* CreateMesh(LPDIRECT3DDEVICE9 pDevice, LPD3DXMESH pMesh, LPCTSTR pszResFileName);
 	CBaseMesh* CreateMesh(LPDIRECT3DDEVICE9 pDevice, LPD3DXMESH pMesh, LPDIRECT3DVERTEXDECLARATION9 pVertexDecl, LPCTSTR pszResFileName);
+	CBaseMesh* CreateMesh(LPDIRECT3DDEVICE9 pDevice,
+		void*               pVertexInfo,
+		UINT                uVBufferSize,
+		UINT                uVertexStride,
+		D3DPRIMITIVETYPE    ePrimitiveType,
+		UINT                uPrimitiveCount,
+		DWORD               dwFVF,
+		const D3DVERTEXELEMENT9*  pVertexElement,
+		const unsigned short**     ppIndexInfo,
+		UINT                 uIBufferSize,
+		UINT                 uIBNum,
+		LPCTSTR          pszMeshName);
 	CBaseMesh* FindMesh(LPCTSTR pszResName);
 	CBaseFx* CreateEffect(LPDIRECT3DDEVICE9 pDevice, LPCTSTR lpszEffectName, const char** ppszMacros = NULL, int nMacroCount = 0);
 	CVertexShader* CreateVertexShader(LPDIRECT3DDEVICE9 pDevice, LPCTSTR lpszShaderName, const char** ppszMacros = NULL, int nMacroCount = 0);

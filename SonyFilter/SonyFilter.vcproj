@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="EffSonyPinP"
-	ProjectGUID="{66B6CD60-FFAB-4E2B-97A9-16183748BF77}"
-	RootNamespace="EffSonyPinP"
+	Name="SonyFilter"
+	ProjectGUID="{B987B948-559E-491D-ACCB-09C88820A675}"
+	RootNamespace="SonyFilter"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="196613"
 	>
@@ -153,7 +153,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\SonyPinpRender.cpp"
+				RelativePath=".\SonyFilter.cpp"
 				>
 			</File>
 			<File
@@ -183,7 +183,7 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\SonyPinpRender.h"
+				RelativePath=".\SonyFilter.h"
 				>
 			</File>
 			<File

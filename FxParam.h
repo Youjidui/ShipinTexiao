@@ -583,7 +583,6 @@ struct CubeFxParam : public FxParamBase
 
 struct SonyPinPFxParam : public FxParamBase
 {
-	BOOL             bLink_Scale;
 	float			 fScaleX;		//100, 0.01, 0.01, 70
 	float			 fScaleY;		//as above
 	float			 fPositionX;	//2.0000, -2.0000, 0.0001, 0
@@ -602,11 +601,10 @@ struct SonyPinPFxParam : public FxParamBase
 	DWORD	         dwBackGroundType;
 	D3DCOLOR		 cBackGroundSepiaColor;		//0xff4b3e15  };	// a,r,g,b
 	float            fBackGoundDensity;			//100.f, 0.f, 0.01f,5, 2, 100.f
-	BOOL             bLinkCrop;
 	float            fBoundsLeft;		//(24):    TPPARAM_FLOAT_FMT     gFloat2Default0     = { 0, 2.f, 0, 0.0001f, 5, 4, 0.f};
-	float            fBoundsBottom;		//as above
-	float            fBoundsRight;		//as above
 	float            fBoundsTop;		//as above
+	float            fBoundsRight;		//as above
+	float            fBoundsBottom;		//as above
 	float            fTansparency;		////1.f, 0.f, 0.0001f,5, 4, 0.3f
 	//key TODO: remove them or change them?
 	float			 fKeyScaleX[2];
@@ -614,5 +612,43 @@ struct SonyPinPFxParam : public FxParamBase
 	float			 fKeyPositionX[2];
 	float			 fKeyPositionY[2];
 	int				 nKeyCount;
+
+	SonyPinPFxParam() : fScaleX(70), fScaleY(70), fPositionX(0), fPositionY(0), bFilter(true),
+		fBorderWidth(0), cBorderColor(D3DCOLOR_RGBA(235, 235, 235, 255)), bEnableShadow(false),
+		cShadowColor(D3DCOLOR_RGBA(16, 16, 16, 255)), fShadowDropDistance(0.15f), fShadowDropLightAngle(135.f),
+		fShadowDropTransparency(0.3f), fShadowDropSoftness(0), dwTrailDecayType(0), iTrailDecayTime(0),
+		dwBackGroundType(1), cBackGroundSepiaColor(0xff4b3e15), fBackGoundDensity(100.f), fBoundsLeft(0.f),
+		fBoundsTop(0.f), fBoundsRight(0.f), fBoundsBottom(0.f)
+	{
+		fKeyScaleX[0] = fKeyScaleX[1] = fKeyScaleY[0] = fKeyScaleY[1] = 70.f;
+		fKeyPositionX[0] = fKeyPositionX[1] = fKeyPositionY[0] = fKeyPositionY[1] = 0.f;
+		nKeyCount = 0;
+	}
 } ;
 
+
+struct SonyFilterFxParam : public FxParamBase
+{
+	float fSacleX;
+	float fSacleY;
+	int nTaps;
+	RECT rcBound;
+
+	enum POS_Def
+	{ 
+		POS_NOCHANGE = 0,
+		//POS_STRETCH_TO_FILL,
+		//POS_STRETCH_FITX,
+		//POS_STRETCH_FITY,
+		//POS_CENTER_NOCHANGE,
+		POS_CUSTOM,
+		//POS_SONY_STRETCH,
+		//POS_NO_CONVERT,
+		//POS_FRAME_SIZE_CONVERT,
+		POS_SONY_PINP
+	}emPosDefMode;
+	float OffsetX;
+	float OffsetY;
+	//float vector4[4];
+	D3DXVECTOR4 vector4;
+};

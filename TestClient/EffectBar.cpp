@@ -151,6 +151,14 @@ void CEffectBar::OnBnClickedParameters()
 			}
 			m_sonyDME3DDlg.ShowWindow(SW_SHOW);
 		}
+		else if(FX_SONY_PINP == str)
+		{
+			if(!m_sonyPinpDlg.GetSafeHwnd())
+			{
+				m_sonyPinpDlg.Create(m_sonyPinpDlg.IDD);
+			}
+			m_sonyPinpDlg.ShowWindow(SW_SHOW);
+		}
 	}
 }
 

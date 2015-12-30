@@ -420,6 +420,14 @@
 			ReferencedProjectIdentifier="{B0D7DD53-F02C-4270-A62A-62A5209B3B97}"
 			RelativePathToProject=".\EffMatrixWipeTrans\EffMatrixWipeTrans.vcproj"
 		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{B987B948-559E-491D-ACCB-09C88820A675}"
+			RelativePathToProject=".\SonyFilter\SonyFilter.vcproj"
+		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{66B6CD60-FFAB-4E2B-97A9-16183748BF77}"
+			RelativePathToProject=".\EffSonyPinP\EffSonyPinP.vcproj"
+		/>
 	</References>
 	<Files>
 		<Filter
@@ -481,6 +489,10 @@
 			</File>
 			<File
 				RelativePath=".\ParamMatrixWipeDlg.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ParamPinPDlg.cpp"
 				>
 			</File>
 			<File
@@ -615,6 +627,10 @@
 			</File>
 			<File
 				RelativePath=".\ParamMatrixWipeDlg.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ParamPinPDlg.h"
 				>
 			</File>
 			<File

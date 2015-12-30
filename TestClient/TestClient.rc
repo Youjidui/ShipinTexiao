@@ -751,6 +751,74 @@ BEGIN
     CONTROL         "bFilter",IDC_CHECK_BFLITER,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,60,327,36,10
 END
 
+IDD_PARAM_PINP DIALOGEX 0, 0, 271, 373
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Dialog"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "È·¶¨",IDOK,214,352,50,14
+    CONTROL         "bLink_Scale",IDC_CHECK_bLink_Scale,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,7,53,10
+    CONTROL         "",IDC_SLIDER_fScaleX,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,7,16,100,13
+    LTEXT           "fScaleX",IDC_STATIC,118,17,24,8
+    CONTROL         "",IDC_SLIDER_fScaleY,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,7,27,100,13
+    LTEXT           "fScaleY",IDC_STATIC,118,28,24,8
+    CONTROL         "",IDC_SLIDER_fPositionX,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,7,38,100,13
+    LTEXT           "fPositionX",IDC_STATIC,118,39,32,8
+    CONTROL         "",IDC_SLIDER_fPositionY,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,7,50,100,13
+    LTEXT           "fPositionY",IDC_STATIC,118,51,32,8
+    CONTROL         "bFilter",IDC_CHECK_bFilter,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,62,36,10
+    CONTROL         "",IDC_SLIDER_fBorderWidth,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,7,72,100,13
+    LTEXT           "fBorderWidth",IDC_STATIC,118,73,44,8
+    EDITTEXT        IDC_EDIT_cBorderColor,7,84,54,12,ES_AUTOHSCROLL
+    LTEXT           "cBorderColor (AARRGGBB)(ff88ff88)",IDC_STATIC,65,86,118,8
+    CONTROL         "bEnableShadow",IDC_CHECK_bEnableShadow,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,97,67,10
+    EDITTEXT        IDC_EDIT_cShadowColor,7,107,54,12,ES_AUTOHSCROLL
+    LTEXT           "cShadowColor (AARRGGBB)(ff88ff88)",IDC_STATIC,65,109,122,8
+    CONTROL         "",IDC_SLIDER_fShadowDropDistance,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,7,120,100,13
+    LTEXT           "fShadowDropDistance",IDC_STATIC,118,121,72,8
+    CONTROL         "",IDC_SLIDER_fShadowDropLightAngle,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,7,131,100,13
+    LTEXT           "fShadowDropLightAngle",IDC_STATIC,118,132,78,8
+    CONTROL         "",IDC_SLIDER_fShadowDropTransparency,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,7,142,100,13
+    LTEXT           "fShadowDropTransparency",IDC_STATIC,118,143,88,8
+    CONTROL         "",IDC_SLIDER_fShadowDropSoftness,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,7,153,100,13
+    LTEXT           "fShadowDropSoftness",IDC_STATIC,118,154,72,8
+    CONTROL         "",IDC_SLIDER_dwTrailDecayType,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,7,164,100,13
+    LTEXT           "dwTrailDecayType",IDC_STATIC,118,165,60,8
+    CONTROL         "",IDC_SLIDER_iTrailDecayTime,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,7,176,100,13
+    LTEXT           "iTrailDecayTime",IDC_STATIC,118,177,50,8
+    CONTROL         "",IDC_SLIDER_dwBackGroundType,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,7,187,100,13
+    LTEXT           "dwBackGroundType",IDC_STATIC,118,189,64,8
+    EDITTEXT        IDC_EDIT_cBackGroundSepiaColor,7,198,54,12,ES_AUTOHSCROLL
+    LTEXT           "cBackGroundSepiaColor (AARRGGBB)(ff88ff88)",IDC_STATIC,65,200,152,8
+    CONTROL         "",IDC_SLIDER_fBackGoundDensity,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,7,211,100,13
+    LTEXT           "fBackGoundDensity",IDC_STATIC,118,212,63,8
+    CONTROL         "bEnableShadow",IDC_CHECK_bLinkCrop,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,222,67,10
+    CONTROL         "",IDC_SLIDER_fBoundsLeft,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,7,231,100,13
+    LTEXT           "fBoundsLeft",IDC_STATIC,118,232,40,8
+    CONTROL         "",IDC_SLIDER_fBoundsTop,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,7,241,100,13
+    LTEXT           "fBoundsTop",IDC_STATIC,118,243,39,8
+    CONTROL         "",IDC_SLIDER_fBoundsRight,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,7,252,100,13
+    LTEXT           "fBoundsRight",IDC_STATIC,118,254,44,8
+    CONTROL         "",IDC_SLIDER_fBoundsBottom,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,7,263,100,13
+    LTEXT           "fBoundsBottom",IDC_STATIC,118,265,50,8
+    CONTROL         "",IDC_SLIDER_fTansparency,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,7,274,100,13
+    LTEXT           "fTansparency",IDC_STATIC,118,276,45,8
+    CONTROL         "",IDC_SLIDER_fKeyScaleX1,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,7,285,100,13
+    LTEXT           "fKeyScaleX",IDC_STATIC,118,287,36,8
+    CONTROL         "",IDC_SLIDER_fKeyScaleY1,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,7,296,100,13
+    LTEXT           "fKeyScaleY",IDC_STATIC,118,298,36,8
+    CONTROL         "",IDC_SLIDER_fKeyPositionX1,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,7,307,100,13
+    LTEXT           "fKeyPositionX",IDC_STATIC,118,309,44,8
+    CONTROL         "",IDC_SLIDER_fKeyPositionY1,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,7,318,100,13
+    LTEXT           "fKeyPositionY",IDC_STATIC,118,320,44,8
+    CONTROL         "",IDC_SLIDER_nKeyCount,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,7,329,100,13
+    LTEXT           "nKeyCount",IDC_STATIC,118,331,36,8
+    CONTROL         "",IDC_SLIDER_fKeyScaleX2,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,164,284,100,13
+    CONTROL         "",IDC_SLIDER_fKeyScaleY2,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,164,295,100,13
+    CONTROL         "",IDC_SLIDER_fKeyPositionX2,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,164,306,100,13
+    CONTROL         "",IDC_SLIDER_fKeyPositionY2,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,164,318,100,13
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -898,6 +966,14 @@ BEGIN
         VERTGUIDE, 264
         TOPMARGIN, 7
         BOTTOMMARGIN, 433
+    END
+
+    IDD_PARAM_PINP, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 264
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 366
     END
 END
 #endif    // APSTUDIO_INVOKED
