@@ -277,6 +277,12 @@ BOOL CEffectBar::OnInitDialog()
 		m_ctrlEffects.SetItemDataPtr(i, p);
 		m_cubeTransDlg.SetParam(p);
 	}
+	i = m_ctrlEffects.AddString(FX_SONY_PINP);
+	{
+		SonyPinPFxParam* p = new SonyPinPFxParam;
+		m_ctrlEffects.SetItemDataPtr(i, p);
+		m_sonyPinpDlg.SetParam(p);
+	}
 
 	m_ctrlEffects.SetCurSel(i);
 

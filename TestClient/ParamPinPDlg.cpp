@@ -95,7 +95,7 @@ BOOL CParamPinPDlg::OnInitDialog()
 	pCtrl->SetRange(0,30);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->iTrailDecayTime);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_dwBackGroundType);
-	pCtrl->SetRange(1,3, TRUE);
+	pCtrl->SetRange(0,3, TRUE);		//1,3 or 0,3
 	if(m_pParam)	pCtrl->SetPos(m_pParam->dwBackGroundType);
 	pEdit = (CEdit*)GetDlgItem(IDC_EDIT_cBackGroundSepiaColor);
 	str.Format(_T("%08x"), m_pParam->cBackGroundSepiaColor);

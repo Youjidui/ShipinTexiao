@@ -394,6 +394,8 @@ void CSonyPinpRender::_do_render_scene(CVideoBuffer* pSrc, SonyPinPFxParam* pPar
 									   const RECT& rcDestImage, float offsetX,float offsetY, BOOL bSingleWord,float fAlpha)
 {
 	LPDIRECT3DDEVICE9 pDevice = m_pEngine->GetDevice();
+	float fScaleX = pParam->fScaleX / 100.0f;
+	float fScaleY = pParam->fScaleY / 100.0f;
 	float fBorderScale =  pParam->fBorderWidth;
 	//float fAspect = m_pResMan->GetAspect() * pProfile->nEditWidth / (float) (pProfile->nEditHeight * m_pResMan->GetAspectVerifyCoef()); 
 	int nEditWidth, nEditHeight;
@@ -414,18 +416,18 @@ void CSonyPinpRender::_do_render_scene(CVideoBuffer* pSrc, SonyPinPFxParam* pPar
 	D3DXMatrixIdentity( &matSrcTex );
 	int left = 0, top = 0;
 	matSrcTex._11   =  max(0,pSrcDef_GetImageWidth * (1.0f - pParam->fBoundsLeft - pParam->fBoundsRight)) / ((float)biSrc.nAllocWidth);
-	matSrcTex._22   =  max(0,pSrcDef_GetImageHeight * (1.0f - pParam->fBoundsTop - pParam->fBoundsBottom)) / ((float)biSrc.nAllocHeight); 
+	matSrcTex._22   =  max(0,pSrcDef_GetImageHeight * (1.0f - pParam->fBoundsTop - pParam->fBoundsBottom)) / ((float)biSrc.nAllocHeight);
 	matSrcTex._31 =  (0.5f + left + pSrcDef_GetImageWidth * pParam->fBoundsLeft)   / (float)(biSrc.nAllocWidth);
-	matSrcTex._32 =  (0.5f + top + pSrcDef_GetImageHeight * pParam->fBoundsTop)  / (float)(biSrc.nAllocHeight);  	
+	matSrcTex._32 =  (0.5f + top + pSrcDef_GetImageHeight * pParam->fBoundsTop)  / (float)(biSrc.nAllocHeight);
 
 	D3DXMATRIXA16 matTransition,matPrevScale, matPrevTransition,matCombine,matWorld,matClip,matborder;
-	float fxZoom = max(0,pSrcDef_GetImageWidth * (1.0f - pParam->fBoundsLeft - pParam->fBoundsRight) * pParam->fScaleX)  / (float)nEditWidth;
-	float fyZoom = max(0,pSrcDef_GetImageHeight * (1.0 - pParam->fBoundsTop - pParam->fBoundsBottom) * pParam->fScaleY) / (float)nEditHeight;	
+	float fxZoom = max(0,pSrcDef_GetImageWidth * (1.0f - pParam->fBoundsLeft - pParam->fBoundsRight) * fScaleX)  / (float)nEditWidth;
+	float fyZoom = max(0,pSrcDef_GetImageHeight * (1.0 - pParam->fBoundsTop - pParam->fBoundsBottom) * fScaleY) / (float)nEditHeight;	
 
-	D3DXMatrixScaling(&matPrevScale, fxZoom, fyZoom , 1.0f);	
+	D3DXMatrixScaling(&matPrevScale, fxZoom, fyZoom , 1.0f);
 	D3DXMatrixIdentity(&matborder);
-	matborder._11 = max(0,pSrcDef_GetImageWidth * (1.0f - pParam->fBoundsLeft - pParam->fBoundsRight) * pParam->fScaleX + 2 * fBorderX) / (float)nEditWidth;
-	matborder._22 = max(0, pSrcDef_GetImageHeight * (1.0f - pParam->fBoundsTop - pParam->fBoundsBottom) * pParam->fScaleY + 2 * fBorderY) / (float)nEditHeight;	
+	matborder._11 = max(0,pSrcDef_GetImageWidth * (1.0f - pParam->fBoundsLeft - pParam->fBoundsRight) * fScaleX + 2 * fBorderX) / (float)nEditWidth;
+	matborder._22 = max(0, pSrcDef_GetImageHeight * (1.0f - pParam->fBoundsTop - pParam->fBoundsBottom) * fScaleY + 2 * fBorderY) / (float)nEditHeight;
 
 	D3DXMatrixIdentity(&matPrevTransition);
 	matPrevTransition._41 = (pSrcDef_OffsetX + pSrcDef_GetImageWidth / 2.0f - nEditWidth / 2.0f) / nEditWidth;
@@ -434,19 +436,19 @@ void CSonyPinpRender::_do_render_scene(CVideoBuffer* pSrc, SonyPinPFxParam* pPar
 	D3DXMatrixIdentity(&matClip);
 	matClip._41 = (rcImage.left + pSrcDef_GetImageWidth * pParam->fBoundsLeft + rcImage.right - pSrcDef_GetImageWidth  * pParam->fBoundsRight - (rcImage.left + rcImage.right)) / 2.0f / (float)nEditWidth;
 	matClip._42 = -(rcImage.top + pSrcDef_GetImageHeight * pParam->fBoundsTop + rcImage.bottom - pSrcDef_GetImageHeight  * pParam->fBoundsBottom - (rcImage.top + rcImage.bottom)) / 2.0f / (float)nEditHeight;
-	matClip._41 *= pParam->fScaleX;
-	matClip._42 *= pParam->fScaleY;
+	matClip._41 *= fScaleX;
+	matClip._42 *= fScaleY;
 
 	float fTransX = pParam->fPositionX/2.f * nEditWidth;
 	float fTransY = pParam->fPositionY/2.f * nEditHeight;
-	D3DXMatrixTranslation(&matTransition, fTransX / (float) nEditWidth, fTransY / (float) nEditHeight, 0.0f);	
+	D3DXMatrixTranslation(&matTransition, fTransX / (float) nEditWidth, fTransY / (float) nEditHeight, 0.0f);
 
-	//m_matPrevScale = matPrevScale; 
+	//m_matPrevScale = matPrevScale;
 	//m_matPrevTransition = matPrevTransition;
 
 	//m_matOriginal = matPrevScale  * matClip * matPrevTransition * matTransition;
 
-	HRESULT hr = m_pPinPEffect->SetInt("g_nFilter",(int)(pParam->bFilter?2:0));
+	HRESULT hr = m_pPinPEffect->SetInt("g_nFilter",(int)(pParam->bFilter ? 2 : 0));
 	ASSERT(SUCCEEDED(hr));
 
 	D3DVIEWPORT9 vPort;
@@ -515,14 +517,18 @@ void CSonyPinpRender::_do_render_scene(CVideoBuffer* pSrc, SonyPinPFxParam* pPar
 		m_pPinPEffect->SetTexture("g_tex", pSrc->GetTexture());
 		m_pPinPEffect->SetMatrix("g_matTexture",&matSrcTex);
 		//handle_tpr hTemp = NewRTBuffer(0,0,nEditWidth,nEditHeight);
-		VideoBufferInfo biTemp = {D3DFMT_A8R8G8B8, VideoBufferInfo::VIDEO_MEM, VideoBufferInfo::_IN_OUT, nEditWidth, nEditHeight, 0, 0};
-		CVideoBufferManager* pVM = m_pEngine->GetVideoBufferManager();
-		CVideoBuffer* pTempDef = pVM->CreateVideoBuffer(biTemp);
+		CVideoBuffer* pTempDef = NULL;
 		LPDIRECT3DSURFACE9 pOldRT = NULL;
 		if(bDecay)
 		{
+			VideoBufferInfo biTemp = {D3DFMT_A8R8G8B8, VideoBufferInfo::VIDEO_MEM, VideoBufferInfo::_IN_OUT, nEditWidth, nEditHeight, 0, 0};
+			CVideoBufferManager* pVM = m_pEngine->GetVideoBufferManager();
+			pTempDef = pVM->CreateVideoBuffer(biTemp);
+			ASSERT(pTempDef);
 			hr = pDevice->GetRenderTarget(0,&pOldRT);
-			m_pEngine->SetRenderTarget(pTempDef);
+			ASSERT(SUCCEEDED(hr));
+			bool bOK = m_pEngine->SetRenderTarget(pTempDef);
+			ASSERT(bOK);
 		}
 
 		if (pParam->bEnableShadow && pParam->fShadowDropDistance > 0.f)
@@ -563,7 +569,7 @@ void CSonyPinpRender::_do_render_scene(CVideoBuffer* pSrc, SonyPinPFxParam* pPar
 			UnionRect(&rcDestImage,&rcDestImage,&rcTemp);
 		}		
 
-		if(pParam->bFilter && (pParam->fScaleX < 0.9999f || pParam->fScaleY < 0.9999f))
+		if(pParam->bFilter && (fScaleX < 0.9999f || fScaleY < 0.9999f))
 		{
 			//handle_tpr hSonyFiltr = NewRTBuffer(0,0,nEditWidth,nEditHeight);
 			//TP_VBufferDef *pSonyFilterDef = m_pResMan->GetBufferDef(hSonyFiltr);
@@ -706,6 +712,9 @@ void CSonyPinpRender::_do_render_scene(CVideoBuffer* pSrc, SonyPinPFxParam* pPar
 
 			pDevice->SetViewport(&vPort);
 
+			ASSERT(pTempDef);
+			const VideoBufferInfo& biTemp = pTempDef->GetVideoBufferInfo();
+
 			m_pPinPEffect->SetTexture("g_tex", pTempDef->GetTexture());
 			D3DXMATRIX matSrcImage;	
 			D3DXMatrixIdentity( &matSrcImage );			
@@ -765,9 +774,18 @@ void CSonyPinpRender::_do_render_scene(CVideoBuffer* pSrc, SonyPinPFxParam* pPar
 
 		pDevice->EndScene();
 
+		//{
+		//	LPDIRECT3DSURFACE9 pOldRT = NULL;
+		//	hr = pDevice->GetRenderTarget(0,&pOldRT);
+		//	D3DXSaveSurfaceToFile(_T("./DestDef.dds"), D3DXIFF_DDS, pOldRT, NULL, NULL);
+		//	pOldRT->Release();
+		//}
+
 		//FreeRTBuffer(hTemp);
 		if(pTempDef)
 		{
+			//D3DXSaveSurfaceToFile(_T("./TempDef.dds"), D3DXIFF_DDS, pTempDef->GetSurface(), NULL, NULL);
+
 			CVideoBufferManager* pBufMgr = m_pEngine->GetVideoBufferManager();
 			pBufMgr->ReleaseVideoBuffer(pTempDef);
 			pTempDef = NULL;

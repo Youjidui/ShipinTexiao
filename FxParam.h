@@ -617,7 +617,7 @@ struct SonyPinPFxParam : public FxParamBase
 		fBorderWidth(0), cBorderColor(D3DCOLOR_RGBA(235, 235, 235, 255)), bEnableShadow(false),
 		cShadowColor(D3DCOLOR_RGBA(16, 16, 16, 255)), fShadowDropDistance(0.15f), fShadowDropLightAngle(135.f),
 		fShadowDropTransparency(0.3f), fShadowDropSoftness(0), dwTrailDecayType(0), iTrailDecayTime(0),
-		dwBackGroundType(1), cBackGroundSepiaColor(0xff4b3e15), fBackGoundDensity(100.f), fBoundsLeft(0.f),
+		dwBackGroundType(0), cBackGroundSepiaColor(0xff4b3e15), fBackGoundDensity(100.f), fBoundsLeft(0.f),
 		fBoundsTop(0.f), fBoundsRight(0.f), fBoundsBottom(0.f)
 	{
 		fKeyScaleX[0] = fKeyScaleX[1] = fKeyScaleY[0] = fKeyScaleY[1] = 70.f;

@@ -100,9 +100,9 @@ void VS(float3 vPos:POSITION,
 float4 PS_ORG(float3 Tex:TEXCOORD0,uniform bool bBorder):COLOR0
 {	
 	float4 oColor=(float4)0;
-	
+
 	if(bBorder)		
-	{	
+	{
 		//if(Tex.z > 0.0f)
 			oColor = g_BorderColor;
 		//else			
@@ -110,10 +110,7 @@ float4 PS_ORG(float3 Tex:TEXCOORD0,uniform bool bBorder):COLOR0
 	}			
 	else 
 	   oColor = tex2D(g_samColor,Tex); 	
-	   
-	 //if(oColor.a < 1.0f / 255.0f)
-		//discard;
-	
+		
 	return oColor;
 }
 
