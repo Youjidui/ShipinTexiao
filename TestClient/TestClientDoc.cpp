@@ -29,6 +29,7 @@
 #include "../EffQuadPageRollTrans/QuadPageRollRender.h"
 #include "../Eff3DCubeTrans/CubeTransRender.h"
 #include "../EffSonyPinP/SonyPinpRender.h"
+#include "../EffSonyBarnSlide/SonyBarnSlideRender.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -408,6 +409,14 @@ bool CTestClientDoc::EffectRender(CVideoBuffer* pDest, CVideoBuffer* pSrc, CVide
 		if(eff.Init(m_pRenderEngine))
 		{
 			bOK = eff.Render(pDest, pSrc, pSrc2, (SonySlideFxParam*)m_pEffectParam);
+		}
+	}
+	else if(FX_SONY_BARN_SLIDE == m_strEffectName)
+	{
+		CSonyBarnSlideRender eff;
+		if(eff.Init(m_pRenderEngine))
+		{
+			bOK = eff.Render(pDest, pSrc, pSrc2, m_pEffectParam);
 		}
 	}
 	else if(FX_BARM_WIPE == m_strEffectName)

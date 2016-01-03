@@ -198,7 +198,6 @@ struct SonyMaskFxParam : FxParamBase	//SONY_MASK_INFO
 	int       nNumMask;
 	int		  nMaskType;
 
-	// add 2010年2月25日 星期四
 	BOOL		bSufColor;
 	DWORD       crSuface;
 	float		fTransparency;
@@ -651,6 +650,17 @@ struct SonyFilterFxParam : public FxParamBase
 	//float vector4[4];
 	D3DXVECTOR4 vector4;
 };
+
+struct SonyBarnSlideFxParam : public FxParamBase
+{
+	int nType;		//"0=Horz\n1=Vert\n2=Cross"
+	float fSlant;	//45.f, -45.f, 0.01f, 5, 3, 0.f
+	float fTrans;	//progress 0 - 10000
+	bool  bReverse;
+
+	SonyBarnSlideFxParam() : nType(0), fSlant(0.f), fTrans(0.f), bReverse(false) {}
+};
+
 
 struct DiffuseWipeFxParam : public FxParamBase
 {

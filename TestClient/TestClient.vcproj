@@ -428,6 +428,10 @@
 			ReferencedProjectIdentifier="{66B6CD60-FFAB-4E2B-97A9-16183748BF77}"
 			RelativePathToProject=".\EffSonyPinP\EffSonyPinP.vcproj"
 		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{BF8D4426-38EE-4D2E-980A-A685595CF711}"
+			RelativePathToProject=".\EffSonyBarnSlide\EffSonyBarnSlide.vcproj"
+		/>
 	</References>
 	<Files>
 		<Filter
@@ -497,6 +501,10 @@
 			</File>
 			<File
 				RelativePath=".\ParamQuadPageRollDlg.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ParamSonyBarnSlideDlg.cpp"
 				>
 			</File>
 			<File
@@ -635,6 +643,10 @@
 			</File>
 			<File
 				RelativePath=".\ParamQuadPageRollDlg.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ParamSonyBarnSlideDlg.h"
 				>
 			</File>
 			<File

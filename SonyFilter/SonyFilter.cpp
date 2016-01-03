@@ -455,6 +455,13 @@ bool CSonyFilter::Render( CVideoBuffer* pDstDef, CVideoBuffer* pSrcDef, FxParamB
 	//pDstDef->OffsetX = pDstDef->rcImage.left;
 	//pDstDef->OffsetY = pDstDef->rcImage.top;
 
+	if(pYUVATexture != pDstDef)
+	{
+		CVideoBufferManager* pBufMgr = m_pEngine->GetVideoBufferManager();
+		pBufMgr->ReleaseVideoBuffer(pYUVATexture);
+		pYUVATexture = NULL;
+	}
+
 	//D3DXSaveTextureToFile(L"C:\\AAbY.bmp",D3DXIFF_BMP,((CBaseTexture*)pDstDef->pContainer)->GetTexture() ,NULL);	
 	return TRUE;
 }

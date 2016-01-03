@@ -14,6 +14,7 @@
 #include "ParamCubeDlg.h"
 #include "SonyDME3DDlg.h"
 #include "ParamPinpDlg.h"
+#include "ParamSonyBarnSlideDlg.h"
 
 
 // CEffectBar ¶Ô»°¿ò
@@ -51,6 +52,7 @@ public:
 	CParamCubeDlg m_cubeTransDlg;
 	CSonyDME3DDlg m_sonyDME3DDlg;
 	CParamPinPDlg m_sonyPinpDlg;
+	CParamSonyBarnSlideDlg m_barnSlideDlg;
 
 	afx_msg void OnBnClickedParameters();
 	virtual BOOL OnInitDialog();

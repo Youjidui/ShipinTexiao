@@ -33,8 +33,8 @@
 #define IDD_QUAD_PAGE_ROLL              321
 #define IDD_CUBE                        323
 #define IDD_PARAM_SONY_DME3D            324
-#define IDD_DIALOG1                     325
 #define IDD_PARAM_PINP                  325
+#define IDD_SONY_BARN_SLIDE             326
 #define IDC_EFFECTS                     1000
 #define IDC_PROGRESS                    1001
 #define IDC_BUTTON1                     1002
@@ -256,20 +256,24 @@
 #define IDC_SLIDER_fKeyPositionY2       1076
 #define IDC__L_LOCATION_Y               1077
 #define IDC_L_LOCATION_Y                1077
-#define IDC_CHECK_bLink_Scale           1077
 #define IDC_CHECK_bFilter               1078
 #define IDC_SLIDER_nDirecttion          1079
 #define IDC_L_SPIN_X                    1079
 #define IDC_EDIT_cBorderColor           1079
 #define IDC_SLIDER_fTransition          1080
 #define IDC_CHECK_bEnableShadow         1080
+#define IDC_SLIDER_nType                1080
 #define IDC_SLIDER_fBackgroundTransparency 1081
 #define IDC_L_SPIN_Y                    1081
 #define IDC_EDIT_cShadowColor           1081
+#define IDC_SLIDER_fSlant               1081
 #define IDC_CHECK_bReverse              1082
 #define IDC_EDIT_cBackGroundSepiaColor  1082
+#define IDC_SLIDER_fTrans               1082
 #define IDC_L_ROTATION_X                1083
 #define IDC_CHECK_bLinkCrop             1083
+#define IDC_CHECK1                      1083
+#define IDC_CHECK_bReverse1             1083
 #define IDC_L_SPIN_Z                    1085
 #define IDC_L_ROTATION_Y                1087
 #define IDC_L_ROTATION_Z                1089
@@ -301,9 +305,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        326
+#define _APS_NEXT_RESOURCE_VALUE        327
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1080
+#define _APS_NEXT_CONTROL_VALUE         1084
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif

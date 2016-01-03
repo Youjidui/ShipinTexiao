@@ -95,6 +95,14 @@ void CEffectBar::OnBnClickedParameters()
 			}
 			m_matrixWipeDlg.ShowWindow(SW_SHOW);
 		}
+		else if(FX_SONY_BARN_SLIDE == str)
+		{
+			if(!m_barnSlideDlg.GetSafeHwnd())
+			{
+				m_barnSlideDlg.Create(m_barnSlideDlg.IDD);
+			}
+			m_barnSlideDlg.ShowWindow(SW_SHOW);
+		}
 		else if(FX_PUSH == str)
 		{
 			if(!m_pushDlg.GetSafeHwnd())
@@ -232,6 +240,13 @@ BOOL CEffectBar::OnInitDialog()
 		pParam->cbSize = sizeof(MatrixWipeFxParam);
 		m_ctrlEffects.SetItemDataPtr(i, pParam);
 		m_matrixWipeDlg.SetParam(pParam);
+	}
+	i = m_ctrlEffects.AddString(FX_SONY_BARN_SLIDE);
+	{
+		SonyBarnSlideFxParam* pParam = new SonyBarnSlideFxParam;
+		pParam->cbSize = sizeof(SonyBarnSlideFxParam);
+		m_ctrlEffects.SetItemDataPtr(i, pParam);
+		m_barnSlideDlg.SetParam(pParam);
 	}
 	i = m_ctrlEffects.AddString(FX_SONY_SLIDE);
 	{
@@ -394,6 +409,12 @@ void CEffectBar::OnProgressChange( int nPos )
 			pParam->fTransition = nPos / 10000.f;
 			AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)(LPCTSTR)str, (LPARAM)pParam);
 		}
+		else if (FX_SONY_BARN_SLIDE == str)
+		{
+			SonyBarnSlideFxParam* pParam = (SonyBarnSlideFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
+			pParam->fTrans = nPos / 10000.f;
+			AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)(LPCTSTR)str, (LPARAM)pParam);
+		}
 	}
 }
 
@@ -444,10 +465,10 @@ void CEffectBar::SetProgress(CSliderCtrl* pCtrl)
 			CubeFxParam* pParam = (CubeFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
 			if(pParam)	pCtrl->SetPos(pParam->fTransition * 10000);
 		}
-		//else if(FX_SONY_DME_3D_TRANSFORM == str)
-		//{
-		//	SonyDME3DTransfromFxPrarm* pParam = (SonyDME3DTransfromFxPrarm*)m_ctrlEffects.GetItemDataPtr(nSel);
-		//	if(pParam)	pCtrl->SetPos(pParam->fPerspective * 10000);
-		//}
+		else if(FX_SONY_BARN_SLIDE == str)
+		{
+			SonyBarnSlideFxParam* pParam = (SonyBarnSlideFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
+			if(pParam)	pCtrl->SetPos(pParam->fTrans * 10000);
+		}
 	}
 }

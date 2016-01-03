@@ -43,7 +43,7 @@ END_MESSAGE_MAP()
 
 // CParamPinPDlg 消息处理程序
 
-float decimal_point = 10000.f;
+static float decimal_point = 10000.f;
 
 BOOL CParamPinPDlg::OnInitDialog()
 {

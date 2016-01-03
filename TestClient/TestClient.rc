@@ -818,6 +818,21 @@ BEGIN
     CONTROL         "",IDC_SLIDER_fKeyPositionY2,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,164,318,100,13
 END
 
+IDD_SONY_BARN_SLIDE DIALOGEX 0, 0, 146, 182
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "SonyBarnSlide"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "È·¶¨",IDOK,89,161,50,14
+    LTEXT           "Type",IDC_STATIC,7,7,17,8
+    CONTROL         "",IDC_SLIDER_nType,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,33,7,100,13
+    LTEXT           "Slant",IDC_STATIC,7,18,17,8
+    CONTROL         "",IDC_SLIDER_fSlant,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,33,18,100,13
+    LTEXT           "Progress",IDC_STATIC,7,29,29,8
+    CONTROL         "",IDC_SLIDER_fTrans,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,33,29,100,13
+    CONTROL         "Check1",IDC_CHECK_bReverse1,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,46,39,10
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -973,6 +988,14 @@ BEGIN
         RIGHTMARGIN, 264
         TOPMARGIN, 7
         BOTTOMMARGIN, 366
+    END
+
+    IDD_SONY_BARN_SLIDE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 139
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 175
     END
 END
 #endif    // APSTUDIO_INVOKED
