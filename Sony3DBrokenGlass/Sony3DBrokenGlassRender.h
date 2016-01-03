@@ -17,11 +17,13 @@ public:
 private:
 	CRenderEngine* m_pEngine;
 	CBaseMesh* m_pQuadMesh;
-	CBaseFx* m_pSonyDME3DEffect;
+	CBaseFx* m_pSony3DBrokenGlassEffect;
 
+
+	ID3DXMesh* m_pMesh;
 	UINT				m_uResID_fx;
 
-	UINT				m_uResID_Mesh;
-	UINT				m_resRandom1024x3;
-	UINT				m_resRandomARGB;
+	//LPCTSTR				m_uResID_Mesh;
+	//UINT				m_resRandom1024x3;
+	//UINT				m_resRandomARGB;
 };
