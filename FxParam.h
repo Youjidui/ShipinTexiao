@@ -661,6 +661,28 @@ struct SonyBarnSlideFxParam : public FxParamBase
 	SonyBarnSlideFxParam() : nType(0), fSlant(0.f), fTrans(0.f), bReverse(false) {}
 };
 
+struct BorkenGlassFxParam : public FxParamBase
+{
+	float prm_movement;				//1.f, -1.f, 0.01f, 3, 2, 0.f
+	float prm_movementRandom;		//1.f, 0.f, 0.01f, 3, 2, 0.f
+
+	float prm_rotate;				//3.1415926f, -3.1415926f, 0.01f, 3, 2, 0.f
+
+	float prm_centerX;				//1.f, -1.f, 0.01f, 3, 2, 0.f
+	float prm_centerY;				//1.f, -1.f, 0.01f, 3, 2, 0.f
+
+	float prm_aspect;				//1.f, -1.f, 0.01f, 3, 2, 0.f
+
+	float prm_width;				//2*3.14f/8.f, 2*3.14f/160.f, 0.01f, 3, 2, 3.14f/10.f
+	float prm_widthRandom;			//1.f, 0.f, 0.01f, 3, 2, 0.f
+
+	float prm_angleBlock;			//3.1415f, 0.f, 0.01f, 3, 2, 3.1415f*4.f/5.f
+
+	float prm_randomPix;			//1.f, 0.f, 0.01f, 3, 2, 0.f
+
+	bool  prm_bReverse;
+} ;
+
 
 struct DiffuseWipeFxParam : public FxParamBase
 {

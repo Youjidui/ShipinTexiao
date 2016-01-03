@@ -230,7 +230,6 @@ bool CSonyPinpRender::Render(CVideoBuffer* pDst, CVideoBuffer* pSrc, FxParamBase
 	CVideoBuffer* pSrcDef = pSrc;
 	const VideoBufferInfo& biSrc = pSrcDef->GetVideoBufferInfo();
 	SonyPinPFxParam* pParam = (SonyPinPFxParam*)pParamRaw;
-	//pParam = pParam;
 	LPDIRECT3DDEVICE9 pDevice = m_pEngine->GetDevice();
 
 	//float fAspect = m_pResMan->GetAspect() * pProfile->nEditWidth / (float) (pProfile->nEditHeight * m_pResMan->GetAspectVerifyCoef()); 

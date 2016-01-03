@@ -126,8 +126,8 @@ bool CSonySlideRender::Render(CVideoBuffer* pDst, CVideoBuffer* pSrc1,  CVideoBu
 	}
 	//D3DXSaveSurfaceToFile(_T("./SonySlide_temp.dds"), D3DXIFF_DDS, pTempDef->GetSurface(), NULL, NULL);
 
-	m_pEngine->BlendCompose(pDst, pSrc2, pTempDef);
 	//BlendTwoBuffer(pSrc1, pSrc2, pDst);
+	m_pEngine->BlendCompose(pDst, pSrc2, pTempDef);
 	m_pEngine->GetVideoBufferManager()->ReleaseVideoBuffer(pTempDef);
 	return true;
 }

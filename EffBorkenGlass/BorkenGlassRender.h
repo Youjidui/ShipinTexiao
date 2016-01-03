@@ -18,4 +18,6 @@ protected:
 	CRenderEngine*	m_pEngine;
 	CBaseMesh* m_pQuadMesh;
 	CBaseFx*		m_pEffect;
+	CVideoBuffer* m_pRandomTexture;
+	CVideoBuffer* m_pRandomPixel;
 };
