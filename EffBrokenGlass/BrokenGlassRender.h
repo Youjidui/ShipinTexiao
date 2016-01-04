@@ -4,11 +4,11 @@
 #include "../D3D9Render/VideoBuffer.h"
 #include "../FxParam.h"
 
-class CBorkenGlassRender
+class CBrokenGlassRender
 {
 public:
-	CBorkenGlassRender(void);
-	~CBorkenGlassRender(void);
+	CBrokenGlassRender(void);
+	~CBrokenGlassRender(void);
 
 	bool Init(CRenderEngine* pEngine);
 	void Uninit();

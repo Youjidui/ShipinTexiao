@@ -17,5 +17,6 @@
 #define FX_QUAD_PAGE_ROLL _T("Quad Page Roll")
 #define FX_CUBE_TRANS _T("Cube Trans")
 #define FX_SONY_BARN_SLIDE _T("Sony Barn Slide")
+#define FX_BROKEN_GLASS _T("Broken Glass")
 #define FX_SONY_PINP _T("Sony PinP")
 

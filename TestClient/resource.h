@@ -35,6 +35,7 @@
 #define IDD_PARAM_SONY_DME3D            324
 #define IDD_PARAM_PINP                  325
 #define IDD_SONY_BARN_SLIDE             326
+#define IDD_DIALOG1                     327
 #define IDC_EFFECTS                     1000
 #define IDC_PROGRESS                    1001
 #define IDC_BUTTON1                     1002
@@ -272,13 +273,23 @@
 #define IDC_SLIDER_fTrans               1082
 #define IDC_L_ROTATION_X                1083
 #define IDC_CHECK_bLinkCrop             1083
-#define IDC_CHECK1                      1083
 #define IDC_CHECK_bReverse1             1083
+#define IDC_SLIDER_movement             1084
 #define IDC_L_SPIN_Z                    1085
+#define IDC_SLIDER_movementRandom       1085
+#define IDC_SLIDER_rotate               1086
 #define IDC_L_ROTATION_Y                1087
+#define IDC_SLIDER_centerX              1087
+#define IDC_SLIDER_centerY              1088
 #define IDC_L_ROTATION_Z                1089
+#define IDC_SLIDER_aspect               1089
+#define IDC_SLIDER_width                1090
 #define IDC_L_SRC_SPIN_Y                1091
+#define IDC_SLIDER_widthRandom          1091
+#define IDC_SLIDER_angleBlock           1092
 #define IDC_L_SRC_SPIN_X                1093
+#define IDC_SLIDER_randomPix            1093
+#define IDC_CHECK1                      1094
 #define IDC_L_SRC_SPIN_Z                1095
 #define IDC_L_AXIS_X                    1097
 #define IDC_L_AXIS_Z                    1099
@@ -305,9 +316,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        327
+#define _APS_NEXT_RESOURCE_VALUE        328
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1084
+#define _APS_NEXT_CONTROL_VALUE         1095
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif

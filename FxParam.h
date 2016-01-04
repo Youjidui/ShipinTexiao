@@ -661,9 +661,11 @@ struct SonyBarnSlideFxParam : public FxParamBase
 	SonyBarnSlideFxParam() : nType(0), fSlant(0.f), fTrans(0.f), bReverse(false) {}
 };
 
-struct BorkenGlassFxParam : public FxParamBase
+struct BrokenGlassFxParam : public FxParamBase
 {
-	float prm_movement;				//1.f, -1.f, 0.01f, 3, 2, 0.f
+	//float prm_movement;				//1.f, -1.f, 0.01f, 3, 2, 0.f
+	//Progress
+	float prm_movement;				//1.f, 0.f, 0.0001f, 5, 4, 0.f
 	float prm_movementRandom;		//1.f, 0.f, 0.01f, 3, 2, 0.f
 
 	float prm_rotate;				//3.1415926f, -3.1415926f, 0.01f, 3, 2, 0.f
@@ -681,6 +683,11 @@ struct BorkenGlassFxParam : public FxParamBase
 	float prm_randomPix;			//1.f, 0.f, 0.01f, 3, 2, 0.f
 
 	bool  prm_bReverse;
+
+	BrokenGlassFxParam() : prm_movement(0.f), prm_movementRandom(0.f), prm_rotate(0.f)
+		, prm_centerX(0.f), prm_centerY(0.f), prm_aspect(0.f), prm_width(3.14f/10.f)
+		, prm_widthRandom(0.f), prm_angleBlock(3.1415f*4/5), prm_randomPix(0.f), prm_bReverse(false)
+	{	}
 } ;
 
 

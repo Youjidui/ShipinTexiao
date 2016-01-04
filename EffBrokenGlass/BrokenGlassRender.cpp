@@ -1,11 +1,11 @@
 #include "StdAfx.h"
-#include "BorkenGlassRender.h"
+#include "BrokenGlassRender.h"
 
 #pragma warning(disable:4244)
 
 #define _TRANS
 
-CBorkenGlassRender::CBorkenGlassRender(void)
+CBrokenGlassRender::CBrokenGlassRender(void)
 : m_pEngine(NULL)
 , m_pQuadMesh(NULL)
 , m_pEffect(NULL)
@@ -14,12 +14,12 @@ CBorkenGlassRender::CBorkenGlassRender(void)
 {
 }
 
-CBorkenGlassRender::~CBorkenGlassRender(void)
+CBrokenGlassRender::~CBrokenGlassRender(void)
 {
 	Uninit();
 }
 
-bool CBorkenGlassRender::Init( CRenderEngine* pEngine )
+bool CBrokenGlassRender::Init( CRenderEngine* pEngine )
 {
 	HRESULT hr = E_FAIL;
 	m_pEngine = pEngine;
@@ -28,7 +28,7 @@ bool CBorkenGlassRender::Init( CRenderEngine* pEngine )
 
 	m_pQuadMesh = pResMan->CreateQuadMesh(pDevice);
 	ASSERT(m_pQuadMesh);
-	m_pEffect = pResMan->CreateEffect(pDevice, _T("NewEffects/GBorkenGlassShader.fx"));
+	m_pEffect = pResMan->CreateEffect(pDevice, _T("NewEffects/BrokenGlassShader.fx"));
 	ASSERT(m_pEffect);
 
 	//m_resRandomTex = pResMan->CreateTexture(256,1,D3DUSAGE_DYNAMIC,D3DFMT_A8R8G8B8,D3DPOOL_DEFAULT,&uuid_randomTex);
@@ -75,7 +75,7 @@ bool CBorkenGlassRender::Init( CRenderEngine* pEngine )
 	return true;
 }
 
-void CBorkenGlassRender::Uninit()
+void CBrokenGlassRender::Uninit()
 {
 	CVideoBufferManager* pBufMgr = m_pEngine->GetVideoBufferManager();
 	if(m_pRandomTexture)
@@ -90,9 +90,9 @@ void CBorkenGlassRender::Uninit()
 	}
 }
 
-bool CBorkenGlassRender::Render( CVideoBuffer* pDest, CVideoBuffer *pSrcA, CVideoBuffer *pSrcB, FxParamBase* pParamRaw )
+bool CBrokenGlassRender::Render( CVideoBuffer* pDest, CVideoBuffer *pSrcA, CVideoBuffer *pSrcB, FxParamBase* pParamRaw )
 {
-	BorkenGlassFxParam* pParam = (BorkenGlassFxParam*)pParamRaw;
+	BrokenGlassFxParam* pParam = (BrokenGlassFxParam*)pParamRaw;
 	RESET_RENDER_TARGET(m_pEngine);
 	SET_DEPTH_STENCIL(m_pEngine);
 	CResourceManager* pResMan = m_pEngine->GetResourceManager();
@@ -230,6 +230,8 @@ bool CBorkenGlassRender::Render( CVideoBuffer* pDest, CVideoBuffer *pSrcA, CVide
 		hr = pDevice->EndScene();
 		ASSERT(SUCCEEDED(hr));
 	}
+
+	D3DXSaveSurfaceToFile(_T("./BrokenGlass_Render_RGBA.dds"), D3DXIFF_DDS, pDstDef->GetSurface(), NULL, NULL);
 
 #ifdef _TRANS
 	//BlendTwoBuffer(pDst0,ppSrcDef[1],pDstReal);

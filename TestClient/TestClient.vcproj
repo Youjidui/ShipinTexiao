@@ -432,6 +432,10 @@
 			ReferencedProjectIdentifier="{BF8D4426-38EE-4D2E-980A-A685595CF711}"
 			RelativePathToProject=".\EffSonyBarnSlide\EffSonyBarnSlide.vcproj"
 		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{4BA3B749-2C6A-4B1F-ACCC-ED63D48E9F6E}"
+			RelativePathToProject=".\EffBrokenGlass\EffBrokenGlass.vcproj"
+		/>
 	</References>
 	<Files>
 		<Filter
@@ -477,6 +481,10 @@
 			</File>
 			<File
 				RelativePath=".\ParamBlurDlg.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ParamBrokenGlassDlg.cpp"
 				>
 			</File>
 			<File
@@ -619,6 +627,10 @@
 			</File>
 			<File
 				RelativePath=".\ParamBlurDlg.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ParamBrokenGlassDlg.h"
 				>
 			</File>
 			<File

@@ -30,6 +30,7 @@
 #include "../Eff3DCubeTrans/CubeTransRender.h"
 #include "../EffSonyPinP/SonyPinpRender.h"
 #include "../EffSonyBarnSlide/SonyBarnSlideRender.h"
+#include "../EffBrokenGlass/BrokenGlassRender.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -401,6 +402,14 @@ bool CTestClientDoc::EffectRender(CVideoBuffer* pDest, CVideoBuffer* pSrc, CVide
 		if(eff.Init(m_pRenderEngine))
 		{
 			bOK = eff.Render(pDest, pSrc, pSrc2, (PushFxParam*)m_pEffectParam);
+		}
+	}
+	else if(FX_BROKEN_GLASS == m_strEffectName)
+	{
+		CBrokenGlassRender eff;
+		if(eff.Init(m_pRenderEngine))
+		{
+			bOK = eff.Render(pDest, pSrc, pSrc2, m_pEffectParam);
 		}
 	}
 	else if(FX_SONY_SLIDE == m_strEffectName)

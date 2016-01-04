@@ -833,6 +833,35 @@ BEGIN
     CONTROL         "Check1",IDC_CHECK_bReverse1,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,46,39,10
 END
 
+IDD_DIALOG1 DIALOGEX 0, 0, 181, 162
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Dialog"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "È·¶¨",IDOK,124,141,50,14
+    LTEXT           "movement",IDC_STATIC,7,7,34,8
+    CONTROL         "",IDC_SLIDER_movement,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,74,7,100,13
+    LTEXT           "movementRandom",IDC_STATIC,7,18,60,8
+    CONTROL         "",IDC_SLIDER_movementRandom,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,74,18,100,13
+    LTEXT           "rotate",IDC_STATIC,7,29,21,8
+    CONTROL         "",IDC_SLIDER_rotate,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,74,29,100,13
+    LTEXT           "centerX",IDC_STATIC,7,40,26,8
+    CONTROL         "",IDC_SLIDER_centerX,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,74,40,100,13
+    LTEXT           "centerY",IDC_STATIC,7,51,26,8
+    CONTROL         "",IDC_SLIDER_centerY,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,74,51,100,13
+    LTEXT           "aspect",IDC_STATIC,7,62,22,8
+    CONTROL         "",IDC_SLIDER_aspect,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,74,62,100,13
+    LTEXT           "width",IDC_STATIC,7,73,18,8
+    CONTROL         "",IDC_SLIDER_width,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,74,73,100,13
+    LTEXT           "widthRandom",IDC_STATIC,7,84,44,8
+    CONTROL         "",IDC_SLIDER_widthRandom,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,74,84,100,13
+    LTEXT           "angleBlock",IDC_STATIC,7,95,34,8
+    CONTROL         "",IDC_SLIDER_angleBlock,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,74,95,100,13
+    LTEXT           "randomPix",IDC_STATIC,7,106,34,8
+    CONTROL         "",IDC_SLIDER_randomPix,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,74,106,100,13
+    CONTROL         "bReverse",IDC_CHECK_bReverse,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,119,47,10
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -996,6 +1025,14 @@ BEGIN
         RIGHTMARGIN, 139
         TOPMARGIN, 7
         BOTTOMMARGIN, 175
+    END
+
+    IDD_DIALOG1, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 174
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 155
     END
 END
 #endif    // APSTUDIO_INVOKED

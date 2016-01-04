@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="EffBorkenGlass"
+	Name="EffBrokenGlass"
 	ProjectGUID="{4BA3B749-2C6A-4B1F-ACCC-ED63D48E9F6E}"
 	RootNamespace="EffBorkenGlass"
 	Keyword="Win32Proj"
@@ -153,7 +153,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\BorkenGlassRender.cpp"
+				RelativePath=".\BrokenGlassRender.cpp"
 				>
 			</File>
 			<File
@@ -183,7 +183,7 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\BorkenGlassRender.h"
+				RelativePath=".\BrokenGlassRender.h"
 				>
 			</File>
 			<File
