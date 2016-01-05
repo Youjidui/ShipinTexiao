@@ -436,6 +436,10 @@
 			ReferencedProjectIdentifier="{4BA3B749-2C6A-4B1F-ACCC-ED63D48E9F6E}"
 			RelativePathToProject=".\EffBrokenGlass\EffBrokenGlass.vcproj"
 		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{2F47C18D-C823-4826-A24A-13713543C659}"
+			RelativePathToProject=".\EffDissolve\EffDissolve.vcproj"
+		/>
 	</References>
 	<Files>
 		<Filter
@@ -497,6 +501,10 @@
 			</File>
 			<File
 				RelativePath=".\ParamCubeDlg.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ParamDissolveDlg.cpp"
 				>
 			</File>
 			<File
@@ -643,6 +651,10 @@
 			</File>
 			<File
 				RelativePath=".\ParamCubeDlg.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ParamDissolveDlg.h"
 				>
 			</File>
 			<File

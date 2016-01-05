@@ -148,7 +148,8 @@ bool CBrokenGlassRender::Render( CVideoBuffer* pDest, CVideoBuffer *pSrcA, CVide
 	D3DXMATRIXA16	matWorldTemp;
 	D3DXMatrixIdentity(&matWorldTemp);
 	D3DXMATRIX*matView,*matPorj;
-	pResMan->GetOrthoMatrix(&matView,&matPorj);
+	//pResMan->GetOrthoMatrix(&matView,&matPorj);
+	pResMan->GetPerspectiveMatrix(&matView, &matPorj);
 	const VideoBufferInfo& biDest = pDstDef->GetVideoBufferInfo();
 	//matWorldTemp._42 += 0.5f / pDstDef->GetImageHeight() * (pParam->bOdd?0.0f:1.0f);
 	matWorldTemp._42 += (0.5f / biDest.nHeight * (0.0f));

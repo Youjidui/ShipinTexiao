@@ -16,6 +16,7 @@
 #include "ParamPinpDlg.h"
 #include "ParamSonyBarnSlideDlg.h"
 #include "ParamBrokenGlassDlg.h"
+#include "ParamDissolveDlg.h"
 
 
 // CEffectBar ¶Ô»°¿ò
@@ -55,6 +56,7 @@ public:
 	CParamPinPDlg m_sonyPinpDlg;
 	CParamBrokenGlassDlg m_brokenGlassDlg;
 	CParamSonyBarnSlideDlg m_barnSlideDlg;
+	CParamDissolveDlg m_dissolveDlg;
 
 	afx_msg void OnBnClickedParameters();
 	virtual BOOL OnInitDialog();

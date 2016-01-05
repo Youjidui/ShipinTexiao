@@ -690,6 +690,15 @@ struct BrokenGlassFxParam : public FxParamBase
 	{	}
 } ;
 
+struct DissolveFxParam : public FxParamBase
+{
+	float prm_process;		//1.f, 0.f, 0.0001f, 5, 4, 0.f
+	int	  prm_mixType;		//0 - 4
+	float prm_subtractr;	//1.0f, 0.0f, 0.0001f, 5, 4, 0.5f
+	bool  prm_bReverse;
+
+	DissolveFxParam() : prm_process(0.f), prm_mixType(0), prm_subtractr(0.5f), prm_bReverse(false) {}
+} ;
 
 struct DiffuseWipeFxParam : public FxParamBase
 {

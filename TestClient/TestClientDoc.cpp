@@ -6,7 +6,6 @@
 #include "TestClient.h"
 
 #include "TestClientDoc.h"
-//#include "CommonMessage.h"
 #include "EffectName.h"
 #include "FreeImage.h"
 #include <d3dx9.h>
@@ -31,6 +30,7 @@
 #include "../EffSonyPinP/SonyPinpRender.h"
 #include "../EffSonyBarnSlide/SonyBarnSlideRender.h"
 #include "../EffBrokenGlass/BrokenGlassRender.h"
+#include "../EffDissolve/DissolveRender.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -407,6 +407,14 @@ bool CTestClientDoc::EffectRender(CVideoBuffer* pDest, CVideoBuffer* pSrc, CVide
 	else if(FX_BROKEN_GLASS == m_strEffectName)
 	{
 		CBrokenGlassRender eff;
+		if(eff.Init(m_pRenderEngine))
+		{
+			bOK = eff.Render(pDest, pSrc, pSrc2, m_pEffectParam);
+		}
+	}
+	else if(FX_DISSOLVE == m_strEffectName)
+	{
+		CDissolveRender eff;
 		if(eff.Init(m_pRenderEngine))
 		{
 			bOK = eff.Render(pDest, pSrc, pSrc2, m_pEffectParam);

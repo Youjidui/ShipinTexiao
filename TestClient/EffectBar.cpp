@@ -111,6 +111,14 @@ void CEffectBar::OnBnClickedParameters()
 			}
 			m_brokenGlassDlg.ShowWindow(SW_SHOW);
 		}
+		else if(FX_DISSOLVE == str)
+		{
+			if(!m_dissolveDlg.GetSafeHwnd())
+			{
+				m_dissolveDlg.Create(m_dissolveDlg.IDD);
+			}
+			m_dissolveDlg.ShowWindow(SW_SHOW);
+		}
 		else if(FX_PUSH == str)
 		{
 			if(!m_pushDlg.GetSafeHwnd())
@@ -256,6 +264,13 @@ BOOL CEffectBar::OnInitDialog()
 		m_ctrlEffects.SetItemDataPtr(i, pParam);
 		m_brokenGlassDlg.SetParam(pParam);
 	}
+	i = m_ctrlEffects.AddString(FX_DISSOLVE);
+	{
+		DissolveFxParam* pParam = new DissolveFxParam;
+		pParam->cbSize = sizeof(DissolveFxParam);
+		m_ctrlEffects.SetItemDataPtr(i, pParam);
+		m_dissolveDlg.SetParam(pParam);
+	}
 	i = m_ctrlEffects.AddString(FX_SONY_BARN_SLIDE);
 	{
 		SonyBarnSlideFxParam* pParam = new SonyBarnSlideFxParam;
@@ -394,6 +409,12 @@ void CEffectBar::OnProgressChange( int nPos )
 			pParam->prm_movement = nPos / 10000.f;
 			AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)(LPCTSTR)str, (LPARAM)pParam);
 		}
+		else if (FX_DISSOLVE == str)
+		{
+			DissolveFxParam* pParam = (DissolveFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
+			pParam->prm_process = nPos / 10000.f;
+			AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)(LPCTSTR)str, (LPARAM)pParam);
+		}
 		else if (FX_PUSH == str)
 		{
 			PushFxParam* pParam = (PushFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
@@ -465,6 +486,11 @@ void CEffectBar::SetProgress(CSliderCtrl* pCtrl)
 		{
 			BrokenGlassFxParam* pParam = (BrokenGlassFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
 			if(pParam)	pCtrl->SetPos(pParam->prm_movement * 10000);
+		}
+		else if (FX_DISSOLVE == str)
+		{
+			DissolveFxParam* pParam = (DissolveFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
+			if(pParam)	pCtrl->SetPos(pParam->prm_process * 10000);
 		}
 		else if (FX_PUSH == str)
 		{

@@ -35,7 +35,9 @@
 #define IDD_PARAM_SONY_DME3D            324
 #define IDD_PARAM_PINP                  325
 #define IDD_SONY_BARN_SLIDE             326
-#define IDD_DIALOG1                     327
+#define IDD_BROKEN_GLASS                327
+#define IDD_DIALOG4                     328
+#define IDD_DISSOLVE                    328
 #define IDC_EFFECTS                     1000
 #define IDC_PROGRESS                    1001
 #define IDC_BUTTON1                     1002
@@ -289,9 +291,11 @@
 #define IDC_SLIDER_angleBlock           1092
 #define IDC_L_SRC_SPIN_X                1093
 #define IDC_SLIDER_randomPix            1093
-#define IDC_CHECK1                      1094
 #define IDC_L_SRC_SPIN_Z                1095
+#define IDC_SLIDER_mixType              1095
+#define IDC_SLIDER_process              1096
 #define IDC_L_AXIS_X                    1097
+#define IDC_SLIDER_subtractr            1097
 #define IDC_L_AXIS_Z                    1099
 #define IDC_L_AXIS_Y                    1101
 #define IDC_L_LOCATION_X2               1137
@@ -316,9 +320,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        328
+#define _APS_NEXT_RESOURCE_VALUE        329
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1095
+#define _APS_NEXT_CONTROL_VALUE         1098
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif

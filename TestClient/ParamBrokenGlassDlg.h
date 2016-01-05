@@ -13,7 +13,7 @@ public:
 	virtual ~CParamBrokenGlassDlg();
 
 // 对话框数据
-	enum { IDD = IDD_DIALOG1 };
+	enum { IDD = IDD_BROKEN_GLASS };
 	void SetParam(BrokenGlassFxParam* pParam) {m_pParam = pParam;}
 
 protected:
