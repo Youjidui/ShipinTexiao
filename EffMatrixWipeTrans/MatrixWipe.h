@@ -3,7 +3,7 @@
 #include "../D3D9Render/RenderEngine.h"
 #include "../D3D9Render/VideoBuffer.h"
 #include "../FxParam.h"
-#include "../BarmWipeTrans/WipeBase.h"
+#include "../EffBarmWipeTrans/WipeBase.h"
 
 class CMatrixWipe : public CWipeBase
 {

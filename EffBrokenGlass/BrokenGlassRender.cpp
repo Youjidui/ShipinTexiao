@@ -216,7 +216,7 @@ bool CBrokenGlassRender::Render( CVideoBuffer* pDest, CVideoBuffer *pSrcA, CVide
 	// begin&end scene
 	if ( SUCCEEDED(pDevice->BeginScene()))
 	{
-		UINT cPass,uPass;
+		UINT cPass;
 		hr = m_pEffect->Begin(&cPass,0);
 		ASSERT(SUCCEEDED(hr));
 		DWORD pSrcDef_bufferFormat = FMT_RGBA32;

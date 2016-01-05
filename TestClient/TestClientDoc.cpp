@@ -20,7 +20,7 @@
 #include "../EffAmoebaWipeTrans/AmoebaWipeRender.h"
 #include "../EffPush/PushRender.h"
 #include "../SonySlide/SonySlideRender.h"
-#include "../BarmWipeTrans/BarmWipeRender.h"
+#include "../EffBarmWipeTrans/BarmWipeRender.h"
 #include "../EffMatrixWipeTrans/MatrixWipeRender.h"
 #include "../EffChromaKey/ChromaKeyRender.h"
 #include "../EffPageRoll/PageRollRender.h"
@@ -31,6 +31,7 @@
 #include "../EffSonyBarnSlide/SonyBarnSlideRender.h"
 #include "../EffBrokenGlass/BrokenGlassRender.h"
 #include "../EffDissolve/DissolveRender.h"
+#include "../EffSonyFadeFromTo/SonyFadeFromToRender.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -415,6 +416,14 @@ bool CTestClientDoc::EffectRender(CVideoBuffer* pDest, CVideoBuffer* pSrc, CVide
 	else if(FX_DISSOLVE == m_strEffectName)
 	{
 		CDissolveRender eff;
+		if(eff.Init(m_pRenderEngine))
+		{
+			bOK = eff.Render(pDest, pSrc, pSrc2, m_pEffectParam);
+		}
+	}
+	else if(FX_FADE_FROM_TO == m_strEffectName)
+	{
+		CSonyFadeFromToRender eff;
 		if(eff.Init(m_pRenderEngine))
 		{
 			bOK = eff.Render(pDest, pSrc, pSrc2, m_pEffectParam);

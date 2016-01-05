@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="BarmWipeTrans"
-	ProjectGUID="{AF9FF148-E429-4B63-A790-6A07DD18ED07}"
-	RootNamespace="BarmWipeTrans"
+	Name="EffSonyFadeFromTo"
+	ProjectGUID="{3796AC7D-88D2-4A23-A11A-F9AA5313434A}"
+	RootNamespace="EffSonyFadeFrom"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="196613"
 	>
@@ -21,7 +21,7 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="4"
-			InheritedPropertySheets="..\DXSDK.vsprops;..\vld.vsprops"
+			InheritedPropertySheets="..\DXSDK.vsprops;..\log4cpp.vsprops;..\vld.vsprops"
 			UseOfMFC="2"
 			CharacterSet="1"
 			>
@@ -84,7 +84,7 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="4"
-			InheritedPropertySheets="..\DXSDK.vsprops;..\vld.vsprops"
+			InheritedPropertySheets="..\DXSDK.vsprops;..\log4cpp.vsprops;..\vld.vsprops"
 			UseOfMFC="2"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
@@ -153,11 +153,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\BarmWipe.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\BarmWipeRender.cpp"
+				RelativePath=".\SonyFadeFromToRender.cpp"
 				>
 			</File>
 			<File
@@ -180,14 +176,6 @@
 					/>
 				</FileConfiguration>
 			</File>
-			<File
-				RelativePath=".\WipeBase.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\WipeRenderBase.cpp"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="Í·ÎÄ¼þ"
@@ -195,11 +183,7 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\BarmWipe.h"
-				>
-			</File>
-			<File
-				RelativePath=".\BarmWipeRender.h"
+				RelativePath=".\SonyFadeFromToRender.h"
 				>
 			</File>
 			<File
@@ -208,14 +192,6 @@
 			</File>
 			<File
 				RelativePath=".\targetver.h"
-				>
-			</File>
-			<File
-				RelativePath=".\WipeBase.h"
-				>
-			</File>
-			<File
-				RelativePath=".\WipeRenderBase.h"
 				>
 			</File>
 		</Filter>

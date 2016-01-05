@@ -19,5 +19,6 @@
 #define FX_SONY_BARN_SLIDE _T("Sony Barn Slide")
 #define FX_BROKEN_GLASS _T("Broken Glass")
 #define FX_DISSOLVE _T("Dissolve")
+#define FX_FADE_FROM_TO _T("Sony Fade From To")
 #define FX_SONY_PINP _T("Sony PinP")
 

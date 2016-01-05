@@ -386,7 +386,7 @@
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{AF9FF148-E429-4B63-A790-6A07DD18ED07}"
-			RelativePathToProject=".\BarmWipeTrans\BarmWipeTrans.vcproj"
+			RelativePathToProject=".\EffBarmWipeTrans\EffBarmWipeTrans.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{00F3B508-F9A8-47DA-9A2B-375D9ACA1F0B}"
@@ -439,6 +439,10 @@
 		<ProjectReference
 			ReferencedProjectIdentifier="{2F47C18D-C823-4826-A24A-13713543C659}"
 			RelativePathToProject=".\EffDissolve\EffDissolve.vcproj"
+		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{3796AC7D-88D2-4A23-A11A-F9AA5313434A}"
+			RelativePathToProject=".\EffSonyFadeFromTo\EffSonyFadeFromTo.vcproj"
 		/>
 	</References>
 	<Files>
@@ -505,6 +509,10 @@
 			</File>
 			<File
 				RelativePath=".\ParamDissolveDlg.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ParamFadeFromToDlg.cpp"
 				>
 			</File>
 			<File
@@ -655,6 +663,10 @@
 			</File>
 			<File
 				RelativePath=".\ParamDissolveDlg.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ParamFadeFromToDlg.h"
 				>
 			</File>
 			<File
