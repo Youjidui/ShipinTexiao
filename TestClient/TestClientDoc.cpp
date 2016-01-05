@@ -32,6 +32,7 @@
 #include "../EffBrokenGlass/BrokenGlassRender.h"
 #include "../EffDissolve/DissolveRender.h"
 #include "../EffSonyFadeFromTo/SonyFadeFromToRender.h"
+#include "../EffPageRotation/PageRotationRender.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -416,6 +417,14 @@ bool CTestClientDoc::EffectRender(CVideoBuffer* pDest, CVideoBuffer* pSrc, CVide
 	else if(FX_DISSOLVE == m_strEffectName)
 	{
 		CDissolveRender eff;
+		if(eff.Init(m_pRenderEngine))
+		{
+			bOK = eff.Render(pDest, pSrc, pSrc2, m_pEffectParam);
+		}
+	}
+	else if(FX_PAGE_ROTATION == m_strEffectName)
+	{
+		CPageRotationRender eff;
 		if(eff.Init(m_pRenderEngine))
 		{
 			bOK = eff.Render(pDest, pSrc, pSrc2, m_pEffectParam);

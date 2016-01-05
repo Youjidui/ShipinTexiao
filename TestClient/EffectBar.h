@@ -18,6 +18,7 @@
 #include "ParamBrokenGlassDlg.h"
 #include "ParamDissolveDlg.h"
 #include "ParamFadeFromToDlg.h"
+#include "ParamPageRotationDlg.h"
 
 
 // CEffectBar ¶Ô»°¿ò
@@ -59,6 +60,7 @@ public:
 	CParamSonyBarnSlideDlg m_barnSlideDlg;
 	CParamDissolveDlg m_dissolveDlg;
 	CParamFadeFromToDlg m_fadeFromToDlg;
+	CParamPageRotationDlg m_pageRotationDlg;
 
 	afx_msg void OnBnClickedParameters();
 	virtual BOOL OnInitDialog();

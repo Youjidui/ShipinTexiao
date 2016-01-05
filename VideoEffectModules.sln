@@ -57,6 +57,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EffBarmWipeTrans", "EffBarm
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EffSonyFadeFromTo", "EffSonyFadeFromTo\EffSonyFadeFromTo.vcproj", "{3796AC7D-88D2-4A23-A11A-F9AA5313434A}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EffPageRotation", "EffPageRotation\EffPageRotation.vcproj", "{349068D7-C84B-4360-9A09-DB4E29BB989C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Pocket PC 2003 (ARMV4) = Debug|Pocket PC 2003 (ARMV4)
@@ -305,6 +307,14 @@ Global
 		{3796AC7D-88D2-4A23-A11A-F9AA5313434A}.Release|Win32.ActiveCfg = Release|Win32
 		{3796AC7D-88D2-4A23-A11A-F9AA5313434A}.Release|Win32.Build.0 = Release|Win32
 		{3796AC7D-88D2-4A23-A11A-F9AA5313434A}.Release|x64.ActiveCfg = Release|Win32
+		{349068D7-C84B-4360-9A09-DB4E29BB989C}.Debug|Pocket PC 2003 (ARMV4).ActiveCfg = Debug|Win32
+		{349068D7-C84B-4360-9A09-DB4E29BB989C}.Debug|Win32.ActiveCfg = Debug|Win32
+		{349068D7-C84B-4360-9A09-DB4E29BB989C}.Debug|Win32.Build.0 = Debug|Win32
+		{349068D7-C84B-4360-9A09-DB4E29BB989C}.Debug|x64.ActiveCfg = Debug|Win32
+		{349068D7-C84B-4360-9A09-DB4E29BB989C}.Release|Pocket PC 2003 (ARMV4).ActiveCfg = Release|Win32
+		{349068D7-C84B-4360-9A09-DB4E29BB989C}.Release|Win32.ActiveCfg = Release|Win32
+		{349068D7-C84B-4360-9A09-DB4E29BB989C}.Release|Win32.Build.0 = Release|Win32
+		{349068D7-C84B-4360-9A09-DB4E29BB989C}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

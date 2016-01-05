@@ -305,6 +305,22 @@ struct ChromaKeyFxParam : FxParamBase
 	}paramFGVAdj;
 };
 
+struct PageRotationFxParam : public FxParamBase
+{
+	int	nPattern;		//0,1
+
+	struct Transition
+	{
+		float fTransition;		//progress 0 - 10000
+		BOOL bReverse;
+
+		Transition() : fTransition(0.f), bReverse(false) {}
+	};
+	Transition structTrans;
+
+	PageRotationFxParam() : nPattern(0) {}
+} ;
+
 struct PageRollFxParam : public FxParamBase
 {	
 	struct Geometry
@@ -334,7 +350,7 @@ struct PageRollFxParam : public FxParamBase
 		Rear() : bUseForeGround(TRUE), fMatteRatio(0.0f), crMaatte(0xffc0c0c0) {}
 	};
 	struct Transition {
-		float fTransition;
+		float fTransition;		//progress 0 - 10000
 		BOOL bReverse;
 
 		Transition() : fTransition(0.0f), bReverse(FALSE) {}

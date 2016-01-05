@@ -444,6 +444,10 @@
 			ReferencedProjectIdentifier="{3796AC7D-88D2-4A23-A11A-F9AA5313434A}"
 			RelativePathToProject=".\EffSonyFadeFromTo\EffSonyFadeFromTo.vcproj"
 		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{349068D7-C84B-4360-9A09-DB4E29BB989C}"
+			RelativePathToProject=".\EffPageRotation\EffPageRotation.vcproj"
+		/>
 	</References>
 	<Files>
 		<Filter
@@ -517,6 +521,10 @@
 			</File>
 			<File
 				RelativePath=".\ParamMatrixWipeDlg.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ParamPageRotationDlg.cpp"
 				>
 			</File>
 			<File
@@ -671,6 +679,10 @@
 			</File>
 			<File
 				RelativePath=".\ParamMatrixWipeDlg.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ParamPageRotationDlg.h"
 				>
 			</File>
 			<File

@@ -891,6 +891,19 @@ BEGIN
     LTEXT           "FadeColor (AARRGGBB)(ff88ff88)",IDC_STATIC,65,26,109,8
 END
 
+IDD_PAGE_ROTATION DIALOGEX 0, 0, 182, 87
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "PageRotation"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "È·¶¨",IDOK,125,66,50,14
+    LTEXT           "fTransition",IDC_STATIC,7,9,35,8
+    CONTROL         "",IDC_SLIDER_fTransition,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,74,7,100,15
+    LTEXT           "nPattern",IDC_STATIC,7,26,29,8
+    CONTROL         "",IDC_SLIDER_nPattern,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,74,24,100,14
+    CONTROL         "bReverse",IDC_CHECK_bReverse,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,43,47,10
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -1078,6 +1091,14 @@ BEGIN
         RIGHTMARGIN, 182
         TOPMARGIN, 7
         BOTTOMMARGIN, 83
+    END
+
+    IDD_PAGE_ROTATION, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 175
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 80
     END
 END
 #endif    // APSTUDIO_INVOKED

@@ -127,6 +127,14 @@ void CEffectBar::OnBnClickedParameters()
 			}
 			m_fadeFromToDlg.ShowWindow(SW_SHOW);
 		}
+		else if(FX_PAGE_ROTATION == str)
+		{
+			if(!m_pageRotationDlg.GetSafeHwnd())
+			{
+				m_pageRotationDlg.Create(m_pageRotationDlg.IDD);
+			}
+			m_pageRotationDlg.ShowWindow(SW_SHOW);
+		}
 		else if(FX_PUSH == str)
 		{
 			if(!m_pushDlg.GetSafeHwnd())
@@ -279,6 +287,13 @@ BOOL CEffectBar::OnInitDialog()
 		m_ctrlEffects.SetItemDataPtr(i, pParam);
 		m_dissolveDlg.SetParam(pParam);
 	}
+	i = m_ctrlEffects.AddString(FX_PAGE_ROTATION);
+	{
+		PageRotationFxParam* pParam = new PageRotationFxParam;
+		pParam->cbSize = sizeof(PageRotationFxParam);
+		m_ctrlEffects.SetItemDataPtr(i, pParam);
+		m_pageRotationDlg.SetParam(pParam);
+	}
 	i = m_ctrlEffects.AddString(FX_FADE_FROM_TO);
 	{
 		SonyFadeFromToFxParam* pParam = new SonyFadeFromToFxParam;
@@ -430,6 +445,12 @@ void CEffectBar::OnProgressChange( int nPos )
 			pParam->prm_process = nPos / 10000.f;
 			AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)(LPCTSTR)str, (LPARAM)pParam);
 		}
+		else if (FX_PAGE_ROTATION == str)
+		{
+			PageRotationFxParam* pParam = (PageRotationFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
+			pParam->structTrans.fTransition = nPos / 10000.f;
+			AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)(LPCTSTR)str, (LPARAM)pParam);
+		}
 		else if (FX_FADE_FROM_TO == str)
 		{
 			SonyFadeFromToFxParam* pParam = (SonyFadeFromToFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
@@ -512,6 +533,11 @@ void CEffectBar::SetProgress(CSliderCtrl* pCtrl)
 		{
 			DissolveFxParam* pParam = (DissolveFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
 			if(pParam)	pCtrl->SetPos(pParam->prm_process * 10000);
+		}
+		else if (FX_PAGE_ROTATION == str)
+		{
+			PageRotationFxParam* pParam = (PageRotationFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
+			if(pParam)	pCtrl->SetPos(pParam->structTrans.fTransition * 10000);
 		}
 		else if (FX_FADE_FROM_TO == str)
 		{

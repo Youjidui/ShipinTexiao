@@ -38,6 +38,8 @@
 #define IDD_BROKEN_GLASS                327
 #define IDD_DISSOLVE                    328
 #define IDD_FADE_FROM_TO                329
+#define IDD_DIALOG1                     330
+#define IDD_PAGE_ROTATION               330
 #define IDC_EFFECTS                     1000
 #define IDC_PROGRESS                    1001
 #define IDC_BUTTON1                     1002
@@ -299,6 +301,7 @@
 #define IDC_SLIDER_subtractr            1097
 #define IDC_EDIT_FadeColor              1098
 #define IDC_L_AXIS_Z                    1099
+#define IDC_SLIDER_nPattern             1099
 #define IDC_L_AXIS_Y                    1101
 #define IDC_L_LOCATION_X2               1137
 #define IDC__L_LOCATION_Z2              1138
@@ -322,9 +325,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        330
+#define _APS_NEXT_RESOURCE_VALUE        331
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1099
+#define _APS_NEXT_CONTROL_VALUE         1100
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif
