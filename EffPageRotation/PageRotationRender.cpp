@@ -67,8 +67,6 @@ bool CPageRotationRender::Render(CVideoBuffer* pDest, CVideoBuffer *pSrcA, CVide
 	m_pEngine->GetTargetVideoSize(nEditWidth, nEditHeight);
 	float fAspect = nEditWidth  / (float)(nEditHeight);
 
-	fAspect *= fAspect;			//TODO: !!!!
-
 	D3DXMatrixScaling(&matAspect,fAspect,1.0f,1.0f);
 	D3DXMatrixPerspectiveFovLH( &matProj, D3DX_PI/4, fAspect, 0.01f, 1000.0f );
 
@@ -92,7 +90,7 @@ bool CPageRotationRender::Render(CVideoBuffer* pDest, CVideoBuffer *pSrcA, CVide
 	pResMan->GetPerspectiveMatrix(&pMatView, &pMatProj);
 	matCombine = matAspect * matWorld * matShift * (*pMatView) * matProj;
 
-	float fAlphaValue = 0.f;
+	float fAlphaValue = 1.f;
 	D3DXVECTOR4 vMisc(fAlphaValue,fAlphaValue,0.0f,0.0f);
 
 	m_pEffect->SetTechnique("PageRotation");

@@ -107,7 +107,7 @@ float4 PS(float2 Tex:TEXCOORD0,uniform int nPass):COLOR0
 		vColor=tex2D(g_samColor1,Tex);
 		vColor.a *= g_vMisc.y;
 	}
-	
+
 	return vColor;
 }
 VertexShader aVS[] =
