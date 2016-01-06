@@ -811,7 +811,7 @@ struct Sony3DBrokenGlassEffectParam : public FxParamBase
 	LightingParam	lightingPackParam;
 	PerspectiveParam	perspPackParam;
 
-	int fallingDirestion;
+	int fallingDirection;
 	BOOL bReverse;
 
 	float centerX, centerY;
