@@ -56,6 +56,8 @@ protected:
 	std::vector<CString> m_ImageFiles;
 	std::vector<CVideoBuffer*> m_SrcImages;
 
+	CVideoBuffer* m_pBackImage;
+
 	VideoBufferInfo m_DestVideoBufferInfo;
 
 	CString m_strEffectName;

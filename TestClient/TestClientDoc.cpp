@@ -253,6 +253,7 @@ void CTestClientDoc::UninitEffect()
 		m_pBufferMgr->ReleaseVideoBuffer(m_SrcImages[i]);
 	}
 	m_SrcImages.clear();
+	m_pBufferMgr->ReleaseVideoBuffer(m_pBackImage);
 	m_pBufferMgr->ReleaseVideoBuffer(m_pDestImage);
 
 	ReleaseVideoBufferManager(m_pBufferMgr);
@@ -266,6 +267,7 @@ bool CTestClientDoc::SetBackBufferSize( UINT w, UINT h )
 {
 	if(m_pBufferMgr)
 	{
+		//target buffer
 		if(m_pDestImage)
 		{
 			m_pBufferMgr->ReleaseVideoBuffer(m_pDestImage);
@@ -275,6 +277,40 @@ bool CTestClientDoc::SetBackBufferSize( UINT w, UINT h )
 		m_DestVideoBufferInfo.nHeight = h;
 		m_pDestImage = m_pBufferMgr->CreateVideoBuffer(m_DestVideoBufferInfo);
 
+		//background buffer
+		if(m_pBackImage)
+		{
+			m_pBufferMgr->ReleaseVideoBuffer(m_pBackImage);
+			m_pBackImage = NULL;
+		}
+		if(!m_pBackImage)
+		{
+			VideoBufferInfo bi = {D3DFMT_A8R8G8B8, VideoBufferInfo::SYSTEM_MEM, VideoBufferInfo::_IN, w, h, 0, 0};
+			m_pBackImage = m_pBufferMgr->CreateVideoBuffer(bi);
+		}
+		if(m_pBackImage)
+		{
+			DWORD* psLine[2] = {new DWORD[w], new DWORD[w]};
+			int pitch = sizeof(DWORD)*w;
+			memset(psLine[0], 0, pitch);
+			memset(psLine[1], 0xff, pitch);
+
+			int vbpitch = 0;
+			BYTE* pd = (BYTE*)m_pBackImage->LockBuffer(vbpitch);
+			for(int i = 0; i < h; ++i)
+			{
+				const DWORD* ps = psLine[i%2];
+				int copysize = min(pitch, vbpitch);
+				int zerosize = max(pitch, vbpitch) - copysize;
+				memcpy(pd, ps, copysize);
+				memset(pd + copysize, 0, zerosize);
+				pd += vbpitch;
+				ps += pitch;
+			}
+			m_pBackImage->UnLockBuffer();
+		}
+
+		//refresh
 		UpdateAllViews(NULL);
 	}
 	return !!m_pDestImage;
@@ -331,7 +367,8 @@ bool CTestClientDoc::Render()
 
 					pDest = m_pDestImage;
 					ASSERT(pDest != pTemp);
-					bOK = m_pRenderEngine->BlendCompose(pDest, pSrc2, pTemp);
+					ASSERT(m_pBackImage);
+					bOK = m_pRenderEngine->BlendCompose(pDest, m_pBackImage, pTemp);
 					ASSERT(bOK);
 					//D3DXSaveSurfaceToFile(_T("./Blend_src_a.dds"), D3DXIFF_DDS, pTemp->GetSurface(), NULL, NULL);
 					//D3DXSaveSurfaceToFile(_T("./Blend_src_B.dds"), D3DXIFF_DDS, pSrc2->GetSurface(), NULL, NULL);

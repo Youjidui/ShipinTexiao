@@ -82,5 +82,6 @@ void CParamPageRotationDlg::OnBnClickedCheckReverse()
 {
 	CButton* pBtn = (CButton*)GetDlgItem(IDC_CHECK_bReverse);
 	m_pParam->structTrans.bReverse = pBtn->GetCheck();
+	AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)FX_PAGE_ROTATION, (LPARAM)m_pParam);
 }
 

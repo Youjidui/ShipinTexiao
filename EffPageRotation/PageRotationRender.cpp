@@ -46,8 +46,6 @@ bool CPageRotationRender::Render(CVideoBuffer* pDest, CVideoBuffer *pSrcA, CVide
 	if(pParam->structTrans.bReverse)
 		std::swap(pSrcA, pSrcB);
 
-	CVideoBuffer* pSrcDef[2] = {pSrcA, pSrcB};
-
 	//CBaseTexture * pMipMap[2] = {NULL,NULL},*pYUVA = NULL;
 	CVideoBuffer* pMipMap[2] = {NULL,NULL};
 	//pMipMap[0] = m_pResMan->GetTemp_Video(0,TRUE);	
