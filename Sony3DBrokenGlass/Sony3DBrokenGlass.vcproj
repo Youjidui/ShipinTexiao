@@ -22,6 +22,7 @@
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="4"
 			InheritedPropertySheets="..\vld.vsprops;..\DXSDK.vsprops"
+			UseOfMFC="2"
 			CharacterSet="1"
 			>
 			<Tool
