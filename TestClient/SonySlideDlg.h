@@ -4,13 +4,13 @@
 
 // CSonySlideDlg 对话框
 
-class CSonySlideDlg : public CDialog
+class CParamSonySlideDlg : public CDialog
 {
-	DECLARE_DYNAMIC(CSonySlideDlg)
+	DECLARE_DYNAMIC(CParamSonySlideDlg)
 
 public:
-	CSonySlideDlg(CWnd* pParent = NULL);   // 标准构造函数
-	virtual ~CSonySlideDlg();
+	CParamSonySlideDlg(CWnd* pParent = NULL);   // 标准构造函数
+	virtual ~CParamSonySlideDlg();
 
 // 对话框数据
 	enum { IDD = IDD_DIALOG_SONY_SLIDE };

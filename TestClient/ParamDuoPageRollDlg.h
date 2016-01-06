@@ -2,23 +2,23 @@
 
 #include "../FxParam.h"
 
-// CParamQuadPageRollDlg 对话框
+// CParamDuoPageRollDlg 对话框
 
-class CParamQuadPageRollDlg : public CDialog
+class CParamDuoPageRollDlg : public CDialog
 {
-	DECLARE_DYNAMIC(CParamQuadPageRollDlg)
+	DECLARE_DYNAMIC(CParamDuoPageRollDlg)
 
 public:
-	CParamQuadPageRollDlg(CWnd* pParent = NULL);   // 标准构造函数
-	virtual ~CParamQuadPageRollDlg();
+	CParamDuoPageRollDlg(CWnd* pParent = NULL);   // 标准构造函数
+	virtual ~CParamDuoPageRollDlg();
 
 // 对话框数据
-	enum { IDD = IDD_QUAD_PAGE_ROLL };
-	void SetParam(QuadPageRollFxParam* pParam) {m_pParam = pParam;}
+	enum { IDD = IDD_DUO_PAGE_ROLL };
+	void SetParam(DuoPageRollFxParam* pParam) {m_pParam = pParam;}
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
-	QuadPageRollFxParam* m_pParam;
+	DuoPageRollFxParam* m_pParam;
 
 	DECLARE_MESSAGE_MAP()
 public:
@@ -27,4 +27,3 @@ public:
 	afx_msg void OnBnClickedCheckReverse();
 	afx_msg void OnBnClickedCheckUseForeGround();
 };
-

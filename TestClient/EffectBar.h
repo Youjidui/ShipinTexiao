@@ -10,6 +10,7 @@
 #include "ParamChromaKeyDlg.h"
 #include "SonySlideDlg.h"
 #include "PageRollParamDlg.h"
+#include "ParamDuoPageRollDlg.h"
 #include "ParamQuadPageRollDlg.h"
 #include "ParamCubeDlg.h"
 #include "SonyDME3DDlg.h"
@@ -48,10 +49,11 @@ public:
 	CParamAmoebaWipeDlg m_amoebaWipeDlg;
 	CParamBarmWipeDlg m_barmWipeDlg;
 	CParamMatrixWipeDlg m_matrixWipeDlg;
-	CPushDlg m_pushDlg;
+	CParamPushDlg m_pushDlg;
 	CParamChromaKeyDlg m_chromaKeyDlg;
-	CSonySlideDlg m_SonySlideDlg;
-	CPageRollParamDlg m_PageRollDlg;
+	CParamSonySlideDlg m_SonySlideDlg;
+	CParamPageRollDlg m_PageRollDlg;
+	CParamDuoPageRollDlg m_duoPageRollDlg;
 	CParamQuadPageRollDlg m_QuadPageRollDlg;
 	CParamCubeDlg m_cubeTransDlg;
 	CSonyDME3DDlg m_sonyDME3DDlg;

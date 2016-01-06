@@ -25,6 +25,7 @@
 #include "../EffChromaKey/ChromaKeyRender.h"
 #include "../EffPageRoll/PageRollRender.h"
 #include "../SonyDME3DTransform/SonyDME3DTransformRender.h"
+#include "../EffQuadPageRollTrans/DuoPageRollRender.h"
 #include "../EffQuadPageRollTrans/QuadPageRollRender.h"
 #include "../Eff3DCubeTrans/CubeTransRender.h"
 #include "../EffSonyPinP/SonyPinpRender.h"
@@ -512,7 +513,15 @@ bool CTestClientDoc::EffectRender(CVideoBuffer* pDest, CVideoBuffer* pSrc, CVide
 		CPageRollRender eff;
 		if(eff.Init(m_pRenderEngine))
 		{
-			bOK = eff.Render(pDest, pSrc, pSrc2, (PageRollFxParam*)m_pEffectParam);
+			bOK = eff.Render(pDest, pSrc, pSrc2, m_pEffectParam);
+		}
+	}
+	else if(FX_DUO_PAGE_ROLL == m_strEffectName)
+	{
+		CDuoPageRollRender eff;
+		if(eff.Init(m_pRenderEngine))
+		{
+			bOK = eff.Render(pDest, pSrc, pSrc2, m_pEffectParam);
 		}
 	}
 	else if(FX_QUAD_PAGE_ROLL == m_strEffectName)
@@ -520,7 +529,7 @@ bool CTestClientDoc::EffectRender(CVideoBuffer* pDest, CVideoBuffer* pSrc, CVide
 		CQuadPageRollRender eff;
 		if(eff.Init(m_pRenderEngine))
 		{
-			bOK = eff.Render(pDest, pSrc, pSrc2, (QuadPageRollFxParam*)m_pEffectParam);
+			bOK = eff.Render(pDest, pSrc, pSrc2, m_pEffectParam);
 		}
 	}
 	else if(FX_CUBE_TRANS == m_strEffectName)
@@ -528,7 +537,7 @@ bool CTestClientDoc::EffectRender(CVideoBuffer* pDest, CVideoBuffer* pSrc, CVide
 		CCubeTransRender eff;
 		if(eff.Init(m_pRenderEngine))
 		{
-			bOK = eff.Render(pDest, pSrc, pSrc2, (CubeFxParam*)m_pEffectParam);
+			bOK = eff.Render(pDest, pSrc, pSrc2, m_pEffectParam);
 		}
 	}
 	else if(FX_SONY_DME_3D_TRANSFORM == m_strEffectName)
@@ -536,7 +545,7 @@ bool CTestClientDoc::EffectRender(CVideoBuffer* pDest, CVideoBuffer* pSrc, CVide
 		CSonyDME3DTransformRender eff;
 		if(eff.Init(m_pRenderEngine))
 		{
-			bOK = eff.Render(pDest, pSrc, (SonyDME3DTransfromFxPrarm*)m_pEffectParam);
+			bOK = eff.Render(pDest, pSrc, m_pEffectParam);
 		}
 	}
 	else if(FX_SONY_PINP == m_strEffectName)

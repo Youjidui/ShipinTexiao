@@ -4,13 +4,13 @@
 
 // PushDlg 对话框
 
-class CPushDlg : public CDialog
+class CParamPushDlg : public CDialog
 {
-	DECLARE_DYNAMIC(CPushDlg)
+	DECLARE_DYNAMIC(CParamPushDlg)
 
 public:
-	CPushDlg(CWnd* pParent = NULL);   // 标准构造函数
-	virtual ~CPushDlg();
+	CParamPushDlg(CWnd* pParent = NULL);   // 标准构造函数
+	virtual ~CParamPushDlg();
 
 // 对话框数据
 	enum { IDD = IDD_PARAM_PUSH };

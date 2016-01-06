@@ -31,6 +31,7 @@ void CParamQuadPageRollDlg::DoDataExchange(CDataExchange* pDX)
 
 
 BEGIN_MESSAGE_MAP(CParamQuadPageRollDlg, CDialog)
+	ON_WM_HSCROLL()
 	ON_BN_CLICKED(IDC_CHECK_REVERSE, &CParamQuadPageRollDlg::OnBnClickedCheckReverse)
 	ON_BN_CLICKED(IDC_CHECK_USE_FORE_GROUND, &CParamQuadPageRollDlg::OnBnClickedCheckUseForeGround)
 END_MESSAGE_MAP()
@@ -67,7 +68,7 @@ BOOL CParamQuadPageRollDlg::OnInitDialog()
 	if(m_pParam)	pCtrl->SetPos(m_pParam->nStepPattern);
 
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_GROUP_PATTERN);
-	pCtrl->SetRange(-36000, 72000, TRUE);	//720.f, 360, 0.01f
+	pCtrl->SetRange(0, 2);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->nGroupPattern);
 
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_RADIUS);
@@ -214,10 +215,12 @@ void CParamQuadPageRollDlg::OnBnClickedCheckReverse()
 {
 	CButton* pBtn = (CButton*)GetDlgItem(IDC_CHECK_REVERSE);
 	if(m_pParam)	m_pParam->structTrans.bReverse = (pBtn->GetCheck() == BST_CHECKED);
+	AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)FX_QUAD_PAGE_ROLL, (LPARAM)m_pParam);
 }
 
 void CParamQuadPageRollDlg::OnBnClickedCheckUseForeGround()
 {
 	CButton* pBtn = (CButton*)GetDlgItem(IDC_CHECK_USE_FORE_GROUND);
 	if(m_pParam)	m_pParam->structRear.bUseForeGround = (pBtn->GetCheck() == BST_CHECKED);
+	AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)FX_QUAD_PAGE_ROLL, (LPARAM)m_pParam);
 }

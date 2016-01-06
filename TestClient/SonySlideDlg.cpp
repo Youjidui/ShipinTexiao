@@ -8,31 +8,31 @@
 
 // CSonySlideDlg 对话框
 
-IMPLEMENT_DYNAMIC(CSonySlideDlg, CDialog)
+IMPLEMENT_DYNAMIC(CParamSonySlideDlg, CDialog)
 
-CSonySlideDlg::CSonySlideDlg(CWnd* pParent /*=NULL*/)
-	: CDialog(CSonySlideDlg::IDD, pParent)
+CParamSonySlideDlg::CParamSonySlideDlg(CWnd* pParent /*=NULL*/)
+	: CDialog(CParamSonySlideDlg::IDD, pParent)
 	, m_pParam(NULL)
 {
 
 }
 
-CSonySlideDlg::~CSonySlideDlg()
+CParamSonySlideDlg::~CParamSonySlideDlg()
 {
 }
 
-void CSonySlideDlg::DoDataExchange(CDataExchange* pDX)
+void CParamSonySlideDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
 }
 
 
-BEGIN_MESSAGE_MAP(CSonySlideDlg, CDialog)
-	ON_CBN_SELCHANGE(IDC_COMBO_DWTYPE, &CSonySlideDlg::OnCbnSelchangeComboDwtype)
-	ON_BN_CLICKED(IDC_CHECK_REVERSE, &CSonySlideDlg::OnBnClickedCheckReverse)
+BEGIN_MESSAGE_MAP(CParamSonySlideDlg, CDialog)
+	ON_CBN_SELCHANGE(IDC_COMBO_DWTYPE, &CParamSonySlideDlg::OnCbnSelchangeComboDwtype)
+	ON_BN_CLICKED(IDC_CHECK_REVERSE, &CParamSonySlideDlg::OnBnClickedCheckReverse)
 END_MESSAGE_MAP()
 
-BOOL CSonySlideDlg::OnInitDialog()
+BOOL CParamSonySlideDlg::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 
@@ -52,14 +52,14 @@ BOOL CSonySlideDlg::OnInitDialog()
 
 // CSonySlideDlg 消息处理程序
 
-void CSonySlideDlg::OnCbnSelchangeComboDwtype()
+void CParamSonySlideDlg::OnCbnSelchangeComboDwtype()
 {
 	CComboBox* pCombolBox = (CComboBox*)GetDlgItem(IDC_COMBO_DWTYPE);
 	int index = pCombolBox->GetCurSel();
 	m_pParam->dwType = index;
 }
 
-void CSonySlideDlg::OnBnClickedCheckReverse()
+void CParamSonySlideDlg::OnBnClickedCheckReverse()
 {
 	CButton* pCheckBox = (CButton*)GetDlgItem(IDC_CHECK_REVERSE);
 	int lStatus = pCheckBox->GetCheck();

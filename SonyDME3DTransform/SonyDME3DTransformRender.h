@@ -28,7 +28,7 @@ public:
 
 	bool Init(CRenderEngine* pEngine);
 	void Uninit();
-	bool Render(CVideoBuffer* pDst, CVideoBuffer* pSrc, SonyDME3DTransfromFxPrarm* pParam);
+	bool Render(CVideoBuffer* pDst, CVideoBuffer* pSrc, FxParamBase* pParam);
 
 protected:
 	void RenderRGBA(CVideoBuffer* pDst, CVideoBuffer* pSrc);

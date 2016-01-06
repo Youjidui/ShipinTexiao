@@ -1,44 +1,44 @@
-// PageRollParamDlg.cpp : 实现文件
+// ParamDuoPageRollDlg.cpp : 实现文件
 //
 
 #include "stdafx.h"
 #include "TestClient.h"
-#include "PageRollParamDlg.h"
+#include "ParamDuoPageRollDlg.h"
+
 #include "EffectName.h"
 #include "CommonMessage.h"
 
 #pragma warning(disable: 4244)
 
-// CPageRollParamDlg 对话框
+// CParamDuoPageRollDlg 对话框
 
-IMPLEMENT_DYNAMIC(CParamPageRollDlg, CDialog)
+IMPLEMENT_DYNAMIC(CParamDuoPageRollDlg, CDialog)
 
-CParamPageRollDlg::CParamPageRollDlg(CWnd* pParent /*=NULL*/)
-	: CDialog(CParamPageRollDlg::IDD, pParent)
+CParamDuoPageRollDlg::CParamDuoPageRollDlg(CWnd* pParent /*=NULL*/)
+	: CDialog(CParamDuoPageRollDlg::IDD, pParent)
 {
 
 }
 
-CParamPageRollDlg::~CParamPageRollDlg()
+CParamDuoPageRollDlg::~CParamDuoPageRollDlg()
 {
 }
 
-void CParamPageRollDlg::DoDataExchange(CDataExchange* pDX)
+void CParamDuoPageRollDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
 }
 
 
-BEGIN_MESSAGE_MAP(CParamPageRollDlg, CDialog)
+BEGIN_MESSAGE_MAP(CParamDuoPageRollDlg, CDialog)
 	ON_WM_HSCROLL()
-	ON_BN_CLICKED(IDC_CHECK_REVERSE, &CParamPageRollDlg::OnBnClickedCheckReverse)
-	ON_BN_CLICKED(IDC_CHECK_USE_FORE_GROUND, &CParamPageRollDlg::OnBnClickedCheckUseForeGround)
+	ON_BN_CLICKED(IDC_CHECK_REVERSE, &CParamDuoPageRollDlg::OnBnClickedCheckReverse)
+	ON_BN_CLICKED(IDC_CHECK_USE_FORE_GROUND, &CParamDuoPageRollDlg::OnBnClickedCheckUseForeGround)
 END_MESSAGE_MAP()
 
 
-// CPageRollParamDlg 消息处理程序
-
-BOOL CParamPageRollDlg::OnInitDialog()
+// CParamDuoPageRollDlg 消息处理程序
+BOOL CParamDuoPageRollDlg::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 
@@ -47,9 +47,21 @@ BOOL CParamPageRollDlg::OnInitDialog()
 	pCtrl->SetRange(0, 10000, TRUE);	//1.f, 0, 0.0001f
 	if(m_pParam)	pCtrl->SetPos(m_pParam->structTrans.fTransition * 10000);
 
-	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_ANGLE);
+	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_ANGLE_LT);
 	pCtrl->SetRange(-36000, 72000, TRUE);	//720.f, 360, 0.01f
-	if(m_pParam)	pCtrl->SetPos(m_pParam->structGeometry.fAngle * 100);
+	if(m_pParam)	pCtrl->SetPos(m_pParam->fAngle[0] * 100);
+
+	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_ANGLE_RT);
+	pCtrl->SetRange(-36000, 72000, TRUE);	//720.f, 360, 0.01f
+	if(m_pParam)	pCtrl->SetPos(m_pParam->fAngle[1] * 100);
+
+	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_STEP_PATTERN);
+	pCtrl->SetRange(0, 2);
+	if(m_pParam)	pCtrl->SetPos(m_pParam->nStepPattern);
+
+	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_GROUP_PATTERN);
+	pCtrl->SetRange(0, 1);
+	if(m_pParam)	pCtrl->SetPos(m_pParam->nSplitPattern);
 
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_RADIUS);
 	pCtrl->SetRange(1000, 10000, TRUE);	//1.0f, 0.1f, 0.0001f
@@ -58,7 +70,7 @@ BOOL CParamPageRollDlg::OnInitDialog()
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_ANGLE_PHI);
 	pCtrl->SetRange(0, 360000, TRUE);	////360.0f, 0.0f,  0.001f
 	if(m_pParam)	pCtrl->SetPos(m_pParam->structLight.fAnglePhi * 1000);
-	
+
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_ANGLE_THETA);
 	pCtrl->SetRange(0, 36000, TRUE);	////360.0f, 0.0f,  0.01f
 	if(m_pParam)	pCtrl->SetPos(m_pParam->structLight.fAngleTheta * 100);
@@ -85,9 +97,9 @@ BOOL CParamPageRollDlg::OnInitDialog()
 
 	CButton* pBtn = (CButton*)GetDlgItem(IDC_CHECK_USE_FORE_GROUND);
 	if(m_pParam)	pBtn->SetCheck(m_pParam->structRear.bUseForeGround);
-		
+
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_MATTE_RATIO);
-	pCtrl->SetRange(0, 10000, TRUE);	//1.0f, 0.0f,  0.0001f
+	pCtrl->SetRange(0, 10000);	//1.0f, 0.0f,  0.0001f
 	if(m_pParam)	pCtrl->SetPos(m_pParam->structRear.fMatteRatio * 10000);
 
 	char vColor[4];
@@ -111,7 +123,7 @@ BOOL CParamPageRollDlg::OnInitDialog()
 	// 异常: OCX 属性页应返回 FALSE
 }
 
-void CParamPageRollDlg::OnHScroll(UINT nSBCode, UINT uPos, CScrollBar* pScrollBar)
+void CParamDuoPageRollDlg::OnHScroll(UINT nSBCode, UINT uPos, CScrollBar* pScrollBar)
 {
 	CDialog::OnHScroll(nSBCode, uPos, pScrollBar);
 
@@ -126,8 +138,17 @@ void CParamPageRollDlg::OnHScroll(UINT nSBCode, UINT uPos, CScrollBar* pScrollBa
 	case IDC_SLIDER_TRANSITION:		//Progress
 		m_pParam->structTrans.fTransition = nPos / 10000.f;
 		break;
-	case IDC_SLIDER_ANGLE:
-		m_pParam->structGeometry.fAngle = nPos / 100.f;
+	case IDC_SLIDER_ANGLE_LT:
+		m_pParam->fAngle[0] = nPos / 100.f;
+		break;
+	case IDC_SLIDER_ANGLE_RT:
+		m_pParam->fAngle[1] = nPos / 100.f;
+		break;
+	case IDC_SLIDER_STEP_PATTERN:
+		m_pParam->nStepPattern = nPos;
+		break;
+	case IDC_SLIDER_GROUP_PATTERN:
+		m_pParam->nSplitPattern = nPos;
 		break;
 	case IDC_SLIDER_RADIUS:
 		m_pParam->structGeometry.fRadius = nPos / 10000.f;
@@ -173,17 +194,21 @@ void CParamPageRollDlg::OnHScroll(UINT nSBCode, UINT uPos, CScrollBar* pScrollBa
 		break;
 	}
 
-	AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)FX_PAGE_ROLL, (LPARAM)m_pParam);
+	AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)FX_DUO_PAGE_ROLL, (LPARAM)m_pParam);
 }
 
-void CParamPageRollDlg::OnBnClickedCheckReverse()
+void CParamDuoPageRollDlg::OnBnClickedCheckReverse()
 {
 	CButton* pBtn = (CButton*)GetDlgItem(IDC_CHECK_REVERSE);
 	if(m_pParam)	m_pParam->structTrans.bReverse = (pBtn->GetCheck() == BST_CHECKED);
+	AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)FX_DUO_PAGE_ROLL, (LPARAM)m_pParam);
 }
 
-void CParamPageRollDlg::OnBnClickedCheckUseForeGround()
+void CParamDuoPageRollDlg::OnBnClickedCheckUseForeGround()
 {
 	CButton* pBtn = (CButton*)GetDlgItem(IDC_CHECK_USE_FORE_GROUND);
 	if(m_pParam)	m_pParam->structRear.bUseForeGround = (pBtn->GetCheck() == BST_CHECKED);
+	AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)FX_DUO_PAGE_ROLL, (LPARAM)m_pParam);
 }
+
+

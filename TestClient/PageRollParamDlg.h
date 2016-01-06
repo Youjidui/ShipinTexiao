@@ -4,13 +4,13 @@
 
 // CPageRollParamDlg 对话框
 
-class CPageRollParamDlg : public CDialog
+class CParamPageRollDlg : public CDialog
 {
-	DECLARE_DYNAMIC(CPageRollParamDlg)
+	DECLARE_DYNAMIC(CParamPageRollDlg)
 
 public:
-	CPageRollParamDlg(CWnd* pParent = NULL);   // 标准构造函数
-	virtual ~CPageRollParamDlg();
+	CParamPageRollDlg(CWnd* pParent = NULL);   // 标准构造函数
+	virtual ~CParamPageRollDlg();
 
 // 对话框数据
 	enum { IDD = IDD_PAGE_ROLL };

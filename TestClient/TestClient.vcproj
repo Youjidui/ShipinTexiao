@@ -516,6 +516,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ParamDuoPageRollDlg.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\ParamFadeFromToDlg.cpp"
 				>
 			</File>
@@ -671,6 +675,10 @@
 			</File>
 			<File
 				RelativePath=".\ParamDissolveDlg.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ParamDuoPageRollDlg.h"
 				>
 			</File>
 			<File

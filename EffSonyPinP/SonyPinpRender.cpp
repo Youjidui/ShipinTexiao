@@ -615,7 +615,7 @@ void CSonyPinpRender::_do_render_scene(CVideoBuffer* pSrc, SonyPinPFxParam* pPar
 				render.Render(pFilterBuf, pSrc, &param);
 				render.Uninit();
 
-				D3DXSaveSurfaceToFile(_T("./FilterBuf.dds"), D3DXIFF_DDS, pFilterBuf->GetSurface(), NULL, NULL);
+				//D3DXSaveSurfaceToFile(_T("./FilterBuf.dds"), D3DXIFF_DDS, pFilterBuf->GetSurface(), NULL, NULL);
 
 				pDevice->SetRenderTarget(0,pOldSurf);
 				SAFE_RELEASE(pOldSurf);

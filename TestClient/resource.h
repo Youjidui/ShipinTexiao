@@ -38,8 +38,9 @@
 #define IDD_BROKEN_GLASS                327
 #define IDD_DISSOLVE                    328
 #define IDD_FADE_FROM_TO                329
-#define IDD_DIALOG1                     330
 #define IDD_PAGE_ROTATION               330
+#define IDD_QUAD_PAGE_ROLL1             331
+#define IDD_DUO_PAGE_ROLL               331
 #define IDC_EFFECTS                     1000
 #define IDC_PROGRESS                    1001
 #define IDC_BUTTON1                     1002

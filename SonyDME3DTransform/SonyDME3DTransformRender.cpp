@@ -37,10 +37,11 @@ void CSonyDME3DTransformRender::Uninit()
 
 }
 
-bool CSonyDME3DTransformRender::Render(CVideoBuffer* pDst, CVideoBuffer* pSrc, SonyDME3DTransfromFxPrarm* pParam)
+bool CSonyDME3DTransformRender::Render(CVideoBuffer* pDst, CVideoBuffer* pSrc, FxParamBase* pParamRaw)
 {
 	HRESULT hr = E_FAIL;
 
+	SonyDME3DTransfromFxPrarm* pParam = (SonyDME3DTransfromFxPrarm*)pParamRaw;
 	RESET_RENDER_TARGET(m_pEngine);
 	SET_DEPTH_STENCIL(m_pEngine);
 

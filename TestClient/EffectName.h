@@ -14,6 +14,7 @@
 #define FX_CHROMA_KEY _T("Chroma Key")
 #define FX_PAGE_ROTATION _T("Page Rotation")
 #define FX_PAGE_ROLL _T("Page Roll")
+#define FX_DUO_PAGE_ROLL _T("Duo Page Roll")
 #define FX_QUAD_PAGE_ROLL _T("Quad Page Roll")
 #define FX_SONY_DME_3D_TRANSFORM _T("Soney DME 3D Transform")
 #define FX_CUBE_TRANS _T("Cube Trans")

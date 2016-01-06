@@ -232,7 +232,7 @@ bool CBrokenGlassRender::Render( CVideoBuffer* pDest, CVideoBuffer *pSrcA, CVide
 		ASSERT(SUCCEEDED(hr));
 	}
 
-	D3DXSaveSurfaceToFile(_T("./BrokenGlass_Render_RGBA.dds"), D3DXIFF_DDS, pDstDef->GetSurface(), NULL, NULL);
+	//D3DXSaveSurfaceToFile(_T("./BrokenGlass_Render_RGBA.dds"), D3DXIFF_DDS, pDstDef->GetSurface(), NULL, NULL);
 
 #ifdef _TRANS
 	//BlendTwoBuffer(pDst0,ppSrcDef[1],pDstReal);

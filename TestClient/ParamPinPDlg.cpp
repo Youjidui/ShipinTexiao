@@ -254,12 +254,14 @@ void CParamPinPDlg::OnBnClickedCheckbenableshadow()
 {
 	CButton* pBtn = (CButton*)GetDlgItem(IDC_CHECK_bEnableShadow);
 	m_pParam->bEnableShadow = pBtn->GetCheck();
+	AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)FX_SONY_PINP, (LPARAM)m_pParam);
 }
 
 void CParamPinPDlg::OnBnClickedCheckbfilter()
 {
 	CButton* pBtn = (CButton*)GetDlgItem(IDC_CHECK_bFilter);
 	m_pParam->bFilter = pBtn->GetCheck();
+	AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)FX_SONY_PINP, (LPARAM)m_pParam);
 }
 
 void CParamPinPDlg::OnEnChangeEditcbackgroundsepiacolor()
@@ -273,6 +275,7 @@ void CParamPinPDlg::OnEnChangeEditcbackgroundsepiacolor()
 	CString str;
 	pEdit->GetWindowText(str);
 	_stscanf(str, _T("%08x"), &m_pParam->cBackGroundSepiaColor);
+	AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)FX_SONY_PINP, (LPARAM)m_pParam);
 }
 
 void CParamPinPDlg::OnEnChangeEditcbordercolor()
@@ -281,6 +284,7 @@ void CParamPinPDlg::OnEnChangeEditcbordercolor()
 	CString str;
 	pEdit->GetWindowText(str);
 	_stscanf(str, _T("%08x"), &m_pParam->cBorderColor);
+	AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)FX_SONY_PINP, (LPARAM)m_pParam);
 }
 
 void CParamPinPDlg::OnEnChangeEditcshadowcolor()
@@ -289,4 +293,5 @@ void CParamPinPDlg::OnEnChangeEditcshadowcolor()
 	CString str;
 	pEdit->GetWindowText(str);
 	_stscanf(str, _T("%08x"), &m_pParam->cShadowColor);
+	AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)FX_SONY_PINP, (LPARAM)m_pParam);
 }

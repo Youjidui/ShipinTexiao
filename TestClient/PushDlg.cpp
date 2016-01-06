@@ -8,37 +8,37 @@
 
 // PushDlg 对话框
 
-IMPLEMENT_DYNAMIC(CPushDlg, CDialog)
+IMPLEMENT_DYNAMIC(CParamPushDlg, CDialog)
 
-CPushDlg::CPushDlg(CWnd* pParent /*=NULL*/)
-	: CDialog(CPushDlg::IDD, pParent)
+CParamPushDlg::CParamPushDlg(CWnd* pParent /*=NULL*/)
+	: CDialog(CParamPushDlg::IDD, pParent)
 	, m_pParam(NULL)
 {
 
 }
 
-CPushDlg::~CPushDlg()
+CParamPushDlg::~CParamPushDlg()
 {
 	//deleted in CEffectBar::OnDestroy
 	//delete m_pParam;
 }
 
-void CPushDlg::DoDataExchange(CDataExchange* pDX)
+void CParamPushDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
 }
 
 
-BEGIN_MESSAGE_MAP(CPushDlg, CDialog)
+BEGIN_MESSAGE_MAP(CParamPushDlg, CDialog)
 	ON_WM_HSCROLL()
-	ON_CBN_SELCHANGE(IDC_COMBO_DWTYPE, &CPushDlg::OnCbnSelchangeComboDwtype)
-	ON_BN_CLICKED(IDC_CHECK_REVERSE, &CPushDlg::OnBnClickedCheckReverse)
+	ON_CBN_SELCHANGE(IDC_COMBO_DWTYPE, &CParamPushDlg::OnCbnSelchangeComboDwtype)
+	ON_BN_CLICKED(IDC_CHECK_REVERSE, &CParamPushDlg::OnBnClickedCheckReverse)
 END_MESSAGE_MAP()
 
 
 // PushDlg 消息处理程序
 
-BOOL CPushDlg::OnInitDialog()
+BOOL CParamPushDlg::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 
@@ -86,7 +86,7 @@ BOOL CPushDlg::OnInitDialog()
 
 }
 
-void CPushDlg::OnHScroll(UINT nSBCode, UINT uPos, CScrollBar* pScrollBar)
+void CParamPushDlg::OnHScroll(UINT nSBCode, UINT uPos, CScrollBar* pScrollBar)
 {
 	CDialog::OnHScroll(nSBCode, uPos, pScrollBar);
 
@@ -148,14 +148,14 @@ void CPushDlg::OnHScroll(UINT nSBCode, UINT uPos, CScrollBar* pScrollBar)
 	}
 }
 
-void CPushDlg::OnCbnSelchangeComboDwtype()
+void CParamPushDlg::OnCbnSelchangeComboDwtype()
 {
 	CComboBox* pCombolBox = (CComboBox*)GetDlgItem(IDC_COMBO_DWTYPE);
 	int index = pCombolBox->GetCurSel();
 	m_pParam->dwType = index;
 }
 
-void CPushDlg::OnBnClickedCheckReverse()
+void CParamPushDlg::OnBnClickedCheckReverse()
 {
 	CButton* pCheckBox = (CButton*)GetDlgItem(IDC_CHECK_REVERSE);
 	int lStatus = pCheckBox->GetCheck();

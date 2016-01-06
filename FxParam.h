@@ -368,11 +368,28 @@ struct PageRollFxParam : public FxParamBase
 	}
 };
 
+
+struct DuoPageRollFxParam : public PageRollFxParam
+{	
+	float	fAngle[2];		//720.f, 360, 0.01f
+	int		nSplitPattern;	//0 - 1
+	int		nStepPattern;	//0 - 2
+
+	DuoPageRollFxParam()
+	{
+		fAngle[0] = 45.f;
+		fAngle[1] = 315.f;
+
+		nSplitPattern = 0;
+		nStepPattern = 0;
+	}
+} ;
+
 struct QuadPageRollFxParam : public PageRollFxParam
 {
-	float	fAngle[4];
-	int		nStepPattern;
-	int		nGroupPattern;
+	float	fAngle[4];		//720.f, 360, 0.01f
+	int		nStepPattern;	//0 - 2
+	int		nGroupPattern;	//0 - 2
 
 	QuadPageRollFxParam()
 	{

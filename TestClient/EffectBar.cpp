@@ -139,7 +139,7 @@ void CEffectBar::OnBnClickedParameters()
 		{
 			if(!m_pushDlg.GetSafeHwnd())
 			{
-				m_pushDlg.Create(CPushDlg::IDD);
+				m_pushDlg.Create(CParamPushDlg::IDD);
 			}
 			m_pushDlg.ShowWindow(SW_SHOW);
 		}
@@ -166,6 +166,14 @@ void CEffectBar::OnBnClickedParameters()
 				m_PageRollDlg.Create(m_PageRollDlg.IDD);
 			}
 			m_PageRollDlg.ShowWindow(SW_SHOW);
+		}
+		else if(FX_DUO_PAGE_ROLL == str)
+		{
+			if(!m_duoPageRollDlg.GetSafeHwnd())
+			{
+				m_duoPageRollDlg.Create(m_duoPageRollDlg.IDD);
+			}
+			m_duoPageRollDlg.ShowWindow(SW_SHOW);
 		}
 		else if(FX_QUAD_PAGE_ROLL == str)
 		{
@@ -340,6 +348,13 @@ BOOL CEffectBar::OnInitDialog()
 		m_sonyDME3DDlg.SetParam(p);
 
 	}
+	i = m_ctrlEffects.AddString(FX_DUO_PAGE_ROLL);
+	{
+		DuoPageRollFxParam* p = new DuoPageRollFxParam;
+		p->cbSize = sizeof(DuoPageRollFxParam);
+		m_ctrlEffects.SetItemDataPtr(i, p);
+		m_duoPageRollDlg.SetParam(p);
+	}
 	i = m_ctrlEffects.AddString(FX_QUAD_PAGE_ROLL);
 	{
 		QuadPageRollFxParam* p = new QuadPageRollFxParam;
@@ -481,6 +496,12 @@ void CEffectBar::OnProgressChange( int nPos )
 			SonyDME3DTransfromFxPrarm* pParam = (SonyDME3DTransfromFxPrarm*)m_ctrlEffects.GetItemDataPtr(nSel);
 			AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)(LPCTSTR)str, (LPARAM)pParam);
 		}
+		else if (FX_DUO_PAGE_ROLL == str)
+		{
+			DuoPageRollFxParam* pParam = (DuoPageRollFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
+			pParam->structTrans.fTransition = nPos / 10000.f;
+			AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)(LPCTSTR)str, (LPARAM)pParam);
+		}
 		else if (FX_QUAD_PAGE_ROLL == str)
 		{
 			QuadPageRollFxParam* pParam = (QuadPageRollFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
@@ -504,6 +525,7 @@ void CEffectBar::OnProgressChange( int nPos )
 
 void CEffectBar::SetProgress(CSliderCtrl* pCtrl)
 {
+	pCtrl->EnableWindow(TRUE);
 	int nSel = m_ctrlEffects.GetCurSel();
 	if(LB_ERR != nSel)
 	{
@@ -559,6 +581,11 @@ void CEffectBar::SetProgress(CSliderCtrl* pCtrl)
 			PageRollFxParam* pParam = (PageRollFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
 			if(pParam)	pCtrl->SetPos(pParam->structTrans.fTransition * 10000);
 		}
+		else if (FX_DUO_PAGE_ROLL == str)
+		{
+			DuoPageRollFxParam* pParam = (DuoPageRollFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
+			if(pParam)	pCtrl->SetPos(pParam->structTrans.fTransition * 10000);
+		}
 		else if (FX_QUAD_PAGE_ROLL == str)
 		{
 			QuadPageRollFxParam* pParam = (QuadPageRollFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
@@ -574,5 +601,14 @@ void CEffectBar::SetProgress(CSliderCtrl* pCtrl)
 			SonyBarnSlideFxParam* pParam = (SonyBarnSlideFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
 			if(pParam)	pCtrl->SetPos(pParam->fTrans * 10000);
 		}
+		else	//不是过渡特技，没有进度条
+		{
+			pCtrl->SetPos(0);
+			pCtrl->EnableWindow(FALSE);
+		}
+	}
+	else
+	{
+		AfxMessageBox(_T("当前没有选择特技"), MB_ICONWARNING|MB_OK);
 	}
 }
