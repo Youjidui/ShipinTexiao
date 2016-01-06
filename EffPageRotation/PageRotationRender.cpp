@@ -49,16 +49,18 @@ bool CPageRotationRender::Render(CVideoBuffer* pDest, CVideoBuffer *pSrcA, CVide
 	CVideoBuffer* pSrcDef[2] = {pSrcA, pSrcB};
 
 	//CBaseTexture * pMipMap[2] = {NULL,NULL},*pYUVA = NULL;
+	CVideoBuffer* pMipMap[2] = {NULL,NULL};
 	//pMipMap[0] = m_pResMan->GetTemp_Video(0,TRUE);	
 	//pMipMap[1] = m_pResMan->GetTemp_Video(1,TRUE);
-	CVideoBuffer* pMipMap[2] = {NULL,NULL};
-
-	//GenerateMipMap(pSrcDef[0],pMipMap[0],TRUE);
-	//GenerateMipMap(pSrcDef[1],pMipMap[1],TRUE);
+	// not use mipmap
 	//VideoBufferInfo mipMapInfo = pSrcA->GetVideoBufferInfo();
+	//mipMapInfo.eType = VideoBufferInfo::VIDEO_MEM;
 	//mipMapInfo.eUsage = VideoBufferInfo::_IN_OUT_WITH_MIPMAP;
 	//pMipMap[0] = pVM->CreateVideoBuffer(mipMapInfo);
 	//pMipMap[1] = pVM->CreateVideoBuffer(mipMapInfo);
+
+	//GenerateMipMap(pSrcDef[0],pMipMap[0],TRUE);
+	//GenerateMipMap(pSrcDef[1],pMipMap[1],TRUE);
 	pMipMap[0] = pSrcA;
 	pMipMap[1] = pSrcB;
 
@@ -79,7 +81,6 @@ bool CPageRotationRender::Render(CVideoBuffer* pDest, CVideoBuffer *pSrcA, CVide
 	matTex._31 = 0.5f / biSrc.nAllocWidth;
 	//if(pParam->bOdd)
 	//	matTex._32 = 0.5f / biSrc.nAllocHeight;
-
 	if(pParam->nPattern == 0)
 		D3DXMatrixRotationX(&matWorld,-D3DX_PI * pParam->structTrans.fTransition);
 	else
