@@ -21,7 +21,7 @@ bool CMatrixWipeRender::Init( CRenderEngine* pEngine )
 
 	LPDIRECT3DDEVICE9 pDevice = pEngine->GetDevice();
 	CResourceManager* pResMan = pEngine->GetResourceManager();
-	m_pMaskEffect = pResMan->CreateEffect(pDevice, _T("NewEffects/GMatrix_Mask.fx"));
+	m_pMaskEffect = pResMan->CreateEffect(pDevice, _T("NewEffects/Matrix_Mask.fx"));
 	ASSERT(m_pMaskEffect);
 
 	return m_pMaskEffect && bOK;
