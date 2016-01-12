@@ -34,6 +34,7 @@
 #include "../EffDissolve/DissolveRender.h"
 #include "../EffSonyFadeFromTo/SonyFadeFromToRender.h"
 #include "../EffPageRotation/PageRotationRender.h"
+#include "../Sony3DBrokenGlass/Sony3DBrokenGlassRender.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -555,6 +556,15 @@ bool CTestClientDoc::EffectRender(CVideoBuffer* pDest, CVideoBuffer* pSrc, CVide
 		{
 			bOK = eff.Render(pDest, pSrc, m_pEffectParam);
 		}
+	}
+	else if(FX_SONY_3D_BROKEN_GLASS == m_strEffectName)
+	{
+		Sony3DBrokenGlassRender eff;
+		if(eff.Init(m_pRenderEngine))
+		{
+			bOK = eff.Render(pDest, pSrc, pSrc2, (Sony3DBrokenGlassEffectParam*)m_pEffectParam);
+		}
+
 	}
 	return bOK;
 }

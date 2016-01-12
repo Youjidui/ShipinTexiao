@@ -23,4 +23,5 @@
 #define FX_DISSOLVE _T("Dissolve")
 #define FX_FADE_FROM_TO _T("Sony Fade From To")
 #define FX_SONY_PINP _T("Sony PinP")
+#define FX_SONY_3D_BROKEN_GLASS _T("Sony 3D Broken Glass")
 

@@ -373,6 +373,13 @@ BOOL CEffectBar::OnInitDialog()
 		m_ctrlEffects.SetItemDataPtr(i, p);
 		m_sonyPinpDlg.SetParam(p);
 	}
+	i = m_ctrlEffects.AddString(FX_SONY_3D_BROKEN_GLASS);
+	{
+		Sony3DBrokenGlassEffectParam* p = new Sony3DBrokenGlassEffectParam;
+		m_ctrlEffects.SetItemDataPtr(i, p);
+		// 
+
+	}
 
 	m_ctrlEffects.SetCurSel(i);
 
