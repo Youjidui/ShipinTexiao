@@ -79,7 +79,7 @@ void CEffectBar::OnBnClickedParameters()
 			}
 			m_amoebaWipeDlg.ShowWindow(SW_SHOW);
 		}
-		else if(FX_BARM_WIPE == str)
+		else if(FX_BARM_WIPE == str || FX_FAN_WIPE == str)
 		{
 			if(!m_barmWipeDlg.GetSafeHwnd())
 			{
@@ -273,6 +273,9 @@ BOOL CEffectBar::OnInitDialog()
 		pParam->cbSize = sizeof(BarmWipeFxParam);
 		m_ctrlEffects.SetItemDataPtr(i, pParam);
 		m_barmWipeDlg.SetParam(pParam);
+
+		i = m_ctrlEffects.AddString(FX_FAN_WIPE);
+		m_ctrlEffects.SetItemDataPtr(i, pParam);
 	}
 	i = m_ctrlEffects.AddString(FX_MATRIX_WIPE);
 	{
@@ -410,8 +413,13 @@ void CEffectBar::OnDestroy()
 	int n = m_ctrlEffects.GetCount();
 	for(int i = 0; i < n; ++i)
 	{
-		void* pParam = m_ctrlEffects.GetItemDataPtr(i);
-		delete pParam;
+		CString str;
+		m_ctrlEffects.GetLBText(i, str);
+		if(FX_FAN_WIPE != str)
+		{
+			void* pParam = m_ctrlEffects.GetItemDataPtr(i);
+			delete pParam;
+		}
 	}
 
 	CDialog::OnDestroy();
@@ -443,7 +451,7 @@ void CEffectBar::OnProgressChange( int nPos )
 			pParam->fOffset = nPos / 10000.f;
 			AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)(LPCTSTR)str, (LPARAM)pParam);
 		}
-		if(FX_BARM_WIPE == str)
+		if(FX_BARM_WIPE == str || FX_FAN_WIPE == str)
 		{
 			BarmWipeFxParam* pParam = (BarmWipeFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
 			pParam->structPattern.fOffset = nPos / 10000.f;
@@ -543,7 +551,7 @@ void CEffectBar::SetProgress(CSliderCtrl* pCtrl)
 			AmoebaWipeFxParam* pParam = (AmoebaWipeFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
 			if(pParam)	pCtrl->SetPos(pParam->fOffset * 10000);
 		}
-		else if(FX_BARM_WIPE == str)
+		else if(FX_BARM_WIPE == str || FX_FAN_WIPE == str)
 		{
 			BarmWipeFxParam* pParam = (BarmWipeFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
 			if(pParam)	pCtrl->SetPos(pParam->structPattern.fOffset * 10000);

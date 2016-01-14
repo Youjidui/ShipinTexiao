@@ -16,18 +16,12 @@ public:
 
 private:
 	CRenderEngine* m_pEngine;
-	CBaseMesh* m_pQuadMesh;
+	//CBaseMesh* m_pQuadMesh;
 	CBaseFx* m_pSony3DBrokenGlassEffect;
-
-
-	D3DXMATRIXA16	m_matWorld,m_matView, m_matProj;
-
 	CBaseMesh* m_pMesh;
-	UINT				m_uResID_fx;
 
-	//LPCTSTR				m_uResID_Mesh;
-	//UINT				m_resRandom1024x3;
-	//UINT				m_resRandomARGB;
 	CVideoBuffer* m_pRandomARGBTexture;
 	CVideoBuffer* m_pRandom1024x3Texture;
+
+	D3DXMATRIXA16	m_matWorld,m_matView, m_matProj;
 };

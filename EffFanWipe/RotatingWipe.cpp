@@ -172,7 +172,7 @@ HRESULT CRotatingWipe::InitMesh(CRenderEngine* pEngine)
 	CResourceManager* pResMgr = m_pEngine->GetResourceManager();
 
 	m_pMesh = pResMgr->FindMesh(pszMeshName);
-	if(m_pMesh)
+	if(!m_pMesh)
 	{
 		const D3DVERTEXELEMENT9 declWipe[] =
 		{

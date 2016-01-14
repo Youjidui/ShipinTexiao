@@ -452,6 +452,10 @@
 			ReferencedProjectIdentifier="{C5D64DE7-EFFE-4975-AB44-0BAD646E804D}"
 			RelativePathToProject=".\Sony3DBrokenGlass\Sony3DBrokenGlass.vcproj"
 		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{803D6361-401B-426F-B734-CE88E1075E79}"
+			RelativePathToProject=".\EffFanWipe\EffFanWipe.vcproj"
+		/>
 	</References>
 	<Files>
 		<Filter

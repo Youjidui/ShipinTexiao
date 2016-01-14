@@ -20,6 +20,8 @@ HRESULT CVOpenWipe::Init(CRenderEngine* pEngine)
 	HRESULT hr = CWipeBase::Init(pEngine);
 	ASSERT(SUCCEEDED(hr));
 	ASSERT(m_pEngine);
+	hr = InitMesh(pEngine);
+	ASSERT(SUCCEEDED(hr));
 
 	LPDIRECT3DDEVICE9 pDevice = pEngine->GetDevice();
 	CResourceManager* pResMan = pEngine->GetResourceManager();
@@ -218,7 +220,7 @@ HRESULT CVOpenWipe::InitMesh(CRenderEngine* pEngine)
 	CResourceManager* pResMgr = m_pEngine->GetResourceManager();
 
 	m_pMesh = pResMgr->FindMesh(pszMeshName);
-	if(m_pMesh)
+	if(!m_pMesh)
 	{
 		const D3DVERTEXELEMENT9 declWipe[] =
 		{

@@ -21,6 +21,7 @@
 #include "../EffPush/PushRender.h"
 #include "../SonySlide/SonySlideRender.h"
 #include "../EffBarmWipeTrans/BarmWipeRender.h"
+#include "../EffFanWipe/FanWipeRender.h"
 #include "../EffMatrixWipeTrans/MatrixWipeRender.h"
 #include "../EffChromaKey/ChromaKeyRender.h"
 #include "../EffPageRoll/PageRollRender.h"
@@ -299,7 +300,7 @@ bool CTestClientDoc::SetBackBufferSize( UINT w, UINT h )
 
 			int vbpitch = 0;
 			BYTE* pd = (BYTE*)m_pBackImage->LockBuffer(vbpitch);
-			for(int i = 0; i < h; ++i)
+			for(UINT i = 0; i < h; ++i)
 			{
 				const DWORD* ps = psLine[i%2];
 				int copysize = min(pitch, vbpitch);
@@ -310,6 +311,8 @@ bool CTestClientDoc::SetBackBufferSize( UINT w, UINT h )
 				ps += pitch;
 			}
 			m_pBackImage->UnLockBuffer();
+			delete[] psLine[0];
+			delete[] psLine[1];
 		}
 
 		//refresh
@@ -499,6 +502,14 @@ bool CTestClientDoc::EffectRender(CVideoBuffer* pDest, CVideoBuffer* pSrc, CVide
 		if(eff.Init(m_pRenderEngine))
 		{
 			bOK = eff.Render(pDest, pSrc, pSrc2, (BarmWipeFxParam*)m_pEffectParam);
+		}
+	}
+	else if(FX_FAN_WIPE == m_strEffectName)
+	{
+		CFanWipeRender eff;
+		if(eff.Init(m_pRenderEngine))
+		{
+			bOK = eff.Render(pDest, pSrc, pSrc2, (BasicWipeFxParam*)m_pEffectParam);
 		}
 	}
 	else if(FX_MATRIX_WIPE == m_strEffectName)
