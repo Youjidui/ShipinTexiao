@@ -18,6 +18,14 @@ HRESULT CWipeBase::Init(CRenderEngine* pEngine)
 	m_pEngine = pEngine;	
 	m_pQuadMesh = pEngine->GetResourceManager()->CreateQuadMesh(pEngine->GetDevice());	
 
+	D3DXMatrixIdentity(&m_matWorld);
+	D3DXVECTOR3 vEyePt( 0.0f, 0.0f,-0.5f/tanf(D3DX_PI/8) );
+	D3DXVECTOR3 vLookatPt( 0.0f, 0.0f, 0.0f );
+	D3DXVECTOR3 vUpVec( 0.0f, 1.0f, 0.0f );	
+	D3DXMatrixLookAtLH( &m_matView, &vEyePt, &vLookatPt, &vUpVec );
+
+	D3DXMatrixPerspectiveFovLH( &m_matProj, D3DX_PI/4, 1.0f, 0.5f, 1000.0f );
+
 	return S_OK;
 }
 void CWipeBase::Ready(CVideoBuffer* pMaskDef)

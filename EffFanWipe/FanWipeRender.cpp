@@ -40,21 +40,11 @@ bool CFanWipeRender::RenderMask( CVideoBuffer*pMaskDef, BasicWipeFxParam* pParam
 
 bool CFanWipeRender::Ready( CVideoBuffer* pSrcDef, BasicWipeFxParam* pParam )
 {
-	if(INSIDE(pParam->structPattern.nPattern, 0, 7) && !INSIDE(m_privateData.m_nPattern, 0, 7))
+	if(InitInstanceByPattern<CRotatingWipe>(pParam->structPattern.nPattern, 0, 7))
 	{
-		m_privateData.m_nPattern = pParam->structPattern.nPattern;
-
-		SAFE_DELETE(m_privateData.m_pWipe);
-		m_privateData.m_pWipe = new CRotatingWipe;
-		m_privateData.m_pWipe->Init(m_pEngine);
 	}
-	else if(INSIDE(pParam->structPattern.nPattern, 8, 13) && !INSIDE(m_privateData.m_nPattern, 8, 13))
+	else if(InitInstanceByPattern<CVOpenWipe>(pParam->structPattern.nPattern, 8, 13))
 	{
-		m_privateData.m_nPattern = pParam->structPattern.nPattern;
-
-		SAFE_DELETE(m_privateData.m_pWipe);
-		m_privateData.m_pWipe = new CVOpenWipe;
-		m_privateData.m_pWipe->Init(m_pEngine);
 	}
 	return NULL != m_privateData.m_pWipe;
 }

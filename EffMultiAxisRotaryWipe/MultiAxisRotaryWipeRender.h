@@ -5,15 +5,14 @@
 #include "../FxParam.h"
 #include "../EffBarmWipeTrans/WipeRenderBase.h"
 
-class CFanWipeRender : public CWipeRenderBase
+class CMultiAxisRotaryWipeRender : public CWipeRenderBase
 {
 public:
-	CFanWipeRender(void);
-	~CFanWipeRender(void);
+	CMultiAxisRotaryWipeRender(void);
+	~CMultiAxisRotaryWipeRender(void);
 
 	bool Init(CRenderEngine* pEngine);
 	void Uninit();
-	//bool Render(CVideoBuffer* pDest, CVideoBuffer *pSrcA, CVideoBuffer *pSrcB, FxParamBase* pParam);
 
 protected:
 	virtual bool RenderMask(CVideoBuffer* pMaskDef, BasicWipeFxParam* pParam );

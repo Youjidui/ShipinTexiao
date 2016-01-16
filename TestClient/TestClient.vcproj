@@ -456,6 +456,10 @@
 			ReferencedProjectIdentifier="{803D6361-401B-426F-B734-CE88E1075E79}"
 			RelativePathToProject=".\EffFanWipe\EffFanWipe.vcproj"
 		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{96F34596-EBBC-482C-9246-021BB0DEB86B}"
+			RelativePathToProject=".\EffMultiAxisRotaryWipe\EffMultiAxisRotaryWipe.vcproj"
+		/>
 	</References>
 	<Files>
 		<Filter

@@ -38,16 +38,7 @@ void CBarmWipeRender::Uninit()
 
 bool CBarmWipeRender::Ready(CVideoBuffer* pSrcDef, BasicWipeFxParam* pParam)
 {
-	if(INSIDE(pParam->structPattern.nPattern, 0, 5) && !INSIDE(m_privateData.m_nPattern, 0, 5))
-	{
-		m_privateData.m_nPattern = pParam->structPattern.nPattern;
-
-		SAFE_DELETE(m_privateData.m_pWipe);
-		m_privateData.m_pWipe = new CBarmWipe;
-		m_privateData.m_pWipe->Init(m_pEngine);
-	}
-
-	return NULL != m_privateData.m_pWipe;
+	return InitInstanceByPattern<CBarmWipe>(pParam->structPattern.nPattern, 0, 5);
 }
 
 bool CBarmWipeRender::RenderMask(CVideoBuffer* pMaskDef, BasicWipeFxParam* pParam)
