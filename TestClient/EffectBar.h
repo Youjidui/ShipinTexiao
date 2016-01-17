@@ -5,6 +5,8 @@
 #include "ParamColorKeyDlg.h"
 #include "ParamAmoebaWipeDlg.h"
 #include "ParamBarmWipeDlg.h"
+#include "ParamFanWipeDlg.h"
+#include "ParamMARWipeDlg.h"
 #include "ParamMatrixWipeDlg.h"
 #include "PushDlg.h"
 #include "ParamChromaKeyDlg.h"
@@ -48,8 +50,8 @@ public:
 	CParamColorKeyDlg m_colorKeyDlg;
 	CParamAmoebaWipeDlg m_amoebaWipeDlg;
 	CParamBarmWipeDlg m_barmWipeDlg;
-	CParamBasicWipeDlg m_fanWipeDlg;
-	CParamBasicWipeDlg m_MARWipeDlg;
+	CParamFanWipeDlg m_fanWipeDlg;
+	CParamMARWipeDlg m_MARWipeDlg;
 	CParamMatrixWipeDlg m_matrixWipeDlg;
 	CParamPushDlg m_pushDlg;
 	CParamChromaKeyDlg m_chromaKeyDlg;

@@ -16,8 +16,6 @@ IMPLEMENT_DYNAMIC(CEffectBar, CDialog)
 
 CEffectBar::CEffectBar(CWnd* pParent /*=NULL*/)
 	: CDialog(CEffectBar::IDD, pParent)
-	, m_fanWipeDlg(FX_FAN_WIPE)
-	, m_MARWipeDlg(FX_MULTI_AXIS_ROTARY_WIPE)
 {
 
 }

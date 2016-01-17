@@ -22,6 +22,7 @@ BEGIN_MESSAGE_MAP(CTestClientView, CView)
 	ON_COMMAND(ID_FILE_PRINT, &CView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_DIRECT, &CView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CTestClientView::OnFilePrintPreview)
+	ON_WM_ERASEBKGND()
 END_MESSAGE_MAP()
 
 // CTestClientView 构造/析构
@@ -117,3 +118,9 @@ CTestClientDoc* CTestClientView::GetDocument() const // 非调试版本是内联的
 
 
 // CTestClientView 消息处理程序
+
+BOOL CTestClientView::OnEraseBkgnd(CDC* pDC)
+{
+	return TRUE;
+	//return CView::OnEraseBkgnd(pDC);
+}

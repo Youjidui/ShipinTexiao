@@ -75,17 +75,17 @@ bool CWipeRenderBase::Render( CVideoBuffer* pDest, CVideoBuffer* pSrcA, CVideoBu
 		std::swap(pSrcA, pSrcB);
 	}
 
-	pParam->structPattern.fOffset = min(pParam->structPattern.fOffset, 1.f);
-	if((pParam->structPattern.fOffset <= 0.0f || pParam->structPattern.fOffset > 1.0f) && pParam->structPattern.fCenterX == 0.0f && pParam->structPattern.fCenterY == 0.0f)
-	{	
-		{
-			m_pEngine->EffectVideoCopy(pSrcA, pDest);
-			//pDstDef->fAlphaValue *= pParam->structGeneral.fTransparency;
-		}
-		return TRUE;
-	}
+	//pParam->structPattern.fOffset = CLAMP(pParam->structPattern.fOffset, 0.f, 1.f);
+	//if((pParam->structPattern.fOffset <= 0.0f || pParam->structPattern.fOffset > 1.0f) && pParam->structPattern.fCenterX == 0.0f && pParam->structPattern.fCenterY == 0.0f)
+	//{	
+	//	{
+	//		m_pEngine->EffectVideoCopy(pSrcA, pDest);
+	//		//pDstDef->fAlphaValue *= pParam->structGeneral.fTransparency;
+	//	}
+	//	return TRUE;
+	//}
 
-	Ready(pSrcA, pParam);	
+	Ready(pSrcA, pParam);
 
 	// generate mask
 	CVideoBufferManager* pBufMgr = m_pEngine->GetVideoBufferManager();
@@ -119,7 +119,7 @@ bool CWipeRenderBase::Render( CVideoBuffer* pDest, CVideoBuffer* pSrcA, CVideoBu
 			ASSERT(bOK);
 			//D3DXSaveSurfaceToFile(_T("./BarmWipe_Mask.DDS"), D3DXIFF_DDS, pMask->GetSurface(), NULL, NULL);
 
-			CVideoBuffer* pNewMask = RenderMulitDivide(pMask,pSrcA, pParam, bProcessMultiple,bProcessDivide);
+			CVideoBuffer* pNewMask = RenderMulitDivide(pMask,pSrcB, pParam, bProcessMultiple,bProcessDivide);
 			ASSERT(pNewMask);
 			if(pNewMask != pMask)
 			{
@@ -128,7 +128,7 @@ bool CWipeRenderBase::Render( CVideoBuffer* pDest, CVideoBuffer* pSrcA, CVideoBu
 			}
 			//D3DXSaveSurfaceToFile(_T("./BarmWipe_Mask_2.bmp"), D3DXIFF_BMP, pMask->GetSurface(), NULL, NULL);
 
-			bOK = RenderDrawOut(pDest, pSrcB, pSrcA, pMask, pParam);
+			bOK = RenderDrawOut(pDest, pSrcA, pSrcB, pMask, pParam);
 			ASSERT(bOK);
 			//D3DXSaveSurfaceToFile(_T("./BarmWipe_.bmp"), D3DXIFF_BMP, pMask->GetSurface(), NULL, NULL);
 

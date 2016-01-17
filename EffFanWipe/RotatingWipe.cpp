@@ -44,6 +44,9 @@ HRESULT CRotatingWipe::Draw(CVideoBuffer* pMaskDef, BasicWipeFxParam* pParam)
 
 	bool bOK = m_pEngine->SetRenderTarget(pMaskDef);
 	ASSERT(bOK);
+	hr = pDevice->ColorFill(pMaskDef->GetSurface(), NULL, 0xffffffff);
+	//hr = pDevice->Clear(0, NULL, D3DCLEAR_TARGET, D3DCOLOR_ARGB(0xff,0xff,0xff,0xff), 0, 0);
+	ASSERT(SUCCEEDED(hr));
 
 	D3DXMATRIXA16 matAxisTrans,matRot,matTrans,matWorld,matCombine,matType;
 
@@ -161,6 +164,8 @@ HRESULT CRotatingWipe::Draw(CVideoBuffer* pMaskDef, BasicWipeFxParam* pParam)
 	}
 	hr = m_pEffect->End();
 	ASSERT(SUCCEEDED(hr));
+
+	//D3DXSaveSurfaceToFile(_T("./Fan_Rotating_Wipe.dds"), D3DXIFF_DDS, pMaskDef->GetSurface(), NULL, NULL);
 	return hr;
 }
 

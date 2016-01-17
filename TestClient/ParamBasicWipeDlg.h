@@ -15,7 +15,6 @@ public:
 	//void SetEffectName(LPCTSTR pEffectName){m_EffectName = pEffectName;}
 
 protected:
-public:
 	void SetParam(BasicWipeFxParam* pParam) {m_pParam = pParam;}
 
 protected:

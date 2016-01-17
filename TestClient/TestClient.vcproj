@@ -536,6 +536,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ParamFanWipeDlg.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ParamMARWipeDlg.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\ParamMatrixWipeDlg.cpp"
 				>
 			</File>
@@ -695,6 +703,14 @@
 			</File>
 			<File
 				RelativePath=".\ParamFadeFromToDlg.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ParamFanWipeDlg.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ParamMARWipeDlg.h"
 				>
 			</File>
 			<File
