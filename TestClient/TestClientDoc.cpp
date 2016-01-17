@@ -23,6 +23,7 @@
 #include "../EffBarmWipeTrans/BarmWipeRender.h"
 #include "../EffFanWipe/FanWipeRender.h"
 #include "../EffMatrixWipeTrans/MatrixWipeRender.h"
+#include "../EffMultiAxisRotaryWipe/MultiAxisRotaryWipeRender.h"
 #include "../EffChromaKey/ChromaKeyRender.h"
 #include "../EffPageRoll/PageRollRender.h"
 #include "../SonyDME3DTransform/SonyDME3DTransformRender.h"
@@ -507,6 +508,14 @@ bool CTestClientDoc::EffectRender(CVideoBuffer* pDest, CVideoBuffer* pSrc, CVide
 	else if(FX_FAN_WIPE == m_strEffectName)
 	{
 		CFanWipeRender eff;
+		if(eff.Init(m_pRenderEngine))
+		{
+			bOK = eff.Render(pDest, pSrc, pSrc2, (BasicWipeFxParam*)m_pEffectParam);
+		}
+	}
+	else if(FX_MULTI_AXIS_ROTARY_WIPE == m_strEffectName)
+	{
+		CMultiAxisRotaryWipeRender eff;
 		if(eff.Init(m_pRenderEngine))
 		{
 			bOK = eff.Render(pDest, pSrc, pSrc2, (BasicWipeFxParam*)m_pEffectParam);

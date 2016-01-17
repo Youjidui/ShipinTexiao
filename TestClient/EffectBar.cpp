@@ -16,6 +16,8 @@ IMPLEMENT_DYNAMIC(CEffectBar, CDialog)
 
 CEffectBar::CEffectBar(CWnd* pParent /*=NULL*/)
 	: CDialog(CEffectBar::IDD, pParent)
+	, m_fanWipeDlg(FX_FAN_WIPE)
+	, m_MARWipeDlg(FX_MULTI_AXIS_ROTARY_WIPE)
 {
 
 }
@@ -79,13 +81,29 @@ void CEffectBar::OnBnClickedParameters()
 			}
 			m_amoebaWipeDlg.ShowWindow(SW_SHOW);
 		}
-		else if(FX_BARM_WIPE == str || FX_FAN_WIPE == str)
+		else if(FX_BARM_WIPE == str)
 		{
 			if(!m_barmWipeDlg.GetSafeHwnd())
 			{
 				m_barmWipeDlg.Create(CParamBarmWipeDlg::IDD);
 			}
 			m_barmWipeDlg.ShowWindow(SW_SHOW);
+		}
+		else if(FX_FAN_WIPE == str)
+		{
+			if(!m_fanWipeDlg.GetSafeHwnd())
+			{
+				m_fanWipeDlg.Create(m_fanWipeDlg.IDD);
+			}
+			m_fanWipeDlg.ShowWindow(SW_SHOW);
+		}
+		else if(FX_MULTI_AXIS_ROTARY_WIPE == str)
+		{
+			if(!m_MARWipeDlg.GetSafeHwnd())
+			{
+				m_MARWipeDlg.Create(m_MARWipeDlg.IDD);
+			}
+			m_MARWipeDlg.ShowWindow(SW_SHOW);
 		}
 		else if(FX_MATRIX_WIPE == str)
 		{
@@ -273,9 +291,22 @@ BOOL CEffectBar::OnInitDialog()
 		pParam->cbSize = sizeof(BarmWipeFxParam);
 		m_ctrlEffects.SetItemDataPtr(i, pParam);
 		m_barmWipeDlg.SetParam(pParam);
-
-		i = m_ctrlEffects.AddString(FX_FAN_WIPE);
+	}
+	i = m_ctrlEffects.AddString(FX_FAN_WIPE);
+	{
+		BasicWipeFxParam* pParam = new BasicWipeFxParam;
+		pParam->cbSize = sizeof(BasicWipeFxParam);
+		strcpy(pParam->FxType, "FanWipe");
 		m_ctrlEffects.SetItemDataPtr(i, pParam);
+		m_fanWipeDlg.SetParam(pParam);
+	}
+	i = m_ctrlEffects.AddString(FX_MULTI_AXIS_ROTARY_WIPE);
+	{
+		BasicWipeFxParam* pParam = new BasicWipeFxParam;
+		pParam->cbSize = sizeof(BasicWipeFxParam);
+		strcpy(pParam->FxType, "MARWipe");
+		m_ctrlEffects.SetItemDataPtr(i, pParam);
+		m_MARWipeDlg.SetParam(pParam);
 	}
 	i = m_ctrlEffects.AddString(FX_MATRIX_WIPE);
 	{
@@ -413,13 +444,10 @@ void CEffectBar::OnDestroy()
 	int n = m_ctrlEffects.GetCount();
 	for(int i = 0; i < n; ++i)
 	{
-		CString str;
-		m_ctrlEffects.GetLBText(i, str);
-		if(FX_FAN_WIPE != str)
-		{
+		//CString str;
+		//m_ctrlEffects.GetLBText(i, str);
 			void* pParam = m_ctrlEffects.GetItemDataPtr(i);
 			delete pParam;
-		}
 	}
 
 	CDialog::OnDestroy();
@@ -451,9 +479,21 @@ void CEffectBar::OnProgressChange( int nPos )
 			pParam->fOffset = nPos / 10000.f;
 			AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)(LPCTSTR)str, (LPARAM)pParam);
 		}
-		if(FX_BARM_WIPE == str || FX_FAN_WIPE == str)
+		if(FX_BARM_WIPE == str )
 		{
 			BarmWipeFxParam* pParam = (BarmWipeFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
+			pParam->structPattern.fOffset = nPos / 10000.f;
+			AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)(LPCTSTR)str, (LPARAM)pParam);
+		}
+		if(FX_FAN_WIPE == str )
+		{
+			BasicWipeFxParam* pParam = (BasicWipeFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
+			pParam->structPattern.fOffset = nPos / 10000.f;
+			AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)(LPCTSTR)str, (LPARAM)pParam);
+		}
+		if(FX_MULTI_AXIS_ROTARY_WIPE == str)
+		{
+			BasicWipeFxParam* pParam = (BasicWipeFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
 			pParam->structPattern.fOffset = nPos / 10000.f;
 			AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)(LPCTSTR)str, (LPARAM)pParam);
 		}
@@ -551,9 +591,19 @@ void CEffectBar::SetProgress(CSliderCtrl* pCtrl)
 			AmoebaWipeFxParam* pParam = (AmoebaWipeFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
 			if(pParam)	pCtrl->SetPos(pParam->fOffset * 10000);
 		}
-		else if(FX_BARM_WIPE == str || FX_FAN_WIPE == str)
+		else if(FX_BARM_WIPE == str )
 		{
 			BarmWipeFxParam* pParam = (BarmWipeFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
+			if(pParam)	pCtrl->SetPos(pParam->structPattern.fOffset * 10000);
+		}
+		else if(FX_FAN_WIPE == str )
+		{
+			BasicWipeFxParam* pParam = (BasicWipeFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
+			if(pParam)	pCtrl->SetPos(pParam->structPattern.fOffset * 10000);
+		}
+		else if(FX_MULTI_AXIS_ROTARY_WIPE == str)
+		{
+			BasicWipeFxParam* pParam = (BasicWipeFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
 			if(pParam)	pCtrl->SetPos(pParam->structPattern.fOffset * 10000);
 		}
 		else if(FX_MATRIX_WIPE == str)

@@ -48,6 +48,8 @@ public:
 	CParamColorKeyDlg m_colorKeyDlg;
 	CParamAmoebaWipeDlg m_amoebaWipeDlg;
 	CParamBarmWipeDlg m_barmWipeDlg;
+	CParamBasicWipeDlg m_fanWipeDlg;
+	CParamBasicWipeDlg m_MARWipeDlg;
 	CParamMatrixWipeDlg m_matrixWipeDlg;
 	CParamPushDlg m_pushDlg;
 	CParamChromaKeyDlg m_chromaKeyDlg;

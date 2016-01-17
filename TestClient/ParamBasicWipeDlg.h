@@ -12,10 +12,11 @@ public:
 
 	// 对话框数据
 	enum { IDD = IDD_PARAM_BASIC_WIPE };
+	//void SetEffectName(LPCTSTR pEffectName){m_EffectName = pEffectName;}
 
 protected:
+public:
 	void SetParam(BasicWipeFxParam* pParam) {m_pParam = pParam;}
-	//void SetEffectName(LPCTSTR pEffectName){m_EffectName = pEffectName;}
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
