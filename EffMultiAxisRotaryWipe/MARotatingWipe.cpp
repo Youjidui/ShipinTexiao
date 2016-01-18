@@ -44,13 +44,16 @@ HRESULT CMARotatingWipe::Draw(CVideoBuffer* pMaskDef, BasicWipeFxParam* pParam)
 
 	bool bOK = m_pEngine->SetRenderTarget(pMaskDef);
 	ASSERT(bOK);
+	hr = pDevice->ColorFill(pMaskDef->GetSurface(), NULL, 0xffffffff);
+	//hr = pDevice->Clear(0, NULL, D3DCLEAR_TARGET, D3DCOLOR_ARGB(0xff,0xff,0xff,0xff), 0, 0);
+	ASSERT(SUCCEEDED(hr));
 
 	const VideoBufferInfo& biMask = pMaskDef->GetVideoBufferInfo();
 
 	D3DXMATRIXA16 matPrevTrans,matAxisTrans,matRot,matAxisInvTrans,matTrans,matMirror,matWorld,matCombine,matMirrorCombine,matType,matShift,matAdd;
 
 	float fAxisOffset = (pParam->structPattern.fBorderWidth + pParam->structPattern.fSoftWidth) / 4.0f + 1.0f  / biMask.nHeight;
-	fAxisOffset *= pParam->structPattern.fOffset * 2.0f - 1.0f;
+	fAxisOffset *= pParam->structPattern.fOffset * 2.0f - 1.0f;		//[-1, 1]
 
 	D3DXMatrixTranslation(&matPrevTrans,fAxisOffset,0.0f,0.0f);
 	
@@ -70,10 +73,10 @@ HRESULT CMARotatingWipe::Draw(CVideoBuffer* pMaskDef, BasicWipeFxParam* pParam)
 
 	/*/////////////////////////////////////////////////////////////////////////
 	0 1           1       1     2   1111111     3        1
-	1 1               1 1          11111              111
-	1 1 1          1 1  1           111              11111
-	1 1               1 1            1              1111111
-	1                   1
+	  1 1               1 1          11111              111
+	  1 1 1			  1 1 1           111              11111
+	  1 1               1 1            1              1111111
+	  1                   1
 	*////////////////////////////////////////////////////////////////////////
 //由于rcimage 是作闭右开，所以右 底 要移动一个像素
 	D3DXVECTOR2 vCenter,vNewCenter,vMirror;
