@@ -582,7 +582,7 @@ bool CTestClientDoc::EffectRender(CVideoBuffer* pDest, CVideoBuffer* pSrc, CVide
 		Sony3DBrokenGlassRender eff;
 		if(eff.Init(m_pRenderEngine))
 		{
-			bOK = eff.Render(pDest, pSrc, pSrc2, (Sony3DBrokenGlassEffectParam*)m_pEffectParam);
+			bOK = eff.Render(pDest, pSrc, pSrc2, (Sony3DBrokenGlassFxParam*)m_pEffectParam);
 		}
 
 	}

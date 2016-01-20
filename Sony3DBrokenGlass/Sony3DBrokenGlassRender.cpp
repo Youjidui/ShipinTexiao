@@ -215,41 +215,42 @@ void Sony3DBrokenGlassRender::Uninit()
 	}
 }
 
-bool Sony3DBrokenGlassRender::Render(CVideoBuffer* pDst, CVideoBuffer* pSrc1, CVideoBuffer* pSrc2, Sony3DBrokenGlassEffectParam* pParam)
+bool Sony3DBrokenGlassRender::Render(CVideoBuffer* pDst, CVideoBuffer* pSrc1, CVideoBuffer* pSrc2, Sony3DBrokenGlassFxParam* pParam)
 {
-
+	bool bOK = false;
 	LPDIRECT3DDEVICE9 pDevice = m_pEngine->GetDevice();
+	CVideoBufferManager* pVM = m_pEngine->GetVideoBufferManager();
 
-	//TP_VBufferDef * pSrcDef = ppSrcDef[0];
-
-	//CGPURender::Base_Render_Mini(pSrcDef, pDstDef);
-	
-	//TPGSony3DBrokenGlassEffectParam* pParam = (TPGSony3DBrokenGlassEffectParam*)pParamRaw;
-
-	// 如果不需要特技处理
-
-	// 	testTime.Begin();
+	RESET_RENDER_TARGET(m_pEngine);
+	SET_DEPTH_STENCIL(m_pEngine);
 
 	// 参数调整
 	int numXY[2] = { min(pParam->maxSizeX,pParam->divideX), min(pParam->divideY,pParam->divideY) };
 
 
-#ifdef _TRANS
+//#ifdef _TRANS
 	if(pParam->bReverse)
-		std::swap(ppSrcDef[0],ppSrcDef[1]);
-	pSrcDef = ppSrcDef[0];
-	TP_VBufferDef *pDst0 = NULL, *pDstReal = pDstDef;
-	handle_tpr hDst0 = NewRTBuffer(pDstDef->OffsetX,pDstDef->OffsetY,pDstDef->GetImageWidth(),pDstDef->GetImageHeight());
-	pDst0 = m_pResMan->GetBufferDef(hDst0);
-	pDstDef = pDst0;
+		std::swap(pSrc1, pSrc2);
 
+	CVideoBuffer* pSrcDef = pSrc1;
+	CVideoBuffer* pDst0 = NULL, *pDstReal = pDst;
+	const VideoBufferInfo& biDst = pDst->GetVideoBufferInfo();
+	VideoBufferInfo biTemp = {biDst.format, VideoBufferInfo::VIDEO_MEM, VideoBufferInfo::_IN_OUT, biDst.nWidth, biDst.nHeight};
+	//handle_tpr hDst0 = NewRTBuffer(pDstDef->OffsetX,pDstDef->OffsetY,pDstDef->GetImageWidth(),pDstDef->GetImageHeight());
+	//pDst0 = m_pResMan->GetBufferDef(hDst0);
+	//pDstDef = pDst0;
+	pDst0 = pVM->CreateVideoBuffer(biTemp);
+	ASSERT(pDst0);
+	pDst = pDst0;
+
+	float time = pParam->progress;
 	if ( pParam->fallingDirection <= 1 )
 	{
 		float fLinesInterval = 1.f / pParam->divideY;
 		float fTimeBegin = -fLinesInterval * 2.f;	// refer to dropDisturb(in fx)
 		float fTimeEnd = 1.f + fLinesInterval * 2.f + ( ( pParam->fallingDirection == 0 ) ? 1.f/2.f : sqrt(fLinesInterval/2.f) );
 
-		pParam->time = fTimeBegin + pParam->time * (fTimeEnd-fTimeBegin);
+		time = fTimeBegin + time * (fTimeEnd-fTimeBegin);
 	}
 	else
 	{
@@ -266,10 +267,10 @@ bool Sony3DBrokenGlassRender::Render(CVideoBuffer* pDst, CVideoBuffer* pSrc1, CV
 
 
 
-		pParam->time = fTimeBegin + pParam->time * (fTimeEnd-fTimeBegin);
+		time = fTimeBegin + time * (fTimeEnd-fTimeBegin);
 	}
 
-#endif	
+//#endif
 
 	// loading和计算工作
 
@@ -304,24 +305,24 @@ bool Sony3DBrokenGlassRender::Render(CVideoBuffer* pDst, CVideoBuffer* pSrc1, CV
 
 	// setRT
 	//m_pEngine->SetRenderTarget(0,pDstDef->handle,pDstDef->COLOR_BLACK(),0x00);
-	m_pEngine->SetRenderTarget(pDst);
+	bOK = m_pEngine->SetRenderTarget(pDst);
+	ASSERT(bOK);
 	
 	//float fAspect = m_pResMan->GetAspect() * m_pEngine->GetCurProfile()->nEditWidth / (float) (m_pEngine->GetCurProfile()->nEditHeight  * m_pResMan->GetAspectVerifyCoef());    
 	int nEditWidth, nEditHeight;
 	m_pEngine->GetTargetVideoSize(nEditWidth, nEditHeight);
 	float fAspect = nEditWidth * 1.0f / nEditHeight;
 	
-	VideoBufferInfo lSrcBufInfo = pSrc1->GetVideoBufferInfo();
-	VideoBufferInfo lDesBufInfo = pDst->GetVideoBufferInfo();
+	const VideoBufferInfo& biSrc = pSrc1->GetVideoBufferInfo();
 
 	D3DXMATRIX matPosQuad;
 	D3DXMatrixScaling(&matPosQuad,
-		(float)lSrcBufInfo.nWidth/lDesBufInfo.nWidth,
-		(float)lSrcBufInfo.nHeight/lSrcBufInfo.nHeight,1.f);
+		(float)biSrc.nWidth/biDst.nWidth,
+		(float)biSrc.nHeight/biDst.nHeight,1.f);
 	D3DXMATRIX matPosQuadTemp;
 	D3DXMatrixTranslation(&matPosQuadTemp,
-		-0.5f+(/*pSrcDef->OffsetX*/0 + lSrcBufInfo.nWidth/2.f)/lDesBufInfo.nWidth,
-		0.5f-(/*pSrcDef->OffsetY*/0 + lSrcBufInfo.nHeight/2.f)/lDesBufInfo.nHeight,
+		-0.5f+(/*pSrcDef->OffsetX*/0 + biSrc.nWidth/2.f)/biDst.nWidth,
+		0.5f-(/*pSrcDef->OffsetY*/0 + biSrc.nHeight/2.f)/biDst.nHeight,
 		0.f);
 	matPosQuad = matPosQuad * matPosQuadTemp;
 
@@ -369,7 +370,7 @@ bool Sony3DBrokenGlassRender::Render(CVideoBuffer* pDst, CVideoBuffer* pSrc1, CV
 	m_pSony3DBrokenGlassEffect->SetMatrix("g_matWorldViewProj",&matCombined);
 	m_pSony3DBrokenGlassEffect->SetMatrix("g_matWorldNormal",&matWorldForNormal);
 	m_pSony3DBrokenGlassEffect->SetMatrix("g_matTexture",&matTextureSrc);	
-	m_pSony3DBrokenGlassEffect->SetFloat("g_time",(pParam->time));
+	m_pSony3DBrokenGlassEffect->SetFloat("g_time",(time));
 	m_pSony3DBrokenGlassEffect->GetFxPtr()->SetIntArray( "g_numXY", numXY, 2 );
 
 	if( pParam->fallingDirection == 1 || pParam->fallingDirection == 3 )
@@ -458,7 +459,7 @@ bool Sony3DBrokenGlassRender::Render(CVideoBuffer* pDst, CVideoBuffer* pSrc1, CV
 			m_pSony3DBrokenGlassEffect->BeginPass(uPass);
 			
 			//((CBaseMesh*)(m_pResMan->GetResource(m_uResID_Mesh)))->DrawInstance(sizeof(InstanceData),numXY[0]*numXY[1]);
-			//m_pQuadMesh->DrawMeshFx();
+			bOK = m_pMesh->DrawInstance(sizeof(InstanceData),numXY[0]*numXY[1]);
 			m_pSony3DBrokenGlassEffect->EndPass();
 		}
 		m_pSony3DBrokenGlassEffect->End();
@@ -475,15 +476,12 @@ bool Sony3DBrokenGlassRender::Render(CVideoBuffer* pDst, CVideoBuffer* pSrc1, CV
 	//渲染pass结束
 	//////////////////////////////////////////////////////////////////////////
 
-#ifdef _TRANS
-	pDst0->fAlphaValue = ppSrcDef[0]->fAlphaValue;
-	BlendTwoBuffer(pDst0,ppSrcDef[1],pDstReal);
-	FreeRTBuffer(pDst0->handle);
-	pDstDef = pDstReal;
-#else
-	//TODO:
-	//pDstDef->bIsCG_BlenedBuffer = pSrcDef->bIsCG_BlenedBuffer;
-#endif
+//#ifdef _TRANS
+	//BlendTwoBuffer(pDst0,ppSrcDef[1],pDstReal);
+	bOK = m_pEngine->BlendCompose(pDstReal, pDst0, pSrc2);
+	pDst = pDstReal;
+	pVM->ReleaseVideoBuffer(pDst0);
+//#endif
 
 	// dest标志位设定
 	//TODO:

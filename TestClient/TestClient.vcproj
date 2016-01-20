@@ -560,6 +560,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ParamSony3DBrokenGlassDlg.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\ParamSonyBarnSlideDlg.cpp"
 				>
 			</File>
@@ -727,6 +731,10 @@
 			</File>
 			<File
 				RelativePath=".\ParamQuadPageRollDlg.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ParamSony3DBrokenGlassDlg.h"
 				>
 			</File>
 			<File

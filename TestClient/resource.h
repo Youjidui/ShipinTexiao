@@ -41,6 +41,7 @@
 #define IDD_PAGE_ROTATION               330
 #define IDD_QUAD_PAGE_ROLL1             331
 #define IDD_DUO_PAGE_ROLL               331
+#define IDD_SONY3D_BROKEN_GLASS         332
 #define IDC_EFFECTS                     1000
 #define IDC_PROGRESS                    1001
 #define IDC_BUTTON1                     1002
@@ -59,19 +60,23 @@
 #define IDC_SLIDER_PROGRESS             1011
 #define IDC_SLIDER_PHASE                1012
 #define IDC_SLIDER_DIVIDE_WIDTH         1012
+#define IDC_SLIDER_divideX              1012
 #define IDC_SLIDER_BUMP_DENSITY         1013
 #define IDC_SLIDER_DIVIDE_TYPE          1013
 #define IDC_SLIDER_DIVIDE_WIDTH2        1013
 #define IDC_SLIDER_REVERSE              1013
+#define IDC_SLIDER_divideY              1013
 #define IDC_SLIDER_SLANT                1014
 #define IDC_SLIDER_OFFSET1              1014
 #define IDC_SLIDER_DIVIDE_WIDTH3        1014
 #define IDC_SLIDER_FIRSTSOFTNESS        1014
+#define IDC_SLIDER_fallingDirection     1014
 #define IDC_SLIDER_HEIGHT               1015
 #define IDC_SLIDER_CENTER_X             1015
 #define IDC_SLIDER_DIVIDE_WIDTH4        1015
 #define IDC_SLIDER_FIRSTCOLOR           1015
 #define IDC_SLIDER_FIRSTCOLOR_R         1015
+#define IDC_SLIDER_rotateType           1015
 #define IDC_SLIDER_SOFT_EDGE            1016
 #define IDC_SLIDER_CENTER_Y             1016
 #define IDC_SLIDER_DIVIDE_WIDTH5        1016
@@ -280,6 +285,7 @@
 #define IDC_CHECK_bLinkCrop             1083
 #define IDC_CHECK_bReverse1             1083
 #define IDC_CHECK_FromOrTo              1083
+#define IDC_CHECK_bEnabled              1083
 #define IDC_SLIDER_movement             1084
 #define IDC_L_SPIN_Z                    1085
 #define IDC_SLIDER_movementRandom       1085
@@ -289,12 +295,18 @@
 #define IDC_SLIDER_centerY              1088
 #define IDC_L_ROTATION_Z                1089
 #define IDC_SLIDER_aspect               1089
+#define IDC_SLIDER_lightXDegree         1089
 #define IDC_SLIDER_width                1090
+#define IDC_SLIDER_lightYDegree         1090
 #define IDC_L_SRC_SPIN_Y                1091
 #define IDC_SLIDER_widthRandom          1091
+#define IDC_SLIDER_diffuse2             1091
 #define IDC_SLIDER_angleBlock           1092
+#define IDC_SLIDER_ambient1             1092
 #define IDC_L_SRC_SPIN_X                1093
 #define IDC_SLIDER_randomPix            1093
+#define IDC_SLIDER_ambient2             1093
+#define IDC_SLIDER_fovDegree            1093
 #define IDC_L_SRC_SPIN_Z                1095
 #define IDC_SLIDER_mixType              1095
 #define IDC_SLIDER_process              1096
@@ -326,9 +338,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        331
+#define _APS_NEXT_RESOURCE_VALUE        333
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1100
+#define _APS_NEXT_CONTROL_VALUE         1102
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif

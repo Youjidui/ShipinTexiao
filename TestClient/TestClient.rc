@@ -948,6 +948,40 @@ BEGIN
     CONTROL         "",IDC_SLIDER_GROUP_PATTERN,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,66,52,100,15
 END
 
+IDD_SONY3D_BROKEN_GLASS DIALOGEX 0, 0, 161, 267
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Sony 3D Broken Glass"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    PUSHBUTTON      "È¡Ïû",IDCANCEL,104,246,50,14
+    LTEXT           "progress",IDC_STATIC,7,9,29,8
+    CONTROL         "",IDC_SLIDER_PROGRESS,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,54,7,100,15
+    CONTROL         "bReverse",IDC_CHECK_bReverse,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,26,47,10
+    LTEXT           "divideX",IDC_STATIC,7,41,24,8
+    CONTROL         "",IDC_SLIDER_divideX,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,54,38,100,15
+    LTEXT           "divideY",IDC_STATIC,7,57,24,8
+    CONTROL         "",IDC_SLIDER_divideY,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,54,54,100,15
+    LTEXT           "fallingDirection",IDC_STATIC,7,73,48,8
+    CONTROL         "",IDC_SLIDER_fallingDirection,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,54,70,100,15
+    LTEXT           "rotateType",IDC_STATIC,7,89,37,8
+    CONTROL         "",IDC_SLIDER_rotateType,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,54,86,100,15
+    LTEXT           "centerX",IDC_STATIC,7,105,26,8
+    CONTROL         "",IDC_SLIDER_centerX,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,54,102,100,15
+    LTEXT           "centerY",IDC_STATIC,7,121,26,8
+    CONTROL         "",IDC_SLIDER_centerY,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,54,118,100,15
+    CONTROL         "Lighting Enabled",IDC_CHECK_bEnabled,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,138,68,10
+    LTEXT           "lightXDegree",IDC_STATIC,7,153,42,8
+    CONTROL         "",IDC_SLIDER_lightXDegree,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,54,150,100,15
+    LTEXT           "lightYDegree",IDC_STATIC,7,169,42,8
+    CONTROL         "",IDC_SLIDER_lightYDegree,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,54,166,100,15
+    LTEXT           "diffuse2",IDC_STATIC,7,185,27,8
+    CONTROL         "",IDC_SLIDER_diffuse2,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,54,182,100,15
+    LTEXT           "ambient1",IDC_STATIC,7,201,30,8
+    CONTROL         "",IDC_SLIDER_ambient1,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,54,198,100,15
+    LTEXT           "fovDegree",IDC_STATIC,7,217,35,8
+    CONTROL         "",IDC_SLIDER_fovDegree,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,54,214,100,15
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -1151,6 +1185,14 @@ BEGIN
         RIGHTMARGIN, 171
         TOPMARGIN, 7
         BOTTOMMARGIN, 311
+    END
+
+    IDD_SONY3D_BROKEN_GLASS, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 154
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 260
     END
 END
 #endif    // APSTUDIO_INVOKED

@@ -11,14 +11,14 @@ class CParamPageRotationDlg : public CDialog
 public:
 	CParamPageRotationDlg(CWnd* pParent = NULL);   // 标准构造函数
 	virtual ~CParamPageRotationDlg();
-	void SetParam(PageRotationFxParam* pParam) {m_pParam = pParam;}
 
 // 对话框数据
 	enum { IDD = IDD_PAGE_ROTATION };
-	PageRotationFxParam* m_pParam;
+	void SetParam(PageRotationFxParam* pParam) {m_pParam = pParam;}
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
+	PageRotationFxParam* m_pParam;
 
 	DECLARE_MESSAGE_MAP()
 	virtual BOOL OnInitDialog();

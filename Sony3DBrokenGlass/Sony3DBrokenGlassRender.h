@@ -12,7 +12,7 @@ public:
 
 	bool Init(CRenderEngine* pEngine);
 	void Uninit();
-	bool Render(CVideoBuffer* pDst, CVideoBuffer* pSrc1, CVideoBuffer* pSrc2, Sony3DBrokenGlassEffectParam* pParam);
+	bool Render(CVideoBuffer* pDst, CVideoBuffer* pSrc1, CVideoBuffer* pSrc2, Sony3DBrokenGlassFxParam* pParam);
 
 private:
 	CRenderEngine* m_pEngine;

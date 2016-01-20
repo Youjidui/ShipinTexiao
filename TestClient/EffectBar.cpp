@@ -223,6 +223,14 @@ void CEffectBar::OnBnClickedParameters()
 			}
 			m_sonyPinpDlg.ShowWindow(SW_SHOW);
 		}
+		else if(FX_SONY_3D_BROKEN_GLASS == str)
+		{
+			if(!m_3DBrokenGlassDlg.GetSafeHwnd())
+			{
+				m_3DBrokenGlassDlg.Create(m_3DBrokenGlassDlg.IDD);
+			}
+			m_3DBrokenGlassDlg.ShowWindow(SW_SHOW);
+		}
 	}
 }
 
@@ -407,10 +415,9 @@ BOOL CEffectBar::OnInitDialog()
 	}
 	i = m_ctrlEffects.AddString(FX_SONY_3D_BROKEN_GLASS);
 	{
-		Sony3DBrokenGlassEffectParam* p = new Sony3DBrokenGlassEffectParam;
+		Sony3DBrokenGlassFxParam* p = new Sony3DBrokenGlassFxParam;
 		m_ctrlEffects.SetItemDataPtr(i, p);
-		// 
-
+		m_3DBrokenGlassDlg.SetParam(p);
 	}
 
 	m_ctrlEffects.SetCurSel(i);
@@ -573,6 +580,12 @@ void CEffectBar::OnProgressChange( int nPos )
 			pParam->fTrans = nPos / 10000.f;
 			AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)(LPCTSTR)str, (LPARAM)pParam);
 		}
+		else if (FX_SONY_3D_BROKEN_GLASS == str)
+		{
+			Sony3DBrokenGlassFxParam* pParam = (Sony3DBrokenGlassFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
+			pParam->progress = nPos / 10000.f;
+			AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)(LPCTSTR)str, (LPARAM)pParam);
+		}
 	}
 }
 
@@ -663,6 +676,11 @@ void CEffectBar::SetProgress(CSliderCtrl* pCtrl)
 		{
 			SonyBarnSlideFxParam* pParam = (SonyBarnSlideFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
 			if(pParam)	pCtrl->SetPos(pParam->fTrans * 10000);
+		}
+		else if(FX_SONY_3D_BROKEN_GLASS == str)
+		{
+			Sony3DBrokenGlassFxParam* pParam = (Sony3DBrokenGlassFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
+			if(pParam)	pCtrl->SetPos(pParam->progress * 10000);
 		}
 		else	//不是过渡特技，没有进度条
 		{
