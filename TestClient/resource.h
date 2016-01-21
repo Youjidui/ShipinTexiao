@@ -41,6 +41,7 @@
 #define IDD_PAGE_ROTATION               330
 #define IDD_QUAD_PAGE_ROLL1             331
 #define IDD_DUO_PAGE_ROLL               331
+#define IDD_PARAM_SONY_3D_BROKEN_GLASS  332
 #define IDC_EFFECTS                     1000
 #define IDC_PROGRESS                    1001
 #define IDC_BUTTON1                     1002
@@ -229,30 +230,38 @@
 #define IDC_SLIDER_fIntervalX           1066
 #define IDC_POST_SIZE_X                 1066
 #define IDC_SLIDER_fBoundsBottom        1066
+#define IDC_DIVIDE_Y                    1066
 #define IDC_SLIDER_fIntervalY           1067
 #define IDC_PRESIZE_Y                   1067
 #define IDC_SLIDER_fTansparency         1067
+#define IDC_FALLING_DIRECTION           1067
 #define IDC_SLIDER_crSlideColor_R       1068
 #define IDC_SKEW_X                      1068
 #define IDC_SLIDER_fKeyScaleX1          1068
+#define IDC_CENTER_X                    1068
 #define IDC_SLIDER_fSlideTransparency   1069
 #define IDC_POST_LOCATION_X             1069
 #define IDC_SLIDER_fKeyScaleY1          1069
+#define IDC_CENTER_Y                    1069
 #define IDC_SLIDER_crSlideColor_B       1070
 #define IDC_SKEW_Y                      1070
 #define IDC_SLIDER_fKeyPositionX1       1070
+#define IDC_LIGHT_X_DEGREE              1070
 #define IDC_SLIDER_BackgroundColor_B    1071
 #define IDC_PERSPECTIVE                 1071
 #define IDC_SLIDER_fKeyPositionY1       1071
+#define IDC_LIGHT_Y_DEGREE              1071
 #define IDC_SLIDER_crSlideColor_G       1072
 #define IDC_POST_LOCATION_Y             1072
 #define IDC_SLIDER_nKeyCount            1072
+#define IDC_DIFFUSE_2                   1072
 #define IDC_SLIDER_nRotate              1073
 #define IDC_L_LOCATION_X                1073
 #define IDC_SLIDER_fKeyScaleX2          1073
 #define IDC_SLIDER_BackgroundColor_R    1074
 #define IDC_POST_SIZE_Y                 1074
 #define IDC_SLIDER_fKeyScaleY2          1074
+#define IDC_AMBIENT_1                   1074
 #define IDC_SLIDER_BackgroundColor_G    1075
 #define IDC__L_LOCATION_Z               1075
 #define IDC_L_LOCATION_Z                1075
@@ -260,6 +269,7 @@
 #define IDC_SLIDER_fPerspective         1076
 #define IDC_CHECK_BFLITER               1076
 #define IDC_SLIDER_fKeyPositionY2       1076
+#define IDC_FOV_DEGREE                  1076
 #define IDC__L_LOCATION_Y               1077
 #define IDC_L_LOCATION_Y                1077
 #define IDC_CHECK_bFilter               1078
@@ -303,7 +313,26 @@
 #define IDC_EDIT_FadeColor              1098
 #define IDC_L_AXIS_Z                    1099
 #define IDC_SLIDER_nPattern             1099
+#define IDC_DIVIDE_X                    1100
 #define IDC_L_AXIS_Y                    1101
+#define IDC_LOCAL_TRANSLATE_X           1102
+#define IDC_LOCAL_TRANSLATE_Y           1103
+#define IDC_LOCAL_TRANSLATE_Z           1104
+#define IDC_LOCAL_RETATE_X              1105
+#define IDC_LOCAL_ROTATE_Y              1106
+#define IDC_LOCAL_ROTATE_Z              1107
+#define IDC_SCALE_X                     1108
+#define IDC_SCALE_Y                     1109
+#define IDC_SCALE_Z                     1110
+#define IDC_WORLD_TRANSLATE_X           1111
+#define IDC_WORLD_TRANSLATE_Y           1112
+#define IDC_WORLD_TRANSLATE_Z           1113
+#define IDC_WORLD_ROTATE_X              1114
+#define IDC_WORLD_ROTATE_Y              1115
+#define IDC_WORLD_ROTATE_Z              1116
+#define IDC_REVERSE                     1117
+#define IDC_ENABLE                      1118
+#define IDC_ENABLED                     1118
 #define IDC_L_LOCATION_X2               1137
 #define IDC__L_LOCATION_Z2              1138
 #define IDC_L_LOCATION_Z2               1138
@@ -326,9 +355,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        331
+#define _APS_NEXT_RESOURCE_VALUE        333
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1100
+#define _APS_NEXT_CONTROL_VALUE         1119
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif

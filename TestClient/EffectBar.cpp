@@ -207,6 +207,14 @@ void CEffectBar::OnBnClickedParameters()
 			}
 			m_sonyPinpDlg.ShowWindow(SW_SHOW);
 		}
+		else if(FX_SONY_3D_BROKEN_GLASS == str)
+		{
+			if(!m_sony3DBrokenGlassDlg.GetSafeHwnd())
+			{
+				m_sony3DBrokenGlassDlg.Create(m_sony3DBrokenGlassDlg.IDD);
+			}
+			m_sony3DBrokenGlassDlg.ShowWindow(SW_SHOW);
+		}
 	}
 }
 
@@ -377,7 +385,7 @@ BOOL CEffectBar::OnInitDialog()
 	{
 		Sony3DBrokenGlassEffectParam* p = new Sony3DBrokenGlassEffectParam;
 		m_ctrlEffects.SetItemDataPtr(i, p);
-		// 
+		m_sony3DBrokenGlassDlg.SetParam(p);
 
 	}
 
@@ -525,6 +533,12 @@ void CEffectBar::OnProgressChange( int nPos )
 		{
 			SonyBarnSlideFxParam* pParam = (SonyBarnSlideFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
 			pParam->fTrans = nPos / 10000.f;
+			AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)(LPCTSTR)str, (LPARAM)pParam);
+		}
+		else if (FX_SONY_3D_BROKEN_GLASS == str)
+		{
+			Sony3DBrokenGlassEffectParam* pParam = (Sony3DBrokenGlassEffectParam*)m_ctrlEffects.GetItemDataPtr(nSel);
+			pParam->time = nPos / 10000.f;
 			AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)(LPCTSTR)str, (LPARAM)pParam);
 		}
 	}

@@ -20,6 +20,7 @@
 #include "ParamDissolveDlg.h"
 #include "ParamFadeFromToDlg.h"
 #include "ParamPageRotationDlg.h"
+#include "ParamSony3DBrokenGlass.h"
 
 
 // CEffectBar ¶Ô»°¿ò
@@ -63,6 +64,7 @@ public:
 	CParamDissolveDlg m_dissolveDlg;
 	CParamFadeFromToDlg m_fadeFromToDlg;
 	CParamPageRotationDlg m_pageRotationDlg;
+	CParamSony3DBrokenGlass m_sony3DBrokenGlassDlg;
 
 	afx_msg void OnBnClickedParameters();
 	virtual BOOL OnInitDialog();

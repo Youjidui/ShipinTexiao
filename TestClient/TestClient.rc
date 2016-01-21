@@ -948,6 +948,69 @@ BEGIN
     CONTROL         "",IDC_SLIDER_GROUP_PATTERN,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,66,52,100,15
 END
 
+IDD_PARAM_SONY_3D_BROKEN_GLASS DIALOGEX 0, 0, 579, 375
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "3D BROKEN GLASS"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "确定",IDOK,468,354,50,14
+    PUSHBUTTON      "取消",IDCANCEL,522,354,50,14
+    LTEXT           "divideX",IDC_STATIC,7,10,24,8
+    CONTROL         "",IDC_DIVIDE_X,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,63,6,116,15
+    LTEXT           "divideY",IDC_STATIC,7,23,24,8
+    CONTROL         "",IDC_DIVIDE_Y,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,63,20,116,15
+    LTEXT           "fallingDirection",IDC_STATIC,7,304,48,8
+    CONTROL         "",IDC_FALLING_DIRECTION,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,63,302,116,15
+    LTEXT           "centerX",IDC_STATIC,7,338,26,8
+    CONTROL         "",IDC_CENTER_X,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,63,336,116,15
+    LTEXT           "centerY",IDC_STATIC,7,355,26,8
+    CONTROL         "",IDC_CENTER_Y,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,63,353,116,15
+    LTEXT           "transformPackParam",IDC_STATIC,7,49,67,8
+    LTEXT           "fLocalTranslateX",IDC_STATIC,7,65,54,8
+    CONTROL         "",IDC_LOCAL_TRANSLATE_X,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,63,62,116,15
+    LTEXT           "fLocalTranslateY",IDC_STATIC,7,80,54,8
+    CONTROL         "",IDC_LOCAL_TRANSLATE_Z,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,63,92,116,15
+    LTEXT           "fLocalTranslateZ",IDC_STATIC,7,95,54,8
+    CONTROL         "",IDC_LOCAL_TRANSLATE_Y,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,63,77,116,15
+    LTEXT           "fLocalRotateX",IDC_STATIC,7,110,46,8
+    CONTROL         "",IDC_LOCAL_RETATE_X,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,63,107,116,15
+    LTEXT           "fLocalRotateY",IDC_STATIC,7,125,46,8
+    CONTROL         "",IDC_LOCAL_ROTATE_Y,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,63,122,116,15
+    LTEXT           "fLocalRotateZ",IDC_STATIC,7,140,46,8
+    CONTROL         "",IDC_SCALE_X,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,63,152,116,15
+    LTEXT           "fScaleX",IDC_STATIC,7,155,24,8
+    CONTROL         "",IDC_LOCAL_ROTATE_Z,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,63,137,116,15
+    LTEXT           "fScaleY",IDC_STATIC,7,170,24,8
+    CONTROL         "",IDC_SCALE_Y,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,63,167,116,15
+    LTEXT           "fScaleZ",IDC_STATIC,7,185,24,8
+    CONTROL         "",IDC_SCALE_Z,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,63,182,116,15
+    LTEXT           "fWorldTranslateX",IDC_STATIC,7,200,56,8
+    CONTROL         "",IDC_WORLD_TRANSLATE_Y,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,63,212,116,15
+    LTEXT           "fWorldTranslateY",IDC_STATIC,7,215,56,8
+    CONTROL         "",IDC_WORLD_TRANSLATE_X,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,63,197,116,15
+    LTEXT           "fWorldTranslateZ",IDC_STATIC,7,230,56,8
+    CONTROL         "",IDC_WORLD_TRANSLATE_Z,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,63,227,116,15
+    LTEXT           "fWorldRotateX",IDC_STATIC,7,245,48,8
+    CONTROL         "",IDC_WORLD_ROTATE_X,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,63,242,116,15
+    LTEXT           "fWorldRotateY",IDC_STATIC,7,260,48,8
+    CONTROL         "",IDC_WORLD_ROTATE_Z,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,63,272,116,15
+    LTEXT           "fWorldRotateZ",IDC_STATIC,7,275,48,8
+    CONTROL         "",IDC_WORLD_ROTATE_Y,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,63,257,116,15
+    LTEXT           "lightXDegree",IDC_STATIC,187,84,42,8
+    CONTROL         "",IDC_LIGHT_X_DEGREE,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,236,81,116,15
+    LTEXT           "lightYDegree",IDC_STATIC,187,103,42,8
+    CONTROL         "",IDC_LIGHT_Y_DEGREE,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,236,100,116,15
+    LTEXT           "diffuse2",IDC_STATIC,187,124,27,8
+    CONTROL         "",IDC_DIFFUSE_2,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,236,121,116,15
+    LTEXT           "ambient1",IDC_STATIC,187,143,30,8
+    CONTROL         "",IDC_AMBIENT_1,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,236,140,116,15
+    LTEXT           "fovDegree",IDC_STATIC,385,68,35,8
+    CONTROL         "",IDC_FOV_DEGREE,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,433,65,116,15
+    LTEXT           "lightingPackParam",IDC_STATIC,188,49,58,8
+    CONTROL         "bReverse",IDC_REVERSE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,68,322,47,10
+    CONTROL         "Enabled",IDC_ENABLED,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,241,65,41,10
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -1151,6 +1214,14 @@ BEGIN
         RIGHTMARGIN, 171
         TOPMARGIN, 7
         BOTTOMMARGIN, 311
+    END
+
+    IDD_PARAM_SONY_3D_BROKEN_GLASS, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 572
+        TOPMARGIN, 6
+        BOTTOMMARGIN, 368
     END
 END
 #endif    // APSTUDIO_INVOKED
