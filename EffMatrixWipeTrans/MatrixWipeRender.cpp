@@ -21,7 +21,7 @@ bool CMatrixWipeRender::Init( CRenderEngine* pEngine )
 
 	LPDIRECT3DDEVICE9 pDevice = pEngine->GetDevice();
 	CResourceManager* pResMan = pEngine->GetResourceManager();
-	m_pMaskEffect = pResMan->CreateEffect(pDevice, _T("NewEffects/GMatrix_Mask.fx"));
+	m_pMaskEffect = pResMan->CreateEffect(pDevice, _T("NewEffects/Matrix_Mask.fx"));
 	ASSERT(m_pMaskEffect);
 
 	return m_pMaskEffect && bOK;
@@ -43,13 +43,5 @@ bool CMatrixWipeRender::RenderMask( CVideoBuffer*pMaskDef, BasicWipeFxParam* pPa
 
 bool CMatrixWipeRender::Ready( CVideoBuffer* pSrcDef, BasicWipeFxParam* pParam )
 {
-	if(INSIDE(pParam->structPattern.nPattern, 0, 15) && !INSIDE(m_privateData.m_nPattern, 0, 15))
-	{
-		m_privateData.m_nPattern = pParam->structPattern.nPattern;
-
-		SAFE_DELETE(m_privateData.m_pWipe);
-		m_privateData.m_pWipe = new CMatrixWipe;
-		m_privateData.m_pWipe->Init(m_pEngine);
-	}
-	return NULL != m_privateData.m_pWipe;
+	return InitInstanceByPattern<CMatrixWipe>(pParam->structPattern.nPattern, 0, 15);
 }

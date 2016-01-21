@@ -12,6 +12,8 @@ const D3DVERTEXELEMENT9 declWipe[] =
 	D3DDECL_END()
 };
 
+#define TPXMESH_POOL D3DXMESH_MANAGED
+
 class CWipeBase
 {
 public:
@@ -31,6 +33,7 @@ protected:
 public:
 	D3DXMATRIXA16		m_matAspectProj;
 	float				m_fAspect;
+	D3DXMATRIXA16	m_matWorld,m_matView,m_matProj;
 };
 
 

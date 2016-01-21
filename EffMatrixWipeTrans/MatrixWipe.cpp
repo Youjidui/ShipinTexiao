@@ -52,7 +52,7 @@ HRESULT CMatrixWipe::Init(CRenderEngine* pEngine)
 	CResourceManager* pResMan = m_pEngine->GetResourceManager();
 	CVideoBufferManager* pVM = m_pEngine->GetVideoBufferManager();
 
-	m_pEffect = pResMan->CreateEffect(pDevice, _T("NewEffects/GMatrix_Mask.fx"));
+	m_pEffect = pResMan->CreateEffect(pDevice, _T("NewEffects/Matrix_Mask.fx"));
 	ASSERT(m_pEffect);
 
 	//m_pTexture = pResMan->CreateTexture(20,20,D3DUSAGE_DYNAMIC,D3DFMT_R32F,D3DPOOL_DEFAULT,&UUID_TEXTURE);

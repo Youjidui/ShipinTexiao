@@ -784,37 +784,43 @@ struct TransformParam{
 		fWorldTranslateX = fWorldTranslateY = fWorldTranslateZ = 0.f;
 		fWorldRotateX = fWorldRotateY = fWorldRotateZ = 0.f;
 	}
+	TransformParam() { identity(); }
 };
 
 struct LightingParam
 {
 	bool	bEnabled;
-	float	lightXDegree,lightYDegree;
-	float	diffuse2;
-	float	ambient1;
+	float	lightXDegree,lightYDegree;	//90.f,-90.f, 0.001f,5,3,0.f
+	float	diffuse2;					//2.f, 0, 0.0001f, 5, 4, 0.f
+	float	ambient1;					//1.f, 0, 0.0001f, 5, 4, 1.f
+
+	LightingParam() : bEnabled(false), lightXDegree(0.f), lightYDegree(0.f), diffuse2(0.f), ambient1(1.f) {}
 };
 
 struct PerspectiveParam
 {
-	float fovDegree;
+	float fovDegree;		//120.f, 10.f, 0.001f, 5, 3, 30.f
+
+	PerspectiveParam() : fovDegree(30.f) {}
 };
 
-struct Sony3DBrokenGlassEffectParam : public FxParamBase
+struct Sony3DBrokenGlassFxParam : public FxParamBase
 {
 	static const UINT maxSizeX = 40;
 	static const UINT maxSizeY = 40;
 
-	int divideX, divideY;
-	float time;
+	float progress;				//1.f, 0, 0.0001f, 5, 4, 0.5f
+	BOOL bReverse;
+
+	int divideX, divideY;		//40, 1, 1, 10
+	int fallingDirection;		// 0 bottom, 1 top, 2 inside, 3 outside
+	int rotateType;
+
+	float centerX, centerY;		//1.f, 0, 0.0001f, 5, 4, 0.5f ??
 
 	TransformParam	transformPackParam;
 	LightingParam	lightingPackParam;
 	PerspectiveParam	perspPackParam;
-
-	int fallingDirection;
-	BOOL bReverse;
-
-	float centerX, centerY;
 
 	void computeTransformParamForTrans(int rotateType, float progress)	// 0 none 1 clockwise -1 counter clockwise
 	{
@@ -839,6 +845,7 @@ struct Sony3DBrokenGlassEffectParam : public FxParamBase
 		transformPackParam.identity();
 	}
 
+	Sony3DBrokenGlassFxParam() : progress(0.5f), bReverse(false), divideX(10), divideY(10), fallingDirection(0), rotateType(0), centerX(0.5f), centerY(0.5f) {computeTransformParamForTrans(rotateType, progress);}
 };
 
 

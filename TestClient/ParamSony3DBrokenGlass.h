@@ -13,10 +13,10 @@ public:
 
 // 对话框数据
 	enum { IDD = IDD_PARAM_SONY_3D_BROKEN_GLASS };
-	void SetParam(Sony3DBrokenGlassEffectParam* pParam) {m_pParam = pParam;}
+	void SetParam(Sony3DBrokenGlassFxParam* pParam) {m_pParam = pParam;}
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
-	Sony3DBrokenGlassEffectParam* m_pParam;
+	Sony3DBrokenGlassFxParam* m_pParam;
 	DECLARE_MESSAGE_MAP()
 
 public:

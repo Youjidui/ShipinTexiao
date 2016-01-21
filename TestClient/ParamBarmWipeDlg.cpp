@@ -28,7 +28,7 @@ void CParamBarmWipeDlg::DoDataExchange(CDataExchange* pDX)
 }
 
 
-BEGIN_MESSAGE_MAP(CParamBarmWipeDlg, CDialog)
+BEGIN_MESSAGE_MAP(CParamBarmWipeDlg, CParamBasicWipeDlg)
 	ON_WM_HSCROLL()
 END_MESSAGE_MAP()
 

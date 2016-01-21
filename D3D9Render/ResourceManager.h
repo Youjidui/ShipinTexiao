@@ -56,6 +56,21 @@ public:
 		UINT                 uIBufferSize,
 		UINT                 uIBNum,
 		LPCTSTR          pszMeshName);
+	CBaseMesh* CreateMesh(LPDIRECT3DDEVICE9 pDevice,
+		void*               pVertexInfo_indexed,
+		UINT                uVBufferSize_indexed,
+		UINT                uVertexStride_indexed,
+		void*				 pVertexInfo_instance,
+		UINT				 uVBufferSize_instance,
+		UINT				 uVertexStride_instance,
+		D3DPRIMITIVETYPE    ePrimitiveType,
+		UINT                uPrimitiveCount,
+		DWORD               dwFVF,
+		const D3DVERTEXELEMENT9*  pVertexElement,
+		const unsigned short**    ppIndexInfo,
+		UINT                uIBufferSize,
+		UINT                uIBNum,
+		LPCTSTR          pszMeshName);
 	CBaseMesh* FindMesh(LPCTSTR pszResName);
 	CBaseFx* CreateEffect(LPDIRECT3DDEVICE9 pDevice, LPCTSTR lpszEffectName, const char** ppszMacros = NULL, int nMacroCount = 0);
 	CVertexShader* CreateVertexShader(LPDIRECT3DDEVICE9 pDevice, LPCTSTR lpszShaderName, const char** ppszMacros = NULL, int nMacroCount = 0);

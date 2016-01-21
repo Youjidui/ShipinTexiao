@@ -383,7 +383,7 @@ BOOL CEffectBar::OnInitDialog()
 	}
 	i = m_ctrlEffects.AddString(FX_SONY_3D_BROKEN_GLASS);
 	{
-		Sony3DBrokenGlassEffectParam* p = new Sony3DBrokenGlassEffectParam;
+		Sony3DBrokenGlassFxParam* p = new Sony3DBrokenGlassFxParam;
 		m_ctrlEffects.SetItemDataPtr(i, p);
 		m_sony3DBrokenGlassDlg.SetParam(p);
 
@@ -537,8 +537,8 @@ void CEffectBar::OnProgressChange( int nPos )
 		}
 		else if (FX_SONY_3D_BROKEN_GLASS == str)
 		{
-			Sony3DBrokenGlassEffectParam* pParam = (Sony3DBrokenGlassEffectParam*)m_ctrlEffects.GetItemDataPtr(nSel);
-			pParam->time = nPos / 10000.f;
+			Sony3DBrokenGlassFxParam* pParam = (Sony3DBrokenGlassFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
+			pParam->progress = nPos / 10000.f;
 			AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)(LPCTSTR)str, (LPARAM)pParam);
 		}
 	}

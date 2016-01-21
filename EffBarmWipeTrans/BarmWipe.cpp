@@ -433,7 +433,7 @@ HRESULT CBarmWipe::CreateMesh()
 
 		m_pBarmMesh = pResMgr->CreateMesh(pDevice, pMesh, pszMeshName);
 		ASSERT(m_pBarmMesh);
-	}	
+	}
 
 	return S_OK;
 }
