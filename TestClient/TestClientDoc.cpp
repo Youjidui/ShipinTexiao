@@ -391,7 +391,7 @@ bool CTestClientDoc::Render()
 			}
 			else
 			{
-				AfxMessageBox(_T("请确保 2 个图层的图像文件都正确指定了"));
+				//AfxMessageBox(_T("请确保 2 个图层的图像文件都正确指定了"));
 			}
 		}
 	}

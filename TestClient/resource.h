@@ -42,6 +42,8 @@
 #define IDD_QUAD_PAGE_ROLL1             331
 #define IDD_DUO_PAGE_ROLL               331
 #define IDD_PARAM_SONY_3D_BROKEN_GLASS  332
+#define IDD_PARAM_SONY_3D_BROKEN_GLASS1 333
+#define IDD_PARAM_SONY_3D_BROKEN_GLASS_TRANS 333
 #define IDC_EFFECTS                     1000
 #define IDC_PROGRESS                    1001
 #define IDC_BUTTON1                     1002

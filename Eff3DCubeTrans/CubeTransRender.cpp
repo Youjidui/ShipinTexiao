@@ -275,7 +275,7 @@ bool CCubeTransRender::Render( CVideoBuffer* pDest, CVideoBuffer *pSrcA, CVideoB
 		uPass = 0;
 	else
 		uPass = 1;
-	if(pParam->light.bEnable)
+	if(pParam->light.bEnabled)
 		uPass += 2;
 
 	//handle_tpr hTemp[2] = {INVALID_RESID,INVALID_RESID};

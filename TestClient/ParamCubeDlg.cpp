@@ -93,7 +93,7 @@ BOOL CParamCubeDlg::OnInitDialog()
 	if(m_pParam)	pCtrl->SetPos(m_pParam->trans.fWorldRotateZ*10000.f);
 
 	CButton* pBtn = (CButton*)GetDlgItem(IDC_CHECK_Light);
-	pBtn->SetCheck(m_pParam->light.bEnable);
+	pBtn->SetCheck(m_pParam->light.bEnabled);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_fDirectionX);
 	pCtrl->SetRange(-90*decimal_point, 90*decimal_point, TRUE);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->light.fDirectionX*decimal_point);
@@ -310,7 +310,7 @@ void CParamCubeDlg::OnHScroll(UINT nSBCode, UINT uPos, CScrollBar* pScrollBar)
 void CParamCubeDlg::OnBnClickedCheckLight()
 {
 	CButton* pBtn = (CButton*)GetDlgItem(IDC_CHECK_Light);
-	m_pParam->light.bEnable = pBtn->GetCheck();
+	m_pParam->light.bEnabled = pBtn->GetCheck();
 }
 
 void CParamCubeDlg::OnBnClickedCheckbreverse()

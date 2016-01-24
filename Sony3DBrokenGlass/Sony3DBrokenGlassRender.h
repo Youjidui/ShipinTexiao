@@ -22,6 +22,4 @@ private:
 
 	CVideoBuffer* m_pRandomARGBTexture;
 	CVideoBuffer* m_pRandom1024x3Texture;
-
-	D3DXMATRIXA16	m_matWorld,m_matView, m_matProj;
 };

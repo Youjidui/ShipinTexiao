@@ -43,6 +43,10 @@ BOOL CParamSony3DBrokenGlass::OnInitDialog()
 	CDialog::OnInitDialog();
 
 	CSliderCtrl* pCtrl = NULL;
+	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_PROGRESS);
+	pCtrl->SetRange(0, 10000, TRUE);
+	pCtrl->SetPos(m_pParam->progress * 10000);
+
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_DIVIDE_X);
 	pCtrl->SetRange(1, 40, TRUE);
 	pCtrl->SetPos(m_pParam->divideX);
@@ -157,6 +161,9 @@ void CParamSony3DBrokenGlass::OnHScroll(UINT nSBCode, UINT uPos, CScrollBar* pSc
 
 	switch(pScrollBar->GetDlgCtrlID())
 	{
+	case IDC_SLIDER_PROGRESS:
+		m_pParam->progress = nPos / 10000.f;
+		break;
 	case IDC_DIVIDE_X:
 		m_pParam->divideX = nPos;
 		break;

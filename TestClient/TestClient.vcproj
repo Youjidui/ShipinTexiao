@@ -552,7 +552,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\ParamSony3DBrokenGlass.cpp"
+				RelativePath=".\ParamSony3DBrokenGlassTrans.cpp"
 				>
 			</File>
 			<File
@@ -718,7 +718,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\ParamSony3DBrokenGlass.h"
+				RelativePath=".\ParamSony3DBrokenGlassTrans.h"
 				>
 			</File>
 			<File

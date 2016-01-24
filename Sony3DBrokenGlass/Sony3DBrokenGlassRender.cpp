@@ -26,6 +26,9 @@ static const D3DVERTEXELEMENT9 vertexElement[] =
 	D3DDECL_END()
 };
 
+static const UINT	maxSizeX = 40;
+static const UINT	maxSizeY = 40;
+
 
 void TransPackMatrix(const TransformParam &pTransParam, D3DXMATRIX* matWorldOut)
 {
@@ -64,6 +67,46 @@ void TransPackMatrix(const TransformParam &pTransParam, D3DXMATRIX* matWorldOut)
 	*matWorldOut = matLocalScale * matLocalRot * matLocalTrans * matWorldRot * matWorldTrans ; 
 }
 
+void	GenerateWorldMat(D3DXMATRIX& matWorld, 
+										 int dstSizeX, int dstSizeY,
+										 float srcLeft, float srcTop,
+										 int srcWidth, int srcHeight)
+{
+	D3DXMATRIX matScale, matTrans;
+
+	float fxZoom = (float)(srcWidth) / dstSizeX;
+	float fyZoom = (float)(srcHeight) / dstSizeY;
+
+	float ofx = -0.5f + fxZoom*0.5f + srcLeft / dstSizeX;
+	float ofy =  0.5f - fyZoom*0.5f - srcTop / dstSizeY;
+
+	D3DXMatrixScaling(&matScale, fxZoom, fyZoom, 1.0f);
+
+	D3DXMatrixTranslation(&matTrans, ofx, ofy, 0.0f);
+
+	matWorld = matScale*matTrans;
+}
+
+void computeTransformParamForTrans(TransformParam& transformPackParam, int rotateType, float progress)	// 0 none 1 clockwise -1 counter clockwise
+{
+	//transformPackParam.identity();
+	float fDir = 0.0f;
+	switch (rotateType)
+	{
+	case 1:
+		fDir = 1.0f;
+		break;
+	case 2:
+		fDir = -1.0f;
+		break;
+	default:
+		break;
+	}
+	transformPackParam.fLocalRotateY = progress * fDir;
+}
+
+
+
 Sony3DBrokenGlassRender::Sony3DBrokenGlassRender(void)
 : m_pEngine(NULL)
 , m_pSony3DBrokenGlassEffect(NULL)
@@ -71,13 +114,6 @@ Sony3DBrokenGlassRender::Sony3DBrokenGlassRender(void)
 , m_pRandomARGBTexture(NULL)
 , m_pRandom1024x3Texture(NULL)
 {
-	D3DXMatrixIdentity(&m_matWorld);
-	D3DXVECTOR3 vEyePt( 0.0f, 0.0f,-0.5f/tanf(D3DX_PI/8) );
-	D3DXVECTOR3 vLookatPt( 0.0f, 0.0f, 0.0f );
-	D3DXVECTOR3 vUpVec( 0.0f, 1.0f, 0.0f );	
-	D3DXMatrixLookAtLH( &m_matView, &vEyePt, &vLookatPt, &vUpVec );
-	D3DXMatrixPerspectiveFovLH( &m_matProj, D3DX_PI/4, 1.0f, 0.1f, 1000.0f );
-
 }
 
 Sony3DBrokenGlassRender::~Sony3DBrokenGlassRender(void)
@@ -100,13 +136,12 @@ bool Sony3DBrokenGlassRender::Init(CRenderEngine* pEngine)
 	m_pMesh = pResMgr->FindMesh(pszMeshName);
 	if( !m_pMesh )
 	{
-		static const UINT	maxSizeX = 40;
-		static const UINT	maxSizeY = 40;
 		/*
 		0----2/3
 		|  /  |
 		1/4---5
 		*/
+
 		{
 			VertexData vertexQuadData[6];
 			vertexQuadData[0].position = D3DXVECTOR3(-0.5f,0.5f,0.f);
@@ -225,8 +260,9 @@ bool Sony3DBrokenGlassRender::Render(CVideoBuffer* pDst, CVideoBuffer* pSrc1, CV
 	SET_DEPTH_STENCIL(m_pEngine);
 
 	// 参数调整
-	int numXY[2] = { min(pParam->maxSizeX,pParam->divideX), min(pParam->divideY,pParam->divideY) };
-
+	int numXY[2] = { min(maxSizeX, pParam->divideX), min(maxSizeY, pParam->divideY) };
+	const VideoBufferInfo& biDst = pDst->GetVideoBufferInfo();
+	float time = pParam->progress;
 
 //#ifdef _TRANS
 	if(pParam->bReverse)
@@ -234,7 +270,6 @@ bool Sony3DBrokenGlassRender::Render(CVideoBuffer* pDst, CVideoBuffer* pSrc1, CV
 
 	CVideoBuffer* pSrcDef = pSrc1;
 	CVideoBuffer* pDst0 = NULL, *pDstReal = pDst;
-	const VideoBufferInfo& biDst = pDst->GetVideoBufferInfo();
 	VideoBufferInfo biTemp = {biDst.format, VideoBufferInfo::VIDEO_MEM, VideoBufferInfo::_IN_OUT, biDst.nWidth, biDst.nHeight};
 	//handle_tpr hDst0 = NewRTBuffer(pDstDef->OffsetX,pDstDef->OffsetY,pDstDef->GetImageWidth(),pDstDef->GetImageHeight());
 	//pDst0 = m_pResMan->GetBufferDef(hDst0);
@@ -243,7 +278,8 @@ bool Sony3DBrokenGlassRender::Render(CVideoBuffer* pDst, CVideoBuffer* pSrc1, CV
 	ASSERT(pDst0);
 	pDst = pDst0;
 
-	float time = pParam->progress;
+//#endif
+
 	if ( pParam->fallingDirection <= 1 )
 	{
 		float fLinesInterval = 1.f / pParam->divideY;
@@ -269,8 +305,6 @@ bool Sony3DBrokenGlassRender::Render(CVideoBuffer* pDst, CVideoBuffer* pSrc1, CV
 
 		time = fTimeBegin + time * (fTimeEnd-fTimeBegin);
 	}
-
-//#endif
 
 	// loading和计算工作
 
@@ -312,14 +346,15 @@ bool Sony3DBrokenGlassRender::Render(CVideoBuffer* pDst, CVideoBuffer* pSrc1, CV
 	int nEditWidth, nEditHeight;
 	m_pEngine->GetTargetVideoSize(nEditWidth, nEditHeight);
 	float fAspect = nEditWidth * 1.0f / nEditHeight;
+//	fAspect *= fAspect;
 	
 	const VideoBufferInfo& biSrc = pSrc1->GetVideoBufferInfo();
 
-	D3DXMATRIX matPosQuad;
+	D3DXMATRIXA16 matPosQuad;
 	D3DXMatrixScaling(&matPosQuad,
 		(float)biSrc.nWidth/biDst.nWidth,
 		(float)biSrc.nHeight/biDst.nHeight,1.f);
-	D3DXMATRIX matPosQuadTemp;
+	D3DXMATRIXA16 matPosQuadTemp;
 	D3DXMatrixTranslation(&matPosQuadTemp,
 		-0.5f+(/*pSrcDef->OffsetX*/0 + biSrc.nWidth/2.f)/biDst.nWidth,
 		0.5f-(/*pSrcDef->OffsetY*/0 + biSrc.nHeight/2.f)/biDst.nHeight,
@@ -331,42 +366,50 @@ bool Sony3DBrokenGlassRender::Render(CVideoBuffer* pDst, CVideoBuffer* pSrc1, CV
 	// VS constant
 
 	// 如果是改变了Dst大小的特技，需要重新定位
-	//TODO:
-	//D3DXMATRIX	*matWorld,*matView,*matPorj;
-	//m_pEngine->GetQuadMatrix(&matWorld,&matView,&matPorj);
+	D3DXMATRIXA16 m_matWorld;
+	D3DXMatrixIdentity(&m_matWorld);
+	if (0)
+	{
+		GenerateWorldMat(m_matWorld,
+			biDst.nWidth, biDst.nHeight,
+			0, 0,
+			biSrc.nWidth, biSrc.nHeight);
+	}
 
-	D3DXMATRIX matViewChanged,matProjChanged;
+	D3DXMATRIXA16 matViewChanged,matProjChanged;
 	float fovY = D3DXToRadian(max( pParam->perspPackParam.fovDegree, 1.f ));
 	float eyePointZ = -0.5f / tanf(fovY/2.f);
 	D3DXMatrixLookAtLH(&matViewChanged,&D3DXVECTOR3(0.f,0.f,eyePointZ),&D3DXVECTOR3(0.f,0.f,0.f),&D3DXVECTOR3(0.f,1.f,0.f));
 	D3DXMatrixPerspectiveFovLH(&matProjChanged,fovY,fAspect,0.1f,100.f);
 
-	D3DXMATRIX matForField;
+	D3DXMATRIXA16 matForField;
 	D3DXMatrixIdentity(&matForField);
 	matForField._42 = 0.f; //!pParam->bOdd ? 0.5f / lSrcBufInfo.nHeight : 0.f;  
 	m_pSony3DBrokenGlassEffect->SetFloat("g_offsetField", 0.f/*!pParam->bOdd ? -0.5f/pSrcDef->BaseHeight : 0.f*/);
 
-	D3DXMATRIX matTransform;
-	TransPackMatrix(pParam->transformPackParam, &matTransform);
+	TransformParam transformPackParam;
+	computeTransformParamForTrans(transformPackParam, pParam->rotateType, pParam->progress);
+	D3DXMATRIXA16 matTransform;
+	TransPackMatrix(transformPackParam, &matTransform);
 
-	D3DXMATRIX matAspect;
+	D3DXMATRIXA16 matAspect;
 	D3DXMatrixIdentity(&matAspect);
 	matAspect._11 *= fAspect;
-	D3DXMATRIX matWorldTransed = m_matWorld * matForField * matPosQuad * matAspect * matTransform;
-	D3DXMATRIX matCombined = matWorldTransed*matViewChanged*matProjChanged;
-	D3DXMATRIX matWorldForNormal, matWorldInv;
+	D3DXMATRIXA16 matWorldTransed = m_matWorld * matForField * matPosQuad * matAspect * matTransform;
+	D3DXMATRIXA16 matCombined = matWorldTransed*matViewChanged*matProjChanged;
+	D3DXMATRIXA16 matWorldForNormal, matWorldInv;
 	D3DXMatrixInverse(&matWorldInv,NULL,&matWorldTransed);
 	D3DXMatrixTranspose(&matWorldForNormal,&matWorldInv);
 
 	// 直接从[-0.5,0.5]得到贴图坐标
-	D3DXMATRIX matQUADtoTex;
+	D3DXMATRIXA16 matQUADtoTex;
 	D3DXMatrixIdentity(&matQUADtoTex);
 	matQUADtoTex._22 = -1.f;
 	matQUADtoTex._31 = 0.5f;
 	matQUADtoTex._32 = 0.5f;
-	D3DXMATRIX matTextureSrc;
-	GenerateMatrix(pSrc1,&matTextureSrc,mat_Image);
-	matTextureSrc = matQUADtoTex*matTextureSrc;
+	D3DXMATRIXA16 matTextureSrc;
+	GenerateMatrix(pSrc1, &matTextureSrc, mat_Image);
+	matTextureSrc = matQUADtoTex * matTextureSrc;
 	m_pSony3DBrokenGlassEffect->SetMatrix("g_matWorldViewProj",&matCombined);
 	m_pSony3DBrokenGlassEffect->SetMatrix("g_matWorldNormal",&matWorldForNormal);
 	m_pSony3DBrokenGlassEffect->SetMatrix("g_matTexture",&matTextureSrc);	
@@ -386,17 +429,17 @@ bool Sony3DBrokenGlassRender::Render(CVideoBuffer* pDst, CVideoBuffer* pSrc1, CV
 	D3DXVECTOR4 lightParam(1.f,0.f,0.f,0.f);
 	if( pParam->lightingPackParam.bEnabled )
 	{
-		float radianX = D3DXToRadian(pParam->lightingPackParam.lightXDegree);
-		float radianY = D3DXToRadian(pParam->lightingPackParam.lightYDegree);
-		D3DXMATRIX matRotX,matRotY;	// x first, then y;
+		float radianX = D3DXToRadian(pParam->lightingPackParam.fDirectionX);
+		float radianY = D3DXToRadian(pParam->lightingPackParam.fDirectionY);
+		D3DXMATRIXA16 matRotX,matRotY;	// x first, then y;
 		D3DXMatrixRotationY(&matRotX,-radianX);
 		D3DXVECTOR3 vecRotY(matRotX._11,matRotX._12,matRotX._13);
 		D3DXMatrixRotationAxis(&matRotY,&vecRotY,radianY);
 		D3DXVec3TransformNormal(&lightPos,&lightPos,&matRotX);
 		D3DXVec3TransformNormal(&lightPos,&lightPos,&matRotY);
 		m_pSony3DBrokenGlassEffect->SetVector("g_lightDir",&(D3DXVECTOR4(-lightPos,1.f)));
-		lightParam.x = pParam->lightingPackParam.ambient1;
-		lightParam.y = pParam->lightingPackParam.diffuse2;
+		lightParam.x = pParam->lightingPackParam.fAmbient;
+		lightParam.y = pParam->lightingPackParam.fDiffuse;
 		m_pSony3DBrokenGlassEffect->SetVector("g_lightAmbDiff",&lightParam);
 	}
 	else
@@ -419,7 +462,7 @@ bool Sony3DBrokenGlassRender::Render(CVideoBuffer* pDst, CVideoBuffer* pSrc1, CV
 	// render state
 	//setCurAlphaRenderState(pDstDef->bNeedBlend);
 	//if ( bNeedBlend )
-	if(true)
+	if(0)
 	{
 		pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
 		pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
@@ -477,23 +520,13 @@ bool Sony3DBrokenGlassRender::Render(CVideoBuffer* pDst, CVideoBuffer* pSrc1, CV
 	//////////////////////////////////////////////////////////////////////////
 
 //#ifdef _TRANS
+	//D3DXSaveSurfaceToFile(_T("./bg.dds"), D3DXIFF_DDS, pDst0->GetSurface(), NULL, NULL);
 	//BlendTwoBuffer(pDst0,ppSrcDef[1],pDstReal);
-	bOK = m_pEngine->BlendCompose(pDstReal, pDst0, pSrc2);
+	bOK = m_pEngine->BlendCompose(pDstReal, pSrc2, pDst0);
 	pDst = pDstReal;
 	pVM->ReleaseVideoBuffer(pDst0);
 //#endif
 
-	// dest标志位设定
-	//TODO:
-	//pDstDef->bContainedAlpha = true;
-
-
-	// 	testTime.Count();
-
-	//	m_pResMan->DumpResourceToFile(pSrcDef->handle,L"C:/src.dds");
-	//	m_pResMan->DumpResourceToFile(pDstDef->handle,L"C:/dst.dds");
-
-
-
 	return true;
 }
+

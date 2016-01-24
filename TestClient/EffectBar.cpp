@@ -622,6 +622,11 @@ void CEffectBar::SetProgress(CSliderCtrl* pCtrl)
 			SonyBarnSlideFxParam* pParam = (SonyBarnSlideFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
 			if(pParam)	pCtrl->SetPos(pParam->fTrans * 10000);
 		}
+		else if(FX_SONY_3D_BROKEN_GLASS == str)
+		{
+			Sony3DBrokenGlassFxParam* pParam = (Sony3DBrokenGlassFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
+			if(pParam)	pCtrl->SetPos(pParam->progress * 10000);
+		}
 		else	//不是过渡特技，没有进度条
 		{
 			pCtrl->SetPos(0);

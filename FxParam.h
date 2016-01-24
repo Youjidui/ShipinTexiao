@@ -3,6 +3,66 @@
 #include "VideoBuffer.h"
 #include <d3dx9math.h>
 
+
+//common basic parameter
+struct TransformParam{
+	float fLocalTranslateX;
+	float fLocalTranslateY;
+	float fLocalTranslateZ;
+
+	float fLocalRotateX;
+	float fLocalRotateY;
+	float fLocalRotateZ;
+
+	float fScaleX;
+	float fScaleY;
+	float fScaleZ;
+
+	float fWorldTranslateX;
+	float fWorldTranslateY;
+	float fWorldTranslateZ;
+
+	float fWorldRotateX;
+	float fWorldRotateY;
+	float fWorldRotateZ;
+
+	void identity()
+	{
+		fLocalRotateX = fLocalRotateY = fLocalRotateZ = 0.f;
+		fLocalTranslateX = fLocalTranslateY = fLocalTranslateZ = 0.f;
+		fScaleX = fScaleY = fScaleZ = 1.f;
+		fWorldTranslateX = fWorldTranslateY = fWorldTranslateZ = 0.f;
+		fWorldRotateX = fWorldRotateY = fWorldRotateZ = 0.f;
+	}
+	TransformParam() { identity(); }
+};
+
+struct LightingParam
+{
+	BOOL bEnabled;
+	float fDirectionX;		//90.f,-90.f, 0.001f,5,3,0.f
+	float fDirectionY;
+	float fDiffuse;			//2.f, 0, 0.0001f, 5, 4, 0.f
+	float fAmbient;			//1.f, 0, 0.0001f, 5, 4, 1.f
+	LightingParam():
+	bEnabled(FALSE),
+		fDirectionX(0.f),
+		fDirectionY(0.f),
+		fDiffuse(0.f),
+		fAmbient(1.f)
+	{	}
+};
+
+struct TransitionParam
+{
+	float progress;				//1.f, 0, 0.0001f, 5, 4, 0.5f
+	BOOL bReverse;
+
+	TransitionParam() : progress(0), bReverse(FALSE) {}
+};
+
+//FX parameter
+
 struct NegativeFxParam : FxParamBase
 {
 
@@ -504,68 +564,7 @@ struct RingsFxParam : public FxParamBase
 
 struct CubeFxParam : public FxParamBase
 {
-	struct _Transform
-	{
-		float fLocalTranslateX;
-		float fLocalTranslateY;
-		float fLocalTranslateZ;
-
-		float fLocalRotateX;
-		float fLocalRotateY;
-		float fLocalRotateZ;
-
-		float fScaleX;
-		float fScaleY;
-		float fScaleZ;
-
-		float fWorldTranslateX;
-		float fWorldTranslateY;
-		float fWorldTranslateZ;
-
-		float fWorldRotateX;
-		float fWorldRotateY;
-		float fWorldRotateZ;
-
-		_Transform() : 
-			fLocalTranslateX(0.f),
-			fLocalTranslateY(0.f),
-			fLocalTranslateZ(0.f),
-
-			fLocalRotateX(0.f),
-			fLocalRotateY(0.f),
-			fLocalRotateZ(0.f),
-
-			fScaleX(1.f),
-			fScaleY(1.f),
-			fScaleZ(1.f),
-
-			fWorldTranslateX(0.f),
-			fWorldTranslateY(0.f),
-			fWorldTranslateZ(0.f),
-
-			fWorldRotateX(0.f),
-			fWorldRotateY(0.f),
-			fWorldRotateZ(0.f)
-		{
-		}
-	};
-	struct _Light 
-	{
-		BOOL bEnable;
-		float fDirectionX;
-		float fDirectionY;
-		float fDiffuse;
-		float fAmbient;
-		_Light():
-			bEnable(FALSE),
-			fDirectionX(0.f),
-			fDirectionY(0.f),
-			fDiffuse(0.f),
-			fAmbient(1.f)
-		{
-		}
-	};
-	struct _Shape 
+	struct ShapeParam
 	{
 		int			nDiveX;
 		int			nDiveY;
@@ -577,7 +576,7 @@ struct CubeFxParam : public FxParamBase
 		int			nDirecttion;
 		int			nRotate;
 #endif
-		_Shape():
+		ShapeParam():
 			nDiveX(1),
 			nDiveY(1),
 			fIntervalX(1),
@@ -591,9 +590,9 @@ struct CubeFxParam : public FxParamBase
 		{}
 	};
 
-	_Transform trans;
-	_Light light;
-	_Shape shape;
+	TransformParam trans;
+	LightingParam light;
+	ShapeParam shape;
 
 	float fPerspective;
 #ifdef _3D_CUBE_TRANS
@@ -755,59 +754,17 @@ struct DiffuseWipeFxParam : public FxParamBase
 
 // begin Sony3DBrokenGlassEffect Param
 
-struct TransformParam{
-	float fLocalTranslateX;
-	float fLocalTranslateY;
-	float fLocalTranslateZ;
-
-	float fLocalRotateX;
-	float fLocalRotateY;
-	float fLocalRotateZ;
-
-	float fScaleX;
-	float fScaleY;
-	float fScaleZ;
-
-	float fWorldTranslateX;
-	float fWorldTranslateY;
-	float fWorldTranslateZ;
-
-	float fWorldRotateX;
-	float fWorldRotateY;
-	float fWorldRotateZ;
-
-	void identity()
-	{
-		fLocalRotateX = fLocalRotateY = fLocalRotateZ = 0.f;
-		fLocalTranslateX = fLocalTranslateY = fLocalTranslateZ = 0.f;
-		fScaleX = fScaleY = fScaleZ = 1.f;
-		fWorldTranslateX = fWorldTranslateY = fWorldTranslateZ = 0.f;
-		fWorldRotateX = fWorldRotateY = fWorldRotateZ = 0.f;
-	}
-	TransformParam() { identity(); }
-};
-
-struct LightingParam
-{
-	bool	bEnabled;
-	float	lightXDegree,lightYDegree;	//90.f,-90.f, 0.001f,5,3,0.f
-	float	diffuse2;					//2.f, 0, 0.0001f, 5, 4, 0.f
-	float	ambient1;					//1.f, 0, 0.0001f, 5, 4, 1.f
-
-	LightingParam() : bEnabled(false), lightXDegree(0.f), lightYDegree(0.f), diffuse2(0.f), ambient1(1.f) {}
-};
-
-struct PerspectiveParam
-{
-	float fovDegree;		//120.f, 10.f, 0.001f, 5, 3, 30.f
-
-	PerspectiveParam() : fovDegree(30.f) {}
-};
 
 struct Sony3DBrokenGlassFxParam : public FxParamBase
 {
-	static const UINT maxSizeX = 40;
-	static const UINT maxSizeY = 40;
+
+	struct PerspectiveParam
+	{
+		float fovDegree;		//120.f, 10.f, 0.001f, 5, 3, 30.f
+
+		PerspectiveParam() : fovDegree(30.f) {}
+	};
+
 
 	float progress;				//1.f, 0, 0.0001f, 5, 4, 0.5f
 	BOOL bReverse;
@@ -818,34 +775,11 @@ struct Sony3DBrokenGlassFxParam : public FxParamBase
 
 	float centerX, centerY;		//1.f, 0, 0.0001f, 5, 4, 0.5f ??
 
-	TransformParam	transformPackParam;
+	//TransformParam	transformPackParam;
 	LightingParam	lightingPackParam;
 	PerspectiveParam	perspPackParam;
 
-	void computeTransformParamForTrans(int rotateType, float progress)	// 0 none 1 clockwise -1 counter clockwise
-	{
-		transformPackParam.identity();
-		float fDir = 0.0f;
-		switch (rotateType)
-		{
-		case 1:
-			fDir = 1.0f;
-			break;
-		case 2:
-			fDir = -1.0f;
-			break;
-		default:
-			break;
-		}
-		transformPackParam.fLocalRotateY = progress * fDir;
-	}
-	
-	void computeTransfromParamIdentity()
-	{
-		transformPackParam.identity();
-	}
-
-	Sony3DBrokenGlassFxParam() : progress(0.5f), bReverse(false), divideX(10), divideY(10), fallingDirection(0), rotateType(0), centerX(0.5f), centerY(0.5f) {computeTransformParamForTrans(rotateType, progress);}
+	Sony3DBrokenGlassFxParam() : progress(0.5f), bReverse(false), divideX(10), divideY(10), fallingDirection(0), rotateType(0), centerX(0.5f), centerY(0.5f) {}
 };
 
 
