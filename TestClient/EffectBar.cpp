@@ -87,6 +87,22 @@ void CEffectBar::OnBnClickedParameters()
 			}
 			m_barmWipeDlg.ShowWindow(SW_SHOW);
 		}
+		else if(FX_FAN_WIPE == str)
+		{
+			if(!m_fanWipeDlg.GetSafeHwnd())
+			{
+				m_fanWipeDlg.Create(CParamFanWipeDlg::IDD);
+			}
+			m_fanWipeDlg.ShowWindow(SW_SHOW);
+		}
+		else if(FX_MULTI_AXIS_ROTARY_WIPE == str)
+		{
+			if(!m_marWipeDlg.GetSafeHwnd())
+			{
+				m_marWipeDlg.Create(CParamMARWipeDlg::IDD);
+			}
+			m_marWipeDlg.ShowWindow(SW_SHOW);
+		}
 		else if(FX_MATRIX_WIPE == str)
 		{
 			if(!m_matrixWipeDlg.GetSafeHwnd())
@@ -94,6 +110,14 @@ void CEffectBar::OnBnClickedParameters()
 				m_matrixWipeDlg.Create(CParamMatrixWipeDlg::IDD);
 			}
 			m_matrixWipeDlg.ShowWindow(SW_SHOW);
+		}
+		else if(FX_REVOLVING_WIPE == str)
+		{
+			if(!m_revolvingWipeDlg.GetSafeHwnd())
+			{
+				m_revolvingWipeDlg.Create(CParamRevolvingWipeDlg::IDD);
+			}
+			m_revolvingWipeDlg.ShowWindow(SW_SHOW);
 		}
 		else if(FX_SONY_BARN_SLIDE == str)
 		{
@@ -282,12 +306,33 @@ BOOL CEffectBar::OnInitDialog()
 		m_ctrlEffects.SetItemDataPtr(i, pParam);
 		m_barmWipeDlg.SetParam(pParam);
 	}
+	i = m_ctrlEffects.AddString(FX_FAN_WIPE);
+	{
+		BasicWipeFxParam* pParam = new BasicWipeFxParam;
+		pParam->cbSize = sizeof(BasicWipeFxParam);
+		m_ctrlEffects.SetItemDataPtr(i, pParam);
+		m_fanWipeDlg.SetParam(pParam);
+	}
+	i = m_ctrlEffects.AddString(FX_MULTI_AXIS_ROTARY_WIPE);
+	{
+		BasicWipeFxParam* pParam = new BasicWipeFxParam;
+		pParam->cbSize = sizeof(BasicWipeFxParam);
+		m_ctrlEffects.SetItemDataPtr(i, pParam);
+		m_marWipeDlg.SetParam(pParam);
+	}
 	i = m_ctrlEffects.AddString(FX_MATRIX_WIPE);
 	{
 		MatrixWipeFxParam* pParam = new MatrixWipeFxParam;
 		pParam->cbSize = sizeof(MatrixWipeFxParam);
 		m_ctrlEffects.SetItemDataPtr(i, pParam);
 		m_matrixWipeDlg.SetParam(pParam);
+	}
+	i = m_ctrlEffects.AddString(FX_REVOLVING_WIPE);
+	{
+		MatrixWipeFxParam* pParam = new MatrixWipeFxParam;
+		pParam->cbSize = sizeof(MatrixWipeFxParam);
+		m_ctrlEffects.SetItemDataPtr(i, pParam);
+		m_revolvingWipeDlg.SetParam(pParam);
 	}
 	i = m_ctrlEffects.AddString(FX_BROKEN_GLASS);
 	{
@@ -451,15 +496,9 @@ void CEffectBar::OnProgressChange( int nPos )
 			pParam->fOffset = nPos / 10000.f;
 			AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)(LPCTSTR)str, (LPARAM)pParam);
 		}
-		if(FX_BARM_WIPE == str)
+		if(FX_BARM_WIPE == str || FX_FAN_WIPE == str || FX_MULTI_AXIS_ROTARY_WIPE == str || FX_MATRIX_WIPE == str || FX_REVOLVING_WIPE == str)
 		{
-			BarmWipeFxParam* pParam = (BarmWipeFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
-			pParam->structPattern.fOffset = nPos / 10000.f;
-			AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)(LPCTSTR)str, (LPARAM)pParam);
-		}
-		if(FX_MATRIX_WIPE == str)
-		{
-			MatrixWipeFxParam* pParam = (MatrixWipeFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
+			BasicWipeFxParam* pParam = (BasicWipeFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
 			pParam->structPattern.fOffset = nPos / 10000.f;
 			AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)(LPCTSTR)str, (LPARAM)pParam);
 		}
@@ -557,14 +596,9 @@ void CEffectBar::SetProgress(CSliderCtrl* pCtrl)
 			AmoebaWipeFxParam* pParam = (AmoebaWipeFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
 			if(pParam)	pCtrl->SetPos(pParam->fOffset * 10000);
 		}
-		else if(FX_BARM_WIPE == str)
+		else if(FX_BARM_WIPE == str || FX_FAN_WIPE == str || FX_MULTI_AXIS_ROTARY_WIPE == str || FX_MATRIX_WIPE == str || FX_REVOLVING_WIPE == str)
 		{
 			BarmWipeFxParam* pParam = (BarmWipeFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
-			if(pParam)	pCtrl->SetPos(pParam->structPattern.fOffset * 10000);
-		}
-		else if(FX_MATRIX_WIPE == str)
-		{
-			MatrixWipeFxParam* pParam = (MatrixWipeFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
 			if(pParam)	pCtrl->SetPos(pParam->structPattern.fOffset * 10000);
 		}
 		else if (FX_BROKEN_GLASS == str)

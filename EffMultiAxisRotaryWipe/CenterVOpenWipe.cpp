@@ -172,7 +172,7 @@ HRESULT CCenterVOpenWipe::Draw(CVideoBuffer* pMaskDef, BasicWipeFxParam* pParam)
 HRESULT CCenterVOpenWipe::InitMesh(CRenderEngine* pEngine) 
 {
 	HRESULT hr = E_FAIL;
-	LPCTSTR pszMeshName = _T("DoubleRotatingWipeMesh");
+	LPCTSTR pszMeshName = _T("CenterVOpenWipeMesh");
 	LPDIRECT3DDEVICE9 pDevice = m_pEngine->GetDevice();
 	CResourceManager* pResMgr = m_pEngine->GetResourceManager();
 

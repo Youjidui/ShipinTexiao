@@ -63,6 +63,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EffFanWipe", "EffFanWipe\Ef
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EffMultiAxisRotaryWipe", "EffMultiAxisRotaryWipe\EffMultiAxisRotaryWipe.vcproj", "{96F34596-EBBC-482C-9246-021BB0DEB86B}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EffRevolvingWipe", "EffRevolvingWipe\EffRevolvingWipe.vcproj", "{EF5A1647-D049-4B1D-B2E4-9D9AE2612680}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Pocket PC 2003 (ARMV4) = Debug|Pocket PC 2003 (ARMV4)
@@ -335,6 +337,14 @@ Global
 		{96F34596-EBBC-482C-9246-021BB0DEB86B}.Release|Win32.ActiveCfg = Release|Win32
 		{96F34596-EBBC-482C-9246-021BB0DEB86B}.Release|Win32.Build.0 = Release|Win32
 		{96F34596-EBBC-482C-9246-021BB0DEB86B}.Release|x64.ActiveCfg = Release|Win32
+		{EF5A1647-D049-4B1D-B2E4-9D9AE2612680}.Debug|Pocket PC 2003 (ARMV4).ActiveCfg = Debug|Win32
+		{EF5A1647-D049-4B1D-B2E4-9D9AE2612680}.Debug|Win32.ActiveCfg = Debug|Win32
+		{EF5A1647-D049-4B1D-B2E4-9D9AE2612680}.Debug|Win32.Build.0 = Debug|Win32
+		{EF5A1647-D049-4B1D-B2E4-9D9AE2612680}.Debug|x64.ActiveCfg = Debug|Win32
+		{EF5A1647-D049-4B1D-B2E4-9D9AE2612680}.Release|Pocket PC 2003 (ARMV4).ActiveCfg = Release|Win32
+		{EF5A1647-D049-4B1D-B2E4-9D9AE2612680}.Release|Win32.ActiveCfg = Release|Win32
+		{EF5A1647-D049-4B1D-B2E4-9D9AE2612680}.Release|Win32.Build.0 = Release|Win32
+		{EF5A1647-D049-4B1D-B2E4-9D9AE2612680}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

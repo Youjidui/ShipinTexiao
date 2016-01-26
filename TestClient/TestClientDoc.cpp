@@ -24,6 +24,7 @@
 #include "../EffFanWipe/FanWipeRender.h"
 #include "../EffMatrixWipeTrans/MatrixWipeRender.h"
 #include "../EffMultiAxisRotaryWipe/MultiAxisRotaryWipeRender.h"
+#include "../EffRevolvingWipe/RevolvingWipeRender.h"
 #include "../EffChromaKey/ChromaKeyRender.h"
 #include "../EffPageRoll/PageRollRender.h"
 #include "../SonyDME3DTransform/SonyDME3DTransformRender.h"
@@ -527,6 +528,14 @@ bool CTestClientDoc::EffectRender(CVideoBuffer* pDest, CVideoBuffer* pSrc, CVide
 		if(eff.Init(m_pRenderEngine))
 		{
 			bOK = eff.Render(pDest, pSrc, pSrc2, (MatrixWipeFxParam*)m_pEffectParam);
+		}
+	}
+	else if(FX_REVOLVING_WIPE == m_strEffectName)
+	{
+		CRevolvingWipeRender eff;
+		if(eff.Init(m_pRenderEngine))
+		{
+			bOK = eff.Render(pDest, pSrc, pSrc2, (BasicWipeFxParam*)m_pEffectParam);
 		}
 	}
 	else if(FX_PAGE_ROLL == m_strEffectName)

@@ -460,6 +460,10 @@
 			ReferencedProjectIdentifier="{96F34596-EBBC-482C-9246-021BB0DEB86B}"
 			RelativePathToProject=".\EffMultiAxisRotaryWipe\EffMultiAxisRotaryWipe.vcproj"
 		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{EF5A1647-D049-4B1D-B2E4-9D9AE2612680}"
+			RelativePathToProject=".\EffRevolvingWipe\EffRevolvingWipe.vcproj"
+		/>
 	</References>
 	<Files>
 		<Filter
@@ -536,6 +540,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ParamFanWipeDlg.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ParamMARWipeDlg.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\ParamMatrixWipeDlg.cpp"
 				>
 			</File>
@@ -549,6 +561,10 @@
 			</File>
 			<File
 				RelativePath=".\ParamQuadPageRollDlg.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ParamRevolvingWipeDlg.cpp"
 				>
 			</File>
 			<File
@@ -702,6 +718,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ParamFanWipeDlg.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ParamMARWipeDlg.h"
+				>
+			</File>
+			<File
 				RelativePath=".\ParamMatrixWipeDlg.h"
 				>
 			</File>
@@ -715,6 +739,10 @@
 			</File>
 			<File
 				RelativePath=".\ParamQuadPageRollDlg.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ParamRevolvingWipeDlg.h"
 				>
 			</File>
 			<File

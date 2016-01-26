@@ -5,7 +5,10 @@
 #include "ParamColorKeyDlg.h"
 #include "ParamAmoebaWipeDlg.h"
 #include "ParamBarmWipeDlg.h"
+#include "ParamFanWipeDlg.h"
+#include "ParamMARWipeDlg.h"
 #include "ParamMatrixWipeDlg.h"
+#include "ParamRevolvingWipeDlg.h"
 #include "PushDlg.h"
 #include "ParamChromaKeyDlg.h"
 #include "SonySlideDlg.h"
@@ -42,6 +45,7 @@ protected:
 	void OnProgressChange(int nPos);
 
 	DECLARE_MESSAGE_MAP()
+
 public:
 	CComboBox m_ctrlEffects;
 	CSliderCtrl m_ctrlProgress;
@@ -49,7 +53,10 @@ public:
 	CParamColorKeyDlg m_colorKeyDlg;
 	CParamAmoebaWipeDlg m_amoebaWipeDlg;
 	CParamBarmWipeDlg m_barmWipeDlg;
+	CParamFanWipeDlg m_fanWipeDlg;
+	CParamMARWipeDlg m_marWipeDlg;
 	CParamMatrixWipeDlg m_matrixWipeDlg;
+	CParamRevolvingWipeDlg m_revolvingWipeDlg;
 	CParamPushDlg m_pushDlg;
 	CParamChromaKeyDlg m_chromaKeyDlg;
 	CParamSonySlideDlg m_SonySlideDlg;
