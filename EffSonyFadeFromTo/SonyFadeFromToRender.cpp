@@ -36,7 +36,7 @@ void CSonyFadeFromToRender::Uninit()
 {
 }
 
-bool CSonyFadeFromToRender::Render(CVideoBuffer* pDest, CVideoBuffer *pSrcA, CVideoBuffer *pSrcB, FxParamBase* pParamRaw)
+bool CSonyFadeFromToRender::Render(CVideoBuffer* pDest, CVideoBuffer *pSrcA, FxParamBase* pParamRaw)
 {
 	SonyFadeFromToFxParam* pParam = (SonyFadeFromToFxParam*)pParamRaw;
 	RESET_RENDER_TARGET(m_pEngine);
@@ -44,15 +44,13 @@ bool CSonyFadeFromToRender::Render(CVideoBuffer* pDest, CVideoBuffer *pSrcA, CVi
 	CResourceManager* pResMan = m_pEngine->GetResourceManager();
 	LPDIRECT3DDEVICE9 pDevice = m_pEngine->GetDevice();
 
-	if( pParam->bReverse == TRUE )
-		std::swap(pSrcA, pSrcB);
-
-	//if(!bFromOrTo)
-	//	fTransition = 1.f - pParam->fTransition;
+	float fTransition = pParam->fTransition;
+	if(!pParam->bFromOrTo)
+		fTransition = 1.f - pParam->fTransition;
 
 	CVideoBuffer* pSrcDef = pSrcA;
 	CVideoBuffer* pDstDef = pDest;
-    m_pEngine->SetRenderTarget(pDstDef); 	
+    m_pEngine->SetRenderTarget(pDstDef);
  
  	//D3DXMATRIX matCombined = m_matWorld*m_matView*m_matProj;     
 	D3DXMATRIX *matView,*matPorj;
@@ -69,7 +67,7 @@ bool CSonyFadeFromToRender::Render(CVideoBuffer* pDest, CVideoBuffer *pSrcA, CVi
  	m_pEffect->SetMatrix("g_matWorldViewProj",&matCombined);
  	m_pEffect->SetMatrix("g_matTexture",&matTextureSrc);	
     
-	m_pEffect->SetFloat("g_FadeScale",pParam->fTransition);
+	m_pEffect->SetFloat("g_FadeScale",fTransition);
 	
 	D3DXCOLOR cFadeColor = pParam->cFadeColor;
 	const Buffer_Color_Format pSrcDef_bufferFormat = FMT_RGBA32;

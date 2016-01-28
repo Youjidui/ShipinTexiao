@@ -4,15 +4,15 @@
 #include "../D3D9Render/VideoBuffer.h"
 #include "../FxParam.h"
 
-class CSonyFadeFromToRender
+class CRippleWipeRender
 {
 public:
-	CSonyFadeFromToRender(void);
-	~CSonyFadeFromToRender(void);
+	CRippleWipeRender(void);
+	~CRippleWipeRender(void);
 
 	bool Init(CRenderEngine* pEngine);
 	void Uninit();
-	bool Render(CVideoBuffer* pDest, CVideoBuffer *pSrcA, FxParamBase* pParam);
+	bool Render(CVideoBuffer* pDest, CVideoBuffer *pSrcA, CVideoBuffer *pSrcB, FxParamBase* pParam);
 
 protected:
 	CRenderEngine*	m_pEngine;

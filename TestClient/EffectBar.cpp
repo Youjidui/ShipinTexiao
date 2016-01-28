@@ -119,6 +119,14 @@ void CEffectBar::OnBnClickedParameters()
 			}
 			m_revolvingWipeDlg.ShowWindow(SW_SHOW);
 		}
+		else if(FX_RIPPLE_WIPE == str)
+		{
+			if(!m_rippleWipeDlg.GetSafeHwnd())
+			{
+				m_rippleWipeDlg.Create(m_rippleWipeDlg.IDD);
+			}
+			m_rippleWipeDlg.ShowWindow(SW_SHOW);
+		}
 		else if(FX_SONY_BARN_SLIDE == str)
 		{
 			if(!m_barnSlideDlg.GetSafeHwnd())
@@ -334,6 +342,13 @@ BOOL CEffectBar::OnInitDialog()
 		m_ctrlEffects.SetItemDataPtr(i, pParam);
 		m_revolvingWipeDlg.SetParam(pParam);
 	}
+	i = m_ctrlEffects.AddString(FX_RIPPLE_WIPE);
+	{
+		RippleWipeFxParam* pParam = new RippleWipeFxParam;
+		pParam->cbSize = sizeof(RippleWipeFxParam);
+		m_ctrlEffects.SetItemDataPtr(i, pParam);
+		m_rippleWipeDlg.SetParam(pParam);
+	}
 	i = m_ctrlEffects.AddString(FX_BROKEN_GLASS);
 	{
 		BrokenGlassFxParam* pParam = new BrokenGlassFxParam;
@@ -502,6 +517,12 @@ void CEffectBar::OnProgressChange( int nPos )
 			pParam->structPattern.fOffset = nPos / 10000.f;
 			AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)(LPCTSTR)str, (LPARAM)pParam);
 		}
+		else if (FX_RIPPLE_WIPE== str)
+		{
+			RippleWipeFxParam* pParam = (RippleWipeFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
+			pParam->transParam.progress = nPos / 10000.f;
+			AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)(LPCTSTR)str, (LPARAM)pParam);
+		}
 		else if (FX_BROKEN_GLASS == str)
 		{
 			BrokenGlassFxParam* pParam = (BrokenGlassFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
@@ -600,6 +621,11 @@ void CEffectBar::SetProgress(CSliderCtrl* pCtrl)
 		{
 			BarmWipeFxParam* pParam = (BarmWipeFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
 			if(pParam)	pCtrl->SetPos(pParam->structPattern.fOffset * 10000);
+		}
+		else if (FX_RIPPLE_WIPE == str)
+		{
+			RippleWipeFxParam* pParam = (RippleWipeFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
+			if(pParam)	pCtrl->SetPos(pParam->transParam.progress * 10000);
 		}
 		else if (FX_BROKEN_GLASS == str)
 		{

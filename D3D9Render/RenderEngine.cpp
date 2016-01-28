@@ -195,7 +195,7 @@ void CRenderEngine::GetTargetVideoSize( int& nEditWidth, int& nEditHeight )
 	nEditHeight = m_DeviceSettings.pp.BackBufferHeight;
 }
 
-bool CRenderEngine::EffectVideoCopy( CVideoBuffer* pSrc, CVideoBuffer* pDst  )
+bool CRenderEngine::EffectVideoCopy( CVideoBuffer* pDst, CVideoBuffer* pSrc )
 {
 	LPDIRECT3DDEVICE9 pDevice = GetDevice();
 	CResourceManager* pResMan = GetResourceManager();

@@ -79,7 +79,7 @@ bool CWipeRenderBase::Render( CVideoBuffer* pDest, CVideoBuffer* pSrcA, CVideoBu
 	//if((pParam->structPattern.fOffset <= 0.0f || pParam->structPattern.fOffset > 1.0f) && pParam->structPattern.fCenterX == 0.0f && pParam->structPattern.fCenterY == 0.0f)
 	//{	
 	//	{
-	//		m_pEngine->EffectVideoCopy(pSrcA, pDest);
+	//		m_pEngine->EffectVideoCopy(pDest, pSrcA);
 	//		//pDstDef->fAlphaValue *= pParam->structGeneral.fTransparency;
 	//	}
 	//	return TRUE;
@@ -189,8 +189,7 @@ CVideoBuffer* CWipeRenderBase::RenderMultiple(CVideoBuffer* pMask, CVideoBuffer*
 	bool bOK = m_pEngine->SetRenderTarget(pMaskDest);
 	ASSERT(bOK);
 
-	D3DXMATRIX matWorld, *matView = NULL, *matProj= NULL;
-	D3DXMatrixIdentity(&matWorld);
+	D3DXMATRIX *matView = NULL, *matProj= NULL;
 	pResMgr->GetPerspectiveMatrix( &matView, &matProj);
 	D3DXMATRIX matCombine = *matView * *matProj;
 	hr = m_pEffect->SetMatrix("g_matWorldViewProj",&matCombine);

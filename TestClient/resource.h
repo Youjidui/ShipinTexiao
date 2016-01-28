@@ -42,8 +42,8 @@
 #define IDD_QUAD_PAGE_ROLL1             331
 #define IDD_DUO_PAGE_ROLL               331
 #define IDD_PARAM_SONY_3D_BROKEN_GLASS  332
-#define IDD_PARAM_SONY_3D_BROKEN_GLASS1 333
 #define IDD_PARAM_SONY_3D_BROKEN_GLASS_TRANS 333
+#define IDD_PARAM_RIPPLE_WIPE           334
 #define IDC_EFFECTS                     1000
 #define IDC_PROGRESS                    1001
 #define IDC_BUTTON1                     1002
@@ -335,6 +335,16 @@
 #define IDC_REVERSE                     1117
 #define IDC_ENABLE                      1118
 #define IDC_ENABLED                     1118
+#define IDC_SLIDER_fRipple_Width        1119
+#define IDC_SLIDER_fNum_Wave            1120
+#define IDC_SLIDER_fAmplitude           1121
+#define IDC_SLIDER_fEllipticity         1122
+#define IDC_SLIDER_fCenterX             1123
+#define IDC_SLIDER_fCenterY             1124
+#define IDC_SLIDER_fDistortion          1125
+#define IDC_SLIDER_fBrightness          1126
+#define IDC_SLIDER_fLight_Angle         1127
+#define IDC_CHECK1                      1128
 #define IDC_L_LOCATION_X2               1137
 #define IDC__L_LOCATION_Z2              1138
 #define IDC_L_LOCATION_Z2               1138
@@ -357,9 +367,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        333
+#define _APS_NEXT_RESOURCE_VALUE        335
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1119
+#define _APS_NEXT_CONTROL_VALUE         1129
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif

@@ -9,6 +9,7 @@
 #include "ParamMARWipeDlg.h"
 #include "ParamMatrixWipeDlg.h"
 #include "ParamRevolvingWipeDlg.h"
+#include "ParamRippleWipeDlg.h"
 #include "PushDlg.h"
 #include "ParamChromaKeyDlg.h"
 #include "SonySlideDlg.h"
@@ -57,6 +58,7 @@ public:
 	CParamMARWipeDlg m_marWipeDlg;
 	CParamMatrixWipeDlg m_matrixWipeDlg;
 	CParamRevolvingWipeDlg m_revolvingWipeDlg;
+	CParamRippleWipeDlg m_rippleWipeDlg;
 	CParamPushDlg m_pushDlg;
 	CParamChromaKeyDlg m_chromaKeyDlg;
 	CParamSonySlideDlg m_SonySlideDlg;

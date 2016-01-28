@@ -41,7 +41,7 @@ struct LightingParam
 {
 	BOOL bEnabled;
 	float fDirectionX;		//90.f,-90.f, 0.001f,5,3,0.f
-	float fDirectionY;
+	float fDirectionY;		//90.f,-90.f, 0.001f,5,3,0.f
 	float fDiffuse;			//2.f, 0, 0.0001f, 5, 4, 0.f
 	float fAmbient;			//1.f, 0, 0.0001f, 5, 4, 1.f
 	LightingParam():
@@ -784,3 +784,22 @@ struct Sony3DBrokenGlassFxParam : public FxParamBase
 
 
 // end Sony3DBrokenGlassEffect Param
+
+
+struct RippleWipeFxParam : public FxParamBase
+{
+	float fRipple_Width;		//1.0f, 0.10f,  0.0001f, 5, 4, 0.3f
+	float fNum_Wave;			//20.0f, 0.50f, 0.001f, 5, 3, 5.0f
+	float fAmplitude;			//1.0f, 0.0f, 0.0001f, 5, 4, 0.5f
+	float fEllipticity;			//1.0f, -1.0f, 0.0001f, 5, 4, 0.18f
+	float fCenterX;				//3.0f, -3.0f, 0.0001f, 5, 4, 0.0f
+	float fCenterY;				//3.0f, -3.0f, 0.0001f, 5, 4, -0.5f
+	float fDistortion;			//1.0f, 0.0f, 0.0001f, 5, 4, 0.1380f
+	float fBrightness;			//1.0f, 0.0f,  0.0001f, 5, 4, 0.5f
+	float fLight_Angle;			//720.0f, -360.0f, 0.01f, 5, 2, 135.0f
+	//float fOffset;
+	//bool bRevert;
+	TransitionParam transParam;
+
+	RippleWipeFxParam() : fRipple_Width(0.3f), fNum_Wave(5.0f), fAmplitude(0.5f), fEllipticity(0.18f), fCenterX(0.0f), fCenterY(-0.5f), fDistortion(0.138f), fBrightness(0.5f), fLight_Angle(135.f) {}
+};

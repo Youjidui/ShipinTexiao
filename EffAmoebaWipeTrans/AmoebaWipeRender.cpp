@@ -324,7 +324,7 @@ void CAmoebaWipeRender::Last( CVideoBuffer* pDest, CVideoBuffer* pSrcA, CVideoBu
 	//		|| pTempDef[i]->rcImage.left != CEIL(pTempDef[i]->OffsetX) || pTempDef[i]->rcImage.top != CEIL(pTempDef[i]->OffsetY))
 	//	{
 	//		hTemp[i] = NewRTBuffer(pTempDef[i]->OffsetX,pTempDef[i]->OffsetY,pProfile->nEditWidth,pProfile->nEditHeight);
-	//		m_pEngine->EffectVideoCopy(pSrcDef[i]->handle,hTemp[i]);
+	//		m_pEngine->EffectVideoCopy(hTemp[i], pSrcDef[i]->handle);
 	//		pTempDef[i] = m_pResMan->GetBufferDef(hTemp[i]);
 	//	}
 	//}

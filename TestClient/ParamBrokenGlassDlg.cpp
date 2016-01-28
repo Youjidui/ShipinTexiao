@@ -133,5 +133,6 @@ void CParamBrokenGlassDlg::OnBnClickedCheckReverse()
 {
 	CButton* pBtn = (CButton*)GetDlgItem(IDC_CHECK_bReverse);
 	m_pParam->prm_bReverse = pBtn->GetCheck();
+	AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)FX_BROKEN_GLASS, (LPARAM)m_pParam);
 }
 

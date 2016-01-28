@@ -95,7 +95,7 @@ public:
 	};
 
 public:
-	bool EffectVideoCopy( CVideoBuffer* pSrc, CVideoBuffer* pDst  );
+	bool EffectVideoCopy( CVideoBuffer* pDst, CVideoBuffer* pSrc );
 	bool BlendCompose( CVideoBuffer* pDest, CVideoBuffer* pSrcA, CVideoBuffer* pSrcB);
 
 private:

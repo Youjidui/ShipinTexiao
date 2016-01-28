@@ -883,7 +883,7 @@ BEGIN
     DEFPUSHBUTTON   "确定",IDOK,132,69,50,14
     LTEXT           "fTransition",IDC_STATIC,7,7,35,8
     CONTROL         "",IDC_SLIDER_fTransition,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,82,7,100,13
-    CONTROL         "bReverse",IDC_CHECK_bReverse,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,46,47,10
+    CONTROL         "bReverse",IDC_CHECK_bReverse,"Button",BS_AUTOCHECKBOX | NOT WS_VISIBLE | WS_TABSTOP,7,46,47,10
     CONTROL         "FromOrTo",IDC_CHECK_FromOrTo,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,100,46,48,10
     EDITTEXT        IDC_EDIT_FadeColor,7,24,54,12,ES_AUTOHSCROLL
     LTEXT           "FadeColor (AARRGGBB)(ff88ff88)",IDC_STATIC,65,26,109,8
@@ -1044,6 +1044,35 @@ BEGIN
     CONTROL         "Enabled",IDC_ENABLED,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,61,86,41,10
     LTEXT           "progress",-1,7,9,29,8
     CONTROL         "",IDC_SLIDER_PROGRESS,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,56,6,116,15
+END
+
+IDD_PARAM_RIPPLE_WIPE DIALOGEX 0, 0, 170, 234
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Ripple Wipe"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "确定",IDOK,113,213,50,14
+    LTEXT           "fRipple_Width",IDC_STATIC,7,9,46,8
+    CONTROL         "",IDC_SLIDER_fRipple_Width,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,62,7,100,15
+    LTEXT           "fNum_Wave",IDC_STATIC,7,25,40,8
+    CONTROL         "",IDC_SLIDER_fNum_Wave,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,62,23,100,15
+    LTEXT           "fAmplitude",IDC_STATIC,7,41,35,8
+    CONTROL         "",IDC_SLIDER_fAmplitude,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,62,39,100,15
+    LTEXT           "fEllipticity",IDC_STATIC,7,57,31,8
+    CONTROL         "",IDC_SLIDER_fEllipticity,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,62,55,100,15
+    LTEXT           "fCenterX",IDC_STATIC,7,73,30,8
+    CONTROL         "",IDC_SLIDER_fCenterX,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,62,70,100,15
+    LTEXT           "fCenterY",IDC_STATIC,7,90,30,8
+    CONTROL         "",IDC_SLIDER_fCenterY,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,62,87,100,15
+    LTEXT           "fDistortion",IDC_STATIC,7,105,34,8
+    CONTROL         "",IDC_SLIDER_fDistortion,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,62,102,100,15
+    LTEXT           "fBrightness",IDC_STATIC,7,121,37,8
+    CONTROL         "",IDC_SLIDER_fBrightness,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,62,118,100,15
+    LTEXT           "fLight_Angle",IDC_STATIC,7,137,41,8
+    CONTROL         "",IDC_SLIDER_fLight_Angle,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,62,134,100,15
+    LTEXT           "Progress",IDC_STATIC,7,153,29,8
+    CONTROL         "",IDC_SLIDER_PROGRESS,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,62,150,100,15
+    CONTROL         "Reverse",IDC_CHECK_REVERSE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,173,43,10
 END
 
 
@@ -1265,6 +1294,14 @@ BEGIN
         RIGHTMARGIN, 179
         TOPMARGIN, 6
         BOTTOMMARGIN, 329
+    END
+
+    IDD_PARAM_RIPPLE_WIPE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 163
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 227
     END
 END
 #endif    // APSTUDIO_INVOKED

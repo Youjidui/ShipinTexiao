@@ -12,6 +12,7 @@
 #define FX_MULTI_AXIS_ROTARY_WIPE _T("Multi-Axis Rotary Wipe")
 #define FX_MATRIX_WIPE _T("Matrix Wipe")
 #define FX_REVOLVING_WIPE _T("Revolving Wipe")
+#define FX_RIPPLE_WIPE	_T("Ripple Wipe")
 #define FX_SONY_SLIDE _T("Sony Slide")
 #define FX_SONY_MASK _T("Sony Mask")
 #define FX_CHROMA_KEY _T("Chroma Key")

@@ -464,6 +464,10 @@
 			ReferencedProjectIdentifier="{EF5A1647-D049-4B1D-B2E4-9D9AE2612680}"
 			RelativePathToProject=".\EffRevolvingWipe\EffRevolvingWipe.vcproj"
 		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{74A2D324-6A68-42C2-84AB-9802BCE995F1}"
+			RelativePathToProject=".\EffRippleWipe\EffRippleWipe.vcproj"
+		/>
 	</References>
 	<Files>
 		<Filter
@@ -565,6 +569,10 @@
 			</File>
 			<File
 				RelativePath=".\ParamRevolvingWipeDlg.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ParamRippleWipeDlg.cpp"
 				>
 			</File>
 			<File
@@ -743,6 +751,10 @@
 			</File>
 			<File
 				RelativePath=".\ParamRevolvingWipeDlg.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ParamRippleWipeDlg.h"
 				>
 			</File>
 			<File

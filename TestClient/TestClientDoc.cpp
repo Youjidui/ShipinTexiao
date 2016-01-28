@@ -25,6 +25,7 @@
 #include "../EffMatrixWipeTrans/MatrixWipeRender.h"
 #include "../EffMultiAxisRotaryWipe/MultiAxisRotaryWipeRender.h"
 #include "../EffRevolvingWipe/RevolvingWipeRender.h"
+#include "../EffRippleWipe/RippleWipeRender.h"
 #include "../EffChromaKey/ChromaKeyRender.h"
 #include "../EffPageRoll/PageRollRender.h"
 #include "../SonyDME3DTransform/SonyDME3DTransformRender.h"
@@ -450,6 +451,14 @@ bool CTestClientDoc::EffectRender(CVideoBuffer* pDest, CVideoBuffer* pSrc, CVide
 			bOK = eff.Render(pDest, pSrc, pSrc2, (PushFxParam*)m_pEffectParam);
 		}
 	}
+	else if(FX_RIPPLE_WIPE == m_strEffectName)
+	{
+		CRippleWipeRender eff;
+		if(eff.Init(m_pRenderEngine))
+		{
+			bOK = eff.Render(pDest, pSrc, pSrc2, m_pEffectParam);
+		}
+	}
 	else if(FX_BROKEN_GLASS == m_strEffectName)
 	{
 		CBrokenGlassRender eff;
@@ -479,7 +488,7 @@ bool CTestClientDoc::EffectRender(CVideoBuffer* pDest, CVideoBuffer* pSrc, CVide
 		CSonyFadeFromToRender eff;
 		if(eff.Init(m_pRenderEngine))
 		{
-			bOK = eff.Render(pDest, pSrc, pSrc2, m_pEffectParam);
+			bOK = eff.Render(pDest, pSrc, m_pEffectParam);
 		}
 	}
 	else if(FX_SONY_SLIDE == m_strEffectName)
