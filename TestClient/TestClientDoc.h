@@ -63,6 +63,8 @@ protected:
 	CString m_strEffectName;
 	FxParamBase* m_pEffectParam;
 
+private:
+
 // 生成的消息映射函数
 protected:
 	DECLARE_MESSAGE_MAP()

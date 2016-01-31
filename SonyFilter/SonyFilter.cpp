@@ -74,9 +74,9 @@ bool CSonyFilter::Render( CVideoBuffer* pDstDef, CVideoBuffer* pSrcDef, FxParamB
 	}
 
 	RECT rcImage = {0, 0, biSrc.nWidth, biSrc.nHeight};
-	float pSrcDef_OffsetX = 0.f, pSrcDef_OffsetY = 0.f;
-	//D3DXVECTOR4 vvDst(pParam->vector4[0], pParam->vector4[1], pParam->vector4[2], pParam->vector4[3]);
-	D3DXVECTOR4& vvDst = pParam->vector4;
+	float pSrcDef_OffsetX = pParam->OffsetX, pSrcDef_OffsetY = pParam->OffsetY;
+	D3DXVECTOR4 vvDst(pParam->vector4[0], pParam->vector4[1], pParam->vector4[2], pParam->vector4[3]);
+	//D3DXVECTOR4& vvDst = pParam->vector4;
 	//srcDef.pAppend = (void*)&vvDst;
 	int nEditWidth, nEditHeight;
 	m_pEngine->GetTargetVideoSize(nEditWidth, nEditHeight);
@@ -149,10 +149,10 @@ bool CSonyFilter::Render( CVideoBuffer* pDstDef, CVideoBuffer* pSrcDef, FxParamB
 			matWorld._11 = (vDst->z - vDst->x) * dbSacleX / (float)vPort.Width;
 
 			if(bRenderY)
-				matWorld._22 = biSrc.nHeight / (float)vPort.Height;
+				matWorld._22 = biSrc.nHeight * 1.0f / vPort.Height;
 			else
 				matWorld._22 = (vDst->w - vDst->y) / (float)vPort.Height;
-			}	
+		}	
 		else
 		{
 			matWorld._11 = biSrc.nWidth * dbSacleX / (float)vPort.Width;

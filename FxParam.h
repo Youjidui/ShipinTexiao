@@ -679,8 +679,8 @@ struct SonyFilterFxParam : public FxParamBase
 	}emPosDefMode;
 	float OffsetX;
 	float OffsetY;
-	//float vector4[4];
-	D3DXVECTOR4 vector4;
+	float vector4[4];
+	//D3DXVECTOR4 vector4;
 };
 
 struct SonyBarnSlideFxParam : public FxParamBase

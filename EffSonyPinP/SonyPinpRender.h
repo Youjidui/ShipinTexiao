@@ -4,6 +4,8 @@
 #include "../D3D9Render/VideoBuffer.h"
 #include "../FxParam.h"
 
+class CSonyFilter;
+
 class CSonyPinpRender
 {
 public:
@@ -25,6 +27,7 @@ private:
 	CBaseFx* m_pDirectOutEffect;
 	D3DXMATRIXA16	m_matView, m_matProj;
 	CVideoBuffer*		m_pNoiseTexture;
+	CSonyFilter*	m_pFilterRender;
 
 protected:
 	bool CreateMesh();

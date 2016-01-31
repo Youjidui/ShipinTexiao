@@ -46,6 +46,7 @@ bool CBrokenGlassRender::Init( CRenderEngine* pEngine )
 	{
 		pBits[i*4] = (int)(rand()/(float)(RAND_MAX)*0xff);				// movement random
 		pBits[i*4+1] = (int)(rand()/(float)(RAND_MAX)*0xff);			// width random
+		pBits[i*4+2] = pBits[i*4+3] = 0;
 	}
 	pSuf->UnlockRect();
 	//pSuf->Release();
@@ -60,8 +61,8 @@ bool CBrokenGlassRender::Init( CRenderEngine* pEngine )
 	srand(4567);
 	D3DLOCKED_RECT lockRect;
 	pSuf->LockRect(&lockRect,NULL,D3DLOCK_DISCARD);
-	float* pBits = (float*)(lockRect.pBits);
-	float* pBits2 = (float*)((BYTE*)lockRect.pBits+lockRect.Pitch);
+	float* pBits = (float*)(lockRect.pBits);						//line 1
+	float* pBits2 = (float*)((BYTE*)lockRect.pBits+lockRect.Pitch);	//line 2
 	for( int i=0; i<2048; ++i )
 	{
 		pBits[i] = (rand()/(float)(RAND_MAX));
@@ -117,6 +118,7 @@ bool CBrokenGlassRender::Render( CVideoBuffer* pDest, CVideoBuffer *pSrcA, CVide
 	// 参数调整
 	float	blockAngle	= max(pParam->prm_width,0.0001f);	// 每一个块的角度
 	float	movement	= pParam->prm_movement;
+
 	float	angleBlock	= pParam->prm_angleBlock;
 	float	rotateAngle = pParam->prm_rotate;
 	float	aspect		= pParam->prm_aspect;	// [-1,1]

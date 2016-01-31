@@ -34,6 +34,7 @@ CSonyPinpRender::CSonyPinpRender(void)
 , m_pPinPEffect(NULL)
 , m_pDirectOutEffect(NULL)
 , m_pNoiseTexture(NULL)
+, m_pFilterRender(NULL)
 {
 }
 
@@ -44,6 +45,7 @@ CSonyPinpRender::~CSonyPinpRender(void)
 
 bool CSonyPinpRender::Init( CRenderEngine* pEngine )
 {
+	bool bOK = false;
 	D3DXVECTOR3 vEyePt( 0.0f, 0.0f,-0.5f/tanf(D3DX_PI/8) );
 	D3DXVECTOR3 vLookatPt( 0.0f, 0.0f, 0.0f );
 	D3DXVECTOR3 vUpVec( 0.0f, 1.0f, 0.0f );	
@@ -76,7 +78,17 @@ bool CSonyPinpRender::Init( CRenderEngine* pEngine )
 		return FALSE;
 	}
 #endif
-	return true;
+
+	bOK = CreateMesh();
+
+	if(!m_pFilterRender)
+	{
+		m_pFilterRender = new CSonyFilter;
+		ASSERT(m_pFilterRender);
+		bOK = m_pFilterRender->Init(pEngine);
+		ASSERT(bOK);
+	}
+	return bOK;
 }
 
 void CSonyPinpRender::Uninit()
@@ -87,6 +99,13 @@ void CSonyPinpRender::Uninit()
 		CVideoBufferManager* pBufMgr = m_pEngine->GetVideoBufferManager();
 		pBufMgr->ReleaseVideoBuffer(m_pNoiseTexture);
 		m_pNoiseTexture = NULL;
+	}
+
+	if(m_pFilterRender)
+	{
+		m_pFilterRender->Uninit();
+		delete m_pFilterRender;
+		m_pFilterRender = NULL;
 	}
 }
 
@@ -331,12 +350,14 @@ bool CSonyPinpRender::Render(CVideoBuffer* pDst, CVideoBuffer* pSrc, FxParamBase
 			D3DXVec2Normalize(&vecMove,&vecMove);
 			D3DXVECTOR4 vDir = D3DXVECTOR4(  ceil(vecMove.x * nEditWidth) / (float)nEditWidth, ceil(vecMove.y * nEditHeight) / (float)nEditHeight ,0.0f, 0.0f);
 			D3DXVec4Normalize(&vDir,&vDir);
-			m_pPinPEffect->SetVector("g_vDir",&vDir);
+			HRESULT hr = m_pPinPEffect->SetVector("g_vDir",&vDir);
+			ASSERT(SUCCEEDED(hr));
 			D3DXVECTOR4 vMisc = D3DXVECTOR4(fDencity,fDistance ,fDust,fRainbow );
-			m_pPinPEffect->SetVector("g_vMisc",&vMisc);
-
+			hr = m_pPinPEffect->SetVector("g_vMisc",&vMisc);
+			ASSERT(SUCCEEDED(hr));
 			LPDIRECT3DTEXTURE9 pNoiseTex = m_pNoiseTexture->GetTexture();
-			m_pPinPEffect->SetTexture("g_texNoise",pNoiseTex);
+			hr = m_pPinPEffect->SetTexture("g_texNoise",pNoiseTex);
+			ASSERT(SUCCEEDED(hr));
 
 			bDecay = TRUE;
 		}	
@@ -346,6 +367,7 @@ bool CSonyPinpRender::Render(CVideoBuffer* pDst, CVideoBuffer* pSrc, FxParamBase
 		}
 	}
 	BOOL bAlphaBlend = pParam->dwBackGroundType > 0 || bDecay || (pParam->bEnableShadow && pParam->fShadowDropDistance > 0.f);
+	bAlphaBlend = FALSE;
 	CVideoBuffer* pTempDef = pDst;
 	if(bAlphaBlend)
 	{
@@ -356,15 +378,18 @@ bool CSonyPinpRender::Render(CVideoBuffer* pDst, CVideoBuffer* pSrc, FxParamBase
 		biDest.eUsage = VideoBufferInfo::_IN_OUT;
 		CVideoBufferManager* pVM = m_pEngine->GetVideoBufferManager();
 		pTempDef = pVM->CreateVideoBuffer(biDest);
+		ASSERT(pTempDef);
 	}
 
 	_render_for_rgb32(pTempDef, pSrcDef, pParam, bDecay, bAlphaBlend);
 
-	pDevice->SetRenderTarget(1,NULL);	
+	HRESULT hr = pDevice->SetRenderTarget(1,NULL);
+	ASSERT(SUCCEEDED(hr));
 
 	if(pDst != pTempDef)
 	{
-		ClearCGBlend(pDst, pTempDef);
+		hr = ClearCGBlend(pDst, pTempDef);
+		ASSERT(SUCCEEDED(hr));
 
 		//FreeRTBuffer(hTemp);
 		CVideoBufferManager* pVM = m_pEngine->GetVideoBufferManager();
@@ -392,7 +417,9 @@ void CSonyPinpRender::_render_for_rgb32(CVideoBuffer* pDstDef, CVideoBuffer* pSr
 void CSonyPinpRender::_do_render_scene(CVideoBuffer* pSrc, SonyPinPFxParam* pParam, BOOL bDecay, BOOL bAlphaBlend, 
 									   const RECT& rcDestImage, float offsetX,float offsetY, BOOL bSingleWord,float fAlpha)
 {
+	bool bOK = false;
 	LPDIRECT3DDEVICE9 pDevice = m_pEngine->GetDevice();
+
 	float fScaleX = pParam->fScaleX / 100.0f;
 	float fScaleY = pParam->fScaleY / 100.0f;
 	float fBorderScale =  pParam->fBorderWidth;
@@ -480,7 +507,8 @@ void CSonyPinpRender::_do_render_scene(CVideoBuffer* pSrc, SonyPinPFxParam* pPar
 
 		if (pParam->dwBackGroundType > 0)
 		{
-			m_pPinPEffect->SetTexture("g_tex", pSrc->GetTexture());	
+			hr = m_pPinPEffect->SetTexture("g_tex", pSrc->GetTexture());
+			ASSERT(SUCCEEDED(hr));
 			D3DXMATRIX matBGTex;	
 			D3DXMatrixIdentity(&matBGTex);
 			matBGTex._11 = biSrc.nWidth / (float) biSrc.nAllocWidth;
@@ -488,7 +516,8 @@ void CSonyPinpRender::_do_render_scene(CVideoBuffer* pSrc, SonyPinPFxParam* pPar
 			matBGTex._31 = (0.5f + rcImage.left) / (float) biSrc.nAllocWidth;
 			matBGTex._32 = (0.5f + rcImage.top)/ (float) biSrc.nAllocHeight;
 
-			m_pPinPEffect->SetMatrix("g_matTexture",&matBGTex);			
+			hr = m_pPinPEffect->SetMatrix("g_matTexture",&matBGTex);
+			ASSERT(SUCCEEDED(hr));
 			D3DXMatrixIdentity(&matWorld);
 			matWorld._11 = biSrc.nWidth  / (float)vPort.Width;
 			matWorld._22 = biSrc.nHeight / (float)vPort.Height;
@@ -496,25 +525,36 @@ void CSonyPinpRender::_do_render_scene(CVideoBuffer* pSrc, SonyPinPFxParam* pPar
 			matWorld._42 = 0.5f  - matWorld._22 / 2.0f - pSrcDef_OffsetY / (float)vPort.Height;   
 
 			matCombine = matWorld * m_matView * m_matProj;
-			m_pPinPEffect->SetMatrix("g_matBackGround",&matCombine);
+			hr = m_pPinPEffect->SetMatrix("g_matBackGround",&matCombine);
+			ASSERT(SUCCEEDED(hr));
 
 			D3DXVECTOR4 vecBGSepiaColor = (float*)(D3DXCOLOR)pParam->cBackGroundSepiaColor;
 
-			m_pPinPEffect->SetVector("g_SepiaColor",&vecBGSepiaColor);
-			m_pPinPEffect->SetInt("g_iBGType", (int)pParam->dwBackGroundType);			
-			m_pPinPEffect->SetFloat("g_BGDensity", pParam->fBackGoundDensity/100.f);
-			m_pPinPEffect->SetTechnique("BackGround");
+			hr = m_pPinPEffect->SetVector("g_SepiaColor",&vecBGSepiaColor);
+			ASSERT(SUCCEEDED(hr));
+			hr = m_pPinPEffect->SetInt("g_iBGType", (int)pParam->dwBackGroundType);
+			ASSERT(SUCCEEDED(hr));
+			hr = m_pPinPEffect->SetFloat("g_BGDensity", pParam->fBackGoundDensity/100.f);
+			ASSERT(SUCCEEDED(hr));
+			hr = m_pPinPEffect->SetTechnique("BackGround");
+			ASSERT(SUCCEEDED(hr));
 
-			m_pPinPEffect->Begin(&cPass,0);
-			m_pPinPEffect->BeginPass(uPass);
-			m_pQuadMesh->DrawMeshFx();		  		
-			m_pPinPEffect->EndPass();
-
-			m_pPinPEffect->End();		
+			hr = m_pPinPEffect->Begin(&cPass,0);
+			ASSERT(SUCCEEDED(hr));
+			hr = m_pPinPEffect->BeginPass(uPass);
+			ASSERT(SUCCEEDED(hr));
+			bOK = m_pQuadMesh->DrawMeshFx();
+			ASSERT(bOK);
+			hr = m_pPinPEffect->EndPass();
+			ASSERT(SUCCEEDED(hr));
+			hr = m_pPinPEffect->End();
+			ASSERT(SUCCEEDED(hr));
 		}		
 
-		m_pPinPEffect->SetTexture("g_tex", pSrc->GetTexture());
-		m_pPinPEffect->SetMatrix("g_matTexture",&matSrcTex);
+		hr = m_pPinPEffect->SetTexture("g_tex", pSrc->GetTexture());
+		ASSERT(SUCCEEDED(hr));
+		hr = m_pPinPEffect->SetMatrix("g_matTexture",&matSrcTex);
+		ASSERT(SUCCEEDED(hr));
 		//handle_tpr hTemp = NewRTBuffer(0,0,nEditWidth,nEditHeight);
 		CVideoBuffer* pTempDef = NULL;
 		LPDIRECT3DSURFACE9 pOldRT = NULL;
@@ -526,7 +566,7 @@ void CSonyPinpRender::_do_render_scene(CVideoBuffer* pSrc, SonyPinPFxParam* pPar
 			ASSERT(pTempDef);
 			hr = pDevice->GetRenderTarget(0,&pOldRT);
 			ASSERT(SUCCEEDED(hr));
-			bool bOK = m_pEngine->SetRenderTarget(pTempDef);
+			bOK = m_pEngine->SetRenderTarget(pTempDef);
 			ASSERT(bOK);
 		}
 
@@ -546,40 +586,55 @@ void CSonyPinpRender::_do_render_scene(CVideoBuffer* pSrc, SonyPinPFxParam* pPar
 
 			matCombine =  matWorld * m_matView * m_matProj;
 
-			m_pPinPEffect->SetMatrix("g_matShadow",&matCombine);
+			hr = m_pPinPEffect->SetMatrix("g_matShadow",&matCombine);
+			ASSERT(SUCCEEDED(hr));
 			D3DXCOLOR cShadowColor = pParam->cShadowColor;			
 			ColorConvertor::RGBA2( bufferFormat == FMT_RGBA32? FMT_RGBA32:FMT_YUVA32, &cShadowColor, &cShadowColor);
 			D3DXVECTOR4 vecShadowColor = (float*)cShadowColor;
 
-			m_pPinPEffect->SetVector("g_ShadowColor",&vecShadowColor);
-			m_pPinPEffect->SetFloat("g_ShadowSoftness",pParam->fShadowDropSoftness);
-			m_pPinPEffect->SetFloat("g_ShadowTransparency",pParam->fShadowDropTransparency);
+			hr = m_pPinPEffect->SetVector("g_ShadowColor",&vecShadowColor);
+			ASSERT(SUCCEEDED(hr));
+			hr = m_pPinPEffect->SetFloat("g_ShadowSoftness",pParam->fShadowDropSoftness);
+			ASSERT(SUCCEEDED(hr));
+			hr = m_pPinPEffect->SetFloat("g_ShadowTransparency",pParam->fShadowDropTransparency);
+			ASSERT(SUCCEEDED(hr));
 
-			m_pPinPEffect->SetTechnique("Shadow");	
+			hr = m_pPinPEffect->SetTechnique("Shadow");	
+			ASSERT(SUCCEEDED(hr));
 
-			m_pPinPEffect->Begin(&cPass,0);		
-			m_pPinPEffect->BeginPass(0);
-			m_pQuadMesh->DrawMeshFx();	  		
-			m_pPinPEffect->EndPass();
-
-			m_pPinPEffect->End();
+			hr = m_pPinPEffect->Begin(&cPass,0);
+			ASSERT(SUCCEEDED(hr));
+			hr = m_pPinPEffect->BeginPass(0);
+			ASSERT(SUCCEEDED(hr));
+			bOK = m_pQuadMesh->DrawMeshFx();
+			ASSERT(bOK);
+			hr = m_pPinPEffect->EndPass();
+			ASSERT(SUCCEEDED(hr));
+			hr = m_pPinPEffect->End();
+			ASSERT(SUCCEEDED(hr));
 
 			CalcBox(&matWorld,&rcTemp);
-			UnionRect(&rcDestImage,&rcDestImage,&rcTemp);
+			bOK = UnionRect(&rcDestImage,&rcDestImage,&rcTemp);
+			ASSERT(bOK);
 		}		
 
-		if(pParam->bFilter && (fScaleX < 0.9999f || fScaleY < 0.9999f))
+		if(pParam->bFilter && m_pFilterRender && (fScaleX < 0.9999f || fScaleY < 0.9999f))
 		{
 			//handle_tpr hSonyFiltr = NewRTBuffer(0,0,nEditWidth,nEditHeight);
 			//TP_VBufferDef *pSonyFilterDef = m_pResMan->GetBufferDef(hSonyFiltr);
 			VideoBufferInfo biTemp = {D3DFMT_A8R8G8B8, VideoBufferInfo::VIDEO_MEM, VideoBufferInfo::_IN_OUT, nEditWidth, nEditHeight, 0, 0};
 			CVideoBufferManager* pVM = m_pEngine->GetVideoBufferManager();
+			ASSERT(pVM);
 			CVideoBuffer* pFilterBuf = pVM->CreateVideoBuffer(biTemp);
+			ASSERT(pFilterBuf);
 
 			{
 				LPDIRECT3DSURFACE9 pOldSurf = NULL;
-				pDevice->GetRenderTarget(0,&pOldSurf);
-				pDevice->EndScene();
+				hr = pDevice->GetRenderTarget(0,&pOldSurf);
+				ASSERT(SUCCEEDED(hr));
+				hr = pDevice->EndScene();
+				ASSERT(SUCCEEDED(hr));
+
 
 				matWorld = matPrevScale * matClip * matPrevTransition * matTransition;				
 
@@ -608,18 +663,22 @@ void CSonyPinpRender::_do_render_scene(CVideoBuffer* pSrc, SonyPinPFxParam* pPar
 				param.fSacleY = dbYScale;
 				param.nTaps = 8;
 				SetRect(&param.rcBound, 0, 0, nEditWidth, nEditHeight);
+				param.vector4[0] = vSrc.x;
+				param.vector4[1] = vSrc.y;
+				param.vector4[2] = vSrc.z;
+				param.vector4[3] = vSrc.w;
 
 				//m_pEngine->SonyFilter(&SrcDef,pSonyFilterDef,dbXScale,dbYScale,8);
-				CSonyFilter render;
-				render.Init(m_pEngine);
-				render.Render(pFilterBuf, pSrc, &param);
-				render.Uninit();
+				bOK = m_pFilterRender->Render(pFilterBuf, pSrc, &param);
+				ASSERT(bOK);
 
 				//D3DXSaveSurfaceToFile(_T("./FilterBuf.dds"), D3DXIFF_DDS, pFilterBuf->GetSurface(), NULL, NULL);
 
-				pDevice->SetRenderTarget(0,pOldSurf);
+				hr = pDevice->SetRenderTarget(0,pOldSurf);
+				ASSERT(SUCCEEDED(hr));
 				SAFE_RELEASE(pOldSurf);
-				pDevice->BeginScene();
+				hr = pDevice->BeginScene();
+				ASSERT(SUCCEEDED(hr));
 			}
 
 			D3DXMatrixIdentity(&matWorld);
@@ -631,20 +690,29 @@ void CSonyPinpRender::_do_render_scene(CVideoBuffer* pSrc, SonyPinPFxParam* pPar
 			matWorld._42 = (1.0f - matWorld._22) / 2.0f - 0 / nEditHeight;
 
 			matCombine =  matWorld * m_matView * m_matProj;						
-			m_pPinPEffect->SetMatrix("g_matOriginal", &matCombine);			
-			m_pPinPEffect->SetTexture("g_tex", pFilterBuf->GetTexture());
+			hr = m_pPinPEffect->SetMatrix("g_matOriginal", &matCombine);
+			ASSERT(SUCCEEDED(hr));
+			hr = m_pPinPEffect->SetTexture("g_tex", pFilterBuf->GetTexture());
+			ASSERT(SUCCEEDED(hr));
 
-			GenerateMatrix(pFilterBuf, &matSrcTex, mat_Image);
+			bOK = GenerateMatrix(pFilterBuf, &matSrcTex, mat_Image);
+			ASSERT(bOK);
 
-			m_pPinPEffect->SetMatrix("g_matTexture",&matSrcTex);			
+			hr = m_pPinPEffect->SetMatrix("g_matTexture",&matSrcTex);
+			ASSERT(SUCCEEDED(hr));
 
-			m_pPinPEffect->SetTechnique("ORG");
-			m_pPinPEffect->Begin(&cPass,0);
-			m_pPinPEffect->BeginPass(bAlphaBlend);
-			m_pQuadMesh->DrawMeshFx();			  		
-			m_pPinPEffect->EndPass();
-
-			m_pPinPEffect->End();	
+			hr = m_pPinPEffect->SetTechnique("ORG");
+			ASSERT(SUCCEEDED(hr));
+			hr = m_pPinPEffect->Begin(&cPass,0);
+			ASSERT(SUCCEEDED(hr));
+			hr = m_pPinPEffect->BeginPass(bAlphaBlend);
+			ASSERT(SUCCEEDED(hr));
+			bOK = m_pQuadMesh->DrawMeshFx();
+			ASSERT(bOK);
+			hr = m_pPinPEffect->EndPass();
+			ASSERT(SUCCEEDED(hr));
+			hr = m_pPinPEffect->End();
+			ASSERT(SUCCEEDED(hr));
 
 			//FreeRTBuffer(hSonyFiltr);
 			if(pFilterBuf)
@@ -663,18 +731,25 @@ void CSonyPinpRender::_do_render_scene(CVideoBuffer* pSrc, SonyPinPFxParam* pPar
 		{
 			matWorld = matPrevScale * matClip * matPrevTransition * matTransition;
 			matCombine =  matWorld * m_matView * m_matProj;						
-			m_pPinPEffect->SetMatrix("g_matOriginal", &matCombine);			
-			m_pPinPEffect->SetTexture("g_tex",pSrc->GetTexture());
+			hr = m_pPinPEffect->SetMatrix("g_matOriginal", &matCombine);
+			ASSERT(SUCCEEDED(hr));
+			hr = m_pPinPEffect->SetTexture("g_tex",pSrc->GetTexture());
+			ASSERT(SUCCEEDED(hr));
+			hr = m_pPinPEffect->SetMatrix("g_matTexture",&matSrcTex);
+			ASSERT(SUCCEEDED(hr));
 
-			m_pPinPEffect->SetMatrix("g_matTexture",&matSrcTex);			
-
-			m_pPinPEffect->SetTechnique("ORG");
-			m_pPinPEffect->Begin(&cPass,0);
-			m_pPinPEffect->BeginPass(bAlphaBlend);
-			m_pQuadMesh->DrawMeshFx();
-			m_pPinPEffect->EndPass();
-
-			m_pPinPEffect->End();	
+			hr = m_pPinPEffect->SetTechnique("ORG");
+			ASSERT(SUCCEEDED(hr));
+			hr = m_pPinPEffect->Begin(&cPass,0);
+			ASSERT(SUCCEEDED(hr));
+			hr = m_pPinPEffect->BeginPass(bAlphaBlend);
+			ASSERT(SUCCEEDED(hr));
+			bOK = m_pQuadMesh->DrawMeshFx();
+			ASSERT(bOK);
+			hr = m_pPinPEffect->EndPass();
+			ASSERT(SUCCEEDED(hr));
+			hr = m_pPinPEffect->End();
+			ASSERT(SUCCEEDED(hr));
 
 			CalcBox(&matWorld, &rcTemp);
 			UnionRect(&rcDestImage, &rcDestImage, &rcTemp); 	
@@ -686,20 +761,28 @@ void CSonyPinpRender::_do_render_scene(CVideoBuffer* pSrc, SonyPinPFxParam* pPar
 			matWorld = matborder * matClip * matPrevTransition * matTransition;
 
 			matCombine =  matWorld * m_matView * m_matProj;						
-			m_pPinPEffect->SetMatrix("g_matOriginal", &matCombine);		
+			hr = m_pPinPEffect->SetMatrix("g_matOriginal", &matCombine);
+			ASSERT(SUCCEEDED(hr));
 
 			D3DXCOLOR cBorderColor = pParam->cBorderColor;			
 			ColorConvertor::RGBA2( bufferFormat == FMT_RGBA32? FMT_RGBA32:FMT_YUVA32,&cBorderColor,&cBorderColor);
 			D3DXVECTOR4 vecBorderColor = (float*) cBorderColor;
-			m_pPinPEffect->SetVector("g_BorderColor",&vecBorderColor);
-			pDevice->SetTexture(0,NULL);
-			m_pPinPEffect->SetTechnique("Border");
-			m_pPinPEffect->Begin(&cPass,0);
-			m_pPinPEffect->BeginPass(0);
-			m_pQuadMesh->DrawMeshFx();			  		
-			m_pPinPEffect->EndPass();
-
-			m_pPinPEffect->End();
+			hr = m_pPinPEffect->SetVector("g_BorderColor",&vecBorderColor);
+			ASSERT(SUCCEEDED(hr));
+			hr = pDevice->SetTexture(0,NULL);
+			ASSERT(SUCCEEDED(hr));
+			hr = m_pPinPEffect->SetTechnique("Border");
+			ASSERT(SUCCEEDED(hr));
+			hr = m_pPinPEffect->Begin(&cPass,0);
+			ASSERT(SUCCEEDED(hr));
+			hr = m_pPinPEffect->BeginPass(0);
+			ASSERT(SUCCEEDED(hr));
+			bOK = m_pQuadMesh->DrawMeshFx();
+			ASSERT(bOK);
+			hr = m_pPinPEffect->EndPass();
+			ASSERT(SUCCEEDED(hr));
+			hr = m_pPinPEffect->End();
+			ASSERT(SUCCEEDED(hr));
 
 			CalcBox(&matWorld,&rcTemp);
 			UnionRect(&rcDestImage,&rcDestImage,&rcTemp);				
@@ -707,16 +790,20 @@ void CSonyPinpRender::_do_render_scene(CVideoBuffer* pSrc, SonyPinPFxParam* pPar
 
 		if (bDecay)
 		{
-			pDevice->SetRenderTarget(0, pOldRT);				
-			pDevice->SetRenderTarget(1, NULL);
+			hr = pDevice->SetRenderTarget(0, pOldRT);
+			ASSERT(SUCCEEDED(hr));
+			hr = pDevice->SetRenderTarget(1, NULL);
+			ASSERT(SUCCEEDED(hr));
 			SAFE_RELEASE(pOldRT);
 
-			pDevice->SetViewport(&vPort);
+			hr = pDevice->SetViewport(&vPort);
+			ASSERT(SUCCEEDED(hr));
 
 			ASSERT(pTempDef);
 			const VideoBufferInfo& biTemp = pTempDef->GetVideoBufferInfo();
 
-			m_pPinPEffect->SetTexture("g_tex", pTempDef->GetTexture());
+			hr = m_pPinPEffect->SetTexture("g_tex", pTempDef->GetTexture());
+			ASSERT(SUCCEEDED(hr));
 			D3DXMATRIX matSrcImage;	
 			D3DXMatrixIdentity( &matSrcImage );			
 
@@ -727,7 +814,8 @@ void CSonyPinpRender::_do_render_scene(CVideoBuffer* pSrc, SonyPinPFxParam* pPar
 			matSrcImage._32   = (0.5f + rcDestImage.top) /((float)biTemp.nAllocHeight); 
 
 
-			m_pPinPEffect->SetMatrix("g_matTexture", &matSrcImage); 
+			hr = m_pPinPEffect->SetMatrix("g_matTexture", &matSrcImage); 
+			ASSERT(SUCCEEDED(hr));
 
 			D3DXMATRIXA16 matWorld;
 			D3DXMatrixIdentity(&matWorld);
@@ -737,26 +825,34 @@ void CSonyPinpRender::_do_render_scene(CVideoBuffer* pSrc, SonyPinPFxParam* pPar
 			matWorld._41 = -0.5f + matWorld._11 * 0.5f + rcDestImage.left / (float)nEditWidth;
 			matWorld._42 = 0.5f - matWorld._22 * 0.5f - rcDestImage.top / (float)nEditHeight;			
 
-			m_pPinPEffect->SetMatrix("g_matViewProj", &(matWorld * m_matView * m_matProj));			
+			hr = m_pPinPEffect->SetMatrix("g_matViewProj", &(matWorld * m_matView * m_matProj));
+			ASSERT(SUCCEEDED(hr));
+			hr = m_pPinPEffect->SetFloat("g_fInstanceCount",pParam->iTrailDecayTime);
+			ASSERT(SUCCEEDED(hr));
+			hr = m_pPinPEffect->SetTechnique("Decay");
 
-			m_pPinPEffect->SetFloat("g_fInstanceCount",pParam->iTrailDecayTime);
+			hr = pDevice->SetStreamSourceFreq(0,D3DSTREAMSOURCE_INDEXEDDATA | (pParam->iTrailDecayTime + 1));
+			ASSERT(SUCCEEDED(hr));
+			hr = pDevice->SetStreamSource(1,m_pDecayMesh,0,sizeof(VertexObejct));
+			ASSERT(SUCCEEDED(hr));
+			hr = pDevice->SetStreamSourceFreq(1,D3DSTREAMSOURCE_INSTANCEDATA | 1ul);
+			ASSERT(SUCCEEDED(hr));
 
-			m_pPinPEffect->SetTechnique("Decay");
+			hr = m_pPinPEffect->Begin(&cPass,0);
+			ASSERT(SUCCEEDED(hr));
+			hr = m_pPinPEffect->BeginPass(uPass);
+			ASSERT(SUCCEEDED(hr));
+			bOK = m_pMesh->DrawMeshFx(0);
+			ASSERT(bOK);
+			hr = m_pPinPEffect->EndPass();
+			ASSERT(SUCCEEDED(hr));
+			hr = m_pPinPEffect->End();
+			ASSERT(SUCCEEDED(hr));
 
-			pDevice->SetStreamSourceFreq(0,D3DSTREAMSOURCE_INDEXEDDATA | (pParam->iTrailDecayTime + 1));
-			pDevice->SetStreamSource(1,m_pDecayMesh,0,sizeof(VertexObejct));
-			pDevice->SetStreamSourceFreq(1,D3DSTREAMSOURCE_INSTANCEDATA | 1ul);
-
-			m_pPinPEffect->Begin(&cPass,0);
-
-			m_pPinPEffect->BeginPass(uPass);
-			m_pMesh->DrawMeshFx(0);	  	  		
-			m_pPinPEffect->EndPass();
-
-			m_pPinPEffect->End();
-
-			pDevice->SetStreamSourceFreq(0,1ul);
-			pDevice->SetStreamSourceFreq(1,1ul);			
+			hr = pDevice->SetStreamSourceFreq(0,1ul);
+			ASSERT(SUCCEEDED(hr));
+			hr = pDevice->SetStreamSourceFreq(1,1ul);
+			ASSERT(SUCCEEDED(hr));
 
 			bDecay = FALSE;
 
@@ -773,7 +869,8 @@ void CSonyPinpRender::_do_render_scene(CVideoBuffer* pSrc, SonyPinPFxParam* pPar
 		//m_rcDestImage = rcDestImage;
 
 
-		pDevice->EndScene();
+		hr = pDevice->EndScene();
+		ASSERT(SUCCEEDED(hr));
 
 		//{
 		//	LPDIRECT3DSURFACE9 pOldRT = NULL;
@@ -792,7 +889,8 @@ void CSonyPinpRender::_do_render_scene(CVideoBuffer* pSrc, SonyPinPFxParam* pPar
 			pTempDef = NULL;
 		}
 
-		pDevice->SetRenderState(D3DRS_SEPARATEALPHABLENDENABLE,FALSE);
+		hr = pDevice->SetRenderState(D3DRS_SEPARATEALPHABLENDENABLE,FALSE);
+		ASSERT(SUCCEEDED(hr));
 	} 
 }
 
@@ -821,6 +919,7 @@ void CSonyPinpRender::CalcBox(IN D3DXMATRIXA16 * matWorld, OUT RECT * rcImage)
 
 HRESULT CSonyPinpRender::ClearCGBlend(CVideoBuffer* pDest, CVideoBuffer* pSrc)
 {
+	HRESULT hr = E_FAIL;
 	LPDIRECT3DDEVICE9 pDevice = m_pEngine->GetDevice();
 	D3DXMATRIXA16 matCombine,matTex,matWorld;
 	CVideoBuffer * pSrcDef = pSrc;
@@ -843,8 +942,10 @@ HRESULT CSonyPinpRender::ClearCGBlend(CVideoBuffer* pDest, CVideoBuffer* pSrc)
 		case FMT_YUVA32:uPass = 1;break;
 		case FMT_RGBA32:uPass = 2;break;
 		}
-		m_pEngine->SetRenderTarget(pDestDef);
-		::GenerateMatrix(pSrcDef, &matTex, mat_Image);
+		bool bOK = m_pEngine->SetRenderTarget(pDestDef);
+		ASSERT(bOK);
+		bOK = ::GenerateMatrix(pSrcDef, &matTex, mat_Image);
+		ASSERT(bOK);
 
 		RECT rcImage = {0, 0, biSrc.nWidth, biSrc.nHeight};
 		D3DXVECTOR2 offset(pSrcDef_OffsetX,pSrcDef_OffsetY);
@@ -852,20 +953,30 @@ HRESULT CSonyPinpRender::ClearCGBlend(CVideoBuffer* pDest, CVideoBuffer* pSrc)
 		GenerateWorld(&rcImage, &offset, &destBuffSize, &matWorld);
 
 		matCombine = matWorld * m_matView * m_matProj;
-		m_pDirectOutEffect->SetTechnique("Clear_CGBlend");
-		m_pDirectOutEffect->SetMatrix("g_matWorldViewProj",&matCombine);
-		m_pDirectOutEffect->SetMatrix("g_matTexture",&matTex);
-		m_pDirectOutEffect->SetTexture("g_txColor",pSrcDef->GetTexture());
+		hr = m_pDirectOutEffect->SetTechnique("Clear_CGBlend");
+		ASSERT(SUCCEEDED(hr));
+		hr = m_pDirectOutEffect->SetMatrix("g_matWorldViewProj",&matCombine);
+		ASSERT(SUCCEEDED(hr));
+		hr = m_pDirectOutEffect->SetMatrix("g_matTexture",&matTex);
+		ASSERT(SUCCEEDED(hr));
+		hr = m_pDirectOutEffect->SetTexture("g_txColor",pSrcDef->GetTexture());
+		ASSERT(SUCCEEDED(hr));
 
-		m_pDirectOutEffect->Begin(&cPass,0);
-		m_pDirectOutEffect->BeginPass(uPass);
-		m_pQuadMesh->DrawMeshFx();
-		m_pDirectOutEffect->EndPass();
-		m_pDirectOutEffect->End();
+		hr = m_pDirectOutEffect->Begin(&cPass,0);
+		ASSERT(SUCCEEDED(hr));
+		hr = m_pDirectOutEffect->BeginPass(uPass);
+		ASSERT(SUCCEEDED(hr));
+		bOK = m_pQuadMesh->DrawMeshFx();
+		ASSERT(bOK);
+		hr = m_pDirectOutEffect->EndPass();
+		ASSERT(SUCCEEDED(hr));
+		hr = m_pDirectOutEffect->End();
+		ASSERT(SUCCEEDED(hr));
 		// End the scene
-		pDevice->EndScene();
+		hr = pDevice->EndScene();
+		ASSERT(SUCCEEDED(hr));
 	}
-	return S_OK;
+	return hr;
 }
 
 void CSonyPinpRender::GenerateWorld(const RECT * pSrcRcImage,const D3DXVECTOR2 * pOffset,const D3DXVECTOR2 * pDstSize,D3DXMATRIXA16 * pMatWorld)
