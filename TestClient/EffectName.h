@@ -4,6 +4,7 @@
 
 #define FX_NEGATIVE _T("Negative")
 #define FX_COLOR_KEY _T("Color Key")
+#define FX_DIP_TO_COLOR _T("Dip To Color")
 #define FX_SONY_BLUR _T("Sony Blur")
 #define FX_AMOEBA_WIPE _T("Amoeba Wipe")
 #define FX_PUSH _T("Push")

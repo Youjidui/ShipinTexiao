@@ -468,6 +468,10 @@
 			ReferencedProjectIdentifier="{74A2D324-6A68-42C2-84AB-9802BCE995F1}"
 			RelativePathToProject=".\EffRippleWipe\EffRippleWipe.vcproj"
 		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{4546C276-AF57-4FCA-B266-FB00E0B4E978}"
+			RelativePathToProject=".\EffDipToColor\EffDipToColor.vcproj"
+		/>
 	</References>
 	<Files>
 		<Filter
@@ -529,6 +533,10 @@
 			</File>
 			<File
 				RelativePath=".\ParamCubeDlg.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ParamDipToColorDlg.cpp"
 				>
 			</File>
 			<File
@@ -711,6 +719,10 @@
 			</File>
 			<File
 				RelativePath=".\ParamCubeDlg.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ParamDipToColorDlg.h"
 				>
 			</File>
 			<File

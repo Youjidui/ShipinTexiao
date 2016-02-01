@@ -1075,6 +1075,25 @@ BEGIN
     CONTROL         "Reverse",IDC_CHECK_REVERSE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,173,43,10
 END
 
+IDD_PARAM_DIP_TO_COLOR DIALOGEX 0, 0, 150, 138
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "DipToColor"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "确定",IDOK,93,117,50,14
+    LTEXT           "Color R",IDC_STATIC,7,10,24,8
+    CONTROL         "",IDC_SLIDER_COLOR_R,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,41,7,100,15
+    LTEXT           "Color G",IDC_STATIC,7,25,24,8
+    CONTROL         "",IDC_SLIDER_COLOR_G,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,41,22,100,15
+    LTEXT           "Color B",IDC_STATIC,7,41,24,8
+    CONTROL         "",IDC_SLIDER_COLOR_B,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,41,38,100,15
+    LTEXT           "Color A",IDC_STATIC,7,57,24,8
+    CONTROL         "",IDC_SLIDER_COLOR_A,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,41,54,100,15
+    LTEXT           "Progress",IDC_STATIC,7,73,29,8
+    CONTROL         "",IDC_SLIDER_PROGRESS,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,41,70,100,15
+    CONTROL         "Reverse",IDC_CHECK_bReverse,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,92,43,10
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -1082,8 +1101,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,0,0,1
- PRODUCTVERSION 1,0,0,1
+ FILEVERSION 1,0,0,6
+ PRODUCTVERSION 1,0,0,6
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -1098,14 +1117,14 @@ BEGIN
     BEGIN
         BLOCK "080403a8"
         BEGIN
-            VALUE "CompanyName", "zhuo yuan"
+            VALUE "CompanyName", "unknown software"
             VALUE "FileDescription", "Effect Test Client"
-            VALUE "FileVersion", "1.0.0.1"
+            VALUE "FileVersion", "1.0.0.6"
             VALUE "InternalName", "TestClient.exe"
-            VALUE "LegalCopyright", "(C) zhuo yuan。保留所有权利。"
+            VALUE "LegalCopyright", "(C) unknown software。保留所有权利。"
             VALUE "OriginalFilename", "TestClient.exe"
             VALUE "ProductName", "Effect"
-            VALUE "ProductVersion", "1.0.0.1"
+            VALUE "ProductVersion", "1.0.0.6"
         END
     END
     BLOCK "VarFileInfo"
@@ -1302,6 +1321,14 @@ BEGIN
         RIGHTMARGIN, 163
         TOPMARGIN, 7
         BOTTOMMARGIN, 227
+    END
+
+    IDD_PARAM_DIP_TO_COLOR, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 143
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 131
     END
 END
 #endif    // APSTUDIO_INVOKED

@@ -1,0 +1,39 @@
+float2     ScaleAndAlpha : register(c0);
+float4	  Color			  : register(c1);
+float4    colorBlack	  : register(c2);
+
+sampler2D imageSampler  : register(s0);
+sampler2D alphaSampler	  : register(s1);
+
+#ifdef YUYVA
+
+void main(float2 texcoord:TEXCOORD0, out float4 color:COLOR0, out float4 alpha:COLOR1)
+{
+    float4 srcColor = tex2D(imageSampler, texcoord);
+    float4 srcAlpha = tex2D(alphaSampler, texcoord) * ScaleAndAlpha.y;
+	color = lerp( srcColor, Color, ScaleAndAlpha.x );
+	alpha = lerp( srcAlpha, 1.f, ScaleAndAlpha.x );
+}
+
+
+#else
+
+float4 main(float2 texcoord	: TEXCOORD0):COLOR
+{
+    float4 srcColor = tex2D(imageSampler, texcoord);
+    srcColor.a *= ScaleAndAlpha.y;
+    
+    if( srcColor.a == 0.f )
+		srcColor.rgb = colorBlack;
+
+	srcColor.rgb = lerp(colorBlack,srcColor,srcColor.a);
+	
+	float4 oColor = lerp(srcColor,Color,ScaleAndAlpha.x);
+	oColor.a = lerp(srcColor.a,1,ScaleAndAlpha.x);
+	if(oColor.a > 0.5f / 255.0f)
+		oColor.rgb = lerp(colorBlack,oColor,1.0f / oColor.a);
+	return oColor;
+}
+
+#endif
+

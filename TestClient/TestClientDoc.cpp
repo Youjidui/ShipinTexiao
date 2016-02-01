@@ -39,6 +39,7 @@
 #include "../EffSonyFadeFromTo/SonyFadeFromToRender.h"
 #include "../EffPageRotation/PageRotationRender.h"
 #include "../Sony3DBrokenGlass/Sony3DBrokenGlassRender.h"
+#include "../EffDipToColor/DipToColorRender.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -601,6 +602,15 @@ bool CTestClientDoc::EffectRender(CVideoBuffer* pDest, CVideoBuffer* pSrc, CVide
 		if(eff.Init(m_pRenderEngine))
 		{
 			bOK = eff.Render(pDest, pSrc, pSrc2, (Sony3DBrokenGlassFxParam*)m_pEffectParam);
+		}
+
+	}
+	else if(FX_DIP_TO_COLOR == m_strEffectName)
+	{
+		CDipToColorRender eff;
+		if(eff.Init(m_pRenderEngine))
+		{
+			bOK = eff.Render(pDest, pSrc, pSrc2, (DipToColorTransFxParam*)m_pEffectParam);
 		}
 
 	}

@@ -247,6 +247,14 @@ void CEffectBar::OnBnClickedParameters()
 			}
 			m_sony3DBrokenGlassDlg.ShowWindow(SW_SHOW);
 		}
+		else if(FX_DIP_TO_COLOR == str)
+		{
+			if(!m_dipToColorDlg.GetSafeHwnd())
+			{
+				m_dipToColorDlg.Create(m_dipToColorDlg.IDD);
+			}
+			m_dipToColorDlg.ShowWindow(SW_SHOW);
+		}
 	}
 }
 
@@ -448,6 +456,13 @@ BOOL CEffectBar::OnInitDialog()
 		m_sony3DBrokenGlassDlg.SetParam(p);
 
 	}
+	i = m_ctrlEffects.AddString(FX_DIP_TO_COLOR);
+	{
+		DipToColorTransFxParam* p = new DipToColorTransFxParam;
+		m_ctrlEffects.SetItemDataPtr(i, p);
+		m_dipToColorDlg.SetParam(p);
+
+	}
 
 	m_ctrlEffects.SetCurSel(i);
 
@@ -601,6 +616,12 @@ void CEffectBar::OnProgressChange( int nPos )
 			pParam->progress = nPos / 10000.f;
 			AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)(LPCTSTR)str, (LPARAM)pParam);
 		}
+		else if (FX_DIP_TO_COLOR == str)
+		{
+			DipToColorTransFxParam* pParam = (DipToColorTransFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
+			pParam->fProcess = nPos / 10000.f;
+			AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)(LPCTSTR)str, (LPARAM)pParam);
+		}
 	}
 }
 
@@ -686,6 +707,11 @@ void CEffectBar::SetProgress(CSliderCtrl* pCtrl)
 		{
 			Sony3DBrokenGlassFxParam* pParam = (Sony3DBrokenGlassFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
 			if(pParam)	pCtrl->SetPos(pParam->progress * 10000);
+		}
+		else if(FX_DIP_TO_COLOR == str)
+		{
+			DipToColorTransFxParam* pParam = (DipToColorTransFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
+			if(pParam)	pCtrl->SetPos(pParam->fProcess * 10000);
 		}
 		else	//不是过渡特技，没有进度条
 		{

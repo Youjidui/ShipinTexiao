@@ -44,6 +44,7 @@
 #define IDD_PARAM_SONY_3D_BROKEN_GLASS  332
 #define IDD_PARAM_SONY_3D_BROKEN_GLASS_TRANS 333
 #define IDD_PARAM_RIPPLE_WIPE           334
+#define IDD_PARAM_DIP_TO_COLOR          335
 #define IDC_EFFECTS                     1000
 #define IDC_PROGRESS                    1001
 #define IDC_BUTTON1                     1002
@@ -344,7 +345,11 @@
 #define IDC_SLIDER_fDistortion          1125
 #define IDC_SLIDER_fBrightness          1126
 #define IDC_SLIDER_fLight_Angle         1127
-#define IDC_CHECK1                      1128
+#define IDC_SLIDER_COLOR_R              1129
+#define IDC_SLIDER_COLOR_G              1130
+#define IDC_SLIDER_COLOR_B              1131
+#define IDC_SLIDER_COLOR_A              1132
+#define IDC_CHECK1                      1133
 #define IDC_L_LOCATION_X2               1137
 #define IDC__L_LOCATION_Z2              1138
 #define IDC_L_LOCATION_Z2               1138
@@ -367,9 +372,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        335
+#define _APS_NEXT_RESOURCE_VALUE        336
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1129
+#define _APS_NEXT_CONTROL_VALUE         1134
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif

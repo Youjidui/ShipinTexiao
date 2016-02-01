@@ -262,7 +262,7 @@ bool CRenderEngine::EffectVideoCopy( CVideoBuffer* pDst, CVideoBuffer* pSrc )
 
 		pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE,FALSE);
 		pDevice->SetRenderState(D3DRS_ALPHATESTENABLE,FALSE);
-		pDevice->SetPixelShader(pPS->GetPixelShader());
+		pDevice->SetPixelShader(pPS->GetPixelShaderPtr());
 		pDevice->SetPixelShaderConstantF(0,&bHaveAlpha,1);
 		pDevice->SetPixelShaderConstantF(1,&bParticleBlend,1);
 		pDevice->SetVertexShaderConstantF( 0, (float*)&matCC,      4 );
@@ -431,7 +431,7 @@ bool CRenderEngine::BlendCompose( CVideoBuffer* pDest, CVideoBuffer* pSrcA, CVid
 		{
 			m_pDevice->SetPixelShaderConstantF(3,&fbCGBlended,1);
 		}
-		m_pDevice->SetPixelShader(pShader->GetPixelShader());
+		m_pDevice->SetPixelShader(pShader->GetPixelShaderPtr());
 
 		if(SUCCEEDED(m_pDevice -> BeginScene())) 
 		{

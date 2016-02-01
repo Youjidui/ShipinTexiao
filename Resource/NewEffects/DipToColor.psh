@@ -1,0 +1,29 @@
+sampler2D imageSampler  : register(s0);
+float     Scale         : register(c0);
+float4	  ColorBegin    : register(c1);
+float4    ColorEnd      : register(c2);
+
+float4 main(float2 texcoord	: TEXCOORD0):COLOR
+{
+    float4 scnColor = tex2D(imageSampler, texcoord);
+    float4 result = 0;
+    if(Scale < 0.25)
+#ifdef FMT_YUYV
+      result = lerp(scnColor, ColorBegin, Scale*4);
+#else
+      result = lerp(scnColor, ColorBegin*scnColor.a, Scale*4);
+#endif
+    else if(Scale >= 0.25&&Scale < 0.75)
+#ifdef FMT_YUYV
+      result = lerp(ColorBegin, ColorEnd, (Scale - 0.25)*2);
+#else
+      result = lerp(ColorBegin*scnColor.a, ColorEnd*scnColor.a, (Scale - 0.25)*2);
+#endif
+    else 
+#ifdef FMT_YUYV
+      result = lerp(ColorEnd, scnColor, (Scale - 0.75)*4);
+#else
+      result = lerp(ColorEnd*scnColor.a, scnColor, (Scale - 0.75)*4);
+#endif
+    return result;
+}

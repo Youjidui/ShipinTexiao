@@ -271,7 +271,7 @@ void ColorKeyRender::_colorkey_pass(CVideoBuffer* pSrcDef, CVideoBuffer* pDstDef
 	LPDIRECT3DDEVICE9 pDevice = m_pEngine->GetDevice();
 	CResourceManager* pResMan = m_pEngine->GetResourceManager();
 
-	pDevice->SetPixelShader(pixelshader->GetPixelShader());
+	pDevice->SetPixelShader(pixelshader->GetPixelShaderPtr());
 
 	pDevice->SetRenderTarget(0, pDstDef->GetSurface());
 
@@ -353,7 +353,7 @@ void ColorKeyRender::_fine_tune_pass(CVideoBuffer* pSrcDef, CVideoBuffer* pDstDe
 	float fFineTune = fabsf(m_pParam->fFineTune);
 		CPixelShader* pixelshader = NULL;
 		pixelshader = fFineTune>0.0f ? m_PS_FineTune_RGB32_EXPAND : m_PS_FineTune_RGB32_SHRINK;
-	pDevice->SetPixelShader(pixelshader->GetPixelShader());
+	pDevice->SetPixelShader(pixelshader->GetPixelShaderPtr());
 	const VideoBufferInfo& bi = pSrcDef->GetVideoBufferInfo();
 	D3DXVECTOR2 vTexelSize(1.0f/(float)bi.nWidth, 1.0f/(float)bi.nHeight);
 	pDevice->SetPixelShaderConstantF(0, (float*)&vTexelSize, 1);
@@ -386,7 +386,7 @@ void ColorKeyRender::_blur_pass(CVideoBuffer* pSrcDef, CVideoBuffer* pDstDef, Fx
 	{
 		pDevice->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
 		pDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
-		pDevice->SetPixelShader(m_PS_Blur->GetPixelShader());
+		pDevice->SetPixelShader(m_PS_Blur->GetPixelShaderPtr());
 		const VideoBufferInfo& bi = pSrcDef->GetVideoBufferInfo();
 		D3DXVECTOR2 vQTexSize( 0.25f * fBlurness / (float)bi.nWidth, 0.25f * fBlurness / bi.nHeight);
 		pDevice->SetPixelShaderConstantF(0, (const float*)&vQTexSize, 1);

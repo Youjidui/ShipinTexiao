@@ -13,7 +13,7 @@ public:
 	HRESULT GetFunction(void* pData, UINT* pSizeOfData);
 
 	UINT GetSamplerIndex(D3DXHANDLE hTexName);
-	LPDIRECT3DPIXELSHADER9 GetPixelShader() { return (LPDIRECT3DPIXELSHADER9)m_pShader; }
+	LPDIRECT3DPIXELSHADER9 GetPixelShaderPtr() { return (LPDIRECT3DPIXELSHADER9)m_pShader; }
 	LPD3DXCONSTANTTABLE GetConstTablePtr() { return m_pConstTable; }
 
 	//special function

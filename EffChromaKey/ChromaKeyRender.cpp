@@ -437,7 +437,7 @@ bool ChromaKeyRender::RenderArea(CVideoBuffer*pDstDef, CVideoBuffer *pSrcDef, Fx
 	// 2.2.4 shader
 	//CVertexShader* vertexshader = pResMan->CreateVertexShader(pDevice, _T("Shaders/VSDirectOut_2stages_V3.vsh"));
 	CVertexShader* vertexshader = m_VS_DirectOut_2stages_V3;
-	hr = pDevice->SetPixelShader(pixelshader->GetPixelShader());
+	hr = pDevice->SetPixelShader(pixelshader->GetPixelShaderPtr());
 	ASSERT(SUCCEEDED(hr));
 
 	// 2.3 render
