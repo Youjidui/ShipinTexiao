@@ -52,16 +52,16 @@ void CParamDipToColorDlg::OnHScroll(UINT nSBCode, UINT uPos, CScrollBar* pScroll
 
 	switch(pScrollBar->GetDlgCtrlID())
 	{
-	case IDC_SLIDER_R:
+	case IDC_SLIDER_COLOR_R:
 		m_pParam->fColor[0] = nPos / MaxValue;
 		break;
-	case IDC_SLIDER_G:
+	case IDC_SLIDER_COLOR_G:
 		m_pParam->fColor[1] = nPos / MaxValue;
 		break;
-	case IDC_SLIDER_B:
+	case IDC_SLIDER_COLOR_B:
 		m_pParam->fColor[2] = nPos / MaxValue;
 		break;
-	case IDC_SLIDER_A:
+	case IDC_SLIDER_COLOR_A:
 		m_pParam->fColor[3] = nPos / MaxValue;
 		break; 
 	case IDC_SLIDER_PROGRESS:
@@ -79,20 +79,20 @@ BOOL CParamDipToColorDlg::OnInitDialog()
 	CButton* pBtn = (CButton*)GetDlgItem(IDC_CHECK_bReverse);
 	pBtn->SetCheck(m_pParam->bReverse);
 
-	CSliderCtrl* pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_R);
+	CSliderCtrl* pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_COLOR_R);
 	pCtrl->SetRange(0, 255);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->fColor[0] * MaxValue);
-	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_G);
+	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_COLOR_G);
 	pCtrl->SetRange(0, 255);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->fColor[1] * MaxValue);
-	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_B);
+	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_COLOR_B);
 	pCtrl->SetRange(0, 255);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->fColor[2] * MaxValue);
-	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_A);
+	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_COLOR_A);
 	pCtrl->SetRange(0, 255);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->fColor[3] * MaxValue);
-	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_ANGLE1);
-	pCtrl->SetRange(0, D3DX_PI * 1000);
+	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_PROGRESS);
+	pCtrl->SetRange(0, 10000);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->fProcess * 10000);
 
 	return TRUE;  // return TRUE unless you set the focus to a control
