@@ -1,8 +1,11 @@
 #include "StdAfx.h"
 #include "VideoBuffer.h"
 #include "../Utility/SafeDelete.h"
+#include "../Logger/Logging.h"
 #include <DxErr.h>
 #pragma comment(lib, "DxErr")
+
+#pragma warning(disable:4996)
 
 CVideoBuffer::CVideoBuffer(IDirect3DDevice9* pDevice, const VideoBufferInfo& info)
 : m_pDevice(pDevice)
@@ -68,6 +71,10 @@ bool CVideoBuffer::Create(IDirect3DDevice9* pDevice, const VideoBufferInfo& info
 					LPCTSTR pszErrorDesc = DXGetErrorDescription(hr);
 					TRACE(pszErrorString);
 					TRACE(pszErrorDesc);
+
+					char buf[MAX_PATH];
+					wcstombs(buf, pszErrorDesc, MAX_PATH);
+					LOG_ERROR_FORMAT("%s:pDevice->CreateTexture failed because %s", __FUNCTION__, buf);
 				}
 			}
 		}
@@ -98,6 +105,10 @@ bool CVideoBuffer::Create(IDirect3DDevice9* pDevice, const VideoBufferInfo& info
 					LPCTSTR pszErrorDesc = DXGetErrorDescription(hr);
 					TRACE(pszErrorString);
 					TRACE(pszErrorDesc);
+
+					char buf[MAX_PATH];
+					wcstombs(buf, pszErrorDesc, MAX_PATH);
+					LOG_ERROR_FORMAT("%s:pDevice->CreateTexture failed because %s", __FUNCTION__, buf);
 				}
 			}
 		}
@@ -121,6 +132,10 @@ bool CVideoBuffer::Create(IDirect3DDevice9* pDevice, const VideoBufferInfo& info
 						LPCTSTR pszErrorDesc = DXGetErrorDescription(hr);
 						TRACE(pszErrorString);
 						TRACE(pszErrorDesc);
+
+						char buf[MAX_PATH];
+						wcstombs(buf, pszErrorDesc, MAX_PATH);
+						LOG_ERROR_FORMAT("%s:pDevice->CreateOffscreenPlainSurface failed because %s", __FUNCTION__, buf);
 					}
 				}
 				break;
@@ -143,6 +158,10 @@ bool CVideoBuffer::Create(IDirect3DDevice9* pDevice, const VideoBufferInfo& info
 						LPCTSTR pszErrorDesc = DXGetErrorDescription(hr);
 						TRACE(pszErrorString);
 						TRACE(pszErrorDesc);
+
+						char buf[MAX_PATH];
+						wcstombs(buf, pszErrorDesc, MAX_PATH);
+						LOG_ERROR_FORMAT("%s:pDevice->CreateRenderTarget failed because %s", __FUNCTION__, buf);
 					}
 				}
 				break;

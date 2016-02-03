@@ -5,6 +5,7 @@
 #include "../D3D9Render/VideoBuffer.h"
 #include "../D3D9Render/VideoBufferManager.h"
 #include "../D3D9Render/RenderEngine.h"
+#include <locale.h>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -24,6 +25,12 @@ void ReleaseVideoBufferManager(CVideoBufferManager* p)
 
 CRenderEngine* InitEffectModule(HWND hDeviceWnd, UINT nBackBufferWidth, UINT nBackBufferHeight )
 {
+	//for logging
+	////setlocale(LC_ALL, ".936");	//GBK
+	//setlocale(LC_ALL, "");		//Windows default
+	//wcstombs(char * to,wchar_t * from,size_t _maxCount);
+	//mbstowcs(wchar_t * to,char * from,size_t _maxCount);
+	
 	CRenderEngine* p = new CRenderEngine;
 	HRESULT hr = E_FAIL;
 	if(p)

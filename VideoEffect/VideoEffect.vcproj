@@ -350,8 +350,8 @@
 			RelativePathToProject=".\D3D9Render\D3D9Render.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{3308018F-008C-4A3F-8E50-3788E74E976D}"
-			RelativePathToProject=".\EffNegative\EffNegative.vcproj"
+			ReferencedProjectIdentifier="{1B9A854C-74B7-42E1-B7E6-DF9EC761EA4C}"
+			RelativePathToProject=".\Logger\Logger.vcproj"
 		/>
 	</References>
 	<Files>

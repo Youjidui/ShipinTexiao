@@ -5,12 +5,14 @@
 #include "../Utility/ColorConvertor.h"
 #include "../Utility/SafeDelete.h"
 #include "../Utility/PathSettings.h"
+#include "../Logger/Logging.h"
 
 #include <DxErr.h>
 #pragma comment(lib, "DxErr")
 #include <Shlwapi.h>
 #pragma comment(lib, "Shlwapi")
 
+#pragma warning(disable:4996)
 
 CBaseFx::CBaseFx()
 : m_pDevice(NULL)
@@ -69,6 +71,10 @@ HRESULT CBaseFx::Create ( LPDIRECT3DDEVICE9 pDevice,const TCHAR* szFxName, const
 				LPCTSTR pszErrorDesc = DXGetErrorDescription(hr);
 				TRACE(pszErrorString);
 				TRACE(pszErrorDesc);
+
+				char buf[MAX_PATH];
+				wcstombs(buf, pszErrorDesc, MAX_PATH);
+				LOG_ERROR_FORMAT("%s:D3DXCreateEffectFromFile failed because %s", __FUNCTION__, buf);
 			}
 
 			//hFile = CreateFile( szExeFilePath, 
@@ -179,6 +185,10 @@ HRESULT CBaseFx::SetTexture(LPCSTR pName, LPDIRECT3DTEXTURE9 pTex)
 			LPCTSTR pszErrorDesc = DXGetErrorDescription(hr);
 			TRACE(pszErrorString);
 			TRACE(pszErrorDesc);
+
+			char buf[MAX_PATH];
+			wcstombs(buf, pszErrorDesc, MAX_PATH);
+			LOG_ERROR_FORMAT("%s:pEffect->SetTexture failed because %s", __FUNCTION__, buf);
 		}
 	}
 	return hr;

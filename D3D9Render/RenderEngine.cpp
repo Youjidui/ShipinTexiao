@@ -1,9 +1,12 @@
 #include "StdAfx.h"
 #include <DxErr.h>
 #include "RenderEngine.h"
-#include "../Utility/mathmacros.h"
 #include "VideoBuffer.h"
+#include "../Utility/mathmacros.h"
 #include "../Utility/SafeDelete.h"
+#include "../Logger/Logging.h"
+
+#pragma warning(disable:4996)
 
 CRenderEngine::CRenderEngine(void)
 : m_pD3D(NULL)
@@ -92,6 +95,10 @@ bool CRenderEngine::SetRenderTarget( CVideoBuffer* pDest, bool bSetDepthStencil 
 		LPCTSTR pszErrorDesc = DXGetErrorDescription(hr);
 		TRACE(pszErrorString);
 		TRACE(pszErrorDesc);
+
+		char buf[MAX_PATH];
+		wcstombs(buf, pszErrorDesc, MAX_PATH);
+		LOG_ERROR_FORMAT("%s:pDevice->SetRenderTarget failed because %s", __FUNCTION__, buf);
 	}
 	//SAFE_RELEASE(pRTSurface);
 	hr = pDevice->SetRenderTarget(1, NULL);
@@ -124,6 +131,10 @@ bool CRenderEngine::SetRenderTarget( CVideoBuffer* pDest, bool bSetDepthStencil 
 			LPCTSTR pszErrorDesc = DXGetErrorDescription(hr);
 			TRACE(pszErrorString);
 			TRACE(pszErrorDesc);
+
+			char buf[MAX_PATH];
+			wcstombs(buf, pszErrorDesc, MAX_PATH);
+			LOG_ERROR_FORMAT("%s:pDevice->Clear failed because %s", __FUNCTION__, buf);
 		}
 	}
 	return !!pRTSurface;
@@ -149,6 +160,10 @@ bool CRenderEngine::SetRenderTarget( CVideoBuffer* pDest )
 		LPCTSTR pszErrorDesc = DXGetErrorDescription(hr);
 		TRACE(pszErrorString);
 		TRACE(pszErrorDesc);
+
+		char buf[MAX_PATH];
+		wcstombs(buf, pszErrorDesc, MAX_PATH);
+		LOG_ERROR_FORMAT("%s:pDevice->SetRenderTarget failed because %s", __FUNCTION__, buf);
 	}
 	//SAFE_RELEASE(pRTSurface);
 	hr = pDevice->SetRenderTarget(1, NULL);
@@ -184,6 +199,10 @@ bool CRenderEngine::SetRenderTarget( CVideoBuffer* pDest )
 			LPCTSTR pszErrorDesc = DXGetErrorDescription(hr);
 			TRACE(pszErrorString);
 			TRACE(pszErrorDesc);
+
+			char buf[MAX_PATH];
+			wcstombs(buf, pszErrorDesc, MAX_PATH);
+			LOG_ERROR_FORMAT("%s:pDevice->Clear failed because %s", __FUNCTION__, buf);
 		}
 	}
 	return !!pRTSurface;

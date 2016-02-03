@@ -3,12 +3,14 @@
 #include <wchar.h>
 #include "../Utility/SafeDelete.h"
 #include "../Utility/PathSettings.h"
+#include "../Logger/Logging.h"
 
 #include <DxErr.h>
 #pragma comment(lib, "DxErr")
 #include <Shlwapi.h>
 #pragma comment(lib, "Shlwapi")
 
+#pragma warning(disable:4996)
 
 CVertexShader::CVertexShader(void)
 : m_pDevice(NULL)
@@ -96,6 +98,10 @@ HRESULT CVertexShader::Create ( LPDIRECT3DDEVICE9 pDevice,
 			LPCTSTR pszErrorDesc = DXGetErrorDescription(hr);
 			TRACE(pszErrorString);
 			TRACE(pszErrorDesc);
+
+			char buf[MAX_PATH];
+			wcstombs(buf, pszErrorDesc, MAX_PATH);
+			LOG_ERROR_FORMAT("%s:pDevice->CreateVertexShader failed because %s", __FUNCTION__, buf);
 		}
 	}
 	else
@@ -104,6 +110,10 @@ HRESULT CVertexShader::Create ( LPDIRECT3DDEVICE9 pDevice,
 		LPCTSTR pszErrorDesc = DXGetErrorDescription(hr);
 		TRACE(pszErrorString);
 		TRACE(pszErrorDesc);
+
+		char buf[MAX_PATH];
+		wcstombs(buf, pszErrorDesc, MAX_PATH);
+		LOG_ERROR_FORMAT("%s:D3DXCompileShaderFromFile failed because %s", __FUNCTION__, buf);
 	}
 
 	return hr;
