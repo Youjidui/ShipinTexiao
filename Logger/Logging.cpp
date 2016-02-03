@@ -14,7 +14,7 @@ Logging::Logging(const std::string& strLogInstanceName, const std::string& strLo
 : m_strLogInstanceName(strLogInstanceName)
 , m_strLogFilePathName(strLogFilePathName)
 {
-	log4cpp::Appender *appender1 = new log4cpp::OstreamAppender("console", &std::cout);
+	log4cpp::Appender *appender1 = new log4cpp::OstreamAppender("console", &std::cerr);
 	appender1->setLayout(new log4cpp::BasicLayout());
 
 	log4cpp::Appender *appender2 = new log4cpp::FileAppender(strLogInstanceName, strLogFilePathName);
@@ -25,31 +25,39 @@ Logging::Logging(const std::string& strLogInstanceName, const std::string& strLo
 	root.addAppender(appender1);
 
 	log4cpp::Category& sub1 = log4cpp::Category::getInstance(strLogInstanceName);
+	sub1.setPriority(log4cpp::Priority::DEBUG);
 	sub1.addAppender(appender2);
 
-	// use of functions for logging messages
-	root.fatal("error");
-	root.error("root error");
-	root.info("root info");
-	sub1.error("sub1 error");
-	sub1.warn("sub1 warn");
-	sub1.debug("debug");
+	//// use of functions for logging messages
+	//root.fatal("error");
+	//root.error("root error");
+	//root.info("root info");
+	//sub1.error("sub1 error");
+	//sub1.warn("sub1 warn");
+	//sub1.debug("debug");
 
-	// printf-style for logging variables
-	root.warn("%d + %d == %s ?", 1, 1, "two");
+	//// printf-style for logging variables
+	//root.warn("%d + %d == %s ?", 1, 1, "two");
 
-	// use of streams for logging messages
-	root << log4cpp::Priority::ERROR << "Streamed root error";
-	root << log4cpp::Priority::INFO << "Streamed root info";
-	sub1 << log4cpp::Priority::ERROR << "Streamed sub1 error";
-	sub1 << log4cpp::Priority::WARN << "Streamed sub1 warn";
+	//// use of streams for logging messages
+	//root << log4cpp::Priority::ERROR << "Streamed root error";
+	//root << log4cpp::Priority::INFO << "Streamed root info";
+	//sub1 << log4cpp::Priority::ERROR << "Streamed sub1 error";
+	//sub1 << log4cpp::Priority::WARN << "Streamed sub1 warn";
 
-	// or this way:
-	root.errorStream() << "Another streamed error";
+	//// or this way:
+	//root.errorStream() << "Another streamed error";
 }
 
 Logging::~Logging(void)
 {
+	log4cpp::Category& root = log4cpp::Category::getRoot();
+	root.removeAllAppenders();
+
+	if(log4cpp::Category* pLogInst = log4cpp::Category::exists(m_strLogInstanceName))
+	{
+		pLogInst->removeAllAppenders();
+	}
 }
 
 void Logging::log(Logging::LOG_LEVEL level, const char* stringFormat, ...)
@@ -57,9 +65,10 @@ void Logging::log(Logging::LOG_LEVEL level, const char* stringFormat, ...)
 	va_list list;
 	va_start(list, stringFormat);
 
-	if(log4cpp::Category::exists(m_strLogInstanceName))
+	if(log4cpp::Category* pLogInst = log4cpp::Category::exists(m_strLogInstanceName))
 	{
-		log4cpp::Category& output = log4cpp::Category::getInstance(m_strLogInstanceName);
+		//log4cpp::Category& output = log4cpp::Category::getInstance(m_strLogInstanceName);
+		log4cpp::Category& output = (*pLogInst);
 		bool bEnabled = false;
 		log4cpp::Priority::Value ePriority = log4cpp::Priority::NOTSET;
 		switch (level)
