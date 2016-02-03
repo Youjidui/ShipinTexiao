@@ -81,8 +81,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)_$(PlatformName)"
+			IntermediateDirectory="$(ConfigurationName)_$(PlatformName)"
 			ConfigurationType="4"
 			UseOfMFC="2"
 			CharacterSet="1"

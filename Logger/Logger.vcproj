@@ -19,7 +19,7 @@
 		<Configuration
 			Name="Debug|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)_$(PlatformName)"
-			IntermediateDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)_$(PlatformName)"
 			ConfigurationType="2"
 			InheritedPropertySheets="..\log4cpp.vsprops;..\vld.vsprops"
 			UseOfMFC="2"
@@ -98,7 +98,7 @@
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)_$(PlatformName)"
-			IntermediateDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)_$(PlatformName)"
 			ConfigurationType="2"
 			InheritedPropertySheets="..\log4cpp.vsprops;..\vld.vsprops"
 			UseOfMFC="2"
