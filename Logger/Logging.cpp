@@ -106,6 +106,34 @@ void Logging::log(Logging::LOG_LEVEL level, const char* stringFormat, ...)
 	}
 }
 
+void Logging::setLogLevel( LOG_LEVEL level )
+{
+	if(log4cpp::Category* pLogInst = log4cpp::Category::exists(m_strLogInstanceName))
+	{
+		log4cpp::Priority::Value ePriority = log4cpp::Priority::NOTSET;
+		switch (level)
+		{
+		case L_FATAL:
+			ePriority = log4cpp::Priority::FATAL;
+			break;
+		case L_ERROR:
+			ePriority = log4cpp::Priority::ERROR;
+			break;
+		case L_WARN:
+			ePriority = log4cpp::Priority::WARN;
+			break;
+		case L_INFO:
+			ePriority = log4cpp::Priority::INFO;
+			break;
+		case L_DEBUG:
+		default:
+			ePriority = log4cpp::Priority::DEBUG;
+			break;
+		}
+		pLogInst->setPriority(ePriority);
+	}
+}
+
 //////////////////////////////////////////////////////////////////////////
 
 static Logging* volatile g_Logger = NULL;
@@ -135,5 +163,24 @@ void DestroyLoggerInstance( Logging* pLoggerInstance )
 	if(pLoggerInstance)
 	{
 		delete pLoggerInstance;
+	}
+	else
+	{
+		Logging* p = GetLoggerInstance();
+		if(p)
+		{
+			delete p;
+			p = NULL;
+		}
+	}
+}
+
+void SetLoggerOutputLevel( Logging* pLoggerInstance, Logging::LOG_LEVEL level )
+{
+	Logging* p = pLoggerInstance;
+	if(!p)	p = GetLoggerInstance();
+	if(p)
+	{
+		p->setLogLevel(level);
 	}
 }

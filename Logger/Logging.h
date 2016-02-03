@@ -21,10 +21,12 @@ public:
 	Logging(const std::string& strLogInstanceName, const std::string& strLogFilePathName);
 	~Logging(void);
 
+	void setLogLevel(LOG_LEVEL level);
 	void log(LOG_LEVEL level, const char* stringFormat, ...);
 };
 
 LOGGING_CLASS_EXPORT Logging* CreateLoggerInstance(const char* const strLogInstanceName, const char* const strLogFilePathName);
+LOGGING_CLASS_EXPORT void SetLoggerOutputLevel(Logging* pLoggerInstance, Logging::LOG_LEVEL);
 LOGGING_CLASS_EXPORT Logging* GetLoggerInstance();
 LOGGING_CLASS_EXPORT void DestroyLoggerInstance(Logging* pLoggerInstance);
 
