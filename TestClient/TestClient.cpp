@@ -36,6 +36,14 @@ CTestClientApp::CTestClientApp()
 
 	// TODO: 在此处添加构造代码，
 	// 将所有重要的初始化放置在 InitInstance 中
+	m_pLogging = CreateLoggerInstance("effect", "./effect.log");
+	LOG_INFO(__FUNCTION__);
+}
+
+CTestClientApp::~CTestClientApp()
+{
+	LOG_INFO(__FUNCTION__);
+	DestroyLoggerInstance(m_pLogging);
 }
 
 // 唯一的一个 CTestClientApp 对象

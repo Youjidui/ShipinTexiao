@@ -71,9 +71,8 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="FreeImage.lib log4cppD.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="../FreeImage;../lib/debug"
+				AdditionalLibraryDirectories=""
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				TargetMachine="1"
@@ -235,9 +234,8 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="FreeImage.lib log4cppLIB.lib"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="../FreeImage;../lib/release"
+				AdditionalLibraryDirectories=""
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="2"
@@ -471,6 +469,10 @@
 		<ProjectReference
 			ReferencedProjectIdentifier="{4546C276-AF57-4FCA-B266-FB00E0B4E978}"
 			RelativePathToProject=".\EffDipToColor\EffDipToColor.vcproj"
+		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{1B9A854C-74B7-42E1-B7E6-DF9EC761EA4C}"
+			RelativePathToProject=".\Logger\Logger.vcproj"
 		/>
 	</References>
 	<Files>

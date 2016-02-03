@@ -10,6 +10,7 @@
 	/>
 	<Tool
 		Name="VCLinkerTool"
+		AdditionalDependencies="FreeImage.lib"
 		AdditionalLibraryDirectories="$(ProjectDir)../FreeImage/Dist/x64;$(SolutionDir)/FreeImage/Dist/x64"
 	/>
 </VisualStudioPropertySheet>

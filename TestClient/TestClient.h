@@ -9,6 +9,7 @@
 
 #include "resource.h"       // 主符号
 
+#include "../Logger/Logging.h"
 
 // CTestClientApp:
 // 有关此类的实现，请参阅 TestClient.cpp
@@ -18,7 +19,7 @@ class CTestClientApp : public CWinAppEx
 {
 public:
 	CTestClientApp();
-
+	~CTestClientApp();
 
 // 重写
 public:
@@ -26,6 +27,7 @@ public:
 
 // 实现
 	BOOL  m_bHiColorIcons;
+	Logging* m_pLogging;
 
 	virtual void PreLoadState();
 	virtual void LoadCustomState();

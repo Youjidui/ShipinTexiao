@@ -10,7 +10,7 @@
 	/>
 	<Tool
 		Name="VCLinkerTool"
-		AdditionalDependencies="log4cpp.lib"
-		AdditionalLibraryDirectories="../lib/log4cpp/$(ConfigurationName)"
+		AdditionalDependencies="log4cppLIB.lib"
+		AdditionalLibraryDirectories="../lib/log4cpp"
 	/>
 </VisualStudioPropertySheet>
