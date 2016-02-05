@@ -67,7 +67,7 @@ bool CSonyPinpRender::Init( CRenderEngine* pEngine )
 	//m_uResID_Noise = m_pResMan->CreateTexture(512,256,0,D3DFMT_A8R8G8B8,D3DPOOL_MANAGED,&UUID_TEXTURE_NOISE);
 	//LPDIRECT3DTEXTURE9 pNoiseTex = ((CBaseTexture*)m_pResMan->GetResource(m_uResID_Noise))->GetTexture();
 	CVideoBufferManager* pBufMgr = m_pEngine->GetVideoBufferManager();
-	VideoBufferInfo mediaBI = {D3DFMT_A8R8G8B8, VideoBufferInfo::VIDEO_MEM, VideoBufferInfo::_IN, 512, 256, 0, 0};
+	VideoBufferInfo mediaBI = {D3DFMT_A8R8G8B8, VideoBufferInfo::VIDEO_MEM, VideoBufferInfo::_IN, 512, 256, 0, 0};		//the same as RingsRender
 	m_pNoiseTexture = pBufMgr->CreateVideoBuffer(mediaBI);
 	ASSERT(m_pNoiseTexture);
 	LPDIRECT3DTEXTURE9 pTex = m_pNoiseTexture->GetTexture();

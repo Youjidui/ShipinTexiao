@@ -63,11 +63,6 @@ struct TransitionParam
 
 //FX parameter
 
-struct NegativeFxParam : FxParamBase
-{
-
-};
-
 struct ColorConvertFxParam : FxParamBase
 {
 	enum _color_convert_direction { RGBA2YUVA, YUVA2RGBA }
@@ -547,7 +542,7 @@ struct SonyDME3DTransfromFxPrarm : public FxParamBase
 struct RingsFxParam : public FxParamBase
 {
 	int			nPattern;
-	float		fTranslate;
+	float		fTranslate;		//progress
 	float		fRandomTranslate;
 	float		fRotate;
 	float		fCenterX;

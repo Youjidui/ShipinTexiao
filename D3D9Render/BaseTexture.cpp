@@ -210,13 +210,13 @@ CBaseTexture::~CBaseTexture(void)
 }
 
 HRESULT CBaseTexture::Create( LPDIRECT3DDEVICE9 pDevice,
-							 TCHAR*             szFileName,
+							 LPCTSTR            szFileName,
 							 UINT               nWidth,
 							 UINT               nHeight,
 							 DWORD              dwUsage, 
 							 D3DFORMAT          format,
 							 D3DPOOL            pool,
-							LPCTSTR            pszResID)
+							 LPCTSTR            pszResID)
 {
 	m_pDevice =  pDevice;
 	m_strResID                  =  pszResID;

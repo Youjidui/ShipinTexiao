@@ -16,6 +16,9 @@ public:
 
 private:
 	CRenderEngine*	m_pEngine;
-	CBaseMesh*			m_pQuadMesh;
-	CBaseFx*			m_pNegativeEffect;
+	CBaseMesh*		m_pQuadMesh;
+	CBaseFx*		m_pEffect;
+	CBaseTexture*	m_pShapeTexture;
+	//CBaseTexture*
+	CVideoBuffer*	m_pNoiseTexture;
 };

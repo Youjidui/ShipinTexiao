@@ -503,6 +503,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\TextureResource.h"
+				>
+			</File>
+			<File
 				RelativePath=".\VertexDeclaration.h"
 				>
 			</File>

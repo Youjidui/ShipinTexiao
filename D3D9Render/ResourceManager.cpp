@@ -657,3 +657,17 @@ CPixelShader* CResourceManager::CreateBlendPixelShader( LPDIRECT3DDEVICE9 pDevic
 	}
 	return pShader;
 }
+
+CBaseTexture* CResourceManager::CreateTexture( LPDIRECT3DDEVICE9 pDevice, 
+											  LPCTSTR szFileName, 
+											  UINT nWidth, 
+											  UINT nHeight, 
+											  DWORD dwUsage, 
+											  D3DFORMAT Format, 
+											  D3DPOOL Pool, 
+											  //int nTexType, /* TPBaseTexType_Tex=0, TPBaseTexType_Volume=1, TPBaseTexType_Cube=2 */ 
+											  LPCTSTR pszResName )
+{
+	return m_TexRes.Create(pDevice, szFileName, nWidth, nHeight
+		, dwUsage, Format, Pool, pszResName);
+}

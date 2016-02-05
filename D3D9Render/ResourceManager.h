@@ -4,7 +4,8 @@
 #include "FxEffectResource.h"
 #include "PixelShaderResource.h"
 #include "VertexShaderResource.h"
-#include "BaseTexture.h"
+//#include "BaseTexture.h"
+#include "TextureResource.h"
 #include "VideoBuffer.h"
 
 
@@ -76,6 +77,15 @@ public:
 	CVertexShader* CreateVertexShader(LPDIRECT3DDEVICE9 pDevice, LPCTSTR lpszShaderName, const char** ppszMacros = NULL, int nMacroCount = 0);
 	CPixelShader* CreatePixelShader(LPDIRECT3DDEVICE9 pDevice, LPCTSTR lpszShaderName, const char** ppszMacros = NULL, int nMacroCount = 0);
 	CPixelShader* CreateBlendPixelShader( LPDIRECT3DDEVICE9 pDevice, BlendMode eMode );
+	CBaseTexture* CreateTexture(LPDIRECT3DDEVICE9 pDevice,
+		LPCTSTR		szFileName,
+		UINT        nWidth,
+		UINT        nHeight,
+		DWORD       dwUsage,
+		D3DFORMAT   Format,
+		D3DPOOL     Pool,
+		//int         nTexType,	// TPBaseTexType_Tex=0, TPBaseTexType_Volume=1, TPBaseTexType_Cube=2
+		LPCTSTR     pszResName);
 	void GetOrthoMatrix( D3DXMATRIX** ppMatView , D3DXMATRIX** ppMatPrj );
 	void GetPerspectiveMatrix( D3DXMATRIX** ppMatView , D3DXMATRIX** ppMatPrj );
 
@@ -96,4 +106,5 @@ private:
 	CPixelShaderResource m_PSRes;
 	CVertexShaderResource m_VSRes;
 	CMeshResource m_MeshRes;
+	CTextureResource m_TexRes;
 };

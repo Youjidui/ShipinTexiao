@@ -68,7 +68,7 @@ public:
                   LPCTSTR            pszResID);
 
 	HRESULT Create( LPDIRECT3DDEVICE9 pDevice,
-                  TCHAR*             szFileName,
+					LPCTSTR             szFileName,
                   UINT               nWidth,
                   UINT               nHeight,
                   DWORD              dwUsage, 
