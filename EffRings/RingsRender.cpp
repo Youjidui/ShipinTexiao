@@ -87,7 +87,7 @@ bool CRingsRender::Init( CRenderEngine* pEngine)
 	return true;
 }
 
-bool CRingsRender::Render( CVideoBuffer* pDstDef, CVideoBuffer* pSrcDef, FxParamBase* pParamRaw)
+bool CRingsRender::Render( CVideoBuffer* pDstDef, CVideoBuffer* pSrcDef, CVideoBuffer* pSrcB, FxParamBase* pParamRaw)
 {
 	RESET_RENDER_TARGET(m_pEngine);
 	SET_DEPTH_STENCIL(m_pEngine);

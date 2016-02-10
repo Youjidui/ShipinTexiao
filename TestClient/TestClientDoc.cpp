@@ -35,6 +35,7 @@
 #include "../EffSonyPinP/SonyPinpRender.h"
 #include "../EffSonyBarnSlide/SonyBarnSlideRender.h"
 #include "../EffBrokenGlass/BrokenGlassRender.h"
+#include "../EffRings/RingsRender.h"
 #include "../EffDissolve/DissolveRender.h"
 #include "../EffSonyFadeFromTo/SonyFadeFromToRender.h"
 #include "../EffPageRotation/PageRotationRender.h"
@@ -409,7 +410,7 @@ bool CTestClientDoc::EffectRender(CVideoBuffer* pDest, CVideoBuffer* pSrc, CVide
 		CNegativeRender eff;
 		if(eff.Init(m_pRenderEngine))
 		{
-			bOK = eff.Render(pDest, pSrc, (NegativeFxParam*)m_pEffectParam);
+			bOK = eff.Render(pDest, pSrc, m_pEffectParam);
 		}
 	}
 	else if(FX_COLOR_KEY == m_strEffectName)
@@ -463,6 +464,14 @@ bool CTestClientDoc::EffectRender(CVideoBuffer* pDest, CVideoBuffer* pSrc, CVide
 	else if(FX_BROKEN_GLASS == m_strEffectName)
 	{
 		CBrokenGlassRender eff;
+		if(eff.Init(m_pRenderEngine))
+		{
+			bOK = eff.Render(pDest, pSrc, pSrc2, m_pEffectParam);
+		}
+	}
+	else if(FX_RINGS == m_strEffectName)
+	{
+		CRingsRender eff;
 		if(eff.Init(m_pRenderEngine))
 		{
 			bOK = eff.Render(pDest, pSrc, pSrc2, m_pEffectParam);

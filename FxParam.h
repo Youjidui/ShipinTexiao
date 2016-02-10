@@ -541,17 +541,19 @@ struct SonyDME3DTransfromFxPrarm : public FxParamBase
 
 struct RingsFxParam : public FxParamBase
 {
-	int			nPattern;
-	float		fTranslate;		//progress
-	float		fRandomTranslate;
-	float		fRotate;
-	float		fCenterX;
-	float		fCenterY;
-	float		fAspect;
-	float		fWidth;
-	float		fRandomWidth;
-	float		fSpiral;
-	float		fRandomPixel;		
+	//progress
+	float		fTranslate;		//1.f, 0.f, 0.0001f, 5, 4, 0.f
+	bool  bReverse;
+	float		fRandomTranslate;	////1.f, 0.f, 0.01f, 3, 2, 0.f	 the same as BrokenGlass
+	float		fRotate;		//3.1415926f, -3.1415926f, 0.01f, 3, 2, 0.f  the same as BrokenGlass
+	float		fCenterX;		//1.f, -1.f, 0.01f, 3, 2, 0.f	 the same as BrokenGlass
+	float		fCenterY;		//1.f, -1.f, 0.01f, 3, 2, 0.f	 the same as BrokenGlass
+	float		fAspect;		//1.f, -1.f, 0.01f, 3, 2, 0.f	 the same as BrokenGlass
+	float		fWidth;			//1.f, 0.f, 0.0001f, 5, 4, 0.2f
+	float		fRandomWidth;	//180.f, -180.f, 0.01f, 5, 2, 80.f
+	float		fSpiral;		//10, 0, 1,  3
+	float		fRandomPixel;	//1.f, 0.f, 0.01f, 3, 2, 0.f	 the same as BrokenGlass	
+	int			nPattern;		//0-4
 	int			nEffectNo;
 };
 
@@ -693,27 +695,27 @@ struct BrokenGlassFxParam : public FxParamBase
 	//float prm_movement;				//1.f, -1.f, 0.01f, 3, 2, 0.f
 	//Progress
 	float prm_movement;				//1.f, 0.f, 0.0001f, 5, 4, 0.f
-	float prm_movementRandom;		//1.f, 0.f, 0.01f, 3, 2, 0.f
+	bool  prm_bReverse;
+	float prm_movementRandom;		//1.f, 0.f, 0.01f, 3, 2, 0.f		 the same as Rings
 
-	float prm_rotate;				//3.1415926f, -3.1415926f, 0.01f, 3, 2, 0.f
+	float prm_rotate;				//3.1415926f, -3.1415926f, 0.01f, 3, 2, 0.f		 the same as Rings
 
-	float prm_centerX;				//1.f, -1.f, 0.01f, 3, 2, 0.f
-	float prm_centerY;				//1.f, -1.f, 0.01f, 3, 2, 0.f
+	float prm_centerX;				//1.f, -1.f, 0.01f, 3, 2, 0.f		 the same as Rings
+	float prm_centerY;				//1.f, -1.f, 0.01f, 3, 2, 0.f		 the same as Rings
 
-	float prm_aspect;				//1.f, -1.f, 0.01f, 3, 2, 0.f
+	float prm_aspect;				//1.f, -1.f, 0.01f, 3, 2, 0.f		 the same as Rings
 
 	float prm_width;				//2*3.14f/8.f, 2*3.14f/160.f, 0.01f, 3, 2, 3.14f/10.f
 	float prm_widthRandom;			//1.f, 0.f, 0.01f, 3, 2, 0.f
 
 	float prm_angleBlock;			//3.1415f, 0.f, 0.01f, 3, 2, 3.1415f*4.f/5.f
 
-	float prm_randomPix;			//1.f, 0.f, 0.01f, 3, 2, 0.f
+	float prm_randomPix;			//1.f, 0.f, 0.01f, 3, 2, 0.f		 the same as Rings
 
-	bool  prm_bReverse;
 
-	BrokenGlassFxParam() : prm_movement(0.f), prm_movementRandom(0.f), prm_rotate(0.f)
+	BrokenGlassFxParam() : prm_movement(0.f), prm_bReverse(false), prm_movementRandom(0.f), prm_rotate(0.f)
 		, prm_centerX(0.f), prm_centerY(0.f), prm_aspect(0.f), prm_width(3.14f/10.f)
-		, prm_widthRandom(0.f), prm_angleBlock(3.1415f*4/5), prm_randomPix(0.f), prm_bReverse(false)
+		, prm_widthRandom(0.f), prm_angleBlock(3.1415f*4/5), prm_randomPix(0.f)
 	{	}
 } ;
 

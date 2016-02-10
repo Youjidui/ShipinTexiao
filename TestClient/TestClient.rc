@@ -1094,6 +1094,37 @@ BEGIN
     CONTROL         "Reverse",IDC_CHECK_bReverse,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,92,43,10
 END
 
+IDD_PARAM_RINGS DIALOGEX 0, 0, 176, 237
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Dialog"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "È·¶¨",IDOK,119,216,50,14
+    LTEXT           "Progress",IDC_STATIC,7,10,29,8
+    CONTROL         "",IDC_SLIDER_PROGRESS,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,69,7,100,15
+    CONTROL         "bReverse",IDC_CHECK_REVERSE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,26,47,10
+    LTEXT           "fRandomTranslate",IDC_STATIC,7,39,60,8
+    CONTROL         "",IDC_SLIDER_fRandomTranslate,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,69,36,100,15
+    LTEXT           "fRotate",IDC_STATIC,7,55,26,8
+    CONTROL         "",IDC_SLIDER_fRotate,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,69,52,100,15
+    LTEXT           "fCenterX",IDC_STATIC,7,71,30,8
+    CONTROL         "",IDC_SLIDER_fCenterX,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,69,68,100,15
+    LTEXT           "fCenterY",IDC_STATIC,7,87,30,8
+    CONTROL         "",IDC_SLIDER_fCenterY,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,69,84,100,15
+    LTEXT           "fAspect",IDC_STATIC,7,102,26,8
+    CONTROL         "",IDC_SLIDER_fAspect,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,69,100,100,15
+    LTEXT           "fWidth",IDC_STATIC,7,118,22,8
+    CONTROL         "",IDC_SLIDER_fWidth,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,69,116,100,15
+    LTEXT           "fRandomWidth",IDC_STATIC,7,134,48,8
+    CONTROL         "",IDC_SLIDER_fRandomWidth,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,69,132,100,15
+    LTEXT           "fSpiral",IDC_STATIC,7,150,21,8
+    CONTROL         "",IDC_SLIDER_fSpiral,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,69,148,100,15
+    LTEXT           "fRandomPixel",IDC_STATIC,7,167,44,8
+    CONTROL         "",IDC_SLIDER_fRandomPixel,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,69,165,100,15
+    LTEXT           "nPattern",IDC_STATIC,7,182,29,8
+    CONTROL         "",IDC_SLIDER_nPattern,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,69,180,100,15
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -1329,6 +1360,14 @@ BEGIN
         RIGHTMARGIN, 143
         TOPMARGIN, 7
         BOTTOMMARGIN, 131
+    END
+
+    IDD_PARAM_RINGS, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 169
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 230
     END
 END
 #endif    // APSTUDIO_INVOKED

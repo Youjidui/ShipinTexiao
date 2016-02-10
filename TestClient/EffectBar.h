@@ -21,6 +21,7 @@
 #include "ParamPinpDlg.h"
 #include "ParamSonyBarnSlideDlg.h"
 #include "ParamBrokenGlassDlg.h"
+#include "ParamRingsDlg.h"
 #include "ParamDissolveDlg.h"
 #include "ParamFadeFromToDlg.h"
 #include "ParamPageRotationDlg.h"
@@ -69,6 +70,7 @@ public:
 	CSonyDME3DDlg m_sonyDME3DDlg;
 	CParamPinPDlg m_sonyPinpDlg;
 	CParamBrokenGlassDlg m_brokenGlassDlg;
+	CParamRingsDlg m_ringsDlg;
 	CParamSonyBarnSlideDlg m_barnSlideDlg;
 	CParamDissolveDlg m_dissolveDlg;
 	CParamFadeFromToDlg m_fadeFromToDlg;

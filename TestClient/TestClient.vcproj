@@ -474,6 +474,10 @@
 			ReferencedProjectIdentifier="{1B9A854C-74B7-42E1-B7E6-DF9EC761EA4C}"
 			RelativePathToProject=".\Logger\Logger.vcproj"
 		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{8D177966-EC73-4C0C-84C8-E409258F14F5}"
+			RelativePathToProject=".\EffRings\EffRings.vcproj"
+		/>
 	</References>
 	<Files>
 		<Filter
@@ -579,6 +583,10 @@
 			</File>
 			<File
 				RelativePath=".\ParamRevolvingWipeDlg.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ParamRingsDlg.cpp"
 				>
 			</File>
 			<File
@@ -765,6 +773,10 @@
 			</File>
 			<File
 				RelativePath=".\ParamRevolvingWipeDlg.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ParamRingsDlg.h"
 				>
 			</File>
 			<File

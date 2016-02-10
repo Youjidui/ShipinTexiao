@@ -143,6 +143,14 @@ void CEffectBar::OnBnClickedParameters()
 			}
 			m_brokenGlassDlg.ShowWindow(SW_SHOW);
 		}
+		else if(FX_RINGS == str)
+		{
+			if(!m_ringsDlg.GetSafeHwnd())
+			{
+				m_ringsDlg.Create(m_ringsDlg.IDD);
+			}
+			m_ringsDlg.ShowWindow(SW_SHOW);
+		}
 		else if(FX_DISSOLVE == str)
 		{
 			if(!m_dissolveDlg.GetSafeHwnd())
@@ -265,7 +273,7 @@ BOOL CEffectBar::OnInitDialog()
 	//m_ctrlEffects.AddString(_T("none"));
 	int i = m_ctrlEffects.AddString(FX_NEGATIVE);
 	//m_ctrlEffects.SetItemData(i, FX_NEGATIVE);
-	NegativeFxParam* pN = new NegativeFxParam;
+	FxParamBase* pN = new FxParamBase;
 	m_ctrlEffects.SetItemDataPtr(i, pN);
 	i = m_ctrlEffects.AddString(FX_COLOR_KEY);
 	{
@@ -363,6 +371,13 @@ BOOL CEffectBar::OnInitDialog()
 		pParam->cbSize = sizeof(BrokenGlassFxParam);
 		m_ctrlEffects.SetItemDataPtr(i, pParam);
 		m_brokenGlassDlg.SetParam(pParam);
+	}
+	i = m_ctrlEffects.AddString(FX_RINGS);
+	{
+		RingsFxParam* pParam = new RingsFxParam;
+		pParam->cbSize = sizeof(RingsFxParam);
+		m_ctrlEffects.SetItemDataPtr(i, pParam);
+		m_ringsDlg.SetParam(pParam);
 	}
 	i = m_ctrlEffects.AddString(FX_DISSOLVE);
 	{
@@ -544,6 +559,12 @@ void CEffectBar::OnProgressChange( int nPos )
 			pParam->prm_movement = nPos / 10000.f;
 			AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)(LPCTSTR)str, (LPARAM)pParam);
 		}
+		else if (FX_RINGS == str)
+		{
+			RingsFxParam* pParam = (RingsFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
+			pParam->fTranslate = nPos / 10000.f;
+			AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)(LPCTSTR)str, (LPARAM)pParam);
+		}
 		else if (FX_DISSOLVE == str)
 		{
 			DissolveFxParam* pParam = (DissolveFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
@@ -652,6 +673,11 @@ void CEffectBar::SetProgress(CSliderCtrl* pCtrl)
 		{
 			BrokenGlassFxParam* pParam = (BrokenGlassFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
 			if(pParam)	pCtrl->SetPos(pParam->prm_movement * 10000);
+		}
+		else if (FX_RINGS == str)
+		{
+			RingsFxParam* pParam = (RingsFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
+			if(pParam)	pCtrl->SetPos(pParam->fTranslate * 10000);
 		}
 		else if (FX_DISSOLVE == str)
 		{
