@@ -6,6 +6,7 @@
 #include "../FxParam.h"
 #include <Shlwapi.h>
 #pragma comment(lib, "Shlwapi")
+#include "../Logger/Logging.h"
 
 
 #define _TRANS
@@ -65,9 +66,16 @@ bool CRingsRender::Init( CRenderEngine* pEngine)
 	LPCTSTR pszShapeTexture = _T("ShapeWipe/ShapeTexture.dds");
 	TCHAR szTexFilePath[MAX_PATH];
 	PathSettings::BuildResourcePath(szTexFilePath, sizeof(szTexFilePath), pszShapeTexture);
-	ASSERT(PathFileExists(szTexFilePath));
+	bool bOK = PathFileExists(szTexFilePath);
+	ASSERT(bOK);
 	m_pShapeTexture = pResMgr->CreateTexture(pDevice, szTexFilePath,1800,8,0,D3DFMT_G32R32F,D3DPOOL_MANAGED, pszShapeTexture);
 	ASSERT(m_pShapeTexture);
+	if(!m_pShapeTexture)
+	{
+		char buf[MAX_PATH * 2];
+		wcstombs(buf, szTexFilePath, MAX_PATH);
+		LOG_ERROR_FORMAT("%s:pResMgr->CreateTexture failed. The texture file name is %s", __FUNCTION__, buf);
+	}
 
 	srand(1000);
 	//m_uResID_Noise = m_pResMan->CreateTexture(512,256,0,D3DFMT_A8R8G8B8,D3DPOOL_MANAGED,&UUID_TEXTURE_NOISE);
