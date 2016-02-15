@@ -555,6 +555,14 @@ struct RingsFxParam : public FxParamBase
 	float		fRandomPixel;	//1.f, 0.f, 0.01f, 3, 2, 0.f	 the same as BrokenGlass	
 	int			nPattern;		//0-4
 	int			nEffectNo;
+
+	RingsFxParam() : fTranslate(0.f), bReverse(false), fRandomTranslate(0.f), fRotate(0.f)
+		, fCenterX(0.f), fCenterY(0.f), fAspect(0.f), fWidth(0.2f), fRandomWidth(80.f)
+		, fSpiral(10.f), fRandomPixel(0.f), nPattern(0), nEffectNo(0)
+	{
+		cbSize = sizeof(RingsFxParam);
+		strcpy_s(FxType, sizeof(FxType), "Rings");
+	}
 };
 
 #define _3D_CUBE_TRANS

@@ -8,6 +8,8 @@
 #pragma comment(lib, "Shlwapi")
 #include "../Logger/Logging.h"
 
+#pragma warning(disable:4996)
+#pragma warning(disable:4800)
 
 #define _TRANS
 
@@ -41,6 +43,7 @@ CRingsRender::CRingsRender(void)
 
 CRingsRender::~CRingsRender(void)
 {
+	Uninit();
 }
 
 bool CRingsRender::Init( CRenderEngine* pEngine)
@@ -95,15 +98,42 @@ bool CRingsRender::Init( CRenderEngine* pEngine)
 	return true;
 }
 
-bool CRingsRender::Render( CVideoBuffer* pDstDef, CVideoBuffer* pSrcDef, CVideoBuffer* pSrcB, FxParamBase* pParamRaw)
+void CRingsRender::Uninit()
+{
+	CVideoBufferManager* pBufMgr = m_pEngine->GetVideoBufferManager();
+	if(m_pNoiseTexture)
+	{
+		pBufMgr->ReleaseVideoBuffer(m_pNoiseTexture);
+		m_pNoiseTexture = NULL;
+	}
+	if(m_pShapeTexture)
+	{
+	}
+}
+
+bool CRingsRender::Render( CVideoBuffer* pDst, CVideoBuffer* pSrcA, CVideoBuffer* pSrcB, FxParamBase* pParamRaw)
 {
 	RESET_RENDER_TARGET(m_pEngine);
 	SET_DEPTH_STENCIL(m_pEngine);
 
-	const VideoBufferInfo& biSrc = pSrcDef->GetVideoBufferInfo();
+	const VideoBufferInfo& biSrc = pSrcA->GetVideoBufferInfo();
+	const VideoBufferInfo& biDst = pDst->GetVideoBufferInfo();
 	LPDIRECT3DDEVICE9 pDevice = m_pEngine->GetDevice();
 	CResourceManager* pResMan = m_pEngine->GetResourceManager();
+	CVideoBufferManager* pVM = m_pEngine->GetVideoBufferManager();
 	RingsFxParam* pParam = (RingsFxParam*)pParamRaw;	
+
+	CVideoBuffer* pSrcDef = pSrcA;
+#ifdef _TRANS
+	if(pParam->bReverse)
+		std::swap(pSrcA, pSrcB);
+
+	CVideoBuffer* pDst0 = NULL, *pDstReal = pDst;
+	VideoBufferInfo biTemp = {biDst.format, VideoBufferInfo::VIDEO_MEM, VideoBufferInfo::_IN_OUT, biDst.nWidth, biDst.nHeight};
+	pDst0 = pVM->CreateVideoBuffer(biTemp);
+	ASSERT(pDst0);
+	pDst = pDst0;
+#endif
 
 	D3DXMATRIXA16 matWorld,matCombine,matTex;
 	D3DXMatrixIdentity(&matWorld);
@@ -117,35 +147,43 @@ bool CRingsRender::Render( CVideoBuffer* pDstDef, CVideoBuffer* pSrcDef, CVideoB
 	matTex._31 = 0.5f / biSrc.nAllocWidth;
 	matTex._32 = 0.5f / biSrc.nAllocHeight;
 
+	bool bOK = m_pEngine->SetRenderTarget(pDst);
+	ASSERT(bOK);
+	HRESULT hr = E_FAIL;
 #ifdef _TRANS
 	if(pParam->nEffectNo == 0)
-		m_pEffect->SetTechnique("RingsTrans");
+		hr = m_pEffect->SetTechnique("RingsTrans");
 	else
-		m_pEffect->SetTechnique("BrokenRingsTrans");	
+		hr = m_pEffect->SetTechnique("BrokenRingsTrans");	
 #else		
-	m_pEngine->SetRenderTarget(0,pDstDef->handle,pDstDef->COLOR_BLACK(),0x0);
 	if(pParam->nEffectNo == 0)
 		m_pEffect->SetTechnique("Rings");
 	else
 		m_pEffect->SetTechnique("BrokenRings");
-	
 #endif
+	ASSERT(SUCCEEDED(hr));
+
 	//float fAspect = m_pResMan->GetAspect() * (pSrcDef->BaseWidth * (pSrcDef->IsYUV16Buffer() ? 2.0f : 1.0f))  / (float)(pSrcDef->BaseHeight  * m_pResMan->GetAspectVerifyCoef());		
 	float	fAspect = nEditWidth*1.0f/nEditHeight;
 	
 	D3DXMATRIX *matView = NULL, *matProj= NULL;
 	pResMan->GetOrthoMatrix(&matView, &matProj);
 	matCombine = matWorld * *matView * *matProj;	
-	m_pEffect->SetMatrix("g_matWVP",&matCombine);	
-	
-	m_pEffect->SetMatrix("g_matTex",&matTex);
-	m_pEffect->SetTexture("g_txColor",pSrcDef->GetTexture());
-	m_pEffect->SetTexture("g_txShape",m_pShapeTexture->GetTexture());
-	m_pEffect->SetTexture("g_txNoise",m_pNoiseTexture->GetTexture());
+	hr = m_pEffect->SetMatrix("g_matWVP",&matCombine);
+	ASSERT(SUCCEEDED(hr));
+	hr = m_pEffect->SetMatrix("g_matTex",&matTex);
+	ASSERT(SUCCEEDED(hr));
+	hr = m_pEffect->SetTexture("g_txColor",pSrcDef->GetTexture());
+	ASSERT(SUCCEEDED(hr));
+	hr = m_pEffect->SetTexture("g_txShape",m_pShapeTexture->GetTexture());
+	ASSERT(SUCCEEDED(hr));
+	hr = m_pEffect->SetTexture("g_txNoise",m_pNoiseTexture->GetTexture());
+	ASSERT(SUCCEEDED(hr));
 
 	float pSrcDef_fAlphaValue = 1.0f;
-	D3DXVECTOR4 vRings(pParam->fTranslate, pParam->fRandomTranslate, pSrcDef_fAlphaValue, 0.0f);
-	m_pEffect->SetVector("g_vRings",&vRings); 
+	D3DXVECTOR4 vRings(pParam->fTranslate * 1.66f, pParam->fRandomTranslate, pSrcDef_fAlphaValue, 0.0f);
+	hr = m_pEffect->SetVector("g_vRings",&vRings);
+	ASSERT(SUCCEEDED(hr));
 
 	int nPattern = pParam->nPattern;
 	switch(pParam->nPattern) {
@@ -155,12 +193,13 @@ bool CRingsRender::Render( CVideoBuffer* pDstDef, CVideoBuffer* pSrcDef, CVideoB
 	case 4:nPattern = 3;break;
 	}
 	D3DXVECTOR4 vMisc((nPattern + 0.5f) / 8.0f,fAspect,pParam->fCenterX * fAspect / 2.0f,-pParam->fCenterY / 2.0f);	
-	m_pEffect->SetVector("g_vMisc",&vMisc);
+	hr = m_pEffect->SetVector("g_vMisc",&vMisc);
+	ASSERT(SUCCEEDED(hr));
  
-   
 	D3DXVECTOR4 vBlock(pParam->fWidth + 1e-6f, pParam->fRandomWidth, D3DXToRadian( pParam->fSpiral ), pParam->fRandomPixel);
 	vBlock.x /= 2.5f;
-	m_pEffect->SetVector("g_vBlock",&vBlock);
+	hr = m_pEffect->SetVector("g_vBlock",&vBlock);
+	ASSERT(SUCCEEDED(hr));
 
 	D3DXVECTOR2 vAspect(1.0f,1.0f);
 	if(pParam->fAspect > 0.0f)
@@ -171,19 +210,33 @@ bool CRingsRender::Render( CVideoBuffer* pDstDef, CVideoBuffer* pSrcDef, CVideoB
 	D3DXMATRIXA16 matRote,matAspect;
 	D3DXMatrixScaling(&matAspect,vAspect.x,vAspect.y,1.0f);
 	D3DXMatrixRotationZ(&matRote,D3DXToRadian( pParam->fRotate ));
-	m_pEffect->SetMatrix("g_matTexRote",&(matRote * matAspect));		
-	m_pEffect->SetMatrix("g_matTexRoteR",&matRote);
+	hr = m_pEffect->SetMatrix("g_matTexRote",&(matRote * matAspect));
+	ASSERT(SUCCEEDED(hr));
+	hr = m_pEffect->SetMatrix("g_matTexRoteR",&matRote);
+	ASSERT(SUCCEEDED(hr));
 
 	if(SUCCEEDED(pDevice->BeginScene()))
 	{
 		UINT cPass;
-		m_pEffect->Begin(&cPass,0);
-		m_pEffect->BeginPass(0);
-		m_pQuadMesh->DrawMeshFx();
-		m_pEffect->EndPass();
-		m_pEffect->End();
-		pDevice->EndScene();
+		hr = m_pEffect->Begin(&cPass,0);
+		ASSERT(SUCCEEDED(hr));
+		hr = m_pEffect->BeginPass(0);
+		ASSERT(SUCCEEDED(hr));
+		bOK = m_pQuadMesh->DrawMeshFx();
+		ASSERT(bOK);
+		hr = m_pEffect->EndPass();
+		ASSERT(SUCCEEDED(hr));
+		hr = m_pEffect->End();
+		ASSERT(SUCCEEDED(hr));
+		hr = pDevice->EndScene();
+		ASSERT(SUCCEEDED(hr));
 	}
+
+#ifdef _TRANS
+	bOK = m_pEngine->BlendCompose(pDstReal, pSrcB, pDst0);
+	pDst = pDstReal;
+	pVM->ReleaseVideoBuffer(pDst0);
+#endif
 
 	return true;
 }

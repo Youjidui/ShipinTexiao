@@ -42,7 +42,6 @@ struct FxParamBase
 {
 	unsigned int cbSize;
 	char FxType[8];		//int64,形如'ShapWipe',注意是单引号
-	char FxSubType[8];	//int64,such as 'left'
 };
 
 //过渡特技
