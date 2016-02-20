@@ -15,7 +15,7 @@ public:
 	enum { IDD = IDD_DIALOGBAR_IMAGE };
 
 protected:
-	LPCTSTR GetFilePath();
+	LPCTSTR GetFilePath(CString strInitPath);
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV Ö§³Ö
 
 	DECLARE_MESSAGE_MAP()
@@ -24,6 +24,7 @@ public:
 	CString m_strSecondLevelFileName;
 	UINT m_uWidth;
 	UINT m_uHeight;
+	//CToolTipCtrl m_tooltip;
 	afx_msg void OnBnClickedSelectImage1();
 	afx_msg void OnBnClickedSelectImage2();
 	afx_msg void OnEnKillfocusHeight();
@@ -31,4 +32,5 @@ public:
 	afx_msg void OnDestroy();
 	afx_msg LRESULT OnUpdateImageFile( WPARAM w, LPARAM l );
 	virtual BOOL OnInitDialog();
+	afx_msg BOOL OnToolTipNotify( UINT id, NMHDR * pTTTStruct, LRESULT * pResult );
 };

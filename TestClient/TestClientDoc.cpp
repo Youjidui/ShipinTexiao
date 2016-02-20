@@ -429,14 +429,14 @@ bool CTestClientDoc::EffectRender(CVideoBuffer* pDest, CVideoBuffer* pSrc, CVide
 			bOK = eff.Render(pDest, pSrc, (ChromaKeyFxParam*)m_pEffectParam);
 		}
 	}
-	else if(FX_SONY_BLUR == m_strEffectName)
-	{
-		CSonyBlurRender eff;
-		if(eff.Init(m_pRenderEngine))
-		{
-			bOK = eff.Render(pDest, pSrc, (SonyBlurFxParam*)m_pEffectParam);
-		}
-	}
+	//else if(FX_SONY_BLUR == m_strEffectName)
+	//{
+	//	CSonyBlurRender eff;
+	//	if(eff.Init(m_pRenderEngine))
+	//	{
+	//		bOK = eff.Render(pDest, pSrc, (SonyBlurFxParam*)m_pEffectParam);
+	//	}
+	//}
 	else if(FX_AMOEBA_WIPE == m_strEffectName)
 	{
 		CAmoebaWipeRender eff;

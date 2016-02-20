@@ -275,26 +275,26 @@ BOOL CEffectBar::OnInitDialog()
 	//m_ctrlEffects.SetItemData(i, FX_NEGATIVE);
 	FxParamBase* pN = new FxParamBase;
 	m_ctrlEffects.SetItemDataPtr(i, pN);
-	i = m_ctrlEffects.AddString(FX_COLOR_KEY);
-	{
-		ColorKeyParam* pCK = new ColorKeyParam;
-		pCK->fKeyColor[0] = 0.8f;
-		pCK->fKeyColor[1] = 0.8f;
-		//param.fKeyColor[2] = 0.8f;
-		pCK->fAngle1 = 1.0f;
-		pCK->fAngle2 = 2.0f;
-		pCK->fLength1 = 0.2f;
-		pCK->fLength2 = 0.45f;
-		m_ctrlEffects.SetItemDataPtr(i, pCK);
-		m_colorKeyDlg.SetParam(pCK);
-	}
-	i = m_ctrlEffects.AddString(FX_SONY_BLUR);
-	{
-		SonyBlurFxParam* pSB = new SonyBlurFxParam;
-		pSB->blurX = 41.0f;	pSB->blurY = 29.9f;
-		m_ctrlEffects.SetItemDataPtr(i, pSB);
-		m_blurDlg.SetParam(pSB);
-	}
+	//i = m_ctrlEffects.AddString(FX_COLOR_KEY);
+	//{
+	//	ColorKeyParam* pCK = new ColorKeyParam;
+	//	pCK->fKeyColor[0] = 0.8f;
+	//	pCK->fKeyColor[1] = 0.8f;
+	//	//param.fKeyColor[2] = 0.8f;
+	//	pCK->fAngle1 = 1.0f;
+	//	pCK->fAngle2 = 2.0f;
+	//	pCK->fLength1 = 0.2f;
+	//	pCK->fLength2 = 0.45f;
+	//	m_ctrlEffects.SetItemDataPtr(i, pCK);
+	//	m_colorKeyDlg.SetParam(pCK);
+	//}
+	//i = m_ctrlEffects.AddString(FX_SONY_BLUR);
+	//{
+	//	SonyBlurFxParam* pSB = new SonyBlurFxParam;
+	//	pSB->blurX = 41.0f;	pSB->blurY = 29.9f;
+	//	m_ctrlEffects.SetItemDataPtr(i, pSB);
+	//	m_blurDlg.SetParam(pSB);
+	//}
 	i = m_ctrlEffects.AddString(FX_AMOEBA_WIPE);
 	{
 		AmoebaWipeFxParam* pAW = new AmoebaWipeFxParam;
@@ -414,12 +414,12 @@ BOOL CEffectBar::OnInitDialog()
 		m_ctrlEffects.SetItemDataPtr(i, pParam);
 		m_SonySlideDlg.SetParam(pParam);
 	}
-	i = m_ctrlEffects.AddString(FX_SONY_MASK);
-	{
-		SonyMaskFxParam* p = new SonyMaskFxParam;
-		m_ctrlEffects.SetItemDataPtr(i, p);
-		//m_blurDlg.SetParam(p);
-	}
+	//i = m_ctrlEffects.AddString(FX_SONY_MASK);
+	//{
+	//	SonyMaskFxParam* p = new SonyMaskFxParam;
+	//	m_ctrlEffects.SetItemDataPtr(i, p);
+	//	//m_blurDlg.SetParam(p);
+	//}
 	i = m_ctrlEffects.AddString(FX_CHROMA_KEY);
 	{
 		ChromaKeyFxParam * p = new ChromaKeyFxParam;

@@ -48,6 +48,7 @@ BEGIN_MESSAGE_MAP(CBufferBar, CDialog)
 	ON_EN_KILLFOCUS(IDC_WIDTH, &CBufferBar::OnEnKillfocusWidth)
 	ON_MESSAGE(UM_UPDATE_IMAGE_FILE, &CBufferBar::OnUpdateImageFile)
 	ON_WM_DESTROY()
+	ON_NOTIFY_EX( TTN_NEEDTEXT, 0, &CBufferBar::OnToolTipNotify )
 END_MESSAGE_MAP()
 
 
@@ -55,32 +56,41 @@ END_MESSAGE_MAP()
 
 void CBufferBar::OnBnClickedSelectImage1()
 {
-	m_strFirstLevelFileName = GetFilePath();
-	AfxGetApp()->WriteProfileString(PROFILE_SECTION, FIRST_LEVEL, m_strFirstLevelFileName);
-	UpdateData(FALSE);
-	AfxGetMainWnd()->PostMessage(UM_SET_IMAGE, 0, (LPARAM)(LPCTSTR)m_strFirstLevelFileName);
-	//TODO: UM_SET_IMAGE
-	//UM_SET_IMAGE把图像消息通知给Document类，然后再把图像提取成Buffer传递给VideoEffect
-	//再从VideoEffect取得Buffer，显示到View中
+	CString str = GetFilePath(m_strFirstLevelFileName);
+	if(str != m_strFirstLevelFileName)
+	{
+		m_strFirstLevelFileName = str;
+		AfxGetApp()->WriteProfileString(PROFILE_SECTION, FIRST_LEVEL, m_strFirstLevelFileName);
+		UpdateData(FALSE);
+		AfxGetMainWnd()->PostMessage(UM_SET_IMAGE, 0, (LPARAM)(LPCTSTR)m_strFirstLevelFileName);
+		//TODO: UM_SET_IMAGE
+		//UM_SET_IMAGE把图像消息通知给Document类，然后再把图像提取成Buffer传递给VideoEffect
+		//再从VideoEffect取得Buffer，显示到View中
+	}
 }
 
 void CBufferBar::OnBnClickedSelectImage2()
 {
-	m_strSecondLevelFileName = GetFilePath();
-	AfxGetApp()->WriteProfileString(PROFILE_SECTION, SECOND_LEVEL, m_strSecondLevelFileName);
-	UpdateData(FALSE);
-	AfxGetMainWnd()->PostMessage(UM_SET_IMAGE, 1, (LPARAM)(LPCTSTR)m_strSecondLevelFileName);
-	//过渡特技需要2层图像
+	CString str = GetFilePath(m_strSecondLevelFileName);
+	if(str != m_strSecondLevelFileName)
+	{
+		m_strSecondLevelFileName = str;
+		AfxGetApp()->WriteProfileString(PROFILE_SECTION, SECOND_LEVEL, m_strSecondLevelFileName);
+		UpdateData(FALSE);
+		AfxGetMainWnd()->PostMessage(UM_SET_IMAGE, 1, (LPARAM)(LPCTSTR)m_strSecondLevelFileName);
+		//过渡特技需要2层图像
+	}
 }
 
-LPCTSTR CBufferBar::GetFilePath()
+LPCTSTR CBufferBar::GetFilePath(CString strInitPath)
 {
-	static CString strPath=_T("");
+	static CString strPath;
+	strPath = strInitPath;
 	CFileDialog Dlg(TRUE,_T("*.bmp"),NULL,OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,_T("图像Files(*.bmp *.tga *.png *.tif *.jpg *.jpeg *.gif)|*.bmp;*.tga;*.png;*.tif;*.jpg;*.jpeg;*gif;||"),NULL);
-	Dlg.m_ofn.lpstrInitialDir=strPath;
+	Dlg.m_ofn.lpstrInitialDir = strPath;
 	if(Dlg.DoModal()==IDOK)
 	{
-		strPath=Dlg.GetPathName();
+		strPath = Dlg.GetPathName();
 	}
 	return strPath;
 }
@@ -100,6 +110,7 @@ void CBufferBar::OnEnKillfocusWidth()
 
 void CBufferBar::OnDestroy()
 {
+	EnableToolTips(FALSE);
 	CDialog::OnDestroy();
 }
 
@@ -109,6 +120,12 @@ BOOL CBufferBar::OnInitDialog()
 
 	m_strFirstLevelFileName = AfxGetApp()->GetProfileString(PROFILE_SECTION, FIRST_LEVEL);
 	m_strSecondLevelFileName = AfxGetApp()->GetProfileString(PROFILE_SECTION, SECOND_LEVEL);
+
+	EnableToolTips(TRUE);
+	//m_tooltip.Create(this);
+	//m_tooltip.AddTool(GetDlgItem(IDC_IMAGE1));
+	//m_tooltip.AddTool(GetDlgItem(IDC_IMAGE2));
+	//m_tooltip.Activate(TRUE);
 
 	PostMessage(UM_UPDATE_IMAGE_FILE, 0, 0);
 
@@ -126,3 +143,28 @@ LRESULT CBufferBar::OnUpdateImageFile( WPARAM w, LPARAM l )
 		AfxGetMainWnd()->PostMessage(UM_SET_IMAGE, 1, (LPARAM)(LPCTSTR)m_strSecondLevelFileName);
 	return 0;
 }
+
+BOOL CBufferBar::OnToolTipNotify( UINT id, NMHDR * pTTTStruct, LRESULT * pResult )
+{
+	TOOLTIPTEXT *pTTT = (TOOLTIPTEXT *)pTTTStruct;    
+	UINT nID =pTTTStruct->idFrom; //得到相应窗口ID，有可能是HWND
+	if (pTTT->uFlags & TTF_IDISHWND)    //表明nID是否为HWND
+	{
+		nID = ::GetDlgCtrlID((HWND)nID);//从HWND得到ID值，当然你也可以通过HWND值来判断
+		switch(nID)
+		{
+		case(IDC_IMAGE1):
+			pTTT->lpszText = (LPTSTR)(LPCTSTR)m_strFirstLevelFileName;
+			pTTT->hinst = NULL;
+			break;
+		case(IDC_IMAGE2):
+			pTTT->lpszText = (LPTSTR)(LPCTSTR)m_strSecondLevelFileName;
+			pTTT->hinst = NULL;
+			break;
+		}
+		//HWND hWnd = (HWND)pTTTStruct->idFrom;
+		//::GetWindowText(hWnd, pTTT->szText, sizeof(pTTT->szText));//设置
+	}
+	return(FALSE);
+}
+
