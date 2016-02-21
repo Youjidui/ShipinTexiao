@@ -400,6 +400,20 @@ bool CSonyPinpRender::Render(CVideoBuffer* pDst, CVideoBuffer* pSrc, FxParamBase
 	return true;
 }
 
+bool CSonyPinpRender::Render( CVideoBuffer* pDest, CVideoBuffer* pSrcA, CVideoBuffer* pSrcB, FxParamBase* pParam )
+{
+	RESET_RENDER_TARGET(m_pEngine);
+
+	CVideoBuffer* pTempDef = m_pEngine->CreateRenderTargetBuffer();//CreateVideoBuffer(pDst->GetVideoBufferInfo());
+	bool bOK = Render(pTempDef, pSrcA, pParam);
+	ASSERT(bOK);
+	bOK = m_pEngine->BlendCompose(pDest, pSrcB, pTempDef);
+	ASSERT(bOK);
+	bool bOK2 = m_pEngine->GetVideoBufferManager()->ReleaseVideoBuffer(pTempDef);
+	ASSERT(bOK2);
+	return bOK;
+}
+
 void CSonyPinpRender::_render_for_rgb32(CVideoBuffer* pDstDef, CVideoBuffer* pSrcDef, SonyPinPFxParam* pParam, BOOL bDecay, BOOL bAlphaBlend)
 {
 	bool bOK = m_pEngine->SetRenderTarget(pDstDef);

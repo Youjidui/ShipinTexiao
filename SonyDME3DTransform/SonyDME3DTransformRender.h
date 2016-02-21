@@ -29,6 +29,7 @@ public:
 	bool Init(CRenderEngine* pEngine);
 	void Uninit();
 	bool Render(CVideoBuffer* pDst, CVideoBuffer* pSrc, FxParamBase* pParam);
+	bool Render(CVideoBuffer* pDst, CVideoBuffer* pSrcA, CVideoBuffer* pSrcB, FxParamBase* pParam);
 
 protected:
 	void RenderRGBA(CVideoBuffer* pDst, CVideoBuffer* pSrc);

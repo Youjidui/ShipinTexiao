@@ -216,6 +216,9 @@ void CRenderEngine::GetTargetVideoSize( int& nEditWidth, int& nEditHeight )
 
 bool CRenderEngine::EffectVideoCopy( CVideoBuffer* pDst, CVideoBuffer* pSrc )
 {
+	RESET_RENDER_TARGET(this);
+	//SET_DEPTH_STENCIL(this);
+
 	LPDIRECT3DDEVICE9 pDevice = GetDevice();
 	CResourceManager* pResMan = GetResourceManager();
 	//这个函数只用于特技缺省Copy ，由调用者决定是否使用Zbuffer
@@ -225,6 +228,7 @@ bool CRenderEngine::EffectVideoCopy( CVideoBuffer* pDst, CVideoBuffer* pSrc )
 	//TP_VBufferDef *vBufferDst = m_pResManager->GetBufferDef( hDst );
 	//assert( vBufferSrc->bufferFormat == vBufferDst->bufferFormat );	
 	CBaseMesh *pMesh          = GetResourceManager()->CreateQuadMesh(GetDevice());
+	ASSERT(pMesh);
 	const VideoBufferInfo& srcBI = pSrc->GetVideoBufferInfo();
 	const VideoBufferInfo& destBI = pDst->GetVideoBufferInfo();
 	//GAutoLock l(&m_D3Dcs);
@@ -245,16 +249,20 @@ bool CRenderEngine::EffectVideoCopy( CVideoBuffer* pDst, CVideoBuffer* pSrc )
 	GetResourceManager()->GetOrthoMatrix(&pMatView, &pMatProj);
 	D3DXMATRIX matWVP = matWorld * (*pMatView)* (*pMatProj);
 	D3DXMATRIX matCC = (*pMatView)*(*pMatProj);
-	pDevice->SetRenderState( D3DRS_ALPHABLENDENABLE,FALSE ); 
-	pDevice->SetRenderState( D3DRS_ALPHATESTENABLE ,FALSE ); 	
+	HRESULT hr = pDevice->SetRenderState( D3DRS_ALPHABLENDENABLE,FALSE );
+	ASSERT(SUCCEEDED(hr));
+	hr = pDevice->SetRenderState( D3DRS_ALPHATESTENABLE ,FALSE );
+	ASSERT(SUCCEEDED(hr));
 
 	D3DXVECTOR4 vMeshArgs(  f_Offsetx/(float)RTTextureWidth,
 		vBufferSrcOffsetY/(float)RTTextureHeight,
 		iTargetImageWidth/(float)RTTextureWidth,
 		iTargetImageHeight/(float)RTTextureHeight);
-	pDevice->SetTexture( 0,pSrc->GetTexture());
+	hr = pDevice->SetTexture( 0,pSrc->GetTexture());
+	ASSERT(SUCCEEDED(hr));
 	//if(vBufferSrc->pAlpha )	SetSourceTexture( 1,vBufferSrc->pAlpha );
-	GenerateMatrix( pSrc, &matTexture, mat_Image );	
+	bool bOk = GenerateMatrix( pSrc, &matTexture, mat_Image );
+	ASSERT(bOk);
 
 	//vBufferDst->bRenderToFullTarget = true;
 	//vBufferDst->bClearFullTarget    = true;
@@ -264,37 +272,57 @@ bool CRenderEngine::EffectVideoCopy( CVideoBuffer* pDst, CVideoBuffer* pSrc )
 	//	vBufferDst->pAlpha= AllocateVideoAlphaRT();
 	//}
 	//SetRenderTarget( 0, hDst,D3DCLEAR_TARGET,vBufferDst->COLOR_BLACK(), 0,1.0f,0 );	// --zms-- yuyv无论何种情况，都清除为黑色（而不是绿色）。
-	SetRenderTarget(pDst);
+	bOk = SetRenderTarget(pDst);
+	ASSERT(bOk);
 
 	float bHaveAlpha     = 0.0f;//vBufferSrc->pAlpha?1.0:0.0;
 	float bParticleBlend = 0.0f;//vBufferSrc->bParticleBlend?1.0:0.0;
 
 	CVertexShader* pVS = pResMan->CreateVertexShader(pDevice, _T("Shaders/VS_SplitField.VSH"));
+	ASSERT(pVS);
 	CPixelShader* pPS = pResMan->CreatePixelShader(pDevice, _T("Shaders/PS_DirectOutEffect.PSH"));
+	ASSERT(pPS);
 
 	if(SUCCEEDED(pDevice -> BeginScene()))
 	{				 
-		pDevice->SetSamplerState( 0, D3DSAMP_MINFILTER, D3DTEXF_POINT );
-		pDevice->SetSamplerState( 1, D3DSAMP_MINFILTER, D3DTEXF_POINT );
-		pDevice->SetSamplerState( 0, D3DSAMP_MAGFILTER, D3DTEXF_POINT );
-		pDevice->SetSamplerState( 1, D3DSAMP_MAGFILTER, D3DTEXF_POINT );
+		hr = pDevice->SetSamplerState( 0, D3DSAMP_MINFILTER, D3DTEXF_POINT );
+		ASSERT(SUCCEEDED(hr));
+		hr = pDevice->SetSamplerState( 1, D3DSAMP_MINFILTER, D3DTEXF_POINT );
+		ASSERT(SUCCEEDED(hr));
+		hr = pDevice->SetSamplerState( 0, D3DSAMP_MAGFILTER, D3DTEXF_POINT );
+		ASSERT(SUCCEEDED(hr));
+		hr = pDevice->SetSamplerState( 1, D3DSAMP_MAGFILTER, D3DTEXF_POINT );
+		ASSERT(SUCCEEDED(hr));
 
-		pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE,FALSE);
-		pDevice->SetRenderState(D3DRS_ALPHATESTENABLE,FALSE);
-		pDevice->SetPixelShader(pPS->GetPixelShaderPtr());
-		pDevice->SetPixelShaderConstantF(0,&bHaveAlpha,1);
-		pDevice->SetPixelShaderConstantF(1,&bParticleBlend,1);
-		pDevice->SetVertexShaderConstantF( 0, (float*)&matCC,      4 );
-		pDevice->SetVertexShaderConstantF( 4, (float*)&matTexture, 4 );
-		pDevice->SetVertexShaderConstantF( 8, (float*)&vMeshArgs,  1 );
+		hr = pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE,FALSE);
+		ASSERT(SUCCEEDED(hr));
+		hr = pDevice->SetRenderState(D3DRS_ALPHATESTENABLE,FALSE);
+		ASSERT(SUCCEEDED(hr));
+		hr = pDevice->SetPixelShader(pPS->GetPixelShaderPtr());
+		ASSERT(SUCCEEDED(hr));
+		hr = pDevice->SetPixelShaderConstantF(0,&bHaveAlpha,1);
+		ASSERT(SUCCEEDED(hr));
+		hr = pDevice->SetPixelShaderConstantF(1,&bParticleBlend,1);
+		ASSERT(SUCCEEDED(hr));
+		hr = pDevice->SetVertexShaderConstantF( 0, (float*)&matCC,      4 );
+		ASSERT(SUCCEEDED(hr));
+		hr = pDevice->SetVertexShaderConstantF( 4, (float*)&matTexture, 4 );
+		ASSERT(SUCCEEDED(hr));
+		hr = pDevice->SetVertexShaderConstantF( 8, (float*)&vMeshArgs,  1 );
+		ASSERT(SUCCEEDED(hr));
 
-		pMesh -> DrawMesh(0, pVS->GetVertexShaderPtr());
-		pDevice->EndScene();
+		bOk = pMesh -> DrawMesh(0, pVS->GetVertexShaderPtr());
+		ASSERT(bOk);
+		hr = pDevice->EndScene();
+		ASSERT(SUCCEEDED(hr));
 	}
 
-	pDevice->SetPixelShader( NULL );
-	//pDevice->SetRenderTarget(0,NULL);
-	pDevice->SetTexture( 0, NULL );
+	hr = pDevice->SetVertexShader(NULL);
+	ASSERT(SUCCEEDED(hr));
+	hr = pDevice->SetPixelShader( NULL );
+	ASSERT(SUCCEEDED(hr));
+	hr = pDevice->SetTexture( 0, NULL );
+	ASSERT(SUCCEEDED(hr));
 	
 	return true;  
 }
@@ -325,6 +353,9 @@ bool CRenderEngine::SetDepthStencilBuffer(bool bUseDepthBuffer)
 
 bool CRenderEngine::BlendCompose( CVideoBuffer* pDest, CVideoBuffer* pSrcA, CVideoBuffer* pSrcB)
 {
+	RESET_RENDER_TARGET(this);
+	//SET_DEPTH_STENCIL(this);
+
 	int num = 2;	//pSrcA and pSrcB
 	//TP_VBufferDef *vBufferDst  = m_pResManager->GetBufferDef( hTarget ); 
 	const VideoBufferInfo& biDst = pDest->GetVideoBufferInfo();
@@ -469,15 +500,8 @@ bool CRenderEngine::BlendCompose( CVideoBuffer* pDest, CVideoBuffer* pSrcA, CVid
 		m_pDevice->SetTexture( i, NULL );
 	}	 
 	m_pDevice->SetRenderTarget(1, NULL);
+	m_pDevice->SetVertexShader(NULL); 
 	m_pDevice->SetPixelShader(NULL); 
 
-	//if(vBufferDst->handle!=hTarget )
-	//{
-	//	Copy(vBufferTemp->handle,vBufferDst->handle);
-	//}
-	//if(vBufferTemp)
-	//{
-	//	m_pResManager->FreeRTBuffer( pTempHandle );
-	//}
 	return true;
 }

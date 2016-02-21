@@ -146,6 +146,17 @@ bool CSonyFadeFromToRender::Render(CVideoBuffer* pDest, CVideoBuffer *pSrcA, FxP
  	pDevice->SetVertexShader(NULL);
  	pDevice->SetPixelShader(NULL);
  	pDevice->SetRenderTarget(1,NULL); 	
+	m_pEffect->SetTexture("g_txColor",NULL);
  
 	return true;
 }
+
+//bool CSonyFadeFromToRender::Render( CVideoBuffer* pDest, CVideoBuffer *pSrcA, CVideoBuffer *pSrcB, FxParamBase* pParam )
+//{
+//	bool bOK = m_pEngine->EffectVideoCopy(pDest, pSrcB);
+//	ASSERT(bOK);
+//	bOK = Render(pDest, pSrcA, pParam);
+//	ASSERT(bOK);
+//	return bOK;
+//
+//}

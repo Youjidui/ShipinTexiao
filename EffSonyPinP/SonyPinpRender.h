@@ -15,6 +15,7 @@ public:
 	bool Init(CRenderEngine* pEngine);
 	void Uninit();
 	bool Render(CVideoBuffer* pDst, CVideoBuffer* pSrc, FxParamBase* pParam);
+	bool Render(CVideoBuffer* pDest, CVideoBuffer* pSrcA, CVideoBuffer* pSrcB, FxParamBase* pParam);
 
 private:
 	CRenderEngine* m_pEngine;

@@ -135,7 +135,7 @@ bool CWipeRenderBase::Render( CVideoBuffer* pDest, CVideoBuffer* pSrcA, CVideoBu
 			pDevice->EndScene();
 			pDevice->SetTexture(0, NULL);
 		}
-		pDevice->SetRenderTarget(0, NULL);
+		pDevice->SetRenderTarget(1, NULL);
 
 		//bOK = m_pEngine->SetDepthBuffer(false);
 		//ASSERT(bOK);

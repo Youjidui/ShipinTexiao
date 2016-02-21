@@ -13,7 +13,8 @@ CVideoBuffer::CVideoBuffer(IDirect3DDevice9* pDevice, const VideoBufferInfo& inf
 , m_pTexture(NULL)
 {
 	memcpy(&m_BufferInfo, &info, sizeof(info));
-	Create(pDevice, info);
+	bool bOK = Create(pDevice, info);
+	ASSERT(bOK);
 	m_BufferInfo.nAllocWidth = info.nWidth;
 	m_BufferInfo.nAllocHeight = info.nHeight;
 }
@@ -31,7 +32,7 @@ const VideoBufferInfo& CVideoBuffer::GetVideoBufferInfo() const
 void* CVideoBuffer::LockBuffer( int &Pitch )
 {
 	D3DLOCKED_RECT rc;
-	if(SUCCEEDED(m_pSurface->LockRect(&rc, NULL, 0)))	//D3DLOCK_DISCARD
+	if(m_pSurface && SUCCEEDED(m_pSurface->LockRect(&rc, NULL, 0)))	//D3DLOCK_DISCARD
 	{
 		Pitch = rc.Pitch;
 		return rc.pBits;

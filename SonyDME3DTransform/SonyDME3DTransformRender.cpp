@@ -39,8 +39,6 @@ void CSonyDME3DTransformRender::Uninit()
 
 bool CSonyDME3DTransformRender::Render(CVideoBuffer* pDst, CVideoBuffer* pSrc, FxParamBase* pParamRaw)
 {
-	HRESULT hr = E_FAIL;
-
 	SonyDME3DTransfromFxPrarm* pParam = (SonyDME3DTransfromFxPrarm*)pParamRaw;
 	RESET_RENDER_TARGET(m_pEngine);
 	SET_DEPTH_STENCIL(m_pEngine);
@@ -58,6 +56,23 @@ bool CSonyDME3DTransformRender::Render(CVideoBuffer* pDst, CVideoBuffer* pSrc, F
 	}
 	
 	return true;
+}
+
+bool CSonyDME3DTransformRender::Render( CVideoBuffer* pDst, CVideoBuffer* pSrcA, CVideoBuffer* pSrcB, FxParamBase* pParamRaw )
+{
+	SonyDME3DTransfromFxPrarm* pParam = (SonyDME3DTransfromFxPrarm*)pParamRaw;
+	RESET_RENDER_TARGET(m_pEngine);
+	SET_DEPTH_STENCIL(m_pEngine);
+
+	CVideoBuffer* pTempDef = m_pEngine->CreateRenderTargetBuffer();//CreateVideoBuffer(pDst->GetVideoBufferInfo());
+	m_pParam = pParam;
+	RenderRGBA(pTempDef, pSrcA);
+
+	bool bOK = m_pEngine->BlendCompose(pDst, pSrcB, pTempDef);
+	ASSERT(bOK);
+	bool bOK2 = m_pEngine->GetVideoBufferManager()->ReleaseVideoBuffer(pTempDef);
+	ASSERT(bOK2);
+	return bOK;
 }
 
 void CSonyDME3DTransformRender::RenderRGBA(CVideoBuffer* pDst, CVideoBuffer* pSrc)

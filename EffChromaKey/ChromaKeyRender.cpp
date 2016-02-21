@@ -280,6 +280,19 @@ bool ChromaKeyRender::Render(CVideoBuffer*pDstDef, CVideoBuffer *pSrcDef, FxPara
 	return RenderArea(pDstDef, pSrcDef, pParam);
 }
 
+bool ChromaKeyRender::Render(CVideoBuffer*pDstDef, CVideoBuffer *pSrcA, CVideoBuffer* pSrcB, FxParamBase* pParam)
+{
+	RESET_RENDER_TARGET(m_pEngine);
+	CVideoBuffer* pTempDef = m_pEngine->CreateRenderTargetBuffer();//CreateVideoBuffer(pDst->GetVideoBufferInfo());
+	bool bOK = RenderArea(pTempDef, pSrcA, pParam);
+	ASSERT(bOK);
+	bOK = m_pEngine->BlendCompose(pDstDef, pSrcB, pTempDef);
+	ASSERT(bOK);
+	bool bOK2 = m_pEngine->GetVideoBufferManager()->ReleaseVideoBuffer(pTempDef);
+	ASSERT(bOK2);
+	return bOK;
+}
+
 bool ChromaKeyRender::RenderArea(CVideoBuffer*pDstDef, CVideoBuffer *pSrcDef, FxParamBase* pParamRaw)
 {
 	LPDIRECT3DDEVICE9 pDevice = m_pEngine->GetDevice();
@@ -453,7 +466,6 @@ bool ChromaKeyRender::RenderArea(CVideoBuffer*pDstDef, CVideoBuffer *pSrcDef, Fx
 	pDevice->SetTexture(0, NULL);
 	pDevice->SetTexture(1, NULL);
 	pDevice->SetTexture(2, NULL);
-	pDevice->SetRenderTarget(0, NULL);
 	pDevice->SetRenderTarget(1, NULL);
 	pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
 	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);

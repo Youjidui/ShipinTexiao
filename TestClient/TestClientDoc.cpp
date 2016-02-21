@@ -62,6 +62,7 @@ CTestClientDoc::CTestClientDoc()
 //, m_pResourceManager(NULL)
 , m_pBufferMgr(NULL)
 , m_pDestImage(NULL)
+, m_pBackImage(NULL)
 , m_pEffectParam(NULL)
 {
 	memset(&m_DestVideoBufferInfo, 0, sizeof(VideoBufferInfo));
@@ -426,7 +427,7 @@ bool CTestClientDoc::EffectRender(CVideoBuffer* pDest, CVideoBuffer* pSrc, CVide
 		ChromaKeyRender eff;
 		if(eff.Init(m_pRenderEngine))
 		{
-			bOK = eff.Render(pDest, pSrc, (ChromaKeyFxParam*)m_pEffectParam);
+			bOK = eff.Render(pDest, pSrc, pSrc2, (ChromaKeyFxParam*)m_pEffectParam);
 		}
 	}
 	//else if(FX_SONY_BLUR == m_strEffectName)
@@ -499,6 +500,7 @@ bool CTestClientDoc::EffectRender(CVideoBuffer* pDest, CVideoBuffer* pSrc, CVide
 		if(eff.Init(m_pRenderEngine))
 		{
 			bOK = eff.Render(pDest, pSrc, m_pEffectParam);
+			//bOK = eff.Render(pDest, pSrc, pSrc2, m_pEffectParam);
 		}
 	}
 	else if(FX_SONY_SLIDE == m_strEffectName)
@@ -594,7 +596,7 @@ bool CTestClientDoc::EffectRender(CVideoBuffer* pDest, CVideoBuffer* pSrc, CVide
 		CSonyDME3DTransformRender eff;
 		if(eff.Init(m_pRenderEngine))
 		{
-			bOK = eff.Render(pDest, pSrc, m_pEffectParam);
+			bOK = eff.Render(pDest, pSrc, pSrc2, m_pEffectParam);
 		}
 	}
 	else if(FX_SONY_PINP == m_strEffectName)
@@ -602,7 +604,7 @@ bool CTestClientDoc::EffectRender(CVideoBuffer* pDest, CVideoBuffer* pSrc, CVide
 		CSonyPinpRender eff;
 		if(eff.Init(m_pRenderEngine))
 		{
-			bOK = eff.Render(pDest, pSrc, m_pEffectParam);
+			bOK = eff.Render(pDest, pSrc, pSrc2, m_pEffectParam);
 		}
 	}
 	else if(FX_SONY_3D_BROKEN_GLASS == m_strEffectName)
