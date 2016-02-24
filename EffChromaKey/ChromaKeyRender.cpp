@@ -347,6 +347,7 @@ bool ChromaKeyRender::RenderArea(CVideoBuffer*pDstDef, CVideoBuffer *pSrcDef, Fx
 	// ²ÎÊý´«µÝ
 	NSACKParamTmpData   tmpData;
 	NSCE_ACK_CalcParams(&tmpData, pParam);
+	TRACE(_T("paramCrkAdj.fAngle:%f, keySlopeInv:%f, ccSlopeInv:%f\n"), pParam->paramCrkAdj.fAngle, tmpData.keySlopeInv, tmpData.ccSlopeInv);
 	// 	float4		fCoefU		: register(c20);	// [ keyCos, -keySin, fvCos, fvSin ]
 	// 	float4		fCoefV		: register(c21);	// [ keySin, keyCos, -fvSin, fvCos ]
 	//float4		fCoefYK		: register(c26);	// [ keyYBalMix * keyGain, ccYBalMix * ccGain, keySlopeInv * keyGain, ccSlopeInv * ccGain ]

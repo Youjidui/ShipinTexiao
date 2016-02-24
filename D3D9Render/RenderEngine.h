@@ -2,6 +2,7 @@
 
 #include "ResourceManager.h"
 #include "VideoBufferManager.h"
+#include "../Utility/SafeDelete.h"
 
 #include <DxErr.h>
 #pragma comment(lib, "DxErr")
@@ -58,6 +59,7 @@ public:
 		{
 			HRESULT hr = m_pDevice->SetRenderTarget(0, m_pOldRT);
 			ASSERT(SUCCEEDED(hr));
+			SAFE_RELEASE(m_pOldRT);
 		}
 	};
 	struct SetDepthStencil
@@ -91,6 +93,7 @@ public:
 		{
 			HRESULT hr = m_pDevice->SetDepthStencilSurface(m_pOldDepth);
 			ASSERT(SUCCEEDED(hr));
+			SAFE_RELEASE(m_pOldDepth);
 		}
 	};
 

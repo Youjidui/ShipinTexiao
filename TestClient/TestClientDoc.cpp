@@ -427,6 +427,7 @@ bool CTestClientDoc::EffectRender(CVideoBuffer* pDest, CVideoBuffer* pSrc, CVide
 		ChromaKeyRender eff;
 		if(eff.Init(m_pRenderEngine))
 		{
+			//bOK = eff.Render(pDest, pSrc, (ChromaKeyFxParam*)m_pEffectParam);
 			bOK = eff.Render(pDest, pSrc, pSrc2, (ChromaKeyFxParam*)m_pEffectParam);
 		}
 	}
