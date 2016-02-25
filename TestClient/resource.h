@@ -45,7 +45,6 @@
 #define IDD_PARAM_SONY_3D_BROKEN_GLASS_TRANS 333
 #define IDD_PARAM_RIPPLE_WIPE           334
 #define IDD_PARAM_DIP_TO_COLOR          335
-#define IDD_DIALOG1                     336
 #define IDD_PARAM_RINGS                 336
 #define IDC_EFFECTS                     1000
 #define IDC_PROGRESS                    1001
@@ -205,12 +204,17 @@
 #define IDC_SLIDER_fScaleY              1051
 #define IDC_SLIDER_fScaleZ              1052
 #define IDC_SLIDER_fPositionX           1052
+#define IDC_SLIDER_REGION_LEFT          1052
 #define IDC_SLIDER_fWorldTranslateX     1053
 #define IDC_SLIDER_fPositionY           1053
+#define IDC_SLIDER_REGION_TOP           1053
 #define IDC_SLIDER_fWorldTranslateY     1054
 #define IDC_SLIDER_fBorderWidth         1054
+#define IDC_SLIDER_REGION_RIGHT         1054
 #define IDC_SLIDER_fWorldTranslateZ     1055
 #define IDC_SLIDER_fShadowDropDistance  1055
+#define IDC_SLIDER_VA_HUE2              1055
+#define IDC_SLIDER_REGION_BOTTOM        1055
 #define IDC_SLIDER_fWorldRotateX        1056
 #define IDC_SLIDER_fShadowDropLightAngle 1056
 #define IDC_SLIDER_fWorldRotateY        1057

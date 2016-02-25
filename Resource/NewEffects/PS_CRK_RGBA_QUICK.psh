@@ -13,10 +13,21 @@ float4		fYKOff		: register(c27);	// [ keyClip * keyGain, ccClip * ccGain, 0.f, 0
 float4		fGain		: register(c28);	// [ -keyGain, -ccGain, 0.f, 0.f ]
 float4		fInvert		: register(c29);	// [ bInvert, -1.f, 0.f, 0.f ]
 float4		fInvCoef	: register(c30);	// [ (bInvert ? -1 : 1) * keyDensity, 1.f, 0.f, 0.f ]
+float4		fRegion		: register(c31);
+
+bool PtInRegion(float2 pt, float4 region)
+{
+	bool bIn = (region.x <= pt.x) && (pt.x <= region.z) && (region.y <= pt.y) && (pt.y <= region.w);
+	//return InOrOut ? bIn : !bIn;
+	return bIn;
+}
 
 float4 main(float2 texSrcCoord : TEXCOORD0) : COLOR0
 {
 	float4 srcColor = tex2D(texSrc, texSrcCoord);
+	if(!PtInRegion(texSrcCoord, fRegion))	//return src color if not in the region
+		return srcColor;
+	
 	float4 srcYUVA = CS_RGBA2YUVA(srcColor);	// UV Range [-0.5, 0.5]
 	srcYUVA.yz *= 2.f;
 	

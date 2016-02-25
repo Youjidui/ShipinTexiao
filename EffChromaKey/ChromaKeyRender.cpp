@@ -45,7 +45,7 @@ static const BYTE g_pFilterMapTable[][4] =
 
 struct NSACKParamTmpData	// 中间变量存储结构
 {
-	BOOL		bKey;
+	//BOOL		bKey;
 	BOOL		bInvert;
 	BOOL		bCC;
 	BOOL		bYBal;
@@ -54,25 +54,25 @@ struct NSACKParamTmpData	// 中间变量存储结构
 	float		keySin;
 	float		keyCos;
 	float		keySlopeInv;
-	int			nKeyKeyFilter;
-	int			nKeySrcFilter;
+	//int			nKeyKeyFilter;
+	//int			nKeySrcFilter;
 	float		keySatCrop;
 	float		keyYBalMix;
 	float		keyYBalClip;
 	float		keyYBalGain;
 	float		keyYBalOffset;
 	float		keyDensity;
-	float		keyLeftPos;
-	float		keyRightPos;
+	//float		keyLeftPos;
+	//float		keyRightPos;
 	float		ccClip;
 	float		ccGain;
 	float		ccSlopeInv;
-	int			nCCKeyFilter;
-	int			nCCSrcFilter;
+	//int			nCCKeyFilter;
+	//int			nCCSrcFilter;
 	float		ccSatCrop;
 	float		ccYBalMix;
-	float		ccLeftPos;
-	float		ccRightPos;
+	//float		ccLeftPos;
+	//float		ccRightPos;
 	float		fvYGain;
 	float		fvSin;
 	float		fvCos;
@@ -91,13 +91,13 @@ void CALLBACK NSCE_ACK_CalcParams(OUT NSACKParamTmpData* pTmpData,		// 中间变量
 	// 参数传递
 	memset(&calcData, 0, sizeof(calcData));
 	// Key
-	if (pParamData->paramCrkAdj.bOn)
+	if (1)//pParamData->paramCrkAdj.bOn)
 	{
 		calcData.paramCrkAdj.fClip = pParamData->paramCrkAdj.fClip;
 		calcData.paramCrkAdj.fGain = pParamData->paramCrkAdj.fGain;
 		calcData.paramCrkAdj.fHue = pParamData->paramCrkAdj.fHue;
 		calcData.paramCrkAdj.fAngle = pParamData->paramCrkAdj.fAngle;
-		calcData.paramCrkAdj.nFilter = pParamData->paramCrkAdj.nFilter;
+		//calcData.paramCrkAdj.nFilter = pParamData->paramCrkAdj.nFilter;
 		calcData.paramCrkAdj.fSatCrop = pParamData->paramCrkAdj.fSatCrop;
 		calcData.paramCrkAdj.fDensity = pParamData->paramCrkAdj.fDensity;
 	}
@@ -107,19 +107,19 @@ void CALLBACK NSCE_ACK_CalcParams(OUT NSACKParamTmpData* pTmpData,		// 中间变量
 		calcData.paramCrkAdj.fGain = 100.f;
 		calcData.paramCrkAdj.fHue = 0.f;
 		calcData.paramCrkAdj.fAngle = 97.59578851f;
-		calcData.paramCrkAdj.nFilter = 1;
+		//calcData.paramCrkAdj.nFilter = 1;
 		calcData.paramCrkAdj.fSatCrop = 20.3125f;
 		calcData.paramCrkAdj.fDensity = 100.f;
 	}
 	if (pParamData->paramCrkAdj.bInvert)
 	{
-		calcData.paramCrkPos.fLeft = pParamData->paramCrkPos.fRight;
-		calcData.paramCrkPos.fRight = pParamData->paramCrkPos.fLeft;
+		//calcData.paramCrkPos.fLeft = pParamData->paramCrkPos.fRight;
+		//calcData.paramCrkPos.fRight = pParamData->paramCrkPos.fLeft;
 	}
 	else
 	{
-		calcData.paramCrkPos.fLeft = pParamData->paramCrkPos.fLeft;
-		calcData.paramCrkPos.fRight = pParamData->paramCrkPos.fRight;
+		//calcData.paramCrkPos.fLeft = pParamData->paramCrkPos.fLeft;
+		//calcData.paramCrkPos.fRight = pParamData->paramCrkPos.fRight;
 	}
 	// CC
 	if (pParamData->paramCc.bOn)
@@ -131,14 +131,14 @@ void CALLBACK NSCE_ACK_CalcParams(OUT NSACKParamTmpData* pTmpData,		// 中间变量
 		calcData.paramCc.fLum = pParamData->paramCc.fLum;
 		calcData.paramCc.fSat = pParamData->paramCc.fSat;
 		calcData.paramCc.fHue = pParamData->paramCc.fHue;
-		calcData.paramCc.nFilter = pParamData->paramCc.nFilter;
+		//calcData.paramCc.nFilter = pParamData->paramCc.nFilter;
 	}
 	else
 	{
-		calcData.paramCc.nFilter = 1;
+		//calcData.paramCc.nFilter = 1;
 	}
-	calcData.paramCckPos.fLeft = pParamData->paramCckPos.fLeft;
-	calcData.paramCckPos.fRight = pParamData->paramCckPos.fRight;
+	//calcData.paramCckPos.fLeft = pParamData->paramCckPos.fLeft;
+	//calcData.paramCckPos.fRight = pParamData->paramCckPos.fRight;
 	// YBAL
 	memcpy(&(calcData.paramYBal), &(pParamData->paramYBal), sizeof(ChromaKeyFxParam::YBalance));
 	// Y Balance Mix
@@ -149,7 +149,7 @@ void CALLBACK NSCE_ACK_CalcParams(OUT NSACKParamTmpData* pTmpData,		// 中间变量
 
 	//////////////////////////////////////////////////////////////////////////
 	// 开始计算
-	pTmpData->bKey = pParamData->paramCrkAdj.bOn;
+	//pTmpData->bKey = pParamData->paramCrkAdj.bOn;
 	pTmpData->bInvert = pParamData->paramCrkAdj.bInvert;
 	pTmpData->bYBal = pParamData->paramYBal.bOn;
 	pTmpData->bCC = pParamData->paramCc.bOn;
@@ -195,11 +195,11 @@ void CALLBACK NSCE_ACK_CalcParams(OUT NSACKParamTmpData* pTmpData,		// 中间变量
 		CM_IN_RANGE(pTmpData->ccSlopeInv, 0.f, 32.f);
 	}
 	// Key Filter
-	pTmpData->nKeyKeyFilter = g_pFilterMapTable[calcData.paramCrkAdj.nFilter][0];
-	pTmpData->nKeySrcFilter = g_pFilterMapTable[calcData.paramCrkAdj.nFilter][1];
+	//pTmpData->nKeyKeyFilter = g_pFilterMapTable[calcData.paramCrkAdj.nFilter][0];
+	//pTmpData->nKeySrcFilter = g_pFilterMapTable[calcData.paramCrkAdj.nFilter][1];
 	// CC Filter
-	pTmpData->nCCKeyFilter = g_pFilterMapTable[calcData.paramCc.nFilter][2];
-	pTmpData->nCCSrcFilter = g_pFilterMapTable[calcData.paramCc.nFilter][3];
+	//pTmpData->nCCKeyFilter = g_pFilterMapTable[calcData.paramCc.nFilter][2];
+	//pTmpData->nCCSrcFilter = g_pFilterMapTable[calcData.paramCc.nFilter][3];
 	// Key SatCrop
 	pTmpData->keySatCrop = calcData.paramCrkAdj.fSatCrop * 0.01f;
 	// CC SatCrop
@@ -207,11 +207,11 @@ void CALLBACK NSCE_ACK_CalcParams(OUT NSACKParamTmpData* pTmpData,		// 中间变量
 	// Key Density
 	pTmpData->keyDensity = calcData.paramCrkAdj.fDensity * 0.01f;
 	// Key Pos
-	pTmpData->keyLeftPos = calcData.paramCrkPos.fLeft;
-	pTmpData->keyRightPos = calcData.paramCrkPos.fRight;
+	//pTmpData->keyLeftPos = calcData.paramCrkPos.fLeft;
+	//pTmpData->keyRightPos = calcData.paramCrkPos.fRight;
 	// CC Pos
-	pTmpData->ccLeftPos = calcData.paramCckPos.fLeft;
-	pTmpData->ccRightPos = calcData.paramCckPos.fRight;
+	//pTmpData->ccLeftPos = calcData.paramCckPos.fLeft;
+	//pTmpData->ccRightPos = calcData.paramCckPos.fRight;
 	// FV
 	tmpGain = (calcData.paramFGVAdj.fVGain * 0.01f + 1.f);
 	tmpHue = calcData.paramFGVAdj.fHue * ANGLE_TO_RADIAN;
@@ -417,6 +417,11 @@ bool ChromaKeyRender::RenderArea(CVideoBuffer*pDstDef, CVideoBuffer *pSrcDef, Fx
 	hr = pDevice->SetPixelShaderConstantF(29, fInvert, 1);
 	ASSERT(SUCCEEDED(hr));
 	hr = pDevice->SetPixelShaderConstantF(30, fInvCoef, 1);
+	ASSERT(SUCCEEDED(hr));
+
+	D3DXVECTOR4 fRegion(pParam->paramRgn.fLeft, pParam->paramRgn.fTop, pParam->paramRgn.fRight, pParam->paramRgn.fBottom);
+	hr = pDevice->SetPixelShaderConstantF(31, fRegion, 1);
+	ASSERT(SUCCEEDED(hr));
 
 	// 2.2.2 texture
 	hr = pDevice->SetTexture(0, pSrcDef->GetTexture());

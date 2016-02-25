@@ -284,43 +284,54 @@ struct ChromaKeyFxParam : FxParamBase
 	//NSCEParamDef.cpp  line:990
 	struct ChromaKeyAdjust
 	{
-		bool bOn;
-		float fClip;
-		float fGain;
-		float fHue;
-		float fAngle;
-		int nFilter;
-		float fSatCrop;
-		float fDensity;
+		//bool bOn;
+		float fClip;		//0, 100.00
+		float fGain;		//-100.00, 100.00
+		float fHue;			//0, 360.00
+		float fAngle;		//0, 180.00
+		//int nFilter;		//0, 9
+		float fSatCrop;		//0, 100.00
+		float fDensity;		//0, 100.00
 		bool bInvert;
 		ChromaKeyAdjust()
-			: bOn(true), fClip(100.f), fGain(100.f), fHue(0.f), fAngle(97.59578851f), nFilter(1), fSatCrop(20.3125f), fDensity(100.f), bInvert(false) {}
+			//: bOn(true)
+			: fClip(100.f), fGain(100.f), fHue(0.f), fAngle(97.59578851f)//, nFilter(1)
+			, fSatCrop(20.3125f), fDensity(100.f), bInvert(false) {}
 	}paramCrkAdj;
 
-	struct ChromaKeyPosition
+	struct Region
 	{
-		float fLeft;
-		float fRight;
-		ChromaKeyPosition() : fLeft(0.f), fRight(0.f) {}
-	}paramCrkPos;
+		float fLeft;		//0, 1.0000
+		float fTop;			//0, 1.0000
+		float fRight;		//0, 1.0000
+		float fBottom;		//0, 1.0000
+		Region() : fLeft(0.f), fTop(0.f), fRight(1.f), fBottom(1.f) {}
+	}paramRgn;
+
+	//struct ChromaKeyPosition
+	//{
+	//	float fLeft;
+	//	float fRight;
+	//	ChromaKeyPosition() : fLeft(0.f), fRight(0.f) {}
+	//}paramCrkPos;
 
 	struct YBalance
 	{
 		bool bOn;
-		float fClip;
-		float fGain;
-		float fLum;
+		float fClip;		//0, 100.00
+		float fGain;		//-100.00, 100.00
+		float fLum;			//0, 100.00
 		YBalance() : bOn(false), fClip(0.f), fGain(0.f), fLum(0.f) {}
 	}paramYBal;
 
 	struct ColorCancel
 	{
 		bool bOn;
-		float fLum;
-		float fSat;
-		float fHue;
-		int nFilter;
-		ColorCancel(): bOn(false), fLum(0.f), fSat(0.f), fHue(0.f), nFilter(1) {}
+		float fLum;			//0, 100.00
+		float fSat;			//0, 100.00
+		float fHue;			//0, 360.00
+		//int nFilter;		//0, 9
+		ColorCancel(): bOn(false), fLum(0.f), fSat(0.f), fHue(0.f)/*, nFilter(1)*/ {}
 	}paramCc;
 
 	struct CancelKey
@@ -330,12 +341,12 @@ struct ChromaKeyFxParam : FxParamBase
 		CancelKey() : fClip(0.f), fGain(0.f) {}
 	}paramCcKey;
 
-	struct CancelKeyPosition
-	{
-		float fLeft;
-		float fRight;
-		CancelKeyPosition() : fLeft(0.f), fRight(0.f) {}
-	}paramCckPos;
+	//struct CancelKeyPosition
+	//{
+	//	float fLeft;
+	//	float fRight;
+	//	CancelKeyPosition() : fLeft(0.f), fRight(0.f) {}
+	//}paramCckPos;
 
 	struct VectorWindow
 	{
