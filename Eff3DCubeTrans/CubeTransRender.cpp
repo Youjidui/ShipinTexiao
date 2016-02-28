@@ -221,6 +221,7 @@ bool CCubeTransRender::Render( CVideoBuffer* pDest, CVideoBuffer *pSrcA, CVideoB
 	
 	bool pParam_bOdd = false;
 	D3DXVECTOR4 vShape(pParam->shape.nDiveX,pParam->shape.nDiveY,pParam->shape.fIntervalX,pParam->shape.fIntervalY);
+	TRACE("pParam->shape.fIntervalX = %f, pParam->shape.fIntervalY = %f\n", pParam->shape.fIntervalX,pParam->shape.fIntervalY);
 	hr = m_pEffect->SetVector("g_vShape",&vShape);
 	ASSERT(SUCCEEDED(hr));
 	D3DXVECTOR4 vMisc(fAspect,pParam->light.fDiffuse,pParam->light.fAmbient,pParam_bOdd ? 0.0f : 0.5f * 2.0f  /  vPort.Height);

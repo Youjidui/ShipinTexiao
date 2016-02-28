@@ -53,11 +53,18 @@ void CWipeRenderBase::Uninit()
 {
 	SAFE_DELETE(m_privateData.m_pWipe);
 
-	CVideoBufferManager* pBufMgr = m_pEngine->GetVideoBufferManager();
-	pBufMgr->ReleaseVideoBuffer(m_privateData.m_pDivideHorTexture);
-	m_privateData.m_pDivideHorTexture = NULL;
-	pBufMgr->ReleaseVideoBuffer(m_privateData.m_pDivideVertTexture);
-	m_privateData.m_pDivideVertTexture = NULL;
+	if(m_privateData.m_pDivideHorTexture)
+	{
+		CVideoBufferManager* pBufMgr = m_pEngine->GetVideoBufferManager();
+		pBufMgr->ReleaseVideoBuffer(m_privateData.m_pDivideHorTexture);
+		m_privateData.m_pDivideHorTexture = NULL;
+	}
+	if(m_privateData.m_pDivideVertTexture)
+	{
+		CVideoBufferManager* pBufMgr = m_pEngine->GetVideoBufferManager();
+		pBufMgr->ReleaseVideoBuffer(m_privateData.m_pDivideVertTexture);
+		m_privateData.m_pDivideVertTexture = NULL;
+	}
 }
 
 bool CWipeRenderBase::Render( CVideoBuffer* pDest, CVideoBuffer* pSrcA, CVideoBuffer* pSrcB, BasicWipeFxParam* pParam )

@@ -6,25 +6,25 @@
 
 //common basic parameter
 struct TransformParam{
-	float fLocalTranslateX;
-	float fLocalTranslateY;
-	float fLocalTranslateZ;
+	float fLocalTranslateX;		//-10.000 - 10.000
+	float fLocalTranslateY;		//-10.000 - 10.000
+	float fLocalTranslateZ;		//-5.00 - 300.00
 
-	float fLocalRotateX;
-	float fLocalRotateY;
-	float fLocalRotateZ;
+	float fLocalRotateX;		//-5.0000 - 5.0000
+	float fLocalRotateY;		//-5.0000 - 5.0000
+	float fLocalRotateZ;		//-5.0000 - 5.0000
 
-	float fScaleX;
-	float fScaleY;
-	float fScaleZ;
+	float fScaleX;				//0 - 10.000
+	float fScaleY;				//0 - 10.000
+	float fScaleZ;				//0 - 10.000
 
-	float fWorldTranslateX;
-	float fWorldTranslateY;
-	float fWorldTranslateZ;
+	float fWorldTranslateX;		//-10.000 - 10.000
+	float fWorldTranslateY;		//-10.000 - 10.000
+	float fWorldTranslateZ;		//-5.00 - 300.00
 
-	float fWorldRotateX;
-	float fWorldRotateY;
-	float fWorldRotateZ;
+	float fWorldRotateX;		//-5.0000 - 5.0000
+	float fWorldRotateY;		//-5.0000 - 5.0000
+	float fWorldRotateZ;		//-5.0000 - 5.0000
 
 	void identity()
 	{
@@ -582,15 +582,15 @@ struct CubeFxParam : public FxParamBase
 {
 	struct ShapeParam
 	{
-		int			nDiveX;
-		int			nDiveY;
-		float		fIntervalX;
-		float		fIntervalY;
+		int			nDiveX;			//1 - 20
+		int			nDiveY;			//1 - 20
+		float		fIntervalX;		//1.000 - 10.000
+		float		fIntervalY;		//1.000 - 10.000
 		D3DCOLOR	crSlideColor;
-		float		fSlideTransparency;
+		float		fSlideTransparency;	//0 - 1.0000
 #ifdef _3D_CUBE_TRANS
-		int			nDirecttion;
-		int			nRotate;
+		int			nDirecttion;	//0 - 3
+		int			nRotate;		//1 - 2
 #endif
 		ShapeParam():
 			nDiveX(1),
@@ -610,11 +610,11 @@ struct CubeFxParam : public FxParamBase
 	LightingParam light;
 	ShapeParam shape;
 
-	float fPerspective;
+	float fPerspective;				//10.00 - 120.00
 #ifdef _3D_CUBE_TRANS
 	D3DCOLOR	crBackgroundColor;
-	float		fBackgroundTransparency;
-	float       fTransition;
+	float		fBackgroundTransparency;	//0.0000 - 1.0000
+	float       fTransition;		//0.0000 - 1.0000
 	BOOL		bReverse;
 #endif
 

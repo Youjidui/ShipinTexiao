@@ -204,7 +204,7 @@ void CParamCubeDlg::OnHScroll(UINT nSBCode, UINT uPos, CScrollBar* pScrollBar)
 		m_pParam->shape.fSlideTransparency = nPos / 10000.f;
 		break;
 	case IDC_SLIDER_fIntervalY:
-		m_pParam->shape.fIntervalY = nPos * decimal_point;
+		m_pParam->shape.fIntervalY = nPos / decimal_point;
 		break;
 	case IDC_SLIDER_fIntervalX:
 		m_pParam->shape.fIntervalX = nPos / decimal_point;
