@@ -354,13 +354,14 @@ bool CTestClientDoc::Render()
 					CVideoBuffer* pDest = m_pDestImage;
 
 					//alpha
+#ifdef BLEND_COMPOSE
 					VideoBufferInfo tempBI = pDest->GetVideoBufferInfo();
 					tempBI.eUsage = VideoBufferInfo::_IN_OUT;
 					CVideoBuffer* pTemp = m_pBufferMgr->CreateVideoBuffer(tempBI);
 					ASSERT(pTemp);
 					pDest = pTemp;
 					ASSERT(pDest == pTemp);
-
+#endif	//BLEND_COMPOSE
 					////src buffer for YUV2RGB
 					//CVideoBuffer* pYUV = m_pBufferMgr->CreateVideoBuffer(tempBI);
 					//ASSERT(pYUV);
@@ -376,6 +377,7 @@ bool CTestClientDoc::Render()
 					//ASSERT(bOK);
 					//m_pBufferMgr->ReleaseVideoBuffer(pYUV);
 
+#ifdef BLEND_COMPOSE
 					pDest = m_pDestImage;
 					ASSERT(pDest != pTemp);
 					ASSERT(m_pBackImage);
@@ -385,6 +387,7 @@ bool CTestClientDoc::Render()
 					//D3DXSaveSurfaceToFile(_T("./Blend_src_B.dds"), D3DXIFF_DDS, pSrc2->GetSurface(), NULL, NULL);
 					//D3DXSaveSurfaceToFile(_T("./Blend.dds"), D3DXIFF_DDS, pDest->GetSurface(), NULL, NULL);
 					m_pBufferMgr->ReleaseVideoBuffer(pTemp);
+#endif	//BLEND_COMPOSE
 				}
 				else
 				{
@@ -431,14 +434,6 @@ bool CTestClientDoc::EffectRender(CVideoBuffer* pDest, CVideoBuffer* pSrc, CVide
 			bOK = eff.Render(pDest, pSrc, pSrc2, (ChromaKeyFxParam*)m_pEffectParam);
 		}
 	}
-	//else if(FX_SONY_BLUR == m_strEffectName)
-	//{
-	//	CSonyBlurRender eff;
-	//	if(eff.Init(m_pRenderEngine))
-	//	{
-	//		bOK = eff.Render(pDest, pSrc, (SonyBlurFxParam*)m_pEffectParam);
-	//	}
-	//}
 	else if(FX_AMOEBA_WIPE == m_strEffectName)
 	{
 		CAmoebaWipeRender eff;
@@ -495,13 +490,20 @@ bool CTestClientDoc::EffectRender(CVideoBuffer* pDest, CVideoBuffer* pSrc, CVide
 			bOK = eff.Render(pDest, pSrc, pSrc2, m_pEffectParam);
 		}
 	}
-	else if(FX_FADE_FROM_TO == m_strEffectName)
+	else if(FX_FADE_FROM == m_strEffectName)
 	{
-		CSonyFadeFromToRender eff;
+		CSonyFadeFromRender eff;
 		if(eff.Init(m_pRenderEngine))
 		{
-			bOK = eff.Render(pDest, pSrc, m_pEffectParam);
-			//bOK = eff.Render(pDest, pSrc, pSrc2, m_pEffectParam);
+			bOK = eff.Render(pDest, pSrc, pSrc2, m_pEffectParam);
+		}
+	}
+	else if(FX_FADE_TO == m_strEffectName)
+	{
+		CSonyFadeToRender eff;
+		if(eff.Init(m_pRenderEngine))
+		{
+			bOK = eff.Render(pDest, pSrc, pSrc2, m_pEffectParam);
 		}
 	}
 	else if(FX_SONY_SLIDE == m_strEffectName)

@@ -8,6 +8,7 @@ CSonyFadeFromToRender::CSonyFadeFromToRender(void)
 : m_pEngine(NULL)
 , m_pQuadMesh(NULL)
 , m_pEffect(NULL)
+, m_bFadeFromOrTo(false)
 {
 }
 
@@ -45,8 +46,8 @@ bool CSonyFadeFromToRender::Render(CVideoBuffer* pDest, CVideoBuffer *pSrcA, FxP
 	LPDIRECT3DDEVICE9 pDevice = m_pEngine->GetDevice();
 
 	float fTransition = pParam->fTransition;
-	if(!pParam->bFromOrTo)
-		fTransition = 1.f - pParam->fTransition;
+ 	if(!m_bFadeFromOrTo)
+ 		fTransition = 1.f - pParam->fTransition;
 
 	CVideoBuffer* pSrcDef = pSrcA;
 	CVideoBuffer* pDstDef = pDest;
@@ -160,3 +161,14 @@ bool CSonyFadeFromToRender::Render(CVideoBuffer* pDest, CVideoBuffer *pSrcA, FxP
 //	return bOK;
 //
 //}
+
+bool CSonyFadeFromToRender::Render( CVideoBuffer* pDest, CVideoBuffer *pSrcA, CVideoBuffer *pSrcB, FxParamBase* pParamRaw )
+{
+	SonyFadeFromToFxParam* pParam = (SonyFadeFromToFxParam*)pParamRaw;
+	if (pParam->bReverse)
+	{
+		std::swap(pSrcA, pSrcB);
+	}
+	return CSonyFadeFromToRender::Render(pDest, pSrcA, pParamRaw);
+}
+

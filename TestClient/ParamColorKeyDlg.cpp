@@ -110,13 +110,13 @@ BOOL CParamColorKeyDlg::OnInitDialog()
 	// TODO:  在此添加额外的初始化
 	CSliderCtrl* pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_R);
 	pCtrl->SetRange(0, 255);
-	if(m_pParam)	pCtrl->SetPos(m_pParam->fKeyColor[0] * MaxValue);
+	if(m_pParam)	pCtrl->SetPos(m_pParam->fKeyColor[2] * MaxValue);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_G);
 	pCtrl->SetRange(0, 255);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->fKeyColor[1] * MaxValue);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_B);
 	pCtrl->SetRange(0, 255);
-	if(m_pParam)	pCtrl->SetPos(m_pParam->fKeyColor[2] * MaxValue);
+	if(m_pParam)	pCtrl->SetPos(m_pParam->fKeyColor[0] * MaxValue);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_A);
 	pCtrl->SetRange(0, 255);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->fKeyColor[3] * MaxValue);
@@ -174,15 +174,16 @@ void CParamColorKeyDlg::OnLButtonDown(UINT nFlags, CPoint point)
 		::ReleaseDC(NULL, pDC);
 		ReleaseCapture();
 
+		//b,g,r,a
 		CSliderCtrl* pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_R);
 		if(m_pParam)	pCtrl->SetPos(GetRValue(clr));
-		m_pParam->fKeyColor[0] = GetRValue(clr);
+		m_pParam->fKeyColor[2] = GetRValue(clr);
 		pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_G);
 		if(m_pParam)	pCtrl->SetPos(GetGValue(clr));
 		m_pParam->fKeyColor[1] = GetGValue(clr);
 		pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_B);
 		if(m_pParam)	pCtrl->SetPos(GetBValue(clr));
-		m_pParam->fKeyColor[2] = GetBValue(clr);
+		m_pParam->fKeyColor[0] = GetBValue(clr);
 		//pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_A);
 	}
 

@@ -86,7 +86,7 @@ struct SonyBlurFxParam : FxParamBase
 struct ColorKeyParam : public FxParamBase
 {
 	DWORD version;
-	float fKeyColor[4];	//r,g,b,a
+	float fKeyColor[4];	//b,g,r,a
 	float fAngle1, fAngle2, fLength1, fLength2;
 	float fSoftness, fBlurness, fFineTune;
 	float fGrayMin,fGrayMax;
@@ -752,10 +752,11 @@ struct SonyFadeFromToFxParam :public FxParamBase
 {
 	D3DCOLOR cFadeColor;
 	float fTransition;		//1.f, 0.f, 0.0001f, 5, 4, 0.f	progress
-	bool bFromOrTo;			//true = from, false = to
+	//bool bFromOrTo;			//true = from, false = to
 	bool  bReverse;
 
-	SonyFadeFromToFxParam() : cFadeColor(0xffffffff), fTransition(0.f), bFromOrTo(true), bReverse(false) {}
+	//SonyFadeFromToFxParam() : cFadeColor(0xffffffff), fTransition(0.f), bFromOrTo(true), bReverse(false) {}
+	SonyFadeFromToFxParam() : cFadeColor(0xffffffff), fTransition(0.f), bReverse(false) {}
 } ;
 
 struct DiffuseWipeFxParam : public FxParamBase

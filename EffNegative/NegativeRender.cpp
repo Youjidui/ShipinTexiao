@@ -35,19 +35,21 @@ bool CNegativeRender::Render( CVideoBuffer* pDest, CVideoBuffer* pSrc, FxParamBa
 
 	if(m_pEngine->SetRenderTarget(pDest))
 	{
+		//pDevice->Clear(0, NULL, D3DCLEAR_TARGET, 0XFFFFFFFF, 0, 0);
+
 		const VideoBufferInfo& srcBuffInfo = pSrc->GetVideoBufferInfo();
 		D3DXMATRIX	matImage;
 		D3DXMatrixIdentity(&matImage);
 		float m_fu =  0.5f/(float)(srcBuffInfo.nWidth);
 		float m_fv =  0.5f/(float)(srcBuffInfo.nHeight);
 
-		D3DXMATRIX  matWorld, *pMatView = NULL, *pMatProj = NULL;
+		D3DXMATRIX *pMatView = NULL, *pMatProj = NULL;
+		//D3DXMATRIX  matWorld;
+		//D3DXMatrixIdentity(&matWorld);
 		pResMan->GetOrthoMatrix(&pMatView, &pMatProj);
-		D3DXMATRIX matWVP = matWorld * (*pMatView)* (*pMatProj);
+		//D3DXMATRIX matWVP = matWorld * (*pMatView)* (*pMatProj);
+		D3DXMATRIX matWVP = (*pMatView)* (*pMatProj);
 
-		//目前需要copy一次，从memory到video memory的texture
-		//这个应该在将来去掉，以提高性能
-		//LPDIRECT3DTEXTURE9 lpTex = CreateTexture(pDevice, pSrc);
 		LPDIRECT3DTEXTURE9 lpTex = pSrc->GetTexture();
 		if(lpTex)
 		{
@@ -85,6 +87,8 @@ bool CNegativeRender::Render( CVideoBuffer* pDest, CVideoBuffer* pSrc, FxParamBa
 			}
 			hr = m_pNegativeEffect->SetTexture("g_txColor", NULL);
 			ASSERT(SUCCEEDED(hr));
+
+			//D3DXSaveSurfaceToFile(_T("./negative.dds"), D3DXIFF_DDS, pSrc->GetSurface(), NULL, NULL);
 		}
 	}
 	else

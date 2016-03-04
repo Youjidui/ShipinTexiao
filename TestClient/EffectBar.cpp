@@ -159,12 +159,26 @@ void CEffectBar::OnBnClickedParameters()
 			}
 			m_dissolveDlg.ShowWindow(SW_SHOW);
 		}
-		else if(FX_FADE_FROM_TO == str)
+		else if(FX_FADE_FROM == str)
 		{
 			if(!m_fadeFromToDlg.GetSafeHwnd())
 			{
 				m_fadeFromToDlg.Create(m_fadeFromToDlg.IDD);
 			}
+			SonyFadeFromToFxParam* pParam = (SonyFadeFromToFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
+			m_fadeFromToDlg.SetParam(pParam);
+			m_fadeFromToDlg.SetEffectName(FX_FADE_FROM);
+			m_fadeFromToDlg.ShowWindow(SW_SHOW);
+		}
+		else if(FX_FADE_TO == str)
+		{
+			if(!m_fadeFromToDlg.GetSafeHwnd())
+			{
+				m_fadeFromToDlg.Create(m_fadeFromToDlg.IDD);
+			}
+			SonyFadeFromToFxParam* pParam = (SonyFadeFromToFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
+			m_fadeFromToDlg.SetParam(pParam);
+			m_fadeFromToDlg.SetEffectName(FX_FADE_TO);
 			m_fadeFromToDlg.ShowWindow(SW_SHOW);
 		}
 		else if(FX_PAGE_ROTATION == str)
@@ -393,12 +407,21 @@ BOOL CEffectBar::OnInitDialog()
 		m_ctrlEffects.SetItemDataPtr(i, pParam);
 		m_pageRotationDlg.SetParam(pParam);
 	}
-	i = m_ctrlEffects.AddString(FX_FADE_FROM_TO);
+	i = m_ctrlEffects.AddString(FX_FADE_FROM);
 	{
 		SonyFadeFromToFxParam* pParam = new SonyFadeFromToFxParam;
 		pParam->cbSize = sizeof(SonyFadeFromToFxParam);
 		m_ctrlEffects.SetItemDataPtr(i, pParam);
-		m_fadeFromToDlg.SetParam(pParam);
+		//m_fadeFromToDlg.SetParam(pParam);
+		//m_fadeFromToDlg.SetEffectName(FX_FADE_FROM);
+	}
+	i = m_ctrlEffects.AddString(FX_FADE_TO);
+	{
+		SonyFadeFromToFxParam* pParam = new SonyFadeFromToFxParam;
+		pParam->cbSize = sizeof(SonyFadeFromToFxParam);
+		m_ctrlEffects.SetItemDataPtr(i, pParam);
+		//m_fadeFromToDlg.SetParam(pParam);
+		//m_fadeFromToDlg.SetEffectName(FX_FADE_TO);
 	}
 	i = m_ctrlEffects.AddString(FX_SONY_BARN_SLIDE);
 	{
@@ -577,7 +600,7 @@ void CEffectBar::OnProgressChange( int nPos )
 			pParam->structTrans.fTransition = nPos / 10000.f;
 			AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)(LPCTSTR)str, (LPARAM)pParam);
 		}
-		else if (FX_FADE_FROM_TO == str)
+		else if (FX_FADE_FROM == str || FX_FADE_TO == str)
 		{
 			SonyFadeFromToFxParam* pParam = (SonyFadeFromToFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
 			pParam->fTransition = nPos / 10000.f;
@@ -689,7 +712,7 @@ void CEffectBar::SetProgress(CSliderCtrl* pCtrl)
 			PageRotationFxParam* pParam = (PageRotationFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
 			if(pParam)	pCtrl->SetPos(pParam->structTrans.fTransition * 10000);
 		}
-		else if (FX_FADE_FROM_TO == str)
+		else if (FX_FADE_FROM == str || FX_FADE_TO == str)
 		{
 			SonyFadeFromToFxParam* pParam = (SonyFadeFromToFxParam*)m_ctrlEffects.GetItemDataPtr(nSel);
 			if(pParam)	pCtrl->SetPos(pParam->fTransition * 10000);
