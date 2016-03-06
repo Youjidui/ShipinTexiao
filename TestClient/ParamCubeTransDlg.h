@@ -2,19 +2,18 @@
 
 #include "../FxParam.h"
 
-// CParamCubeDlg 对话框
+// CParamCubeTransDlg 对话框
 
-class CParamCubeDlg : public CDialog
+class CParamCubeTransDlg : public CDialog
 {
-	DECLARE_DYNAMIC(CParamCubeDlg)
+	DECLARE_DYNAMIC(CParamCubeTransDlg)
 
 public:
-	CParamCubeDlg(CWnd* pParent = NULL);   // 标准构造函数
-	virtual ~CParamCubeDlg();
+	CParamCubeTransDlg(CWnd* pParent = NULL);   // 标准构造函数
+	virtual ~CParamCubeTransDlg();
 
 // 对话框数据
-	enum { IDD = IDD_CUBE };
-
+	enum { IDD = IDD_CUBE_TRANS };
 	void SetParam(CubeFxParam* pParam) {m_pParam = pParam;}
 
 protected:
@@ -26,4 +25,5 @@ public:
 	virtual BOOL OnInitDialog();
 	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
 	afx_msg void OnBnClickedCheckLight();
+	afx_msg void OnBnClickedCheckbreverse();
 };

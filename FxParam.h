@@ -164,15 +164,15 @@ struct BasicWipeFxParam : FxParamBase
 {
 	struct Pattern
 	{
-		int nPattern;
+		int nPattern;				//different wipe has different value range
 		BOOL bInvert;
-		float fOffset;
+		float fOffset;				//1.f, 0, 0.0001f
 		float fRotate;
-		float fCenterX;
-		float fCenterY;
+		float fCenterX;				//2.0f, -2.0f, 0.0001f
+		float fCenterY;				//2.0f, -2.0f, 0.0001f
 		float fAspect;
-		float fSoftWidth;
-		float fBorderWidth;
+		float fSoftWidth;			//5.0f, 0.0f,  0.0001f, 5, 4, 0.0f
+		float fBorderWidth;			//5.0f, 0.0f,  0.0001f, 5, 4, 0.0f
 		D3DCOLOR crBorderColor;
 
 		Pattern()
@@ -182,13 +182,13 @@ struct BasicWipeFxParam : FxParamBase
 	};
 	struct Modify
 	{
-		int		nMultipleType;
+		int		nMultipleType;		//3, 0, 1	??
 		BOOL	bFlip;
-		int		nMultipleNumberX;
-		int		nMultipleNumberY;
+		int		nMultipleNumberX;	//20, 1, 1
+		int		nMultipleNumberY;	//20, 1, 1
 		BOOL	bOverlap;
-		int		nDivideType;
-		float   fDivideWidth;
+		int		nDivideType;		//5, 1,  1
+		float   fDivideWidth;		//1.f, 0, 0.0001f
 
 		Modify() :
 			nMultipleType(0),
@@ -203,11 +203,9 @@ struct BasicWipeFxParam : FxParamBase
 	};
 	struct General
 	{
-		float fTransparency;
-		General()
-		{
-			fTransparency = 1.0f;
-		}
+		float fTransparency;		//1.0f, 0.0f,  0.0001f
+		General() : fTransparency(1.0f)
+		{}
 	};
 
 	Pattern     structPattern;
@@ -556,20 +554,20 @@ struct RingsFxParam : public FxParamBase
 	float		fTranslate;		//1.f, 0.f, 0.0001f, 5, 4, 0.f
 	bool  bReverse;
 	float		fRandomTranslate;	////1.f, 0.f, 0.01f, 3, 2, 0.f	 the same as BrokenGlass
-	float		fRotate;		//3.1415926f, -3.1415926f, 0.01f, 3, 2, 0.f  the same as BrokenGlass
-	float		fCenterX;		//1.f, -1.f, 0.01f, 3, 2, 0.f	 the same as BrokenGlass
-	float		fCenterY;		//1.f, -1.f, 0.01f, 3, 2, 0.f	 the same as BrokenGlass
+	float		fRotate;		//720.f, -720.f, 0.01f, 5, 2, 0.f  //3.1415926f, -3.1415926f, 0.01f, 3, 2, 0.f  the same as BrokenGlass
+	float		fCenterX;		//2.f, -2.f, 0.01f, 3, 2, 0.f	 the same as BrokenGlass
+	float		fCenterY;		//2.f, -2.f, 0.01f, 3, 2, 0.f	 the same as BrokenGlass
 	float		fAspect;		//1.f, -1.f, 0.01f, 3, 2, 0.f	 the same as BrokenGlass
-	float		fWidth;			//1.f, 0.f, 0.0001f, 5, 4, 0.2f
-	float		fRandomWidth;	//180.f, -180.f, 0.01f, 5, 2, 80.f
-	float		fSpiral;		//10, 0, 1,  3
+	float		fWidth;			//1.f, 0.f, 0.0001f, 3, 2, 0.2f
+	float		fRandomWidth;	//1.f, -1.f, 0.01f, 3, 2, 0.f
+	float		fSpiral;		//180.f, -180.f, 0.01f, 5, 2, 80.f	//10, 0, 1,  3
 	float		fRandomPixel;	//1.f, 0.f, 0.01f, 3, 2, 0.f	 the same as BrokenGlass	
-	int			nPattern;		//0-4
+	int			nPattern;		//0-8
 	int			nEffectNo;
 
 	RingsFxParam() : fTranslate(0.f), bReverse(false), fRandomTranslate(0.f), fRotate(0.f)
-		, fCenterX(0.f), fCenterY(0.f), fAspect(0.f), fWidth(0.2f), fRandomWidth(80.f)
-		, fSpiral(10.f), fRandomPixel(0.f), nPattern(0), nEffectNo(0)
+		, fCenterX(0.f), fCenterY(0.f), fAspect(0.f), fWidth(0.2f), fRandomWidth(0.f)
+		, fSpiral(80.f), fRandomPixel(0.f), nPattern(0), nEffectNo(0)
 	{
 		cbSize = sizeof(RingsFxParam);
 		strcpy_s(FxType, sizeof(FxType), "Rings");
@@ -589,8 +587,8 @@ struct CubeFxParam : public FxParamBase
 		D3DCOLOR	crSlideColor;
 		float		fSlideTransparency;	//0 - 1.0000
 #ifdef _3D_CUBE_TRANS
-		int			nDirecttion;	//0 - 3
-		int			nRotate;		//1 - 2
+		int			nDirecttion;	//0 - 3		//上，下，左,右
+		int			nRotate;		//1 - 2		//CW 顺时针, CCW 逆时针
 #endif
 		ShapeParam():
 			nDiveX(1),
@@ -606,7 +604,9 @@ struct CubeFxParam : public FxParamBase
 		{}
 	};
 
+#ifndef _3D_CUBE_TRANS		//not defined
 	TransformParam trans;
+#endif
 	LightingParam light;
 	ShapeParam shape;
 
@@ -717,24 +717,24 @@ struct BrokenGlassFxParam : public FxParamBase
 	bool  prm_bReverse;
 	float prm_movementRandom;		//1.f, 0.f, 0.01f, 3, 2, 0.f		 the same as Rings
 
-	float prm_rotate;				//3.1415926f, -3.1415926f, 0.01f, 3, 2, 0.f		 the same as Rings
+	float prm_rotate;				//720.f, -720.f, 0.01f, 5, 2, 0.f	the same as Rings
 
-	float prm_centerX;				//1.f, -1.f, 0.01f, 3, 2, 0.f		 the same as Rings
-	float prm_centerY;				//1.f, -1.f, 0.01f, 3, 2, 0.f		 the same as Rings
-
+	float prm_centerX;				//2.f, -2.f, 0.01f, 3, 2, 0.f		 the same as Rings
+	float prm_centerY;				//2.f, -2.f, 0.01f, 3, 2, 0.f		 the same as Rings
 	float prm_aspect;				//1.f, -1.f, 0.01f, 3, 2, 0.f		 the same as Rings
 
-	float prm_width;				//2*3.14f/8.f, 2*3.14f/160.f, 0.01f, 3, 2, 3.14f/10.f
-	float prm_widthRandom;			//1.f, 0.f, 0.01f, 3, 2, 0.f
+	float prm_width;				//1.f, 0.f, 0.01f, 3, 2, 0.2f		the same as Rings
+	float prm_widthRandom;			//1.f, -1.f, 0.01f, 3, 2, 0.f		 the same as Rings
 
-	float prm_angleBlock;			//3.1415f, 0.f, 0.01f, 3, 2, 3.1415f*4.f/5.f
+
+	float prm_angleBlock;			//180.00, -180.00 (80)
 
 	float prm_randomPix;			//1.f, 0.f, 0.01f, 3, 2, 0.f		 the same as Rings
 
 
 	BrokenGlassFxParam() : prm_movement(0.f), prm_bReverse(false), prm_movementRandom(0.f), prm_rotate(0.f)
-		, prm_centerX(0.f), prm_centerY(0.f), prm_aspect(0.f), prm_width(3.14f/10.f)
-		, prm_widthRandom(0.f), prm_angleBlock(3.1415f*4/5), prm_randomPix(0.f)
+		, prm_centerX(0.f), prm_centerY(0.f), prm_aspect(0.f), prm_width(0.2f)
+		, prm_widthRandom(0.f), prm_angleBlock(80.0f), prm_randomPix(0.f)
 	{	}
 } ;
 

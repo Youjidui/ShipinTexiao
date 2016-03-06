@@ -26,4 +26,7 @@ protected:
 public:
 	virtual BOOL OnInitDialog();
 	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
+	afx_msg void OnBnClickedCheckboverlap();
+	afx_msg void OnBnClickedCheckbinvert();
+	afx_msg void OnBnClickedCheckbflip();
 };

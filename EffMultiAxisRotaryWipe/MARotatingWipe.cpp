@@ -84,35 +84,51 @@ HRESULT CMARotatingWipe::Draw(CVideoBuffer* pMaskDef, BasicWipeFxParam* pParam)
 	switch(pParam->structPattern.nPattern)
 	{
 	case 0:
-		SetRect(&rcScissort,0,0, biMask.nWidth, biMask.nHeight * CLAMP(0.5f - pParam->structPattern.fCenterY,0.0f,1.0f) );
-		SetRect(&rcMirrorScissort,0, biMask.nHeight * CLAMP(0.5f - pParam->structPattern.fCenterY,0.0f,1.0f), biMask.nWidth, biMask.nHeight);
+		{
+			//float m = biMask.nHeight * CLAMP(0.5f - pParam->structPattern.fCenterY,0.0f,1.0f);
+			float m = biMask.nHeight * (0.5f - pParam->structPattern.fCenterY/4);
+		SetRect(&rcScissort,0,0, biMask.nWidth, m);
+		SetRect(&rcMirrorScissort,0, m, biMask.nWidth, biMask.nHeight);
 		vCenter = D3DXVECTOR2(-0.5f,0.5f);
 		vMirror = D3DXVECTOR2(1.0f,-1.0f);
         matAdd._42 = 1.0f / m_fAspect / biMask.nHeight;
+		}
 		break;
 	case 1:
-		SetRect(&rcMirrorScissort,0,0, biMask.nWidth, biMask.nHeight * CLAMP(0.5f - pParam->structPattern.fCenterY,0.0f,1.0f) );
-		SetRect(&rcScissort,0, biMask.nHeight * CLAMP(0.5f - pParam->structPattern.fCenterY,0.0f,1.0f), biMask.nWidth, biMask.nHeight);
+		{
+			//float m = biMask.nHeight * CLAMP(0.5f - pParam->structPattern.fCenterY,0.0f,1.0f);
+			float m = biMask.nHeight * (0.5f - pParam->structPattern.fCenterY/4);
+		SetRect(&rcMirrorScissort,0,0, biMask.nWidth, m );
+		SetRect(&rcScissort,0, m, biMask.nWidth, biMask.nHeight);
 		vCenter = D3DXVECTOR2(0.5f,-0.5f);
 		vMirror = D3DXVECTOR2(1.0f,-1.0f);
 		D3DXMatrixRotationZ(&matType,D3DX_PI );
         matAdd._42 = 1.0f / m_fAspect / biMask.nHeight;
+		}
 		break;	
 	case 2:
-		SetRect(&rcMirrorScissort,0,0, biMask.nWidth * CLAMP(0.5f + pParam->structPattern.fCenterX,0.0f,1.0f), biMask.nHeight);
-		SetRect(&rcScissort, biMask.nWidth * CLAMP(0.5f + pParam->structPattern.fCenterX,0.0f,1.0f),0, biMask.nWidth, biMask.nHeight);
+		{
+			//float m = biMask.nWidth * CLAMP(0.5f + pParam->structPattern.fCenterX,0.0f,1.0f);
+			float m = biMask.nWidth * (0.5f + pParam->structPattern.fCenterX/4);
+		SetRect(&rcMirrorScissort,0,0, m, biMask.nHeight);
+		SetRect(&rcScissort, m,0, biMask.nWidth, biMask.nHeight);
 		vCenter = D3DXVECTOR2(0.5f,0.5f);		
 		vMirror = D3DXVECTOR2(-1.0f,1.0f);
 		D3DXMatrixRotationZ(&matType, - D3DX_PI /2.0f );
         matAdd._41 = - 1.0f / biMask.nWidth;
+		}
 		break;
-	case 3:		
-		SetRect(&rcScissort,0,0, biMask.nWidth * CLAMP(0.5f + pParam->structPattern.fCenterX,0.0f,1.0f), biMask.nHeight);
-		SetRect(&rcMirrorScissort, biMask.nWidth * CLAMP(0.5f + pParam->structPattern.fCenterX,0.0f,1.0f),0, biMask.nWidth, biMask.nHeight);
+	case 3:
+		{
+			//float m = biMask.nWidth * CLAMP(0.5f + pParam->structPattern.fCenterX,0.0f,1.0f);
+			float m = biMask.nWidth * (0.5f + pParam->structPattern.fCenterX/4);
+		SetRect(&rcScissort,0,0, m, biMask.nHeight);
+		SetRect(&rcMirrorScissort, m,0, biMask.nWidth, biMask.nHeight);
 		vCenter = D3DXVECTOR2(-0.5f,-0.5f);
 		vMirror = D3DXVECTOR2(-1.0f,1.0f);
 		D3DXMatrixRotationZ(&matType, D3DX_PI /2.0f );
         matAdd._41 -= 1.0f / biMask.nWidth;
+		}
 		break;
 	}
 	vNewCenter = D3DXVECTOR2(vCenter.x,ceil(vCenter.y / m_fAspect * biMask.nHeight) / (float)biMask.nHeight);
@@ -120,7 +136,6 @@ HRESULT CMARotatingWipe::Draw(CVideoBuffer* pMaskDef, BasicWipeFxParam* pParam)
 	D3DXMatrixTranslation(&matAxisInvTrans,vNewCenter.x,vNewCenter.y,0.0f);
 	D3DXMatrixTranslation(&matShift,vNewCenter.x - vCenter.x,vNewCenter.y - vCenter.y,0.0f);
     
-
 	matWorld = matPrevTrans * matType * matShift * matAxisTrans * matRot * matAxisInvTrans * matMirror *  matTrans;
 	matCombine = matWorld * m_matView * m_matProj;
     
@@ -165,21 +180,20 @@ HRESULT CMARotatingWipe::Draw(CVideoBuffer* pMaskDef, BasicWipeFxParam* pParam)
 		if(!aPass[uPass])
 			continue;			
 
-		hr = pDevice->SetScissorRect(&rcScissort);
+		//hr = pDevice->SetScissorRect(&rcScissort);
 		ASSERT(SUCCEEDED(hr));
 		hr = m_pEffect->SetMatrix("g_matWorldViewProj",&matCombine);
 		ASSERT(SUCCEEDED(hr));
 		hr = m_pEffect->BeginPass(uPass);
 		ASSERT(SUCCEEDED(hr));
-
 		bOK = m_pMesh->DrawSubset(CLAMP(uPass,0,1));
 		ASSERT(bOK);
-		//Mirror				
-		hr = pDevice->SetScissorRect(&rcMirrorScissort);
+
+		////Mirror
+		//hr = pDevice->SetScissorRect(&rcMirrorScissort);
 		ASSERT(SUCCEEDED(hr));
 		hr = m_pEffect->SetMatrix("g_matWorldViewProj",&matMirrorCombine);
 		ASSERT(SUCCEEDED(hr));
-
 		hr = m_pEffect->CommitChanges();
 		ASSERT(SUCCEEDED(hr));
 		bOK = m_pMesh->DrawSubset(CLAMP(uPass,0,1));

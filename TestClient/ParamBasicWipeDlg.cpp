@@ -33,6 +33,9 @@ void CParamBasicWipeDlg::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CParamBasicWipeDlg, CDialog)
 	ON_WM_HSCROLL()
+	ON_BN_CLICKED(IDC_CHECK_bOverlap, &CParamBasicWipeDlg::OnBnClickedCheckboverlap)
+	ON_BN_CLICKED(IDC_CHECK_bInvert, &CParamBasicWipeDlg::OnBnClickedCheckbinvert)
+	ON_BN_CLICKED(IDC_CHECK_bFlip, &CParamBasicWipeDlg::OnBnClickedCheckbflip)
 END_MESSAGE_MAP()
 
 
@@ -60,9 +63,6 @@ BOOL CParamBasicWipeDlg::OnInitDialog()
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_CENTER_Y);
 	pCtrl->SetRange(-20000, 20000, TRUE);	//2.0f, -2.0f, 0.0001f
 	if(m_pParam)	pCtrl->SetPos(m_pParam->structPattern.fCenterY * 10000);
-	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_INVERT);
-	pCtrl->SetRange(0, 1);	//1, 0
-	if(m_pParam)	pCtrl->SetPos(m_pParam->structPattern.bInvert);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_TRANSPARENCY);
 	pCtrl->SetRange(0, 10000);	//1.0f, 0.0f,  0.0001f
 	if(m_pParam)	pCtrl->SetPos(m_pParam->structGeneral.fTransparency * 10000);
@@ -78,15 +78,6 @@ BOOL CParamBasicWipeDlg::OnInitDialog()
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_PATTERN);
 	pCtrl->SetRange(0, 5);	//5, 0, 1
 	if(m_pParam)	pCtrl->SetPos(m_pParam->structPattern.nPattern);
-	//pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_SLANT2);
-	//pCtrl->SetRange(-100000, 100000);	//1.0f, -1.0f, 0.00001f
-	//if(m_pParam)	pCtrl->SetPos(m_pParam->fSlant * 100000);
-	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_FLIP);
-	pCtrl->SetRange(0, 1);	//
-	if(m_pParam)	pCtrl->SetPos(m_pParam->structModify.bFlip);
-	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_OVERLAP);
-	pCtrl->SetRange(-36000, 72000, TRUE);	//720.0f, -360.0f, 0.01f
-	if(m_pParam)	pCtrl->SetPos(m_pParam->structModify.bOverlap * 100);
 
 	char vColor[4];	//D3DCOLOR_XRGB
 	memcpy(&vColor, &m_pParam->structPattern.crBorderColor, sizeof(vColor));
@@ -137,9 +128,6 @@ void CParamBasicWipeDlg::OnHScroll(UINT nSBCode, UINT uPos, CScrollBar* pScrollB
 	case IDC_SLIDER_CENTER_Y:
 		m_pParam->structPattern.fCenterY = nPos / 10000.0f;
 		break;
-	case IDC_SLIDER_INVERT:
-		m_pParam->structPattern.bInvert = nPos;
-		break;
 	case IDC_SLIDER_TRANSPARENCY:
 		m_pParam->structGeneral.fTransparency = nPos / 10000.0f;
 		break;
@@ -152,17 +140,8 @@ void CParamBasicWipeDlg::OnHScroll(UINT nSBCode, UINT uPos, CScrollBar* pScrollB
 	case IDC_SLIDER_PATTERN:
 		m_pParam->structPattern.nPattern = nPos;
 		break;
-	//case IDC_SLIDER_SLANT2:
-	//	m_pParam->fSlant = nPos / 100000.f;
-	//	break; 
 	case IDC_SLIDER_MULTIPLE_NUMBER_Y:
 		m_pParam->structModify.nMultipleNumberY = nPos;
-		break;
-	case IDC_SLIDER_FLIP:
-		m_pParam->structModify.bFlip = nPos;
-		break;
-	case IDC_SLIDER_OVERLAP:
-		m_pParam->structModify.bOverlap = nPos / 100.0f;
 		break;
 	case IDC_SLIDER_BORDER_COLOR_R:
 		memcpy(vColor, &m_pParam->structPattern.crBorderColor, sizeof(vColor));
@@ -192,6 +171,30 @@ void CParamBasicWipeDlg::OnHScroll(UINT nSBCode, UINT uPos, CScrollBar* pScrollB
 		break;
 	}
 
+	ASSERT(m_EffectName);
+	AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)m_EffectName, (LPARAM)m_pParam);
+}
+
+void CParamBasicWipeDlg::OnBnClickedCheckboverlap()
+{
+	CButton* pBtn = (CButton*)GetDlgItem(IDC_CHECK_bOverlap);
+	m_pParam->structModify.bOverlap = pBtn->GetCheck();
+	ASSERT(m_EffectName);
+	AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)m_EffectName, (LPARAM)m_pParam);
+}
+
+void CParamBasicWipeDlg::OnBnClickedCheckbinvert()
+{
+	CButton* pBtn = (CButton*)GetDlgItem(IDC_CHECK_bInvert);
+	m_pParam->structPattern.bInvert = pBtn->GetCheck();
+	ASSERT(m_EffectName);
+	AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)m_EffectName, (LPARAM)m_pParam);
+}
+
+void CParamBasicWipeDlg::OnBnClickedCheckbflip()
+{
+	CButton* pBtn = (CButton*)GetDlgItem(IDC_CHECK_bFlip);
+	m_pParam->structModify.bFlip = pBtn->GetCheck();
 	ASSERT(m_EffectName);
 	AfxGetMainWnd()->SendMessage(UM_SELECT_EFFECT, (WPARAM)m_EffectName, (LPARAM)m_pParam);
 }

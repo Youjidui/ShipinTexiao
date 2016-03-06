@@ -53,31 +53,31 @@ BOOL CParamRingsDlg::OnInitDialog()
 	pCtrl->SetRange(0*decimal_point, 1*decimal_point, TRUE);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->fRandomTranslate * decimal_point);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_fRotate);
-	pCtrl->SetRange(-3.14f*decimal_point, 3.14f*decimal_point, TRUE);
+	pCtrl->SetRange(-720*decimal_point, 720*decimal_point, TRUE);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->fRotate * decimal_point);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_fCenterX);
-	pCtrl->SetRange(-1 * decimal_point, 1 * decimal_point, TRUE);
+	pCtrl->SetRange(-2 * decimal_point, 2 * decimal_point, TRUE);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->fCenterX * decimal_point);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_fCenterY);
-	pCtrl->SetRange(-1 * decimal_point, 1 * decimal_point, TRUE);
+	pCtrl->SetRange(-2 * decimal_point, 2 * decimal_point, TRUE);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->fCenterY * decimal_point);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_fAspect);
 	pCtrl->SetRange(-1 * decimal_point, 1 * decimal_point, TRUE);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->fAspect * decimal_point);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_fWidth);
-	pCtrl->SetRange(2*3.14f/160*decimal_point, 2*3.14f/8*decimal_point, TRUE);
+	pCtrl->SetRange(0*decimal_point, 1*decimal_point, TRUE);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->fWidth * decimal_point);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_fRandomWidth);
-	pCtrl->SetRange(0 * decimal_point, 1 * decimal_point, TRUE);
+	pCtrl->SetRange(-1 * decimal_point, 1 * decimal_point, TRUE);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->fRandomWidth * decimal_point);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_fSpiral);
-	pCtrl->SetRange(0, 10);
+	pCtrl->SetRange(-180 * decimal_point, 180 * decimal_point, TRUE);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->fSpiral * decimal_point);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_fRandomPixel);
 	pCtrl->SetRange(0 * decimal_point, 1 * decimal_point, TRUE);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->fRandomPixel * decimal_point);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_nPattern);
-	pCtrl->SetRange(0, 4);
+	pCtrl->SetRange(0, 8);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->nPattern * decimal_point);
 
 	return TRUE;  // return TRUE unless you set the focus to a control
@@ -120,7 +120,7 @@ void CParamRingsDlg::OnHScroll(UINT nSBCode, UINT uPos, CScrollBar* pScrollBar)
 		m_pParam->fRandomWidth = nPos / decimal_point;
 		break;
 	case IDC_SLIDER_fSpiral:
-		m_pParam->fSpiral = nPos;
+		m_pParam->fSpiral = nPos / decimal_point;
 		break;
 	case IDC_SLIDER_fRandomPixel:
 		m_pParam->fRandomPixel = nPos / decimal_point;

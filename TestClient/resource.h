@@ -46,6 +46,8 @@
 #define IDD_PARAM_RIPPLE_WIPE           334
 #define IDD_PARAM_DIP_TO_COLOR          335
 #define IDD_PARAM_RINGS                 336
+#define IDD_CUBE1                       337
+#define IDD_CUBE_TRANS                  337
 #define IDC_EFFECTS                     1000
 #define IDC_PROGRESS                    1001
 #define IDC_BUTTON1                     1002
@@ -213,7 +215,6 @@
 #define IDC_SLIDER_REGION_RIGHT         1054
 #define IDC_SLIDER_fWorldTranslateZ     1055
 #define IDC_SLIDER_fShadowDropDistance  1055
-#define IDC_SLIDER_VA_HUE2              1055
 #define IDC_SLIDER_REGION_BOTTOM        1055
 #define IDC_SLIDER_fWorldRotateX        1056
 #define IDC_SLIDER_fShadowDropLightAngle 1056
@@ -362,9 +363,12 @@
 #define IDC_SLIDER_COLOR_G              1130
 #define IDC_SLIDER_COLOR_B              1131
 #define IDC_SLIDER_COLOR_A              1132
+#define IDC_CHECK_bInvert               1136
 #define IDC_L_LOCATION_X2               1137
+#define IDC_CHECK_bFlip                 1137
 #define IDC__L_LOCATION_Z2              1138
 #define IDC_L_LOCATION_Z2               1138
+#define IDC_CHECK_bOverlap              1138
 #define IDC__L_LOCATION_Y2              1139
 #define IDC_L_LOCATION_Y2               1139
 #define IDC_L_SPIN_X2                   1140
@@ -386,7 +390,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        337
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1136
+#define _APS_NEXT_CONTROL_VALUE         1139
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif

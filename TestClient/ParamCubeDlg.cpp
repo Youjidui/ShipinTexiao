@@ -35,7 +35,6 @@ void CParamCubeDlg::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(CParamCubeDlg, CDialog)
 	ON_WM_HSCROLL()
 	ON_BN_CLICKED(IDC_CHECK_Light, &CParamCubeDlg::OnBnClickedCheckLight)
-	ON_BN_CLICKED(IDC_CHECK_bReverse, &CParamCubeDlg::OnBnClickedCheckbreverse)
 END_MESSAGE_MAP()
 
 
@@ -48,6 +47,7 @@ BOOL CParamCubeDlg::OnInitDialog()
 	float decimal_point = 1000.f;
 	CSliderCtrl* pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_fLocalTranslateX);
 	pCtrl->SetRange(-10*decimal_point, 10*decimal_point, TRUE);
+#ifndef _3D_CUBE_TRANS
 	if(m_pParam)	pCtrl->SetPos(m_pParam->trans.fLocalTranslateX * decimal_point);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_fLocalTranslateY);
 	pCtrl->SetRange(-10*decimal_point, 10*decimal_point, TRUE);
@@ -91,6 +91,7 @@ BOOL CParamCubeDlg::OnInitDialog()
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_fWorldRotateZ);
 	pCtrl->SetRange(-5*10000.f, 5*10000.f, TRUE);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->trans.fWorldRotateZ*10000.f);
+#endif
 
 	CButton* pBtn = (CButton*)GetDlgItem(IDC_CHECK_Light);
 	pBtn->SetCheck(m_pParam->light.bEnabled);
@@ -135,38 +136,10 @@ BOOL CParamCubeDlg::OnInitDialog()
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_fSlideTransparency);
 	pCtrl->SetRange(0, 1*10000.f);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->shape.fSlideTransparency*10000.f);
-	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_nDirecttion);
-	pCtrl->SetRange(0, 3);
-	if(m_pParam)	pCtrl->SetPos(m_pParam->shape.nDirecttion);
-	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_nRotate);
-	pCtrl->SetRange(1, 2, TRUE);
-	if(m_pParam)	pCtrl->SetPos(m_pParam->shape.nRotate);
-
-	pBtn = (CButton*)GetDlgItem(IDC_CHECK_bReverse);
-	pBtn->SetCheck(m_pParam->bReverse);
 
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_fPerspective);
 	pCtrl->SetRange(10*100.f, 120*100.f, TRUE);
 	if(m_pParam)	pCtrl->SetPos(m_pParam->fPerspective*100.f);
-
-	memcpy(&vColor, &m_pParam->crBackgroundColor, sizeof(vColor));
-	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_BackgroundColor_R);
-	pCtrl->SetRange(0, 255);
-	if(m_pParam)	pCtrl->SetPos(vColor[2]);
-	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_BackgroundColor_G);
-	pCtrl->SetRange(0, 255);
-	if(m_pParam)	pCtrl->SetPos(vColor[1]);
-	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_BackgroundColor_B);
-	pCtrl->SetRange(0, 255);
-	if(m_pParam)	pCtrl->SetPos(vColor[0]);
-
-
-	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_fBackgroundTransparency);
-	pCtrl->SetRange(0, 1*10000.f);
-	if(m_pParam)	pCtrl->SetPos(m_pParam->fBackgroundTransparency*10000.f);
-	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_fTransition);
-	pCtrl->SetRange(0, 10000);	//1.f, 0, 0.0001f
-	if(m_pParam)	pCtrl->SetPos(m_pParam->fTransition*10000.f);
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 	// 异常: OCX 属性页应返回 FALSE
@@ -185,20 +158,8 @@ void CParamCubeDlg::OnHScroll(UINT nSBCode, UINT uPos, CScrollBar* pScrollBar)
 	char vColor[4];
 	switch(pScrollBar->GetDlgCtrlID())
 	{
-	case IDC_SLIDER_fTransition:		//Progress
-		m_pParam->fTransition = nPos / 10000.f;
-		break;
-	case IDC_SLIDER_fBackgroundTransparency:
-		m_pParam->fBackgroundTransparency = nPos / 10000.f;
-		break;
 	case IDC_SLIDER_fPerspective:
 		m_pParam->fPerspective = nPos / 100.f;
-		break;
-	case IDC_SLIDER_nRotate:
-		m_pParam->shape.nRotate = nPos ;
-		break; 
-	case IDC_SLIDER_nDirecttion:
-		m_pParam->shape.nDirecttion = nPos;
 		break;
 	case IDC_SLIDER_fSlideTransparency:
 		m_pParam->shape.fSlideTransparency = nPos / 10000.f;
@@ -227,6 +188,7 @@ void CParamCubeDlg::OnHScroll(UINT nSBCode, UINT uPos, CScrollBar* pScrollBar)
 	case IDC_SLIDER_fDirectionX:
 		m_pParam->light.fDirectionX = nPos / decimal_point;
 		break;
+#ifndef _3D_CUBE_TRANS
 	case IDC_SLIDER_fWorldRotateZ:
 		m_pParam->trans.fWorldRotateZ = nPos / 10000.f;
 		break;
@@ -272,21 +234,7 @@ void CParamCubeDlg::OnHScroll(UINT nSBCode, UINT uPos, CScrollBar* pScrollBar)
 	case IDC_SLIDER_fLocalTranslateX:
 		m_pParam->trans.fLocalTranslateX = nPos / decimal_point;
 		break;
-	case IDC_SLIDER_BackgroundColor_R:
-		memcpy(vColor, &m_pParam->crBackgroundColor, sizeof(vColor));
-		vColor[2] = nPos;
-		memcpy(&m_pParam->crBackgroundColor, vColor, sizeof(vColor));
-		break;
-	case IDC_SLIDER_BackgroundColor_G:
-		memcpy(vColor, &m_pParam->crBackgroundColor, sizeof(vColor));
-		vColor[1] = nPos;
-		memcpy(&m_pParam->crBackgroundColor, vColor, sizeof(vColor));
-		break;
-	case IDC_SLIDER_BackgroundColor_B:
-		memcpy(vColor, &m_pParam->crBackgroundColor, sizeof(vColor));
-		vColor[0] = nPos;
-		memcpy(&m_pParam->crBackgroundColor, vColor, sizeof(vColor));
-		break;
+#endif
 	case IDC_SLIDER_crSlideColor_R:
 		memcpy(vColor, &m_pParam->shape.crSlideColor, sizeof(vColor));
 		vColor[2] = nPos;
@@ -313,8 +261,3 @@ void CParamCubeDlg::OnBnClickedCheckLight()
 	m_pParam->light.bEnabled = pBtn->GetCheck();
 }
 
-void CParamCubeDlg::OnBnClickedCheckbreverse()
-{
-	CButton* pBtn = (CButton*)GetDlgItem(IDC_CHECK_bReverse);
-	m_pParam->bReverse = pBtn->GetCheck();
-}

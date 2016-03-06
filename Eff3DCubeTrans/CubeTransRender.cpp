@@ -73,8 +73,10 @@ bool CCubeTransRender::Render( CVideoBuffer* pDest, CVideoBuffer *pSrcA, CVideoB
 	ASSERT(pMipMap);
 
 #ifdef _3D_CUBE_TRANS
+	const TransformParam trans;
 	//GenerateMipMap(pSrcDef,pMipMap,TRUE);
 #else
+	const TransformParam& trans = pParam->trans;
 	//GenerateMipMap(pSrcDef,pMipMap);
 #endif
 	if(pMipMap)
@@ -155,23 +157,23 @@ bool CCubeTransRender::Render( CVideoBuffer* pDest, CVideoBuffer *pSrcA, CVideoB
 	D3DXMatrixScaling(&matPrevScale,srcBufInfo.nWidth * (pSrcDef_IsYUV16Buffer ? 2.0f : 1.0f)  / (float)vPort.Width, srcBufInfo.nHeight / (float)vPort.Height, 1.0f);
 	D3DXMatrixTranslation(&matPrevTrans, -0.5f + matPrevScale._11 * 0.5f + pSrcDef_OffsetX / (float)vPort.Width, 0.5f - matPrevScale._22 * 0.5f - pSrcDef_OffsetY / (float)vPort.Height,0.0f);
 	matPrevTrans._41 *= fAspect;
-	D3DXMatrixScaling(&matScale,pParam->trans.fScaleX,pParam->trans.fScaleY,pParam->trans.fScaleZ);
+	D3DXMatrixScaling(&matScale,trans.fScaleX,trans.fScaleY,trans.fScaleZ);
 	
 	D3DXMATRIXA16 matRotX,matRotY,matRotZ;
-	D3DXMatrixRotationX(&matRotX,pParam->trans.fLocalRotateX);
-	D3DXMatrixRotationY(&matRotY,pParam->trans.fLocalRotateY);
-	D3DXMatrixRotationZ(&matRotZ,pParam->trans.fLocalRotateZ);
+	D3DXMatrixRotationX(&matRotX,trans.fLocalRotateX);
+	D3DXMatrixRotationY(&matRotY,trans.fLocalRotateY);
+	D3DXMatrixRotationZ(&matRotZ,trans.fLocalRotateZ);
 	matLocalRot = matRotX * matRotY * matRotZ;
 
-	D3DXMatrixRotationX(&matRotX,pParam->trans.fWorldRotateX);
-	D3DXMatrixRotationY(&matRotY,pParam->trans.fWorldRotateY);
-	D3DXMatrixRotationZ(&matRotZ,pParam->trans.fWorldRotateZ);
+	D3DXMatrixRotationX(&matRotX,trans.fWorldRotateX);
+	D3DXMatrixRotationY(&matRotY,trans.fWorldRotateY);
+	D3DXMatrixRotationZ(&matRotZ,trans.fWorldRotateZ);
 	matGlobalRot = matRotX * matRotY * matRotZ;
-	//D3DXMatrixRotationYawPitchRoll(&matLocalRot,pParam->trans.fLocalRotateY,pParam->trans.fLocalRotateX,pParam->trans.fLocalRotateZ);
-	//D3DXMatrixRotationYawPitchRoll(&matGlobalRot,pParam->trans.fWorldRotateX,pParam->trans.fWorldRotateY,pParam->trans.fWorldRotateZ);
+	//D3DXMatrixRotationYawPitchRoll(&matLocalRot,trans.fLocalRotateY,trans.fLocalRotateX,trans.fLocalRotateZ);
+	//D3DXMatrixRotationYawPitchRoll(&matGlobalRot,trans.fWorldRotateX,trans.fWorldRotateY,trans.fWorldRotateZ);
 
-	D3DXMatrixTranslation(&matLocalTrans,pParam->trans.fLocalTranslateX,pParam->trans.fLocalTranslateY,pParam->trans.fLocalTranslateZ);
-	D3DXMatrixTranslation(&matGlobalTrans,pParam->trans.fWorldTranslateX,pParam->trans.fWorldTranslateY,pParam->trans.fWorldTranslateZ);
+	D3DXMatrixTranslation(&matLocalTrans,trans.fLocalTranslateX,trans.fLocalTranslateY,trans.fLocalTranslateZ);
+	D3DXMatrixTranslation(&matGlobalTrans,trans.fWorldTranslateX,trans.fWorldTranslateY,trans.fWorldTranslateZ);
 	matLocalTrans._41 /= 2.0f;
 	matLocalTrans._42 /= 2.0f;
 	matLocalTrans._43 *= 0.35f;

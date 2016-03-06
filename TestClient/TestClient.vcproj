@@ -542,6 +542,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ParamCubeTransDlg.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\ParamDipToColorDlg.cpp"
 				>
 			</File>
@@ -729,6 +733,10 @@
 			</File>
 			<File
 				RelativePath=".\ParamCubeDlg.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ParamCubeTransDlg.h"
 				>
 			</File>
 			<File

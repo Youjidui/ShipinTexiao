@@ -16,7 +16,7 @@
 #include "PageRollParamDlg.h"
 #include "ParamDuoPageRollDlg.h"
 #include "ParamQuadPageRollDlg.h"
-#include "ParamCubeDlg.h"
+#include "ParamCubeTransDlg.h"
 #include "SonyDME3DDlg.h"
 #include "ParamPinpDlg.h"
 #include "ParamSonyBarnSlideDlg.h"
@@ -66,7 +66,7 @@ public:
 	CParamPageRollDlg m_PageRollDlg;
 	CParamDuoPageRollDlg m_duoPageRollDlg;
 	CParamQuadPageRollDlg m_QuadPageRollDlg;
-	CParamCubeDlg m_cubeTransDlg;
+	CParamCubeTransDlg m_cubeTransDlg;
 	CSonyDME3DDlg m_sonyDME3DDlg;
 	CParamPinPDlg m_sonyPinpDlg;
 	CParamBrokenGlassDlg m_brokenGlassDlg;
