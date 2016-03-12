@@ -115,8 +115,8 @@ bool CCubeTransRender::Render( CVideoBuffer* pDest, CVideoBuffer *pSrcA, CVideoB
 	D3DXCOLOR crBack = D3DCOLOR_ARGB(0XFF,0,0,0);
 #ifdef _3D_CUBE_TRANS
 	float fTransition = 1.0f - fabs(pParam->fTransition * 2.0f - 1.0f);
-	pParam->shape.fIntervalX = LERP(1.0f,pParam->shape.fIntervalX,fTransition);
-	pParam->shape.fIntervalY = LERP(1.0f,pParam->shape.fIntervalY,fTransition);	
+	float fIntervalX = LERP(1.0f,pParam->shape.fIntervalX,fTransition);
+	float fIntervalY = LERP(1.0f,pParam->shape.fIntervalY,fTransition);	
 	
 	crBack = pParam->crBackgroundColor;
 	//RGBA2(pDstDef->bufferFormat,&crBack,&crBack);
@@ -222,8 +222,8 @@ bool CCubeTransRender::Render( CVideoBuffer* pDest, CVideoBuffer *pSrcA, CVideoB
 	matCombine = matWorld * matView * matProj;	
 	
 	bool pParam_bOdd = false;
-	D3DXVECTOR4 vShape(pParam->shape.nDiveX,pParam->shape.nDiveY,pParam->shape.fIntervalX,pParam->shape.fIntervalY);
-	TRACE("pParam->shape.fIntervalX = %f, pParam->shape.fIntervalY = %f\n", pParam->shape.fIntervalX,pParam->shape.fIntervalY);
+	D3DXVECTOR4 vShape(pParam->shape.nDiveX,pParam->shape.nDiveY,fIntervalX,fIntervalY);
+	TRACE("pParam->shape.fIntervalX = %f, pParam->shape.fIntervalY = %f\n", fIntervalX, fIntervalY);
 	hr = m_pEffect->SetVector("g_vShape",&vShape);
 	ASSERT(SUCCEEDED(hr));
 	D3DXVECTOR4 vMisc(fAspect,pParam->light.fDiffuse,pParam->light.fAmbient,pParam_bOdd ? 0.0f : 0.5f * 2.0f  /  vPort.Height);
