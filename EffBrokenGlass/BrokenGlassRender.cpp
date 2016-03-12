@@ -117,7 +117,8 @@ bool CBrokenGlassRender::Render( CVideoBuffer* pDest, CVideoBuffer *pSrcA, CVide
 
 	// 参数调整
 	float	blockAngle	= max(pParam->prm_width,0.0001f);	// 每一个块的角度
-	float	movement	= pParam->prm_movement;
+	//float	movement	= pParam->prm_movement * 1.25f;		//GBrokenGlassEffect.cpp
+	float	movement	= pParam->prm_movement * 1.33f;
 
 	float	angleBlock	= pParam->prm_angleBlock;
 	float	rotateAngle = pParam->prm_rotate;

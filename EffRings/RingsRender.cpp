@@ -164,7 +164,7 @@ bool CRingsRender::Render( CVideoBuffer* pDst, CVideoBuffer* pSrcA, CVideoBuffer
 	ASSERT(SUCCEEDED(hr));
 
 	//float fAspect = m_pResMan->GetAspect() * (pSrcDef->BaseWidth * (pSrcDef->IsYUV16Buffer() ? 2.0f : 1.0f))  / (float)(pSrcDef->BaseHeight  * m_pResMan->GetAspectVerifyCoef());		
-	float	fAspect = nEditWidth*1.0f/nEditHeight;
+	float	fAspect = (nEditWidth*1.0f/nEditHeight);
 	
 	D3DXMATRIX *matView = NULL, *matProj= NULL;
 	pResMan->GetOrthoMatrix(&matView, &matProj);
@@ -181,7 +181,8 @@ bool CRingsRender::Render( CVideoBuffer* pDst, CVideoBuffer* pSrcA, CVideoBuffer
 	ASSERT(SUCCEEDED(hr));
 
 	float pSrcDef_fAlphaValue = 1.0f;
-	D3DXVECTOR4 vRings(pParam->fTranslate * 1.66f, pParam->fRandomTranslate, pSrcDef_fAlphaValue, 0.0f);
+	float fTranslate = pParam->fTranslate * 2.0f;		//GRingsEffect.cpp
+	D3DXVECTOR4 vRings(fTranslate, pParam->fRandomTranslate, pSrcDef_fAlphaValue, 0.0f);
 	hr = m_pEffect->SetVector("g_vRings",&vRings);
 	ASSERT(SUCCEEDED(hr));
 
