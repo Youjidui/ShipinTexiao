@@ -102,7 +102,8 @@ HRESULT CDiagonalWipe::Draw(CVideoBuffer* pMaskDef, BasicWipeFxParam* pParam)
 		}
 		break;
 	}
-	vNewCenter = D3DXVECTOR2(vCenter.x,ceil(vCenter.y / m_fAspect * biMask.nHeight) / (float)biMask.nHeight);
+	//vNewCenter = D3DXVECTOR2(vCenter.x,ceil(vCenter.y / m_fAspect * biMask.nHeight) / (float)biMask.nHeight);
+	vNewCenter = D3DXVECTOR2(vCenter.x,vCenter.y );
 	D3DXMatrixTranslation(&matAxisTrans,-vNewCenter.x,-vNewCenter.y,0.0f);
 	D3DXMatrixTranslation(&matAxisInvTrans,vNewCenter.x,vNewCenter.y,0.0f);
 	D3DXMatrixTranslation(&matShift,vNewCenter.x - vCenter.x,vNewCenter.y - vCenter.y,0.0f);

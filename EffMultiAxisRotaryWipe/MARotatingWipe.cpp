@@ -131,7 +131,8 @@ HRESULT CMARotatingWipe::Draw(CVideoBuffer* pMaskDef, BasicWipeFxParam* pParam)
 		}
 		break;
 	}
-	vNewCenter = D3DXVECTOR2(vCenter.x,ceil(vCenter.y / m_fAspect * biMask.nHeight) / (float)biMask.nHeight);
+	//vNewCenter = D3DXVECTOR2(vCenter.x,ceil(vCenter.y / m_fAspect * biMask.nHeight) / (float)biMask.nHeight);
+	vNewCenter = D3DXVECTOR2(vCenter.x,vCenter.y );
 	D3DXMatrixTranslation(&matAxisTrans,-vNewCenter.x,-vNewCenter.y,0.0f);
 	D3DXMatrixTranslation(&matAxisInvTrans,vNewCenter.x,vNewCenter.y,0.0f);
 	D3DXMatrixTranslation(&matShift,vNewCenter.x - vCenter.x,vNewCenter.y - vCenter.y,0.0f);
@@ -180,7 +181,7 @@ HRESULT CMARotatingWipe::Draw(CVideoBuffer* pMaskDef, BasicWipeFxParam* pParam)
 		if(!aPass[uPass])
 			continue;			
 
-		//hr = pDevice->SetScissorRect(&rcScissort);
+		hr = pDevice->SetScissorRect(&rcScissort);
 		ASSERT(SUCCEEDED(hr));
 		hr = m_pEffect->SetMatrix("g_matWorldViewProj",&matCombine);
 		ASSERT(SUCCEEDED(hr));
@@ -189,8 +190,8 @@ HRESULT CMARotatingWipe::Draw(CVideoBuffer* pMaskDef, BasicWipeFxParam* pParam)
 		bOK = m_pMesh->DrawSubset(CLAMP(uPass,0,1));
 		ASSERT(bOK);
 
-		////Mirror
-		//hr = pDevice->SetScissorRect(&rcMirrorScissort);
+		//Mirror
+		hr = pDevice->SetScissorRect(&rcMirrorScissort);
 		ASSERT(SUCCEEDED(hr));
 		hr = m_pEffect->SetMatrix("g_matWorldViewProj",&matMirrorCombine);
 		ASSERT(SUCCEEDED(hr));

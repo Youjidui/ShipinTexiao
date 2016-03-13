@@ -502,7 +502,9 @@ BOOL CEffectBar::OnInitDialog()
 
 	}
 
-	m_ctrlEffects.SetCurSel(i);
+	int nstart = 0;
+	nstart = m_ctrlEffects.FindString(nstart, FX_MULTI_AXIS_ROTARY_WIPE);
+	m_ctrlEffects.SetCurSel(nstart);
 
 	m_ctrlProgress.SetRange(0, 10000);	//1.f, 0, 0.0001f
 

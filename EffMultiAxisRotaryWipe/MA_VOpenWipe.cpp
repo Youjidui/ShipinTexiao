@@ -83,10 +83,13 @@ HRESULT CMA_VOpenWipe::Draw(CVideoBuffer* pMaskDef, BasicWipeFxParam* pParam)
 	switch(pParam->structPattern.nPattern)
 	{
 	case 11:
-		vCenter = D3DXVECTOR2(0.0f,0.5f);	
+		vCenter = D3DXVECTOR2(0.0f,0.5f);
+		//vCenter = D3DXVECTOR2(0.0f,1.f);
 		D3DXMatrixRotationZ(&matRot,- pParam->structPattern.fOffset * D3DX_PI / 2.0f);
-		matAdd[2]._42 = 1.0f / m_fAspect / biMask.nHeight;
-		matAdd[3]._42 = 1.0f / m_fAspect / biMask.nHeight;
+		//matAdd[2]._42 = 1.0f / m_fAspect / biMask.nHeight;
+		//matAdd[3]._42 = 1.0f / m_fAspect / biMask.nHeight;
+		matAdd[2]._42 = 1.0f / biMask.nHeight;
+		matAdd[3]._42 = 1.0f / biMask.nHeight;
 		break;
 	case 12 :
 		D3DXMatrixRotationZ(&matType, D3DX_PI /2.0f );
@@ -105,7 +108,8 @@ HRESULT CMA_VOpenWipe::Draw(CVideoBuffer* pMaskDef, BasicWipeFxParam* pParam)
 		break;
 	}
 
-	vNewCenter = D3DXVECTOR2(vCenter.x,ceil(vCenter.y / m_fAspect * biMask.nHeight) / (float)biMask.nHeight);
+	//vNewCenter = D3DXVECTOR2(vCenter.x,ceil(vCenter.y / m_fAspect * biMask.nHeight) / (float)biMask.nHeight);
+	vNewCenter = D3DXVECTOR2(vCenter.x,vCenter.y );
 	D3DXMatrixTranslation(&matAxisTrans,-vNewCenter.x,-vNewCenter.y,0.0f);
 	D3DXMatrixTranslation(&matAxisInvTrans,vNewCenter.x,vNewCenter.y,0.0f);
 	D3DXMatrixTranslation(&matShift,vNewCenter.x - vCenter.x,vNewCenter.y - vCenter.y,0.0f);
