@@ -1,13 +1,13 @@
-
 // TestClientDoc.h : CTestClientDoc 类的接口
 //
+#pragma once
+
 #include <vector>
 #include "../VideoBuffer.h"
 #include "../D3D9Render/RenderEngine.h"
 #include "../D3D9Render/ResourceManager.h"
 
-#pragma once
-
+class CBufferColorConvertor;
 
 class CTestClientDoc : public CDocument
 {
@@ -64,6 +64,9 @@ protected:
 	FxParamBase* m_pEffectParam;
 
 private:
+	bool InitColorConvertor();
+	void UninitColorConvertor();
+	CBufferColorConvertor* m_pColorConvertor;
 
 // 生成的消息映射函数
 protected:

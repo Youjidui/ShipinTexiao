@@ -26,7 +26,8 @@ bool CBufferColorConvertor::Init( CRenderEngine* pEngine )
 	ASSERT(m_pQuadMesh);
 	m_pEffect = pResMan->CreateEffect(pDevice, _T("NewEffects/YUVA2RGBA.fx"));
 	ASSERT(m_pEffect);
-	m_pEffect->SetYUVA2RGBAMatrix();
+	hr = m_pEffect->SetYUVA2RGBAMatrix(1);
+	ASSERT(SUCCEEDED(hr));
 
 	return SUCCEEDED(hr);
 }
@@ -46,6 +47,8 @@ bool CBufferColorConvertor::Render( CVideoBuffer* pDest, CVideoBuffer *pSrc, FxP
 	ColorConvertFxParam* pParam = (ColorConvertFxParam*)pParamBase;
 	if(m_pEngine->SetRenderTarget(pDest))
 	{
+		//bool bOK = m_pEngine->SetDepthStencilBuffer(false);
+		//ASSERT(bOK);
 		const VideoBufferInfo& srcBuffInfo = pSrc->GetVideoBufferInfo();
 		D3DXMATRIX	matImage;
 		D3DXMatrixIdentity(&matImage);
@@ -53,6 +56,7 @@ bool CBufferColorConvertor::Render( CVideoBuffer* pDest, CVideoBuffer *pSrc, FxP
 		float m_fv =  0.5f/(float)(srcBuffInfo.nHeight);
 
 		D3DXMATRIX  matWorld, *pMatView = NULL, *pMatProj = NULL;
+		D3DXMatrixIdentity(&matWorld);
 		pResMan->GetOrthoMatrix(&pMatView, &pMatProj);
 		D3DXMATRIX matWVP = matWorld * (*pMatView)* (*pMatProj);
 

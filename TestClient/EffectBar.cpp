@@ -284,11 +284,16 @@ BOOL CEffectBar::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 
-	//m_ctrlEffects.AddString(_T("none"));
-	int i = m_ctrlEffects.AddString(FX_NEGATIVE);
-	//m_ctrlEffects.SetItemData(i, FX_NEGATIVE);
-	FxParamBase* pN = new FxParamBase;
-	m_ctrlEffects.SetItemDataPtr(i, pN);
+	int i = m_ctrlEffects.AddString(FX_NONE);
+	{
+		FxParamBase* pN = new FxParamBase;
+		m_ctrlEffects.SetItemDataPtr(i, pN);
+	}
+	i = m_ctrlEffects.AddString(FX_NEGATIVE);
+	{
+		FxParamBase* pN = new FxParamBase;
+		m_ctrlEffects.SetItemDataPtr(i, pN);
+	}
 	//i = m_ctrlEffects.AddString(FX_COLOR_KEY);
 	//{
 	//	ColorKeyParam* pCK = new ColorKeyParam;

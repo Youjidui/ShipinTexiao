@@ -264,6 +264,8 @@ bool ChromaKeyRender::Init( CRenderEngine* pEngine )
 	ASSERT(m_VS_DirectOut_2stages_V3);
 	m_PS_CRK_RGB32 = pResMan->CreatePixelShader(pDevice, _T("NewEffects/PS_CRK_RGBA_QUICK.psh"));
 	ASSERT(m_PS_CRK_RGB32);
+	HRESULT hr = m_PS_CRK_RGB32->SetYUVA2RGBAMatrix(1);
+	ASSERT(SUCCEEDED(hr));
 	m_PS_CRK_YUVA = pResMan->CreatePixelShader(pDevice, _T("NewEffects/PS_CRK_YUVA.psh"));
 	ASSERT(m_PS_CRK_YUVA );
 	return true;
@@ -288,7 +290,7 @@ bool ChromaKeyRender::Render(CVideoBuffer*pDstDef, CVideoBuffer *pSrcA, CVideoBu
 	ASSERT(bOK);
 	bOK = m_pEngine->BlendCompose(pDstDef, pSrcB, pTempDef);
 	ASSERT(bOK);
-	bool bOK2 = m_pEngine->GetVideoBufferManager()->ReleaseVideoBuffer(pTempDef);
+	BOOL bOK2 = m_pEngine->GetVideoBufferManager()->ReleaseVideoBuffer(pTempDef);
 	ASSERT(bOK2);
 	return bOK;
 }
@@ -322,7 +324,11 @@ bool ChromaKeyRender::RenderArea(CVideoBuffer*pDstDef, CVideoBuffer *pSrcDef, Fx
 	//else 
 	if (bYUVA)
 		pixelshader = m_PS_CRK_YUVA;
-	pixelshader->SetYUVA2RGBAMatrix();
+	//else
+	//{
+	//	HRESULT hr = pixelshader->SetYUVA2RGBAMatrix();
+	//	ASSERT(SUCCEEDED(hr));
+	//}
 
 	// 2.1 setRT和标志位设定	
 	//pDstDef->bRenderToFullTarget = false;

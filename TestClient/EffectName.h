@@ -2,6 +2,7 @@
 
 #include <tchar.h>
 
+#define FX_NONE _T("None")
 #define FX_NEGATIVE _T("Negative")
 #define FX_COLOR_KEY _T("Color Key")
 #define FX_DIP_TO_COLOR _T("Dip To Color")

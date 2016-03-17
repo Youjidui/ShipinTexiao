@@ -64,6 +64,7 @@ CTestClientDoc::CTestClientDoc()
 , m_pDestImage(NULL)
 , m_pBackImage(NULL)
 , m_pEffectParam(NULL)
+, m_pColorConvertor(NULL)
 {
 	memset(&m_DestVideoBufferInfo, 0, sizeof(VideoBufferInfo));
 	m_DestVideoBufferInfo.format = D3DFMT_A8R8G8B8;
@@ -244,19 +245,31 @@ bool CTestClientDoc::UpdateBuffer( UINT level, const BYTE* pBits, int w, int h, 
 bool CTestClientDoc::InitEffect(HWND hDeviceWnd, int nBackBufferWidth, int nBackBufferHeight)
 {
 	m_pRenderEngine = InitEffectModule(hDeviceWnd, nBackBufferWidth, nBackBufferHeight);
+	ASSERT(m_pRenderEngine);
+
 	if(m_pRenderEngine)
 	{
 		m_pBufferMgr = CreateVideoBufferManager(m_pRenderEngine);
+		ASSERT(m_pBufferMgr);
 	}
+
 	if(m_pBufferMgr)
 	{
 		SetBackBufferSize(nBackBufferWidth, nBackBufferHeight);
 	}
+
+	bool bOK = InitColorConvertor();
+	ASSERT(bOK);
+
 	return !!m_pBufferMgr;
 }
 
 void CTestClientDoc::UninitEffect()
 {
+	UninitColorConvertor();
+
+	if(m_pBufferMgr)
+	{
 	for(size_t i = 0; i < m_SrcImages.size(); ++i)
 	{
 		m_pBufferMgr->ReleaseVideoBuffer(m_SrcImages[i]);
@@ -267,9 +280,14 @@ void CTestClientDoc::UninitEffect()
 
 	ReleaseVideoBufferManager(m_pBufferMgr);
 	m_pBufferMgr = NULL;
+	}
+
+	if(m_pRenderEngine)
+	{
 	m_pRenderEngine->SetVideoBufferManager(NULL);
 	UninitEffectModule(m_pRenderEngine);
 	m_pRenderEngine = NULL;
+	}
 }
 
 bool CTestClientDoc::SetBackBufferSize( UINT w, UINT h )
@@ -353,29 +371,55 @@ bool CTestClientDoc::Render()
 					CVideoBuffer* pSrc2 = m_SrcImages[1];
 					CVideoBuffer* pDest = m_pDestImage;
 
-					//alpha
-#ifdef BLEND_COMPOSE
 					VideoBufferInfo tempBI = pDest->GetVideoBufferInfo();
 					tempBI.eUsage = VideoBufferInfo::_IN_OUT;
+					//alpha
+#ifdef BLEND_COMPOSE
 					CVideoBuffer* pTemp = m_pBufferMgr->CreateVideoBuffer(tempBI);
 					ASSERT(pTemp);
 					pDest = pTemp;
 					ASSERT(pDest == pTemp);
 #endif	//BLEND_COMPOSE
-					////src buffer for YUV2RGB
-					//CVideoBuffer* pYUV = m_pBufferMgr->CreateVideoBuffer(tempBI);
-					//ASSERT(pYUV);
-					//pDest = pYUV;
+
+//#define YUV_COLOR_SPACE
+#ifdef YUV_COLOR_SPACE
+					CVideoBuffer* pRGBDest = pDest;
+					CVideoBuffer* pRGBSrc1 = pSrc;
+					CVideoBuffer* pRGBSrc2 = pSrc2;
+					//src buffer for YUV2RGB
+					CVideoBuffer* pYUV = m_pBufferMgr->CreateVideoBuffer(tempBI);
+					ASSERT(pYUV);
+					VideoBufferInfo biYUVSrc = pRGBSrc1->GetVideoBufferInfo();
+					biYUVSrc.eUsage = VideoBufferInfo::_IN_OUT;
+					CVideoBuffer* pYUVSrc1 = m_pBufferMgr->CreateVideoBuffer(biYUVSrc);
+					ASSERT(pYUVSrc1);
+					bOK = ColorConvert(pYUVSrc1, pRGBSrc1, true);
+					ASSERT(bOK);
+					//D3DXSaveSurfaceToFile(_T("./yuv_src_1.dds"), D3DXIFF_DDS, pYUVSrc1->GetSurface(), NULL, NULL);
+					biYUVSrc = pRGBSrc2->GetVideoBufferInfo();
+					biYUVSrc.eUsage = VideoBufferInfo::_IN_OUT;
+					CVideoBuffer* pYUVSrc2 = m_pBufferMgr->CreateVideoBuffer(biYUVSrc);
+					ASSERT(pYUVSrc2);
+					bOK = ColorConvert(pYUVSrc2, pRGBSrc2, true);
+					ASSERT(bOK);
+					//D3DXSaveSurfaceToFile(_T("./yuv_src_2.dds"), D3DXIFF_DDS, pYUVSrc2->GetSurface(), NULL, NULL);
+					pDest = pYUV; pSrc = pYUVSrc1; pSrc2 = pYUVSrc2;
+#endif	//YUV_COLOR_SPACE
 
 					//effect render
 					bOK = EffectRender(pDest, pSrc, pSrc2);
 					ASSERT(bOK);
+					//D3DXSaveSurfaceToFile(_T("./yuv_dest.dds"), D3DXIFF_DDS, pYUV->GetSurface(), NULL, NULL);
 
+#ifdef YUV_COLOR_SPACE
 					////YUV to RGB
-					//pDest = pTemp;
-					//bOK = ColorConvert(pDest, pYUV, false);
-					//ASSERT(bOK);
-					//m_pBufferMgr->ReleaseVideoBuffer(pYUV);
+					bOK = ColorConvert(pRGBDest, pYUV, false);
+					ASSERT(bOK);
+					m_pBufferMgr->ReleaseVideoBuffer(pYUV);
+					m_pBufferMgr->ReleaseVideoBuffer(pYUVSrc1);
+					m_pBufferMgr->ReleaseVideoBuffer(pYUVSrc2);
+					//D3DXSaveSurfaceToFile(_T("./rgb_dest.dds"), D3DXIFF_DDS, pDest->GetSurface(), NULL, NULL);
+#endif	//YUV_COLOR_SPACE
 
 #ifdef BLEND_COMPOSE
 					pDest = m_pDestImage;
@@ -409,7 +453,11 @@ bool CTestClientDoc::Render()
 bool CTestClientDoc::EffectRender(CVideoBuffer* pDest, CVideoBuffer* pSrc, CVideoBuffer* pSrc2)
 {
 	bool bOK = false;
-	if(FX_NEGATIVE == m_strEffectName)
+	if(FX_NONE == m_strEffectName)
+	{
+		bOK = m_pRenderEngine->EffectVideoCopy(pDest, pSrc);
+	}
+	else if(FX_NEGATIVE == m_strEffectName)
 	{
 		CNegativeRender eff;
 		if(eff.Init(m_pRenderEngine))
@@ -710,23 +758,49 @@ void CTestClientDoc::SetEffect( LPCTSTR pszEffectName, FxParamBase* pParam )
 bool CTestClientDoc::ColorConvert(CVideoBuffer* pDest, CVideoBuffer* pSrc, bool bIsRGB2YUV )
 {
 	bool bOK = false;
-	//const VideoBufferInfo& srcBufferInfo = pSrc->GetVideoBufferInfo();
 	ASSERT(pSrc);
+	ASSERT(pDest);
 	ColorConvertFxParam param;
 	if(bIsRGB2YUV)
 		param.convert_dir = ColorConvertFxParam::RGBA2YUVA;
 	else
 		param.convert_dir = ColorConvertFxParam::YUVA2RGBA;
-	CBufferColorConvertor cc;
-	bOK = cc.Init(m_pRenderEngine);
-	if(bOK)
+
+	if(m_pColorConvertor)
 	{
-		//CVideoBuffer* pTemp = m_pBufferMgr->CreateVideoBuffer(srcBufferInfo);
-		ASSERT(pDest);
-		bOK = cc.Render(pDest, pSrc, &param);
-		cc.Uninit();
+		bOK = m_pColorConvertor->Render(pDest, pSrc, &param);
 	}
 	return bOK;
+}
+
+bool CTestClientDoc::InitColorConvertor()
+{
+	bool bOK = false;
+	if(!m_pColorConvertor)
+		m_pColorConvertor = new CBufferColorConvertor;
+	else
+		return true;
+
+	if(m_pColorConvertor)
+	{
+		bOK = m_pColorConvertor->Init(m_pRenderEngine);
+		if(!bOK)
+		{
+			delete m_pColorConvertor;
+			m_pColorConvertor = NULL;
+		}
+	}
+	return bOK;
+}
+
+void CTestClientDoc::UninitColorConvertor()
+{
+	if(m_pColorConvertor)
+	{
+		m_pColorConvertor->Uninit();
+		delete m_pColorConvertor;
+		m_pColorConvertor = NULL;
+	}
 }
 
 

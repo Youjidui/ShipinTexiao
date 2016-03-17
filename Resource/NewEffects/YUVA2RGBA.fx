@@ -43,13 +43,13 @@ PS_INPUT vs_main(VS_INPUT input)
 
 //Ps
 void ps_rgba2yuva(float2 vTex:TEXCOORD0, out float4 oColor:COLOR0)
-{	
+{
 	oColor = tex2D(g_samColor, vTex);
 	oColor = CS_RGBA2YUVA(oColor);
 }
 
 void ps_yuva2rgba(float2 vTex:TEXCOORD0, out float4 oColor:COLOR0)
-{	
+{
 	oColor = tex2D(g_samColor, vTex);
 	oColor = CS_YUVA2RGBA(oColor);
 }
