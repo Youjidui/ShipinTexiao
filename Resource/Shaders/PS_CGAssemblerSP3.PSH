@@ -12,7 +12,7 @@ float4 main( float2 texUV : TEXCOORD0,
     // splite field if needed
     if ( (bool)g_needStrip[index] )
     {
-        float2 texSize = TextureSize[index];
+        float2 texSize = TextureSize[index].xy;
         float3 arg = Argus[index];
         float DivV       = 1.0/texSize.y ;  
         int   iy         = texUV.y * texSize.y - arg.x;

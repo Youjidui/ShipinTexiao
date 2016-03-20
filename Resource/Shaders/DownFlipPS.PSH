@@ -9,7 +9,7 @@ float4 main( float2 texUV: TEXCOORD0 ): COLOR0
   int x , y;
   float3 tempYUV,sampleTemplate,resultYUV;  
   int   ix = int( texUV.x * TextureSize.x );    
-  tempYUV  = mul(matRGBA2YUVA, sColor.rgb);      
+  tempYUV  = mul(matRGBA2YUVA, sColor).rgb;      
   tempYUV += float3( 16.0/255.0,0.5,0.5);  
   tempYUV *= 255;
   y        = tempYUV.r;  

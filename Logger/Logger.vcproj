@@ -21,7 +21,7 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)_$(PlatformName)"
 			IntermediateDirectory="$(ConfigurationName)_$(PlatformName)"
 			ConfigurationType="2"
-			InheritedPropertySheets="..\log4cpp.vsprops;..\vld.vsprops"
+			InheritedPropertySheets="..\log4cpp.vsprops;..\vld.vsprops;..\DXSDK.vsprops"
 			UseOfMFC="2"
 			CharacterSet="1"
 			>
@@ -100,7 +100,7 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)_$(PlatformName)"
 			IntermediateDirectory="$(ConfigurationName)_$(PlatformName)"
 			ConfigurationType="2"
-			InheritedPropertySheets="..\log4cpp.vsprops;..\vld.vsprops"
+			InheritedPropertySheets="..\log4cpp.vsprops;..\vld.vsprops;..\DXSDK.vsprops"
 			UseOfMFC="2"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
@@ -187,6 +187,10 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath=".\LogDxError.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Logger.cpp"
 				>
 			</File>
@@ -225,11 +229,19 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
+				RelativePath=".\LogDxError.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Logger.h"
 				>
 			</File>
 			<File
 				RelativePath=".\Logging.h"
+				>
+			</File>
+			<File
+				RelativePath=".\LoggingExportMacros.h"
 				>
 			</File>
 			<File

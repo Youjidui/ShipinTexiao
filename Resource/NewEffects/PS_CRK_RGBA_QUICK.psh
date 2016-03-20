@@ -25,8 +25,8 @@ bool PtInRegion(float2 pt, float4 region)
 float4 main(float2 texSrcCoord : TEXCOORD0) : COLOR0
 {
 	float4 srcColor = tex2D(texSrc, texSrcCoord);
-	if(!PtInRegion(texSrcCoord, fRegion))	//return src color if not in the region
-		return srcColor;
+	if(PtInRegion(texSrcCoord, fRegion))	//return src color if not in the region
+	{
 	
 	float4 srcYUVA = CS_RGBA2YUVA(srcColor);	// UV Range [-0.5, 0.5]
 	srcYUVA.yz *= 2.f;
@@ -78,5 +78,7 @@ float4 main(float2 texSrcCoord : TEXCOORD0) : COLOR0
 	fQuatnY.y = saturate(fQuatnY.y);
 	fQuatnY.zw = clamp(fQuatnY.zw, -1.0f, 1.0f) * 0.5f;
 
-	return CS_YUVA2RGBA(float4(fQuatnY.yzw, fYB_Key.x));
+	srcColor = CS_YUVA2RGBA(float4(fQuatnY.yzw, fYB_Key.x));
+	}
+	return srcColor;
 }
