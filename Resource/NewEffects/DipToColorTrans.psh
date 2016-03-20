@@ -24,14 +24,14 @@ float4 main(float2 texcoord	: TEXCOORD0):COLOR
     srcColor.a *= ScaleAndAlpha.y;
     
     if( srcColor.a == 0.f )
-		srcColor.rgb = colorBlack.rgb;
+		srcColor.rgb = colorBlack;
 
-	srcColor.rgb = lerp(colorBlack,srcColor,srcColor.a).rgb;
+	srcColor.rgb = lerp(colorBlack,srcColor,srcColor.a);
 	
 	float4 oColor = lerp(srcColor,Color,ScaleAndAlpha.x);
 	oColor.a = lerp(srcColor.a,1,ScaleAndAlpha.x);
 	if(oColor.a > 0.5f / 255.0f)
-		oColor.rgb = lerp(colorBlack,oColor,1.0f / oColor.a).rgb;
+		oColor.rgb = lerp(colorBlack,oColor,1.0f / oColor.a);
 	return oColor;
 }
 

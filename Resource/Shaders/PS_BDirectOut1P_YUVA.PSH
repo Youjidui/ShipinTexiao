@@ -7,6 +7,6 @@ float4 main( float2 texUV  : TEXCOORD0  ): COLOR
   const float4 cMode = CS_YUVA_OFFSET;
   float4 sColor = tex2D( g_texSource,texUV );
   sColor.a  *= g_alpha;
-  sColor.rgb = sColor.rgb * sColor.a - sColor.a * cMode.rgb;
+  sColor.rgb = sColor.rgb * sColor.a - sColor.a * cMode;
   return sColor;
 }

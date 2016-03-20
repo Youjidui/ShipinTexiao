@@ -6,11 +6,11 @@
 #include "../Utility/SafeDelete.h"
 #include "../Utility/PathSettings.h"
 #include "../Logger/Logging.h"
-#include "../Logger/LogDxError.h"
-#include "ShaderResources.h"
 
+#include <DxErr.h>
+#pragma comment(lib, "DxErr")
 #include <Shlwapi.h>
-//#pragma comment(lib, "Shlwapi")
+#pragma comment(lib, "Shlwapi")
 
 #pragma warning(disable:4996)
 
@@ -24,9 +24,6 @@ CBaseFx::~CBaseFx()
 {	
 	Destroy();
 }
-
-//#define _SHADER_COMPILED_FILE
-
 HRESULT CBaseFx::Create ( LPDIRECT3DDEVICE9 pDevice,const TCHAR* szFxName, const char** ppszMacros, int nMacroCount)
 {
 	m_pDevice		  = pDevice;
@@ -36,21 +33,21 @@ HRESULT CBaseFx::Create ( LPDIRECT3DDEVICE9 pDevice,const TCHAR* szFxName, const
 	HRESULT hr = S_OK;
 
 	TCHAR szExeFilePath[MAX_PATH];
-#if defined(_SHADER_SOURCE_FILE)
+	//GetModuleFileName(NULL, szExeFilePath, MAX_PATH);
+	//LPTSTR p = szExeFilePath + lstrlen(szExeFilePath) - 1;
+	//while(*p != '/' && *p != '\\') p--;
+	//p++;
+	//lstrcpy(p, szFxName);
 	PathSettings::BuildResourcePath(szExeFilePath, sizeof(szExeFilePath), szFxName);
-#elif defined(_SHADER_COMPILED_FILE)
-	PathSettings::BuildCompiledResourcePath(szExeFilePath, sizeof(szExeFilePath), szFxName);
-#else
-	GetModuleFileName(NULL, szExeFilePath, MAX_PATH);
-#endif
 	ASSERT(PathFileExists(szExeFilePath));
 
 	LPD3DXEFFECT pEffect = NULL;
-	ID3DXBuffer* pBuffer = NULL;
+	ID3DXBuffer* pBuffer = NULL;	
+	//HANDLE hFile = INVALID_HANDLE_VALUE;
+	//for(int i = 0;i < 3;i ++)
 	{
 		try
 		{
-#ifdef _SHADER_SOURCE_FILE
 			LPD3DXMACRO pMacros = NULL;
 			if(ppszMacros)
 			{
@@ -79,72 +76,61 @@ HRESULT CBaseFx::Create ( LPDIRECT3DDEVICE9 pDevice,const TCHAR* szFxName, const
 				wcstombs(buf, pszErrorDesc, MAX_PATH);
 				LOG_ERROR_FORMAT("%s:D3DXCreateEffectFromFile failed because %s", __FUNCTION__, buf);
 			}
-#elif defined(_SHADER_COMPILED_FILE)
-			HANDLE hFile = CreateFile( szExeFilePath, 
-				GENERIC_READ,              // open for reading 
-				FILE_SHARE_READ,
-				NULL,                      // no security 
-				OPEN_EXISTING,
-				FILE_ATTRIBUTE_NORMAL,     // normal file 
-				NULL );                     // no attr. template 
 
-			if (hFile == INVALID_HANDLE_VALUE) 
-			{
-				CHECK_AND_LOG_WINDOWS_API_ERROR();
-				return E_FAIL;//Shader不存在
-			} 
-			DWORD dwFileSize = GetFileSize( hFile, NULL);
-			byte* sBuffer = new byte[dwFileSize + 1]; 
-			DWORD dwReaded;
-			ReadFile(hFile, sBuffer, dwFileSize, &dwReaded,NULL);   
-			sBuffer[dwReaded + 1] = L'\0';
-			CloseHandle(hFile);
+			//hFile = CreateFile( szExeFilePath, 
+			//	GENERIC_READ,              // open for reading 
+			//	FILE_SHARE_READ,
+			//	NULL,                      // no security 
+			//	OPEN_EXISTING,
+			//	FILE_ATTRIBUTE_NORMAL,     // normal file 
+			//	NULL );                     // no attr. template 
 
-			if(FAILED(hr = D3DXCreateEffect(m_pDevice,sBuffer,dwReaded,
-				NULL,
-				NULL,
-				D3DXFX_NOT_CLONEABLE,
-				NULL,
-				&pEffect,&pBuffer)))
-			{
-				CHECK_AND_LOG_DIRECTX_API_ERROR(hr);
-			}
-			else
-			{
-				m_pEffect = pEffect;
-				//SetYUVA2RGBAMatrix();
-			}
-			delete[] sBuffer;
-#else
-			int nBufferSize = 0;
-			LPVOID pSrcBuffer = GetShaderBufferAndSize(szFxName, nBufferSize);
-			if(pSrcBuffer)
-			{
-			if(FAILED(hr = D3DXCreateEffect(m_pDevice, pSrcBuffer, nBufferSize,
-				NULL,
-				NULL,
-				D3DXFX_NOT_CLONEABLE,
-				NULL,
-				&pEffect,&pBuffer)))
-			{
-				CHECK_AND_LOG_DIRECTX_API_ERROR(hr);
-			}
-			else
-			{
-				m_pEffect = pEffect;
-				//SetYUVA2RGBAMatrix();
-			}
-			delete[] pSrcBuffer;
-			}
-#endif
+			//if (hFile == INVALID_HANDLE_VALUE) 
+			//{ 
+			//	return E_FAIL;//Shader不存在
+			//} 
+			//DWORD dwFileSize = GetFileSize( hFile, NULL);
+			//static byte sBuffer[500 * 1024]; 
+			//DWORD dwReaded;
+			//ReadFile(hFile, sBuffer, dwFileSize, &dwReaded,NULL);   
+			//sBuffer[dwReaded + 1] = L'\0';
+			//CloseHandle(hFile);
+
+			//if(FAILED(hr = D3DXCreateEffect(m_pDevice,sBuffer,dwReaded,
+			//	NULL,
+			//	NULL,
+			//	/*D3DXSHADER_FORCE_PS_SOFTWARE_NOOPT|D3DXSHADER_FORCE_VS_SOFTWARE_NOOPT*/
+			//	/*D3DXFX_NOT_CLONEABLE*/(1 << 11),
+			//	NULL,
+			//	&pEffect,&pBuffer)))
+			//{
+			//	/*
+			//	if(pBuffer)
+			//	{
+			//		TCHAR buffer[1024];
+			//		LPVOID p=pBuffer->GetBufferPointer();
+			//		swprintf(buffer,L"%s",(LPTSTR)p);
+			//		SAFE_RELEASE(pBuffer);
+			//	}
+			//	*/
+			//	assert(0);
+			//}
+			//else
+			//{
+			//	m_pEffect = pEffect;
+			//	//SetYUVA2RGBAMatrix();
+
+			//	return hr;
+			//}	
+			SAFE_RELEASE(pBuffer);
 		}
 		catch (...)
 		{
 			hr = E_FAIL;
 			assert(0);
 		}	
+		//Sleep(10);
 	}
-	SAFE_RELEASE(pBuffer);
 	return hr;
 }
 
@@ -193,7 +179,17 @@ HRESULT CBaseFx::SetTexture(LPCSTR pName, LPDIRECT3DTEXTURE9 pTex)
 	if(pEffect)
 	{
 		hr = pEffect->SetTexture(pName, pTex);
-		CHECK_AND_LOG_DIRECTX_API_ERROR(hr);
+		if(FAILED(hr))
+		{
+			LPCTSTR pszErrorString = DXGetErrorString(hr);
+			LPCTSTR pszErrorDesc = DXGetErrorDescription(hr);
+			TRACE(pszErrorString);
+			TRACE(pszErrorDesc);
+
+			char buf[MAX_PATH];
+			wcstombs(buf, pszErrorDesc, MAX_PATH);
+			LOG_ERROR_FORMAT("%s:pEffect->SetTexture failed because %s", __FUNCTION__, buf);
+		}
 	}
 	return hr;
 }

@@ -6,7 +6,7 @@ float     g_alpha    :register(c0);
 float4 main( float2 texUV0  : TEXCOORD0,
              float2 texUV1  : TEXCOORD1 ): COLOR
 {
-  const float3 cMode = CS_YUVA_OFFSET.xyz;
+  const float3 cMode = CS_YUVA_OFFSET;
   float4 sColor = tex2D( g_texSource,texUV0 );
   float4 sAlpha = tex2D( g_texAlpha ,texUV1 ) * g_alpha;  
   sColor.a     = sAlpha.a;

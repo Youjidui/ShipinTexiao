@@ -4,13 +4,11 @@
 #include "../Utility/SafeDelete.h"
 #include "../Utility/PathSettings.h"
 #include "../Logger/Logging.h"
-#include "../Logger/LogDxError.h"
-#include "ShaderResources.h"
 
-//#include <DxErr.h>
-//#pragma comment(lib, "DxErr")
+#include <DxErr.h>
+#pragma comment(lib, "DxErr")
 #include <Shlwapi.h>
-//#pragma comment(lib, "Shlwapi")
+#pragma comment(lib, "Shlwapi")
 
 #pragma warning(disable:4996)
 
@@ -31,20 +29,42 @@ HRESULT CVertexShader::Create ( LPDIRECT3DDEVICE9 pDevice,
 {
 	HRESULT hr = E_FAIL;
 	m_pDevice		 = pDevice;
+	//wcscpy(m_szShaderFile,szShaderName);
 	m_strResID = szShaderName;
 
 	TCHAR szExeFilePath[MAX_PATH];
-#if defined(_SHADER_SOURCE_FILE)
+	//GetModuleFileName(NULL, szExeFilePath, MAX_PATH);
+	//LPTSTR p = szExeFilePath + lstrlen(szExeFilePath) - 1;
+	//while(*p != '/' && *p != '\\') p--;
+	//p++;
+	//lstrcpy(p, szShaderName);
 	PathSettings::BuildResourcePath(szExeFilePath, sizeof(szExeFilePath), szShaderName);
-#elif defined(_SHADER_COMPILED_FILE)
-	PathSettings::BuildCompiledResourcePath(szExeFilePath, sizeof(szExeFilePath), szShaderName);
-#else
-	GetModuleFileName(NULL, szExeFilePath, MAX_PATH);
-#endif
 	ASSERT(PathFileExists(szExeFilePath));
 
-	LPVOID pSrcBuffer = NULL;
-#ifdef _SHADER_SOURCE_FILE
+	//HANDLE hFile; 
+	//hFile = CreateFile( szShaderName, 
+	//	GENERIC_READ,              // open for reading 
+	//	FILE_SHARE_READ,
+	//	NULL,                      // no security 
+	//	OPEN_EXISTING,
+	//	FILE_ATTRIBUTE_NORMAL,     // normal file 
+	//	NULL );                     // no attr. template 
+
+	//if (hFile == INVALID_HANDLE_VALUE) 
+	//{ 
+	//	return hr;//shader²»´æÔÚ
+	//} 
+	//DWORD dwFileSize = GetFileSize( hFile, NULL);
+	//BYTE *PBuffer = new BYTE[dwFileSize];  DWORD dwReaded;
+	//ReadFile(hFile, PBuffer, dwFileSize, &dwReaded,NULL);   
+	//if(SUCCEEDED(m_pDevice->CreateVertexShader((DWORD*)PBuffer,&m_pShader)))
+	//{
+ //       hr = D3DXGetShaderConstantTable( (DWORD*)PBuffer, &m_pConstTable );
+	//}
+	//delete[] PBuffer;
+	//CloseHandle( hFile );
+
+
 	LPD3DXBUFFER pCompiledShader = NULL, pErrorInfo = NULL;
 	LPD3DXCONSTANTTABLE pConstTable = NULL;
 	LPCSTR pShaderProfile = D3DXGetVertexShaderProfile(pDevice);
@@ -58,81 +78,43 @@ HRESULT CVertexShader::Create ( LPDIRECT3DDEVICE9 pDevice,
 		for(int i = 0; i < nMacroCount; ++i)
 		{
 			pMacros[i].Name = ppszMacros[i];
-			pMacros[i].Definition = "\n";
 		}
 	}
 
 	hr  = D3DXCompileShaderFromFile(szExeFilePath, pMacros, NULL, "main", pShaderProfile, 0, &pCompiledShader, &pErrorInfo, &pConstTable);
 	if(SUCCEEDED(hr))
 	{
-		pSrcBuffer = pCompiledShader->GetBufferPointer();
-	}
-	else
-	{
-		CHECK_AND_LOG_DIRECTX_API_ERROR(hr);
-		LOG_ERROR_FORMAT("Compiling %s error:%s", szShaderName, pErrorInfo->GetBufferPointer());
-	}
-	if(pMacros)
-	{
-		delete[] pMacros;
-		pMacros = NULL;
-	}
-
-#elif defined(_SHADER_COMPILED_FILE)
-	HANDLE hFile = CreateFile( szExeFilePath, 
-		GENERIC_READ,              // open for reading 
-		FILE_SHARE_READ,
-		NULL,                      // no security 
-		OPEN_EXISTING,
-		FILE_ATTRIBUTE_NORMAL,     // normal file 
-		NULL );                     // no attr. template 
-
-	if (hFile == INVALID_HANDLE_VALUE) 
-	{
-		CHECK_AND_LOG_WINDOWS_API_ERROR();
-	}
-	else
-	{
-		DWORD dwFileSize = GetFileSize( hFile, NULL);
-		pSrcBuffer = new BYTE[dwFileSize+1];
-		DWORD dwReaded;
-		BOOL bOK = ReadFile(hFile, pSrcBuffer, dwFileSize, &dwReaded, NULL);
-		if(!bOK)
+		LPDIRECT3DVERTEXSHADER9 pShader = NULL;
+		hr = pDevice->CreateVertexShader((DWORD*)pCompiledShader->GetBufferPointer(), &pShader);
+		if(SUCCEEDED(hr))
 		{
-			CHECK_AND_LOG_WINDOWS_API_ERROR();
+			//hr = D3DXGetShaderConstantTable( (DWORD*)PBuffer, &m_pConstTable );
+			m_pConstTable = pConstTable;
+			m_pShader = pShader;
 		}
-	}
-#else
-	int nBufferSize = 0;
-	pSrcBuffer = GetShaderBufferAndSize(szShaderName, nBufferSize);
-	if(!pSrcBuffer)
-	{
-		CHECK_AND_LOG_WINDOWS_API_ERROR();
-	}
-#endif
-
-	hr = m_pDevice->CreateVertexShader((DWORD*)pSrcBuffer, &m_pShader);
-	if(SUCCEEDED(hr))
-	{
-		hr = D3DXGetShaderConstantTable( (DWORD*)pSrcBuffer, &m_pConstTable );
-		if(FAILED(hr))
+		else
 		{
-			CHECK_AND_LOG_DIRECTX_API_ERROR(hr);
+			LPCTSTR pszErrorString = DXGetErrorString(hr);
+			LPCTSTR pszErrorDesc = DXGetErrorDescription(hr);
+			TRACE(pszErrorString);
+			TRACE(pszErrorDesc);
+
+			char buf[MAX_PATH];
+			wcstombs(buf, pszErrorDesc, MAX_PATH);
+			LOG_ERROR_FORMAT("%s:pDevice->CreateVertexShader failed because %s", __FUNCTION__, buf);
 		}
 	}
 	else
 	{
-		CHECK_AND_LOG_DIRECTX_API_ERROR(hr);
-	}
+		LPCTSTR pszErrorString = DXGetErrorString(hr);
+		LPCTSTR pszErrorDesc = DXGetErrorDescription(hr);
+		TRACE(pszErrorString);
+		TRACE(pszErrorDesc);
 
-#ifdef _SHADER_SOURCE_FILE
-	SAFE_RELEASE(pCompiledShader);
-	SAFE_RELEASE(pErrorInfo);
-	SAFE_RELEASE(pConstTable);
-#else
-	delete[] pSrcBuffer;
-	pSrcBuffer = NULL;
-#endif
+		char buf[MAX_PATH];
+		wcstombs(buf, pszErrorDesc, MAX_PATH);
+		LOG_ERROR_FORMAT("%s:D3DXCompileShaderFromFile failed because %s", __FUNCTION__, buf);
+	}
 
 	return hr;
 }

@@ -1,5 +1,4 @@
-#include "..\Shaders\ColorSpaceFunc.INC"
-
+#include"..\..\..\..\TPEngine\src\Common\TPRenderX\Shaders\ColorSpaceFunc.INC"
 float4x4 g_matWorldViewProj;
 float4x4 g_matTexture;
 float4x4 g_matMask;

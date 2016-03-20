@@ -381,7 +381,7 @@ bool CTestClientDoc::Render()
 					ASSERT(pDest == pTemp);
 #endif	//BLEND_COMPOSE
 
-#define YUV_COLOR_SPACE
+//#define YUV_COLOR_SPACE
 #ifdef YUV_COLOR_SPACE
 					CVideoBuffer* pRGBDest = pDest;
 					CVideoBuffer* pRGBSrc1 = pSrc;

@@ -6,7 +6,7 @@ float4     cBack     :register (c2); //background color
 float4 main( float2 texUV: TEXCOORD0 ): COLOR
 {  
   float4 sColor  =  tex2D(STexture,texUV);
-  sColor.rgb = lerp(cBack,sColor,vAlpha).rgb;
+  sColor.rgb = lerp(cBack,sColor,vAlpha);
     
   return  sColor;
 }
