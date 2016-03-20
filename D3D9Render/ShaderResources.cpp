@@ -28,12 +28,15 @@ public:
 };
 
 CShaderResources::CShaderResources(void)
+: m_hzip(NULL)
 {
-	TCHAR szExeFilePath[MAX_PATH];
-	PathSettings::BuildResourcePath(szExeFilePath, sizeof(szExeFilePath), _T("shaders.o"));
-	ASSERT(PathFileExists(szExeFilePath));
+	TCHAR szZipFilePath[MAX_PATH];
+	BOOL bOK = PathSettings::BuildZipResourcePath(szZipFilePath, MAX_PATH);
+	if(!bOK)
+		CHECK_AND_LOG_WINDOWS_API_ERROR();
+	ASSERT(PathFileExists(szZipFilePath));
 
-	HZIP hz = OpenZip(szExeFilePath, 0);
+	HZIP hz = OpenZip(szZipFilePath, 0);
 	if (hz) 
 	{
 		m_hzip = hz;

@@ -33,7 +33,7 @@ HRESULT CBaseFx::Create ( LPDIRECT3DDEVICE9 pDevice,const TCHAR* szFxName, const
 	m_strResID          = szFxName;
 
 	//wcscpy(m_szShaderFile,szFxName);
-	HRESULT hr = S_OK;
+	HRESULT hr = E_FAIL;
 
 	TCHAR szExeFilePath[MAX_PATH];
 #if defined(_SHADER_SOURCE_FILE)
@@ -117,7 +117,11 @@ HRESULT CBaseFx::Create ( LPDIRECT3DDEVICE9 pDevice,const TCHAR* szFxName, const
 			delete[] sBuffer;
 #else
 			int nBufferSize = 0;
-			LPVOID pSrcBuffer = GetShaderBufferAndSize(szFxName, nBufferSize);
+			//LPCTSTR pszShortName = PathFindFileName(szFxName);
+			szExeFilePath[0] = '\0';
+			BOOL bOK = PathSettings::GetCompiledResFileName(szExeFilePath, MAX_PATH, szFxName);
+			ASSERT(bOK);
+			LPVOID pSrcBuffer = GetShaderBufferAndSize(szExeFilePath, nBufferSize);
 			if(pSrcBuffer)
 			{
 			if(FAILED(hr = D3DXCreateEffect(m_pDevice, pSrcBuffer, nBufferSize,

@@ -48,5 +48,5 @@
 #include <vld.h>
 
 
-#define _SHADER_COMPILED_FILE
+//#define _SHADER_COMPILED_FILE
 

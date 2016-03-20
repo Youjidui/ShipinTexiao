@@ -478,6 +478,10 @@
 			ReferencedProjectIdentifier="{8D177966-EC73-4C0C-84C8-E409258F14F5}"
 			RelativePathToProject=".\EffRings\EffRings.vcproj"
 		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{62B4AB03-1D4B-4286-A46A-B25FD33D1102}"
+			RelativePathToProject=".\Resource\Resource.vcproj"
+		/>
 	</References>
 	<Files>
 		<Filter

@@ -46,7 +46,6 @@
 #define IDD_PARAM_RIPPLE_WIPE           334
 #define IDD_PARAM_DIP_TO_COLOR          335
 #define IDD_PARAM_RINGS                 336
-#define IDD_CUBE1                       337
 #define IDD_CUBE_TRANS                  337
 #define IDC_EFFECTS                     1000
 #define IDC_PROGRESS                    1001
@@ -383,13 +382,15 @@
 #define IDC_L_AXIS_X2                   1149
 #define IDC_L_AXIS_Z2                   1150
 #define IDC_L_AXIS_Y2                   1151
+#define ID_32771                        32771
+#define ID_ZIP_RESOURCES                32772
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        337
-#define _APS_NEXT_COMMAND_VALUE         32771
+#define _APS_NEXT_COMMAND_VALUE         32773
 #define _APS_NEXT_CONTROL_VALUE         1139
 #define _APS_NEXT_SYMED_VALUE           310
 #endif

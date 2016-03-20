@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include <stdio.h>
 #include <tchar.h>
+#include <stdlib.h>
 #include "zip.h"
 
 #pragma warning(disable:4996)

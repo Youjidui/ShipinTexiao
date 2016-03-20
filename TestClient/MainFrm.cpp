@@ -8,6 +8,10 @@
 #include "MainFrm.h"
 #include "TestClientDoc.h"
 #include "CommonMessage.h"
+#include "../Utility/PathSettings.h"
+#include "../Resource/ZipResource.h"
+#include "../Logger/Logging.h"
+#include "../Logger/LogDxError.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -29,6 +33,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWndEx)
 	ON_MESSAGE(UM_SET_TARGET_BUFFER_SIZE, &CMainFrame::OnSetTargetBufferSize)
 	ON_MESSAGE(UM_SELECT_EFFECT, &CMainFrame::OnSelectEffect)
 	ON_WM_DESTROY()
+	ON_COMMAND(ID_ZIP_RESOURCES, &CMainFrame::OnZipResources)
 END_MESSAGE_MAP()
 
 static UINT indicators[] =
@@ -287,4 +292,15 @@ LRESULT CMainFrame::OnSelectEffect( WPARAM w, LPARAM l )
 	pDoc->SetEffect((LPCTSTR)w, (FxParamBase*)l);
 	pDoc->UpdateAllViews(NULL);
 	return 0;
+}
+
+void CMainFrame::OnZipResources()
+{
+	TCHAR szResPath[MAX_PATH];
+	PathSettings::GetResourceDir(szResPath, MAX_PATH);
+	TCHAR szZipFilePath[MAX_PATH];
+	BOOL bOK = PathSettings::BuildZipResourcePath(szZipFilePath, MAX_PATH);
+	lstrcat(szResPath, _T("build"));
+	ZipShaderResourcesToFile(szZipFilePath, szResPath);
+	ASSERT(PathFileExists(szZipFilePath));
 }

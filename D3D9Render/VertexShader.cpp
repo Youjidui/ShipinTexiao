@@ -104,7 +104,11 @@ HRESULT CVertexShader::Create ( LPDIRECT3DDEVICE9 pDevice,
 	}
 #else
 	int nBufferSize = 0;
-	pSrcBuffer = GetShaderBufferAndSize(szShaderName, nBufferSize);
+	//LPCTSTR pszShortName = PathFindFileName(szShaderName);
+	szExeFilePath[0] = '\0';
+	BOOL bOK = PathSettings::GetCompiledResFileName(szExeFilePath, MAX_PATH, szShaderName);
+	ASSERT(bOK);
+	pSrcBuffer = GetShaderBufferAndSize(szExeFilePath, nBufferSize);
 	if(!pSrcBuffer)
 	{
 		CHECK_AND_LOG_WINDOWS_API_ERROR();

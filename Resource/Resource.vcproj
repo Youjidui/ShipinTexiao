@@ -18,8 +18,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)_$(PlatformName)"
+			IntermediateDirectory="$(ConfigurationName)_$(PlatformName)"
 			ConfigurationType="2"
 			CharacterSet="1"
 			>
@@ -89,8 +89,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)_$(PlatformName)"
+			IntermediateDirectory="$(ConfigurationName)_$(PlatformName)"
 			ConfigurationType="2"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
@@ -228,6 +228,10 @@
 			</File>
 			<File
 				RelativePath=".\targetver.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ZipResource.h"
 				>
 			</File>
 		</Filter>
@@ -2038,7 +2042,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="$(InputPath)"
-							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)"
+							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(ProjectDir)/build/$(InputName).o"
 						/>
 					</FileConfiguration>
@@ -2052,7 +2056,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="$(InputPath)"
-							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)"
+							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(ProjectDir)/build/$(InputName).o"
 						/>
 					</FileConfiguration>
@@ -2066,7 +2070,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="$(InputPath)"
-							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)"
+							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(ProjectDir)/build/$(InputName).o"
 						/>
 					</FileConfiguration>
@@ -2080,7 +2084,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="$(InputPath)"
-							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)"
+							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(ProjectDir)/build/$(InputName).o"
 						/>
 					</FileConfiguration>
@@ -2094,7 +2098,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="$(InputPath)"
-							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)"
+							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(ProjectDir)/build/$(InputName).o"
 						/>
 					</FileConfiguration>
@@ -2108,7 +2112,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="$(InputPath)"
-							CommandLine="fxc /nologo /T ps_3_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)"
+							CommandLine="fxc /nologo /T ps_3_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(ProjectDir)/build/$(InputName).o"
 						/>
 					</FileConfiguration>
@@ -2122,7 +2126,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="$(InputPath)"
-							CommandLine="fxc /nologo /T ps_3_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)"
+							CommandLine="fxc /nologo /T ps_3_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(ProjectDir)/build/$(InputName).o"
 						/>
 					</FileConfiguration>
@@ -2136,7 +2140,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="$(InputPath)"
-							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)"
+							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(ProjectDir)/build/$(InputName).o"
 						/>
 					</FileConfiguration>
@@ -2150,7 +2154,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="$(InputPath)"
-							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)"
+							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(ProjectDir)/build/$(InputName).o"
 						/>
 					</FileConfiguration>
@@ -2164,7 +2168,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="$(InputPath)"
-							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)"
+							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(ProjectDir)/build/$(InputName).o"
 						/>
 					</FileConfiguration>
@@ -2178,7 +2182,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="$(InputPath)"
-							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)"
+							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(ProjectDir)/build/$(InputName).o"
 						/>
 					</FileConfiguration>
@@ -2192,7 +2196,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="$(InputPath)"
-							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)"
+							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(ProjectDir)/build/$(InputName).o"
 						/>
 					</FileConfiguration>
@@ -2206,7 +2210,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="$(InputPath)"
-							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)"
+							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(ProjectDir)/build/$(InputName).o"
 						/>
 					</FileConfiguration>
@@ -2220,7 +2224,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="$(InputPath)"
-							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)"
+							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(ProjectDir)/build/$(InputName).o"
 						/>
 					</FileConfiguration>
@@ -2234,7 +2238,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="$(InputPath)"
-							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)"
+							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(ProjectDir)/build/$(InputName).o"
 						/>
 					</FileConfiguration>
@@ -2248,7 +2252,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="$(InputPath)"
-							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)"
+							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(ProjectDir)/build/$(InputName).o"
 						/>
 					</FileConfiguration>
@@ -2262,7 +2266,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="$(InputPath)"
-							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)"
+							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(ProjectDir)/build/$(InputName).o"
 						/>
 					</FileConfiguration>
@@ -2276,7 +2280,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="$(InputPath)"
-							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)"
+							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(ProjectDir)/build/$(InputName).o"
 						/>
 					</FileConfiguration>
@@ -2290,7 +2294,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="$(InputPath)"
-							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)"
+							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(ProjectDir)/build/$(InputName).o"
 						/>
 					</FileConfiguration>
@@ -2304,7 +2308,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="$(InputPath)"
-							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)"
+							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(ProjectDir)/build/$(InputName).o"
 						/>
 					</FileConfiguration>
@@ -2318,7 +2322,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="$(InputPath)"
-							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)"
+							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(ProjectDir)/build/$(InputName).o"
 						/>
 					</FileConfiguration>
@@ -2332,7 +2336,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="$(InputPath)"
-							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)"
+							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(ProjectDir)/build/$(InputName).o"
 						/>
 					</FileConfiguration>
@@ -2346,7 +2350,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="$(InputPath)"
-							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)"
+							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(ProjectDir)/build/$(InputName).o"
 						/>
 					</FileConfiguration>
@@ -2360,7 +2364,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="$(InputPath)"
-							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)"
+							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(ProjectDir)/build/$(InputName).o"
 						/>
 					</FileConfiguration>
@@ -2374,7 +2378,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="$(InputPath)"
-							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)"
+							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(ProjectDir)/build/$(InputName).o"
 						/>
 					</FileConfiguration>
@@ -2388,7 +2392,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="$(InputPath)"
-							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)"
+							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(ProjectDir)/build/$(InputName).o"
 						/>
 					</FileConfiguration>
@@ -2402,7 +2406,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="$(InputPath)"
-							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)"
+							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(ProjectDir)/build/$(InputName).o"
 						/>
 					</FileConfiguration>
@@ -2416,7 +2420,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="$(InputPath)"
-							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)"
+							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(ProjectDir)/build/$(InputName).o"
 						/>
 					</FileConfiguration>
@@ -2430,7 +2434,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="$(InputPath)"
-							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)"
+							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(ProjectDir)/build/$(InputName).o"
 						/>
 					</FileConfiguration>
@@ -2444,7 +2448,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="$(InputPath)"
-							CommandLine="fxc /nologo /T ps_3_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)"
+							CommandLine="fxc /nologo /T ps_3_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(ProjectDir)/build/$(InputName).o"
 						/>
 					</FileConfiguration>
@@ -2458,7 +2462,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="$(InputPath)"
-							CommandLine="fxc /nologo /T ps_3_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)"
+							CommandLine="fxc /nologo /T ps_3_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(ProjectDir)/build/$(InputName).o"
 						/>
 					</FileConfiguration>
@@ -2472,7 +2476,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="$(InputPath)"
-							CommandLine="fxc /nologo /T ps_3_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)"
+							CommandLine="fxc /nologo /T ps_3_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(ProjectDir)/build/$(InputName).o"
 						/>
 					</FileConfiguration>
@@ -2486,7 +2490,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="$(InputPath)"
-							CommandLine="fxc /nologo /T ps_3_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)"
+							CommandLine="fxc /nologo /T ps_3_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(ProjectDir)/build/$(InputName).o"
 						/>
 					</FileConfiguration>
@@ -2500,7 +2504,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="$(InputPath)"
-							CommandLine="fxc /nologo /T ps_3_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)"
+							CommandLine="fxc /nologo /T ps_3_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(ProjectDir)/build/$(InputName).o"
 						/>
 					</FileConfiguration>
@@ -2514,7 +2518,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="$(InputPath)"
-							CommandLine="fxc /nologo /T ps_3_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)"
+							CommandLine="fxc /nologo /T ps_3_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(ProjectDir)/build/$(InputName).o"
 						/>
 					</FileConfiguration>
@@ -2528,7 +2532,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="$(InputPath)"
-							CommandLine="fxc /nologo /T ps_3_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)"
+							CommandLine="fxc /nologo /T ps_3_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(ProjectDir)/build/$(InputName).o"
 						/>
 					</FileConfiguration>
@@ -2542,7 +2546,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="$(InputPath)"
-							CommandLine="fxc /nologo /T ps_3_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)"
+							CommandLine="fxc /nologo /T ps_3_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(ProjectDir)/build/$(InputName).o"
 						/>
 					</FileConfiguration>
@@ -2556,7 +2560,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="$(InputPath)"
-							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)"
+							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(ProjectDir)/build/$(InputName).o"
 						/>
 					</FileConfiguration>
@@ -2570,7 +2574,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="$(InputPath)"
-							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)"
+							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(ProjectDir)/build/$(InputName).o"
 						/>
 					</FileConfiguration>
@@ -2584,7 +2588,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="$(InputPath)"
-							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)"
+							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(ProjectDir)/build/$(InputName).o"
 						/>
 					</FileConfiguration>
@@ -2598,7 +2602,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="$(InputPath)"
-							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)"
+							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(ProjectDir)/build/$(InputName).o"
 						/>
 					</FileConfiguration>
@@ -2612,7 +2616,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="$(InputPath)"
-							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)"
+							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(ProjectDir)/build/$(InputName).o"
 						/>
 					</FileConfiguration>
@@ -2626,7 +2630,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="$(InputPath)"
-							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)"
+							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(ProjectDir)/build/$(InputName).o"
 						/>
 					</FileConfiguration>
@@ -2640,7 +2644,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="$(InputPath)"
-							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)"
+							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(ProjectDir)/build/$(InputName).o"
 						/>
 					</FileConfiguration>
@@ -2654,7 +2658,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="$(InputPath)"
-							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)"
+							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(ProjectDir)/build/$(InputName).o"
 						/>
 					</FileConfiguration>
@@ -2668,7 +2672,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="$(InputPath)"
-							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)"
+							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(ProjectDir)/build/$(InputName).o"
 						/>
 					</FileConfiguration>
@@ -2682,7 +2686,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="$(InputPath)"
-							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)"
+							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(ProjectDir)/build/$(InputName).o"
 						/>
 					</FileConfiguration>
@@ -2696,7 +2700,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="$(InputPath)"
-							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)"
+							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(ProjectDir)/build/$(InputName).o"
 						/>
 					</FileConfiguration>
@@ -2710,7 +2714,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="$(InputPath)"
-							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)"
+							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(ProjectDir)/build/$(InputName).o"
 						/>
 					</FileConfiguration>
@@ -2724,12 +2728,32 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="$(InputPath)"
-							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)"
+							CommandLine="fxc /nologo /T fx_2_0  /Fo&quot;$(ProjectDir)/build/$(InputName).o&quot; $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(ProjectDir)/build/$(InputName).o"
 						/>
 					</FileConfiguration>
 				</File>
 			</Filter>
+		</Filter>
+		<Filter
+			Name="zip_utils"
+			>
+			<File
+				RelativePath="..\zip_utils_src\unzip.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\zip_utils_src\unzip.h"
+				>
+			</File>
+			<File
+				RelativePath="..\zip_utils_src\zip.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\zip_utils_src\zip.h"
+				>
+			</File>
 		</Filter>
 		<File
 			RelativePath=".\ReadMe.txt"
