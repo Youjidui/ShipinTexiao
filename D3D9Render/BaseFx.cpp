@@ -94,10 +94,10 @@ HRESULT CBaseFx::Create ( LPDIRECT3DDEVICE9 pDevice,const TCHAR* szFxName, const
 				return E_FAIL;//Shader²»´æÔÚ
 			} 
 			DWORD dwFileSize = GetFileSize( hFile, NULL);
-			byte* sBuffer = new byte[dwFileSize + 1]; 
+			byte* sBuffer = new byte[dwFileSize + 2]; 
 			DWORD dwReaded;
 			ReadFile(hFile, sBuffer, dwFileSize, &dwReaded,NULL);   
-			sBuffer[dwReaded + 1] = L'\0';
+			sBuffer[dwReaded + 1] = _T('\0');
 			CloseHandle(hFile);
 
 			if(FAILED(hr = D3DXCreateEffect(m_pDevice,sBuffer,dwReaded,

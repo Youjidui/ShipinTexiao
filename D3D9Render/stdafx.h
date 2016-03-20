@@ -46,3 +46,7 @@
 #pragma comment(lib, "dxguid")
 
 #include <vld.h>
+
+
+#define _SHADER_COMPILED_FILE
+
