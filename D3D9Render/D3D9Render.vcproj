@@ -305,6 +305,10 @@
 			ReferencedProjectIdentifier="{739DB65F-C89F-45FF-9690-AB025CA7DBF9}"
 			RelativePathToProject=".\Utility\Utility.vcproj"
 		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{1B9A854C-74B7-42E1-B7E6-DF9EC761EA4C}"
+			RelativePathToProject=".\Logger\Logger.vcproj"
+		/>
 	</References>
 	<Files>
 		<Filter
@@ -386,6 +390,10 @@
 			</File>
 			<File
 				RelativePath=".\ResourceManager.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ShaderResources.cpp"
 				>
 			</File>
 			<File
@@ -495,6 +503,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ShaderResources.h"
+				>
+			</File>
+			<File
 				RelativePath=".\stdafx.h"
 				>
 			</File>
@@ -538,6 +550,26 @@
 			</File>
 			<File
 				RelativePath=".\res\D3D9Render.rc2"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="zip_utils"
+			>
+			<File
+				RelativePath="..\zip_utils_src\unzip.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\zip_utils_src\unzip.h"
+				>
+			</File>
+			<File
+				RelativePath="..\zip_utils_src\zip.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\zip_utils_src\zip.h"
 				>
 			</File>
 		</Filter>

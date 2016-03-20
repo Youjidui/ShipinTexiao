@@ -1,12 +1,7 @@
 #pragma once
 
 #include <string>
-
-#ifdef LOGGING_LIBRARY_EXPORT
-#define LOGGING_CLASS_EXPORT __declspec(dllexport)
-#else
-#define LOGGING_CLASS_EXPORT __declspec(dllimport)
-#endif
+#include "LoggingExportMacros.h"
 
 class LOGGING_CLASS_EXPORT Logging
 {
