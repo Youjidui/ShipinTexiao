@@ -8,7 +8,7 @@
 #include "../Logger/Logging.h"
 #include "../Logger/LogDxError.h"
 #include "ShaderResources.h"
-
+#include <dxerr.h>
 #include <Shlwapi.h>
 //#pragma comment(lib, "Shlwapi")
 

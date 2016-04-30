@@ -96,9 +96,11 @@ HRESULT CBarmWipe::Draw(CVideoBuffer* pMaskDef, BasicWipeFxParam* pParam)
 
 			float fOff0 = CalcOffset(pParam, 0 + nAdd);
 			float fOff1 = CalcOffset(pParam, 1 + nAdd);
-			fOffset = min(fOff0, fOff1);
+			//fOffset = min(fOff0, fOff1);
+			fOffset = fOff0;
 			hr = Draw(pMask0, pParam, 0 + nAdd, fOffset);
 			ASSERT(SUCCEEDED(hr));
+			fOffset = fOff1;
 			hr = Draw(pMask1, pParam, 1 + nAdd, fOffset);
 			ASSERT(SUCCEEDED(hr));
 
@@ -165,7 +167,7 @@ float	CBarmWipe::CalcOffset(BasicWipeFxParam* pParamRaw,int nPattern)
 	case 0:		
 		break;
 	case 1:
-		D3DXMatrixRotationZ(&matType,D3DXToRadian(90));		
+		D3DXMatrixRotationZ(&matType,D3DXToRadian(90));
 		break;
 	case 2:
 		D3DXMatrixRotationZ(&matType,- (D3DX_PI  / 2.0f - atan2(yMax,xMax)));			

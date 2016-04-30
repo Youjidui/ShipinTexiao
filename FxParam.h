@@ -820,3 +820,27 @@ struct RippleWipeFxParam : public FxParamBase
 
 	RippleWipeFxParam() : fRipple_Width(0.3f), fNum_Wave(5.0f), fAmplitude(0.5f), fEllipticity(0.18f), fCenterX(0.0f), fCenterY(-0.5f), fDistortion(0.138f), fBrightness(0.5f), fLight_Angle(135.f) {}
 };
+
+//EffectRenderAll.h
+
+struct TPERParamSmoothNoise
+{
+	float fAmplitude;	// [-1,1]
+	float fFrequency;	// [0,1]
+	float fPhase;		// [-infinite,infinite]
+	UINT  uInterpolationType;	// 0 Near; 1 Linear; 2 Lagrange
+};
+
+struct TPERParamMelt
+{
+	float fAmplitude;	// [0,1]
+	float fPosition;	// height[-0.5f,0.5f]
+	float fRotateRadian;
+	float fSlantRadian;	// corresponds to degree[-30,30]
+	float fRandomPix;	// [0,1]
+	float fDensity;		// [0,1]
+	float fDensityPos;	// [0,1]
+	bool  bSecondeFiled;
+	TPERParamSmoothNoise paramSmoothNoise;
+};
+

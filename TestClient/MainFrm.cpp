@@ -182,6 +182,8 @@ BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
 	// TODO: 在此处通过修改
 	//  CREATESTRUCT cs 来修改窗口类或样式
 
+	OnZipResources();
+
 	return TRUE;
 }
 
@@ -300,7 +302,10 @@ void CMainFrame::OnZipResources()
 	PathSettings::GetResourceDir(szResPath, MAX_PATH);
 	TCHAR szZipFilePath[MAX_PATH];
 	BOOL bOK = PathSettings::BuildZipResourcePath(szZipFilePath, MAX_PATH);
-	lstrcat(szResPath, _T("build"));
-	ZipShaderResourcesToFile(szZipFilePath, szResPath);
-	ASSERT(PathFileExists(szZipFilePath));
+	if(!PathFileExists(szZipFilePath))
+	{
+		lstrcat(szResPath, _T("build"));
+		ZipShaderResourcesToFile(szZipFilePath, szResPath);
+		ASSERT(PathFileExists(szZipFilePath));
+	}
 }

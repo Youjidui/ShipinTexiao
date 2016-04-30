@@ -52,7 +52,7 @@ public:
 	CComboBox m_ctrlEffects;
 	CSliderCtrl m_ctrlProgress;
 	CParamBlurDlg m_blurDlg;
-	CParamColorKeyDlg m_colorKeyDlg;
+	//CParamColorKeyDlg m_colorKeyDlg;
 	CParamAmoebaWipeDlg m_amoebaWipeDlg;
 	CParamBarmWipeDlg m_barmWipeDlg;
 	CParamFanWipeDlg m_fanWipeDlg;

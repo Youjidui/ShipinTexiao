@@ -348,7 +348,9 @@ CVideoBuffer* CWipeRenderBase::RenderDivide(CVideoBuffer* pMask, CVideoBuffer* p
 		hr = m_pEffect->EndPass();
 		ASSERT(SUCCEEDED(hr));
 
-		//m_pResMan->DumpResourceToFile(pDestMaskDef->handle,L"c:\\mask.dds");				
+		//TCHAR szFilename[MAX_PATH];
+		//_stprintf(szFilename, _T("Divide_pass_%d_Misc_%f_%f.dds"), uPass, vMisc.y, vMisc.z);
+		//D3DXSaveSurfaceToFile(szFilename, D3DXIFF_DDS, pMaskDest->GetSurface(), NULL, NULL);
 	}
 	hr = m_pEffect->End();
 	ASSERT(SUCCEEDED(hr));
@@ -409,7 +411,7 @@ void CWipeRenderBase::GenerateDivideTexture(LPDIRECT3DTEXTURE9	pDivideTexture,in
 				nNumRow = 1;
 			}		
 			for(int j = 0; j < nNumRow && nIndex < nBuffWidth;j ++)
-				pCr[nIndex++] = nValue;		
+				pCr[nIndex++] = nValue;
 		}
 		pDivideTexture->UnlockRect(0);
 	}
@@ -431,7 +433,7 @@ void CWipeRenderBase::GenerateDivideTexture(BasicWipeFxParam* pParam)
 		if(m_privateData.m_fDivideHorValue != fWidth)
 		{
 			m_privateData.m_fDivideHorValue = fWidth;
-			GenerateDivideTexture(m_privateData.m_pDivideHorTexture->GetTexture(), nEditHeight, fWidth);
+			GenerateDivideTexture(m_privateData.m_pDivideVertTexture->GetTexture(), nEditHeight, fWidth);
 		}
 		break;	
 	}

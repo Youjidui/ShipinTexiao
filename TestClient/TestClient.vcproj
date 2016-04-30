@@ -367,10 +367,6 @@
 			RelativePathToProject=".\Utility\Utility.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{9C09434E-7AD7-4AFD-A28C-FD4A5C37316E}"
-			RelativePathToProject=".\EffColorKey\EffColorKey.vcproj"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{28113454-E158-4135-BB89-298A1C09BB0E}"
 			RelativePathToProject=".\SonyBlur\SonyBlur.vcproj"
 		/>
@@ -535,10 +531,6 @@
 			</File>
 			<File
 				RelativePath=".\ParamChromaKeyDlg.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\ParamColorKeyDlg.cpp"
 				>
 			</File>
 			<File
@@ -729,10 +721,6 @@
 			</File>
 			<File
 				RelativePath=".\ParamChromaKeyDlg.h"
-				>
-			</File>
-			<File
-				RelativePath=".\ParamColorKeyDlg.h"
 				>
 			</File>
 			<File

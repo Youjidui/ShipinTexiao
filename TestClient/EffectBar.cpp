@@ -55,14 +55,14 @@ void CEffectBar::OnBnClickedParameters()
 		{
 
 		}
-		else if(FX_COLOR_KEY == str)
-		{
-			if(!m_colorKeyDlg.GetSafeHwnd())
-			{
-				m_colorKeyDlg.Create(CParamColorKeyDlg::IDD);
-			}
-			m_colorKeyDlg.ShowWindow(SW_SHOW);
-		}
+		//else if(FX_COLOR_KEY == str)
+		//{
+		//	if(!m_colorKeyDlg.GetSafeHwnd())
+		//	{
+		//		m_colorKeyDlg.Create(CParamColorKeyDlg::IDD);
+		//	}
+		//	m_colorKeyDlg.ShowWindow(SW_SHOW);
+		//}
 		else if(FX_SONY_BLUR == str)
 		{
 			if(!m_blurDlg.GetSafeHwnd())

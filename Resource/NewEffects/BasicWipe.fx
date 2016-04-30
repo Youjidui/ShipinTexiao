@@ -173,8 +173,8 @@ float4 PS_DIVIDE(PS_DIVIDE_INPUT input,
 	else
 		oColor = tex2D(g_samColor,input.vTex);	   
 	
-	if(any(oColor.a) && !any(oColor.rgb))
-		discard;	
+	//if(any(oColor.a) && !any(oColor.rgb))
+	//	discard;
 	return oColor;
 }
 //Multiple

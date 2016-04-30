@@ -381,7 +381,7 @@ bool CTestClientDoc::Render()
 					ASSERT(pDest == pTemp);
 #endif	//BLEND_COMPOSE
 
-#define YUV_COLOR_SPACE
+//#define YUV_COLOR_SPACE
 #ifdef YUV_COLOR_SPACE
 					CVideoBuffer* pRGBDest = pDest;
 					CVideoBuffer* pRGBSrc1 = pSrc;
@@ -465,14 +465,14 @@ bool CTestClientDoc::EffectRender(CVideoBuffer* pDest, CVideoBuffer* pSrc, CVide
 			bOK = eff.Render(pDest, pSrc, m_pEffectParam);
 		}
 	}
-	else if(FX_COLOR_KEY == m_strEffectName)
-	{
-		ColorKeyRender eff;
-		if(eff.Init(m_pRenderEngine))
-		{
-			bOK = eff.Render(pDest, pSrc, (ColorKeyParam*)m_pEffectParam);
-		}
-	}
+	//else if(FX_COLOR_KEY == m_strEffectName)
+	//{
+	//	ColorKeyRender eff;
+	//	if(eff.Init(m_pRenderEngine))
+	//	{
+	//		bOK = eff.Render(pDest, pSrc, (ColorKeyParam*)m_pEffectParam);
+	//	}
+	//}
 	else if(FX_CHROMA_KEY== m_strEffectName)
 	{
 		ChromaKeyRender eff;
