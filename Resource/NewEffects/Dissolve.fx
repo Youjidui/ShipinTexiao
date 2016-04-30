@@ -187,6 +187,26 @@ void PixSceneYUYV_AP(float2 Tex:TEXCOORD0,
 
 }
 
+float4 PixSceneSubtraction(float2 Tex:TEXCOORD0):COLOR0
+{
+	float4 color0 = tex2D(g_samColor0,Tex);
+	float4 color1 = tex2D(g_samColor1,Tex);
+	
+	color0.a *= g_fAlphaBuffer.x;
+	color1.a *= g_fAlphaBuffer.y;	
+	
+	float4 tempr2 = color0 + color1 - color0 * color1 / g_subtrcontr;
+	float p1 = max(0.f, 1.f - g_mix.z * 2.f);
+	float p2 = min(g_mix.z * 2.f, 2.f - g_mix.z * 2.f);
+	float p3 = max(0, g_mix.z * 2.f - 1.f);
+	float4 tempr3 = color0 * p1 + tempr2 * p2 + color1 * p3;
+	
+	float4 tempr4 = saturate(tempr3);
+	tempr4.a = color0.a * (1 - g_mix.z) + color1.a * g_mix.z;
+    return tempr4;
+		
+}
+
 float4 PixSceneSubtractionYUVA(float2 Tex:TEXCOORD0):COLOR0
 {
 	float4 color0 = tex2D(g_samColor0,Tex) - CS_YUVA_OFFSET;
@@ -212,6 +232,22 @@ float4 PixSceneSubtractionYUVA(float2 Tex:TEXCOORD0):COLOR0
 	tempr4 = CS_RGBA2YUVA(tempr4);
     return tempr4+ CS_YUVA_OFFSET;
 		
+}
+
+float4 PixSceneSandStorm(float2 Tex:TEXCOORD0):COLOR0
+{
+	float4 color0 = tex2D(g_samColor0,Tex);
+	float4 color1 = tex2D(g_samColor1,Tex);
+	
+	color0.a *= g_fAlphaBuffer.x;
+	color1.a *= g_fAlphaBuffer.y;	
+	
+	float g_randnum = GPURand(Tex, g_ftime + 0.6);
+	
+	float4 p1 = max(0,min(1,g_randnum + g_mix.z * 2 - 1));
+	
+	float4 descolor = min(1,max(0,(color1 * p1 + color0 * (1 - p1)))/* * 255 / 256 */);
+	return descolor;
 }
 
 float4 PixSceneSandStormYUVA(float2 Tex:TEXCOORD0):COLOR0
@@ -291,7 +327,20 @@ technique RenderYUVA
 	}
 }
 
-technique RenderSubtraction
+technique RenderSubtractionRGBA
+{
+	PASS P0
+	{
+		VertexShader = compile vs_3_0 VertScene();
+		PixelShader = compile ps_3_0	PixSceneSubtraction();
+		CullMode=None;
+		AlphaBlendEnable = False;
+		SrcBlend = SrcAlpha;
+		DestBlend = InvSrcAlpha;
+	}
+}
+
+technique RenderSubtractionYUVA
 {
 	PASS P0
 	{
@@ -304,7 +353,20 @@ technique RenderSubtraction
 	}
 }
 
-technique RenderSandStorm
+technique RenderSandStormRGBA
+{
+	PASS P0
+	{
+		VertexShader = compile vs_3_0 VertScene();
+		PixelShader = compile ps_3_0	PixSceneSandStorm();
+		CullMode=None;
+		AlphaBlendEnable = False;
+		SrcBlend = SrcAlpha;
+		DestBlend = InvSrcAlpha;
+	}
+}
+
+technique RenderSandStormYUVA
 {
 	PASS P0
 	{

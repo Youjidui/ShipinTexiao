@@ -167,11 +167,17 @@ bool CDissolveRender::Render(CVideoBuffer* pDest, CVideoBuffer *pSrcA, CVideoBuf
 	}
 	else if(pParam->prm_mixType == 3)
 	{
-		m_pEffect->SetTechnique("RenderSubtraction");
+		if(bYUVA)
+			m_pEffect->SetTechnique("RenderSubtractionYUVA");
+		else
+			m_pEffect->SetTechnique("RenderSubtractionRGBA");
 	}
 	else
 	{
-		m_pEffect->SetTechnique("RenderSandStorm");
+		if(bYUVA)
+			m_pEffect->SetTechnique("RenderSandStormYUVA");
+		else
+			m_pEffect->SetTechnique("RenderSandStormRGBA");
 	}
 
 	// begin&end scene
