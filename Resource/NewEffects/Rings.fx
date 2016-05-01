@@ -18,6 +18,7 @@ sampler_state
 
 texture g_txShape;
 
+#define __NV8__
 #ifdef __NV8__
 sampler g_samShape = 
 sampler_state

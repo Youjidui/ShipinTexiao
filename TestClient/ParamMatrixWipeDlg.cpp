@@ -23,7 +23,7 @@ void CParamMatrixWipeDlg::DoDataExchange(CDataExchange* pDX)
 	_baseClass::DoDataExchange(pDX);
 }
 
-BEGIN_MESSAGE_MAP(CParamMatrixWipeDlg, CDialog)
+BEGIN_MESSAGE_MAP(CParamMatrixWipeDlg, CParamBasicWipeDlg)
 	ON_WM_HSCROLL()
 END_MESSAGE_MAP()
 
