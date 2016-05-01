@@ -160,6 +160,10 @@ HRESULT CEdgeVOpenWipe::Draw(CVideoBuffer* pMaskDef, BasicWipeFxParam* pParam)
 		}
 		hr = m_pEffect->EndPass();
 		ASSERT(SUCCEEDED(hr));
+
+		//TCHAR szFilename[MAX_PATH];
+		//_stprintf(szFilename, _T("EdgeVOpenWipe_pass=%d.dds"), uPass);
+		//D3DXSaveSurfaceToFile(szFilename, D3DXIFF_DDS, pMaskDef->GetSurface(), NULL, NULL);
 	}
 	hr = m_pEffect->End();
 	ASSERT(SUCCEEDED(hr));

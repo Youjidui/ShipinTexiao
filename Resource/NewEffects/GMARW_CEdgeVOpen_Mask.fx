@@ -65,7 +65,8 @@ float4 PS(float2 Tex:TEXCOORD0,
 		  float4 Color:COLOR0,
 		  uniform int nType):COLOR0
 {
-	float4 retColor = 0.0f;
+	//float4 retColor = 0.0f;
+	float4 retColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
 	
 	if(nType == 1) // Border
 	  retColor = float4(1.0f,0.0f,0.0f,1.0f);
