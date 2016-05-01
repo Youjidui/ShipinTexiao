@@ -140,12 +140,13 @@ void PS(  float4 Color:COLOR0,
 		  uniform int nType)
 {
 	if(nType == 0)
-	{		
-		//oColor = 0.0f;
-		oColor = 1.0f;
+	{
+		//oColor = 1.0f;
+		oColor = float4(0.f, 0.f, 0.f, 1.f);
 		return;
 	}
-	oColor = 1;		
+	//oColor = 1;
+	oColor = 0;
 	float fAlpha = max(0.008f,Color.a + 0.008);
 	if(g_bInvert)
 	{

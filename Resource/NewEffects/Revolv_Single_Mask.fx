@@ -32,7 +32,7 @@ void VS(float4 vPos:POSITION,
 				uniform int nType
 				)
 {
-	oColor = 0;		
+	oColor = 0;
 	
 	float fSign = (vPos.z > 0?1.0f : -1.0f);
 		
@@ -98,19 +98,21 @@ void VS(float4 vPos:POSITION,
 	}
 	else
 		oPos = mul(float4(pos,0.0f,1.0f),g_matWorldViewProj);	
-}	
+}
+
 // r Border ------------b Blend With Current -------------g Blend With Back
 void PS( float4 Color:COLOR0,
 		  out float4 oColor:COLOR0,		  
 		  uniform int nType)
 {		
 	if(nType == 0)
-	{		
-		//oColor = 0.0f;
-		oColor = 1.0f;
+	{
+		//oColor = 1.0f;
+		oColor = float4(0.f, 0.f, 0.f, 1.f);
 		return;
 	}
-	oColor = 1;		
+	//oColor = 1;
+	oColor = 0;
 	float fAlpha = max(0.008f,Color.a + 0.008);
 	if(g_bInvert)
 	{

@@ -115,12 +115,12 @@ HRESULT CDoubleRevolvWipe::Draw(CVideoBuffer* pMaskDef, BasicWipeFxParam* pParam
 		if(pParam->structPattern.fBorderWidth >= pParam->structPattern.fSoftWidth)
 		{
 			aPass[1] = TRUE;
-			if( bDrawSoft)		
+			if( bDrawSoft)
 				aPass[3] = aPass[4] = TRUE;
 		}
 		else
 		{
-			aPass[3] = aPass[4] = aPass[5] = aPass[6] = TRUE;			
+			aPass[3] = aPass[4] = aPass[5] = aPass[6] = TRUE;
 		}
 	}			
 	else if(bDrawSoft)
@@ -154,7 +154,7 @@ HRESULT CDoubleRevolvWipe::Draw(CVideoBuffer* pMaskDef, BasicWipeFxParam* pParam
 	//m_pDevice->Clear(0,NULL,D3DCLEAR_STENCIL|D3DCLEAR_ZBUFFER,0x0,1.0f,0.0f);
 	UINT cPass , uPass;	
 	for(int i = 0;i < 4; i ++)
-	{		
+	{
 		if(bDrawSoft)
 		{
 			bOK = m_pEngine->SetRenderTarget(pMaskDef);

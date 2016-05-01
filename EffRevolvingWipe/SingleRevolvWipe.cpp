@@ -246,6 +246,14 @@ HRESULT CSingleRevolvWipe::Draw(CVideoBuffer* pMaskDef, BasicWipeFxParam* pParam
 
 			hr = m_pEffect->EndPass();
 			ASSERT(SUCCEEDED(hr));
+
+			//debug output
+			//TCHAR szFilename[MAX_PATH];
+			//_stprintf(szFilename, _T("SingleRevolvWipe_i=%d_pass=%d.dds"), i, uPass);
+			//CVideoBuffer* pBuf = pMaskDef;
+			//if(bDrawSoft)
+			//	pBuf = (pTempDef[i]);
+			//D3DXSaveSurfaceToFile(szFilename, D3DXIFF_DDS, pBuf->GetSurface(), NULL, NULL);
 		}
 		aPass[0] = FALSE;
 		hr = m_pEffect->End();
