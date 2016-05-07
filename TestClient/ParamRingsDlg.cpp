@@ -78,7 +78,7 @@ BOOL CParamRingsDlg::OnInitDialog()
 	if(m_pParam)	pCtrl->SetPos(m_pParam->fRandomPixel * decimal_point);
 	pCtrl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER_nPattern);
 	pCtrl->SetRange(0, 8);
-	if(m_pParam)	pCtrl->SetPos(m_pParam->nPattern * decimal_point);
+	if(m_pParam)	pCtrl->SetPos(m_pParam->nPattern);
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 	// 异常: OCX 属性页应返回 FALSE
@@ -126,7 +126,7 @@ void CParamRingsDlg::OnHScroll(UINT nSBCode, UINT uPos, CScrollBar* pScrollBar)
 		m_pParam->fRandomPixel = nPos / decimal_point;
 		break;
 	case IDC_SLIDER_nPattern:
-		m_pParam->nPattern = nPos / decimal_point;
+		m_pParam->nPattern = nPos;
 		break;
 	}
 

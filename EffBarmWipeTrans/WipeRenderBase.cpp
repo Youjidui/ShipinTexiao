@@ -185,7 +185,7 @@ CVideoBuffer* CWipeRenderBase::RenderMultiple(CVideoBuffer* pMask, CVideoBuffer*
 	else
 		matTex._32 -= 0.4f / biInMask.nAllocHeight;
 
-	D3DXVECTOR4 vMultiple = D3DXVECTOR4(biInMask.nWidth / 1.0f / biInMask.nWidth,
+	D3DXVECTOR4 vMultiple = D3DXVECTOR4(biInMask.nWidth / 1.0f / biMaskDest.nWidth,
 		biInMask.nHeight / 1.0f / biMaskDest.nHeight,
 		pParam->structModify.nMultipleNumberX * 1.f, pParam->structModify.nMultipleNumberY * 1.f);
 	if(pParam->structModify.bOverlap || pParam->structModify.nMultipleType == 2)
@@ -224,6 +224,9 @@ CVideoBuffer* CWipeRenderBase::RenderMultiple(CVideoBuffer* pMask, CVideoBuffer*
 
 	UINT cPass = 0;
 	UINT uPass = pParam->structModify.nMultipleType - 1;
+	if(pParam->structModify.bOverlap)
+		uPass += 3;
+
 	hr = m_pEffect->Begin(&cPass,0);
 	ASSERT(SUCCEEDED(hr));
 	hr = m_pEffect->BeginPass(uPass);
@@ -238,8 +241,9 @@ CVideoBuffer* CWipeRenderBase::RenderMultiple(CVideoBuffer* pMask, CVideoBuffer*
 	ASSERT(SUCCEEDED(hr));
 
 	m_pEffect->SetTexture("g_txColor", NULL);
-	//pMaskDef = pMaskDef1;
-	//hMask = hMask1;
+
+	//TODO: remove debug output
+
 	return pMaskDest;
 #ifdef _SHAPE_WIPE
 	pMaskDef->rcImage = rcMask;
@@ -348,9 +352,10 @@ CVideoBuffer* CWipeRenderBase::RenderDivide(CVideoBuffer* pMask, CVideoBuffer* p
 		hr = m_pEffect->EndPass();
 		ASSERT(SUCCEEDED(hr));
 
-		//TCHAR szFilename[MAX_PATH];
-		//_stprintf(szFilename, _T("Divide_pass_%d_Misc_%f_%f.dds"), uPass, vMisc.y, vMisc.z);
-		//D3DXSaveSurfaceToFile(szFilename, D3DXIFF_DDS, pMaskDest->GetSurface(), NULL, NULL);
+		//TODO: remove debug output
+		TCHAR szFilename[MAX_PATH];
+		_stprintf(szFilename, _T("Divide_pass_%d_Misc_x=%f_y=%f_z=%f.dds"), uPass, vMisc.x, vMisc.y, vMisc.z);
+		D3DXSaveSurfaceToFile(szFilename, D3DXIFF_DDS, pMaskDest->GetSurface(), NULL, NULL);
 	}
 	hr = m_pEffect->End();
 	ASSERT(SUCCEEDED(hr));
