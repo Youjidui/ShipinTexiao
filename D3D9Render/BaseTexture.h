@@ -109,4 +109,5 @@ protected:
 };
 
 extern bool GenerateMatrix( CVideoBuffer* pBuffer, D3DXMATRIX* matDummy, MAT_STYLE matStyle);
+extern bool GenerateMatrix(const VideoBufferInfo& bi, D3DXMATRIX* matDummy , MAT_STYLE matStyle);
 extern LPDIRECT3DTEXTURE9 CreateTexture(LPDIRECT3DDEVICE9 pDevice, CVideoBuffer* pSrc);

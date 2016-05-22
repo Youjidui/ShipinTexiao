@@ -26,7 +26,7 @@ protected:
 protected:
 	CVideoBuffer* RenderMultiple(CVideoBuffer* pDest, CVideoBuffer* pSrcDef, BasicWipeFxParam* pParam);
 	CVideoBuffer* RenderDivide(CVideoBuffer* pDest, CVideoBuffer* pSrcDef, BasicWipeFxParam* pParam);
-	CVideoBuffer* RenderMulitDivide(CVideoBuffer* pDestDef, CVideoBuffer* pSrcDef, BasicWipeFxParam* pParam, BOOL bProcessMultiple, BOOL bProcessDivide);
+	CVideoBuffer* RenderMultiDivide(CVideoBuffer* pDestDef, CVideoBuffer* pSrcDef, BasicWipeFxParam* pParam, BOOL bProcessMultiple, BOOL bProcessDivide);
 	void GenerateDivideTexture(BasicWipeFxParam* pParam);
 	void GenerateDivideTexture(LPDIRECT3DTEXTURE9	pDivideTexture,int nBuffWidth, float fDivideWidth);
 	bool RenderDrawOut(CVideoBuffer* pDstDef, CVideoBuffer* pSrcDefA, CVideoBuffer* pSrcDefB, CVideoBuffer* pMaskDef, BasicWipeFxParam* pParam);

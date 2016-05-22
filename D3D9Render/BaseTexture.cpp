@@ -11,11 +11,16 @@ bool GenerateMatrix(CVideoBuffer* pBuffer, D3DXMATRIX* matDummy , MAT_STYLE matS
 		return false;
 
 	const VideoBufferInfo& bi = pBuffer->GetVideoBufferInfo();
+	return GenerateMatrix(bi, matDummy, matStyle);
+}
+
+bool GenerateMatrix(const VideoBufferInfo& bi, D3DXMATRIX* matDummy , MAT_STYLE matStyle)
+{
 	bool bReverse = false;
 
 	D3DXMatrixIdentity( matDummy );
 	float m_fu =  0.5f/(float)(bi.nAllocWidth);
-	float m_fv =  0.5f/(float)(bi.nAllocHeight);      	
+	float m_fv =  0.5f/(float)(bi.nAllocHeight);
 	float fv = bReverse ? -m_fv:m_fv;
 	switch(matStyle)
 	{

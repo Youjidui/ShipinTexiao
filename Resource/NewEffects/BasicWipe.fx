@@ -232,9 +232,10 @@ PS_MASK_INPUT VS_Multiple(VS_INSTANCE_INPUT input,uniform  int nType)
 void PS_Multiple_Overlap(PS_MASK_INPUT In,out float4 oColor:COLOR0,out float depth:DEPTH)
 {
 	oColor = tex2D(g_samColor,In.vTex);	
-	
- 	if(oColor.a > 0.0f && !any(oColor.rgb))
- 		discard; 			
+
+//the color in the mask template is ARGB(!0,0,0,0)
+//	if(oColor.a > 0.0f && !any(oColor.rgb))
+// 		discard; 			
 			
 	depth = 0.9f;
 
@@ -245,7 +246,7 @@ void PS_Multiple_Overlap(PS_MASK_INPUT In,out float4 oColor:COLOR0,out float dep
 	else if(oColor.g > 0.0f)
 		depth = 0.2f + oColor.a * 0.1f;
 	else if(oColor.r > 0.0f)
-		depth = 0.4f + oColor.r * 0.1f;
+		depth = 0.4f + oColor.a * 0.1f;
 	else if(oColor.b > 0.0f)
 		depth = 0.7f - oColor.a * 0.1f;
 	
@@ -254,8 +255,9 @@ void PS_Multiple_Genereal(PS_MASK_INPUT In,out float4 oColor:COLOR0)
 {
 	oColor = tex2D(g_samColor,In.vTex);	
 	
-	if(oColor.a > 0.0f && !any(oColor.rgb))
-		discard;	
+//the color in the mask template is ARGB(1,0,0,0)
+//	if(oColor.a > 0.0f && !any(oColor.rgb))
+//		discard;	
 }
 ///////////////////////////Picture//////////////////////////////////
 //Vs
