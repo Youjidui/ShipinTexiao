@@ -62,23 +62,20 @@ bool CCubeTransRender::Render( CVideoBuffer* pDest, CVideoBuffer *pSrcA, CVideoB
 #ifdef _3D_CUBE_TRANS
 	if(pParam->bReverse)
 		std::swap(pSrcA, pSrcB);
-#endif	
-	CVideoBuffer* pSrcDef = pSrcA;	
-	const VideoBufferInfo& srcBufInfo = pSrcDef->GetVideoBufferInfo();
+#endif
 
+	CVideoBuffer* pMipMap = NULL;
+#ifdef _3D_CUBE_TRANS
+	CVideoBuffer* pMipMap1 = NULL;
+#endif
+	{
+	CVideoBuffer* pSrcDef = pSrcA;	
 	//CBaseTexture * pMipMap = m_pResMan->GetTemp_Video(0,TRUE);
-	VideoBufferInfo mipMapInfo = pSrcDef->GetVideoBufferInfo();
+	VideoBufferInfo mipMapInfo = pDest->GetVideoBufferInfo();
 	mipMapInfo.eUsage = VideoBufferInfo::_IN_OUT_WITH_MIPMAP;
-	CVideoBuffer* pMipMap = pVM->CreateVideoBuffer(mipMapInfo);
+	pMipMap = pVM->CreateVideoBuffer(mipMapInfo);
 	ASSERT(pMipMap);
 
-#ifdef _3D_CUBE_TRANS
-	const TransformParam trans;
-	//GenerateMipMap(pSrcDef,pMipMap,TRUE);
-#else
-	const TransformParam& trans = pParam->trans;
-	//GenerateMipMap(pSrcDef,pMipMap);
-#endif
 	if(pMipMap)
 	{
 		bool bOK = m_pMipMapGenerator->Render(pMipMap, pSrcA, pParamBase);
@@ -88,9 +85,7 @@ bool CCubeTransRender::Render( CVideoBuffer* pDest, CVideoBuffer *pSrcA, CVideoB
 	
 #ifdef _3D_CUBE_TRANS
 	//CBaseTexture * pMipMap1 = m_pResMan->GetTemp_Video(0,TRUE);
-	VideoBufferInfo mipMapInfo1 = pSrcB->GetVideoBufferInfo();
-	mipMapInfo1.eUsage = VideoBufferInfo::_IN_OUT_WITH_MIPMAP;
-	CVideoBuffer* pMipMap1 = pVM->CreateVideoBuffer(mipMapInfo1);
+	pMipMap1 = pVM->CreateVideoBuffer(mipMapInfo);
 	ASSERT(pMipMap1);
 	//if(ppSrcDef[1]->IsYUV16Buffer())
 	//	m_pEngine->ConvertYUYV_YUVA(ppSrcDef[1],pMipMap);
@@ -104,7 +99,15 @@ bool CCubeTransRender::Render( CVideoBuffer* pDest, CVideoBuffer *pSrcA, CVideoB
 		ASSERT(bOK);
 	}
 	//D3DXSaveTextureToFile(_T("./Cube_Mipmap_1.bmp"), D3DXIFF_BMP, pMipMap1->GetTexture(), NULL);
+	}
 #endif
+
+#ifdef _3D_CUBE_TRANS
+	const TransformParam trans;		//no parameters, use default value
+#else
+	const TransformParam& trans = pParam->trans;
+#endif
+	const VideoBufferInfo& srcBufInfo = pMipMap->GetVideoBufferInfo();
 	//const Custom_Profile *pProfile = m_pEngine->GetCurProfile();
     //m_fAspect = m_pResMan->GetAspect() * m_pEngine->GetCurProfile()->nEditWidth / (float) (m_pEngine->GetCurProfile()->nEditHeight  * m_pResMan->GetAspectVerifyCoef());
 	int nEditWidth, nEditHeight;
@@ -135,14 +138,14 @@ bool CCubeTransRender::Render( CVideoBuffer* pDest, CVideoBuffer *pSrcA, CVideoB
 
 	D3DXMatrixIdentity(&matTex);
 #ifdef _3D_CUBE_TRANS
-	matTex._11 = nEditWidth  / (float)mipMapInfo.nAllocWidth;
-	matTex._22 = nEditHeight / (float)mipMapInfo.nAllocHeight;
+	matTex._11 = nEditWidth  / (float)srcBufInfo.nAllocWidth;
+	matTex._22 = nEditHeight / (float)srcBufInfo.nAllocHeight;
 #else
-	matTex._11 = srcBufInfo.nWidth / (float)mipMapInfo.nAllocWidth;
-	matTex._22 = srcBufInfo.nHeight / (float)mipMapInfo.nAllocHeight;
+	matTex._11 = srcBufInfo.nWidth / (float)srcBufInfo.nAllocWidth;
+	matTex._22 = srcBufInfo.nHeight / (float)srcBufInfo.nAllocHeight;
 #endif
-	
-	matTex._31 = 0.5f / (float)mipMapInfo.nAllocWidth;
+
+	matTex._31 = 0.5f / (float)srcBufInfo.nAllocWidth;
     //matTex._32 = pParam->bOdd ? 0.5f / (float)pMipMap->GetImagesInfo()->Base_Height : 0.0f;
 
 	D3DVIEWPORT9 vPort;
@@ -180,7 +183,7 @@ bool CCubeTransRender::Render( CVideoBuffer* pDest, CVideoBuffer *pSrcA, CVideoB
 
 	matGlobalTrans._41 /= 2.0f;
 	matGlobalTrans._42 /= 2.0f;
-	matGlobalTrans._43 *= 0.35f;	
+	matGlobalTrans._43 *= 0.35f;
 
 	D3DXVECTOR3 vEyePt( 0.0f, 0.0f,-0.5f/tan(D3DXToRadian(pParam->fPerspective) / 2.0f) );
 	D3DXVECTOR3 vLookatPt( 0.0f, 0.0f, 0.0f );

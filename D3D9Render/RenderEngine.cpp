@@ -11,15 +11,21 @@
 CRenderEngine::CRenderEngine(void)
 : m_pD3D(NULL)
 , m_pDevice(NULL)
+, m_pDepthNoMultiSample(NULL)
 , m_pResMgr(NULL)
 , m_pBuffMgr(NULL)
 {
 	ZeroMemory(&m_DeviceSettings, sizeof(m_DeviceSettings));
-	ZeroMemory(&m_DeviceSettings.pp, sizeof(m_DeviceSettings.pp));
+	//ZeroMemory(&m_DeviceSettings.pp, sizeof(m_DeviceSettings.pp));
+	m_TargetVideoSize.cx = 0;
+	m_TargetVideoSize.cy = 0;
 }
 
 CRenderEngine::~CRenderEngine(void)
 {
+	SAFE_RELEASE(m_pDepthNoMultiSample);
+	SAFE_RELEASE(m_pDevice);
+	SAFE_RELEASE(m_pD3D);
 }
 
 HRESULT CRenderEngine::Create( HWND hDeviceWnd, UINT nBackBufferWidth, UINT nBackBufferHeight )
@@ -30,14 +36,12 @@ HRESULT CRenderEngine::Create( HWND hDeviceWnd, UINT nBackBufferWidth, UINT nBac
 
 	m_DeviceSettings.pp.Windowed               = true;
 	m_DeviceSettings.pp.SwapEffect             = D3DSWAPEFFECT_DISCARD;
-
-	m_DeviceSettings.pp.BackBufferWidth        = nBackBufferWidth ;
-	m_DeviceSettings.pp.BackBufferHeight       = nBackBufferHeight;  
-
-	//RECT rcClient;
-	//GetClientRect(GetDesktopWindow(),&rcClient);
-	//m_DeviceSettings.pp.BackBufferWidth = UINT(RECTWIDTH(rcClient) * 0.99f);
-	//m_DeviceSettings.pp.BackBufferHeight = UINT(RECTHEIGHT(rcClient) * 0.8f);
+	//m_DeviceSettings.pp.BackBufferWidth        = nBackBufferWidth ;
+	//m_DeviceSettings.pp.BackBufferHeight       = nBackBufferHeight;  
+	RECT rcClient;
+	GetClientRect(hDeviceWnd,&rcClient);
+	m_DeviceSettings.pp.BackBufferWidth = UINT(RECTWIDTH(rcClient) * 0.99f);
+	m_DeviceSettings.pp.BackBufferHeight = UINT(RECTHEIGHT(rcClient) * 0.8f);
 
 	m_DeviceSettings.pp.BackBufferCount        = 1;	
 	m_DeviceSettings.pp.BackBufferFormat       = D3DFMT_A8R8G8B8;
@@ -69,10 +73,7 @@ HRESULT CRenderEngine::Create( HWND hDeviceWnd, UINT nBackBufferWidth, UINT nBac
 	}
 
 	ASSERT(m_pDevice);
-	if(FAILED(hr = m_pDevice->CreateDepthStencilSurface( nBackBufferWidth,nBackBufferHeight,
-		D3DFMT_D24S8,D3DMULTISAMPLE_NONE,0,	FALSE,	&m_pDepthNoMultiSample,NULL )))
-	{
-	}
+	SetTargetVideoSize(nBackBufferWidth, nBackBufferHeight);
 	return hr;
 }
 
@@ -210,8 +211,8 @@ bool CRenderEngine::SetRenderTarget( CVideoBuffer* pDest )
 
 void CRenderEngine::GetTargetVideoSize( int& nEditWidth, int& nEditHeight )
 {
-	nEditWidth = m_DeviceSettings.pp.BackBufferWidth;
-	nEditHeight = m_DeviceSettings.pp.BackBufferHeight;
+	nEditWidth = m_TargetVideoSize.cx;
+	nEditHeight = m_TargetVideoSize.cy;
 }
 
 bool CRenderEngine::EffectVideoCopy( CVideoBuffer* pDst, CVideoBuffer* pSrc )
@@ -335,6 +336,20 @@ CVideoBuffer* CRenderEngine::CreateRenderTargetBuffer()
 	VideoBufferInfo mediaBI = {D3DFMT_A8R8G8B8, VideoBufferInfo::VIDEO_MEM, VideoBufferInfo::_IN_OUT, nEditWidth, nEditHeight, 0, 0};
 	CVideoBuffer* pMask = pBufMgr->CreateVideoBuffer(mediaBI);
 	return pMask;
+}
+
+bool CRenderEngine::SetTargetVideoSize(int nEditWidth, int nEditHeight)
+{
+	m_TargetVideoSize.cx = nEditWidth;
+	m_TargetVideoSize.cy = nEditHeight;
+
+	HRESULT hr;
+	SAFE_RELEASE(m_pDepthNoMultiSample);
+	if(FAILED(hr = m_pDevice->CreateDepthStencilSurface( nEditWidth, nEditHeight,
+		D3DFMT_D24S8,D3DMULTISAMPLE_NONE,0,	FALSE,	&m_pDepthNoMultiSample,NULL )))
+	{
+	}
+	return SUCCEEDED(hr);
 }
 
 bool CRenderEngine::SetDepthStencilBuffer(bool bUseDepthBuffer)

@@ -38,3 +38,6 @@ public:
 };
 
 extern CTestClientApp theApp;
+
+#define DEFAULT_TARGET_BUFFER_WIDTH 960
+#define DEFAULT_TARGET_BUFFER_HEIGHT 540

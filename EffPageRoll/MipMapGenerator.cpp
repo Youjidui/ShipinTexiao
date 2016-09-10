@@ -66,7 +66,9 @@ HRESULT CMipMapGenerator::GenerateMipMap(CVideoBuffer* pMipMap, CVideoBuffer* pS
 	vOldPort = vPort;
 	//const Custom_Profile * pProfile = m_pEngine->GetCurProfile();
 	int nEditWidth, nEditHeight;
-	m_pEngine->GetTargetVideoSize(nEditWidth, nEditHeight);
+	//m_pEngine->GetTargetVideoSize(nEditWidth, nEditHeight);
+	nEditWidth = desc.Width;
+	nEditHeight = desc.Height;
 	vPort.Width = min(nEditWidth + 64,vPort.Width);
 	vPort.Height = min(nEditHeight + 64,vPort.Height);
 	pDevice->SetViewport(&vPort);
@@ -79,8 +81,10 @@ HRESULT CMipMapGenerator::GenerateMipMap(CVideoBuffer* pMipMap, CVideoBuffer* pS
 	const VideoBufferInfo& viSrc = pSrcDef->GetVideoBufferInfo();
 	float pSrcDef_GetImageWidth = viSrc.nWidth;
 	float pSrcDef_GetImageHeight = viSrc.nHeight;
-	matWorld._11 = pSrcDef_GetImageWidth / (float)desc.Width;
-	matWorld._22 = pSrcDef_GetImageHeight / (float)desc.Height;
+	//matWorld._11 = pSrcDef_GetImageWidth / (float)desc.Width;
+	//matWorld._22 = pSrcDef_GetImageHeight / (float)desc.Height;
+	matWorld._11 = 1.0f;
+	matWorld._22 = 1.0f;
 	matWorld._41 = -0.5f + matWorld._11 / 2.0f;
 	matWorld._42 = 0.5f  - matWorld._22 / 2.0f;
 	//if(bLocation)

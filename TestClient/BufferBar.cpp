@@ -21,8 +21,8 @@ CBufferBar::CBufferBar(CWnd* pParent /*=NULL*/)
 	: CDialog(CBufferBar::IDD, pParent)
 	, m_strFirstLevelFileName(_T(""))
 	, m_strSecondLevelFileName(_T(""))
-	, m_uWidth(1920)
-	, m_uHeight(1080)
+	, m_uWidth(DEFAULT_TARGET_BUFFER_WIDTH)
+	, m_uHeight(DEFAULT_TARGET_BUFFER_HEIGHT)
 {
 
 }

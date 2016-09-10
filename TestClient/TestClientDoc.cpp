@@ -96,7 +96,7 @@ BOOL CTestClientDoc::OnNewDocument()
 			HWND hWnd = (pView->GetSafeHwnd());
 			if(hWnd)
 			{
-				bOK = InitEffect(hWnd, 1920, 1080);
+				bOK = InitEffect(hWnd, DEFAULT_TARGET_BUFFER_WIDTH, DEFAULT_TARGET_BUFFER_HEIGHT);
 			}
 		}
 	}
@@ -292,6 +292,8 @@ void CTestClientDoc::UninitEffect()
 
 bool CTestClientDoc::SetBackBufferSize( UINT w, UINT h )
 {
+	if(m_pRenderEngine)
+		m_pRenderEngine->SetTargetVideoSize(w,h);
 	if(m_pBufferMgr)
 	{
 		//target buffer
