@@ -130,8 +130,10 @@ bool CPageRollRender::Render(CVideoBuffer*pDstDef, CVideoBuffer *pSrcA, CVideoBu
 	D3DXMatrixIdentity(&matTex);
 	int pMipMap0_GetImagesInfo_Base_Width = mipMapInfo.nAllocWidth;
 	int pMipMap0_GetImagesInfo_Base_Height = mipMapInfo.nAllocHeight;
-	matTex._11 = nEditWidth * 1.0f / pMipMap0_GetImagesInfo_Base_Width;
-	matTex._22 = nEditHeight * 1.0f / pMipMap0_GetImagesInfo_Base_Height;
+	//matTex._11 = nEditWidth * 1.0f / pMipMap0_GetImagesInfo_Base_Width;
+	//matTex._22 = nEditHeight * 1.0f / pMipMap0_GetImagesInfo_Base_Height;
+	matTex._11 = mipMapInfo.nWidth * 1.0f / pMipMap0_GetImagesInfo_Base_Width;
+	matTex._22 = mipMapInfo.nHeight * 1.0f / pMipMap0_GetImagesInfo_Base_Height;
 	matTex._31 = 0.5f / pMipMap0_GetImagesInfo_Base_Width;
 	//if(pParam->bOdd)
 	//	matTex._32 = 0.5f / pMipMap[0]->GetImagesInfo()->Base_Height;	
@@ -271,17 +273,21 @@ void  CPageRollRender::Trans_Draw_BG(CVideoBuffer* pBGDef,const BOOL bForPageRol
 	{
 		//Draw BackGround
 		UINT cPass;
-		D3DVIEWPORT9 vPort;
-		pDevice->GetViewport(&vPort);
-		::GenerateMatrix(pBGDef, &matTex, mat_Image);
-		const VideoBufferInfo& vbInfo = pBGDef->GetVideoBufferInfo();
-		float pBGDef_OffsetX = 0.0f, pBGDef_OffsetY = 0.0f;
-		GenerateWorld(vbInfo.nWidth, vbInfo.nHeight,
-			&D3DXVECTOR2(pBGDef_OffsetX, pBGDef_OffsetY),
-			&D3DXVECTOR2(vPort.Width,vPort.Height), &matWorld);
+		//D3DVIEWPORT9 vPort;
+		//pDevice->GetViewport(&vPort);
+		//const VideoBufferInfo& vbInfo = pBGDef->GetVideoBufferInfo();
+		//float pBGDef_OffsetX = 0.0f, pBGDef_OffsetY = 0.0f;
+		//GenerateWorld(vbInfo.nWidth, vbInfo.nHeight,
+		//	&D3DXVECTOR2(pBGDef_OffsetX, pBGDef_OffsetY),
+		//	&D3DXVECTOR2(vPort.Width,vPort.Height), &matWorld);
 		D3DXMATRIX *matView = NULL, *matProj= NULL;
 		pResMgr->GetPerspectiveMatrix( &matView, &matProj);		//CGPURenderµÄ×ÓÀà
-		matCombine = matWorld * *matView * *matProj;
+		//matCombine = matWorld * *matView * *matProj;
+		matCombine = *matView * *matProj;
+		::GenerateMatrix(pBGDef, &matTex, mat_Image);
+		//matTex._11 *= vbInfo.nWidth/vPort.Width;
+		//matTex._22 *= vbInfo.nHeight/vPort.Height;
+
 		m_pTrans_Draw_BG_Effect->SetTechnique("BG");
 		m_pTrans_Draw_BG_Effect->SetMatrix("g_matWorldViewProj",&matCombine);
 		m_pTrans_Draw_BG_Effect->SetMatrix("g_matTexBG",&matTex);

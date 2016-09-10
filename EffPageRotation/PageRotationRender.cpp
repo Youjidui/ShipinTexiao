@@ -72,8 +72,10 @@ bool CPageRotationRender::Render(CVideoBuffer* pDest, CVideoBuffer *pSrcA, CVide
 
 	D3DXMatrixIdentity(&matTex);
 	const VideoBufferInfo& biSrc = pMipMap[0]->GetVideoBufferInfo();
-	matTex._11 = nEditWidth * 1.0f / biSrc.nAllocWidth;
-	matTex._22 = nEditHeight * 1.0f / biSrc.nAllocHeight;
+	//matTex._11 = nEditWidth * 1.0f / biSrc.nAllocWidth;
+	//matTex._22 = nEditHeight * 1.0f / biSrc.nAllocHeight;
+	matTex._11 = biSrc.nWidth * 1.0f / biSrc.nAllocWidth;
+	matTex._22 = biSrc.nHeight * 1.0f / biSrc.nAllocHeight;
 	matTex._31 = 0.5f / biSrc.nAllocWidth;
 	//if(pParam->bOdd)
 	//	matTex._32 = 0.5f / biSrc.nAllocHeight;

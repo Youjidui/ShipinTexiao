@@ -85,11 +85,11 @@ bool CDissolveRender::Render(CVideoBuffer* pDest, CVideoBuffer *pSrcA, CVideoBuf
 
 	D3DXMATRIX matTextureSrc;
 	D3DXMatrixIdentity(&matTextureSrc);
-	int nEditWidth, nEditHeight;
-	m_pEngine->GetTargetVideoSize(nEditWidth, nEditHeight);
+	//int nEditWidth, nEditHeight;
+	//m_pEngine->GetTargetVideoSize(nEditWidth, nEditHeight);
 	const VideoBufferInfo& biSrc = pSrcFullDef0->GetVideoBufferInfo();
-	matTextureSrc._11 = nEditWidth * (false ? 0.5f : 1.0f) / biSrc.nAllocWidth;
-	matTextureSrc._22 = nEditHeight * 1.0f / biSrc.nAllocHeight;
+	matTextureSrc._11 = biSrc.nWidth * (false ? 0.5f : 1.0f) / biSrc.nAllocWidth;
+	matTextureSrc._22 = biSrc.nHeight * 1.0f / biSrc.nAllocHeight;
 	matTextureSrc._31 = 0.5f / biSrc.nAllocWidth;
 	matTextureSrc._32 = 0.5f / biSrc.nAllocHeight;
 
