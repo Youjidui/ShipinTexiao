@@ -40,21 +40,21 @@ bool CPushRender::Render(CVideoBuffer* pDst, CVideoBuffer* pSrc1,  CVideoBuffer*
 
 	if(m_pEngine->SetRenderTarget(pDst))
 	{
-		D3DVIEWPORT9 vPort;
-		pDevice->GetViewport(&vPort);
+		//D3DVIEWPORT9 vPort;
+		//pDevice->GetViewport(&vPort);
 
 		int nEditWidth, nEditHeight;
 		m_pEngine->GetTargetVideoSize(nEditWidth, nEditHeight);
 		const VideoBufferInfo& biSrc1 = pSrc1->GetVideoBufferInfo();
 		const float pSrcDef0_OffsetX = 0.f, pSrcDef0_OffsetY = 0.f;
 		//非满屏定位开始
-		D3DXMATRIX matScale, matTransition;
-		float fxZoom = biSrc1.nWidth / (float)vPort.Width;
-		float fyZoom = biSrc1.nHeight / (float)vPort.Height;
-		float ofx = -0.5f + fxZoom*0.5f + pSrcDef0_OffsetX / nEditWidth;
-		float ofy =  0.5f - fyZoom*0.5f - pSrcDef0_OffsetY / nEditHeight;
-		D3DXMatrixScaling(&matScale, fxZoom, fyZoom , 1.0f);
-		D3DXMatrixTranslation(&matTransition, ofx, ofy, 0.0f);	
+		//D3DXMATRIX matScale, matTransition;
+		//float fxZoom = biSrc1.nWidth / (float)vPort.Width;
+		//float fyZoom = biSrc1.nHeight / (float)vPort.Height;
+		//float ofx = -0.5f + fxZoom*0.5f + pSrcDef0_OffsetX / nEditWidth;
+		//float ofy =  0.5f - fyZoom*0.5f - pSrcDef0_OffsetY / nEditHeight;
+		//D3DXMatrixScaling(&matScale, fxZoom, fyZoom , 1.0f);
+		//D3DXMatrixTranslation(&matTransition, ofx, ofy, 0.0f);	
 		//非满屏定位结束
 		
 		D3DXMATRIXA16 matCombined,matWorld,matWorld1;
@@ -65,7 +65,8 @@ bool CPushRender::Render(CVideoBuffer* pDst, CVideoBuffer* pSrc1,  CVideoBuffer*
 		LPD3DXMATRIX matView = NULL, matProj= NULL;
 		pResMan->GetPerspectiveMatrix(&matView, &matProj);
 
-		matCombined = matScale * matTransition * matWorld * *matView * *matProj;
+		//matCombined = matScale * matTransition * matWorld * *matView * *matProj;
+		matCombined = matWorld * *matView * *matProj;
 		
 		D3DXCOLOR FirstColor;
 		FirstColor.b = (pParam->dwFirstColor & 0xFF)/255.0f;
@@ -116,16 +117,17 @@ bool CPushRender::Render(CVideoBuffer* pDst, CVideoBuffer* pSrc1,  CVideoBuffer*
 		const VideoBufferInfo& biSrc2 = pSrc2->GetVideoBufferInfo();
 
 		//非满屏定位开始
-		fxZoom = biSrc2.nWidth / (float)vPort.Width;
-		fyZoom = biSrc2.nHeight / (float)vPort.Height;
-		ofx = -0.5f + fxZoom*0.5f + pSrcDef0_OffsetX/ (float)nEditWidth;
-		ofy =  0.5f - fyZoom*0.5f - pSrcDef0_OffsetY / (float)nEditHeight;
-		D3DXMatrixScaling(&matScale, fxZoom, fyZoom , 1.0f);
-		D3DXMatrixTranslation(&matTransition, ofx, ofy, 0.0f);	
+		//fxZoom = biSrc2.nWidth / (float)vPort.Width;
+		//fyZoom = biSrc2.nHeight / (float)vPort.Height;
+		//ofx = -0.5f + fxZoom*0.5f + pSrcDef0_OffsetX/ (float)nEditWidth;
+		//ofy =  0.5f - fyZoom*0.5f - pSrcDef0_OffsetY / (float)nEditHeight;
+		//D3DXMatrixScaling(&matScale, fxZoom, fyZoom , 1.0f);
+		//D3DXMatrixTranslation(&matTransition, ofx, ofy, 0.0f);	
 		//非满屏定位结束
 
 		GenerateMatrix(pSrc1, &matTextureSrc,mat_Image);
-		matCombined= matScale * matTransition * matWorld1*matWorld * *matView * *matProj;
+		//matCombined= matScale * matTransition * matWorld1*matWorld * *matView * *matProj;
+		matCombined= matWorld1*matWorld * *matView * *matProj;
 
 		m_pPushEffect->SetMatrix("g_matWorldViewProj",&matCombined);
 		m_pPushEffect->SetTexture("g_txColor",pSrc2->GetTexture());

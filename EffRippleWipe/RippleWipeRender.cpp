@@ -70,23 +70,25 @@ bool CRippleWipeRender::Render( CVideoBuffer* pDest, CVideoBuffer *pSrcA, CVideo
 	//	}
 	//}
 	CVideoBuffer* pTempDef[2] = {pSrcDef[0],pSrcDef[1]};
-	for(int i = 0; i< 2;i ++)
-	{
-		const VideoBufferInfo& bi = pTempDef[i]->GetVideoBufferInfo();
-		if(bi.nAllocWidth != nEditWidth || bi.nAllocHeight != nEditHeight)
-		{
-			VideoBufferInfo mediaBI = {D3DFMT_A8R8G8B8, VideoBufferInfo::VIDEO_MEM, VideoBufferInfo::_IN_OUT, nEditWidth, nEditHeight, 0, 0};
-			pTempDef[i] = pBufMgr->CreateVideoBuffer(mediaBI);
-			ASSERT(pTempDef[i]);
-			bOK = m_pEngine->EffectVideoCopy(pTempDef[i], pSrcDef[i]);
-			ASSERT(bOK);
-		}
-	}
+	//for(int i = 0; i< 2;i ++)
+	//{
+	//	const VideoBufferInfo& bi = pTempDef[i]->GetVideoBufferInfo();
+	//	if(bi.nAllocWidth != nEditWidth || bi.nAllocHeight != nEditHeight)
+	//	{
+	//		VideoBufferInfo mediaBI = {D3DFMT_A8R8G8B8, VideoBufferInfo::VIDEO_MEM, VideoBufferInfo::_IN_OUT, nEditWidth, nEditHeight, 0, 0};
+	//		pTempDef[i] = pBufMgr->CreateVideoBuffer(mediaBI);
+	//		ASSERT(pTempDef[i]);
+	//		bOK = m_pEngine->EffectVideoCopy(pTempDef[i], pSrcDef[i]);
+	//		ASSERT(bOK);
+	//	}
+	//}
 
 	//float fAspect = m_pResMan->GetAspect() * (pProfile->nEditWidth * (pSrcDef[0]->IsYUV16Buffer() ? 2.0f : 1.0f))  / (float)(pProfile->nEditHeight  * m_pResMan->GetAspectVerifyCoef());
 	float fAspect = nEditWidth * 1.0f / nEditHeight;
 	bOK = m_pEngine->SetRenderTarget(pDest);
 	ASSERT(bOK);
+
+	const VideoBufferInfo& vbi = pTempDef[0]->GetVideoBufferInfo();
 
 	D3DXMATRIXA16 matCombine,matTex;		
 	float scale_x   = pow( 10.0f, -pParam->fEllipticity );
@@ -115,8 +117,8 @@ bool CRippleWipeRender::Render( CVideoBuffer* pDest, CVideoBuffer *pSrcA, CVideo
 	pResMan->GetPerspectiveMatrix( &matView, &matProj);
 	matCombine = (*matView) * (*matProj);
 	D3DXMatrixIdentity(&matTex);
-	matTex._31 = 0.5f / nEditWidth;
-	matTex._32 = 0.5f / nEditHeight;
+	matTex._31 = 0.5f / vbi.nAllocWidth;
+	matTex._32 = 0.5f / vbi.nAllocHeight;
 
 	hr = m_pEffect->SetMatrix("g_matWorldViewProj",&matCombine);
 	ASSERT(SUCCEEDED(hr));

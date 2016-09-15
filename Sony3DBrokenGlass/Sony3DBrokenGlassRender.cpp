@@ -301,8 +301,6 @@ bool Sony3DBrokenGlassRender::Render(CVideoBuffer* pDst, CVideoBuffer* pSrc1, CV
 		else 
 			fTimeEnd += sqrt(fLinesInterval/1.f) * 0.3f;
 
-
-
 		time = fTimeBegin + time * (fTimeEnd-fTimeBegin);
 	}
 
@@ -351,17 +349,16 @@ bool Sony3DBrokenGlassRender::Render(CVideoBuffer* pDst, CVideoBuffer* pSrc1, CV
 	const VideoBufferInfo& biSrc = pSrc1->GetVideoBufferInfo();
 
 	D3DXMATRIXA16 matPosQuad;
-	D3DXMatrixScaling(&matPosQuad,
-		(float)biSrc.nWidth/biDst.nWidth,
-		(float)biSrc.nHeight/biDst.nHeight,1.f);
-	D3DXMATRIXA16 matPosQuadTemp;
-	D3DXMatrixTranslation(&matPosQuadTemp,
-		-0.5f+(/*pSrcDef->OffsetX*/0 + biSrc.nWidth/2.f)/biDst.nWidth,
-		0.5f-(/*pSrcDef->OffsetY*/0 + biSrc.nHeight/2.f)/biDst.nHeight,
-		0.f);
-	matPosQuad = matPosQuad * matPosQuadTemp;
-
-
+	//D3DXMatrixScaling(&matPosQuad,
+	//	(float)biSrc.nWidth/biDst.nWidth,
+	//	(float)biSrc.nHeight/biDst.nHeight,1.f);
+	//D3DXMATRIXA16 matPosQuadTemp;
+	//D3DXMatrixTranslation(&matPosQuadTemp,
+	//	-0.5f+(/*pSrcDef->OffsetX*/0 + biSrc.nWidth/2.f)/biDst.nWidth,
+	//	0.5f-(/*pSrcDef->OffsetY*/0 + biSrc.nHeight/2.f)/biDst.nHeight,
+	//	0.f);
+	//matPosQuad = matPosQuad * matPosQuadTemp;
+	D3DXMatrixIdentity(&matPosQuad);
 
 	// VS constant
 
@@ -401,15 +398,16 @@ bool Sony3DBrokenGlassRender::Render(CVideoBuffer* pDst, CVideoBuffer* pSrc1, CV
 	D3DXMatrixInverse(&matWorldInv,NULL,&matWorldTransed);
 	D3DXMatrixTranspose(&matWorldForNormal,&matWorldInv);
 
-	// 直接从[-0.5,0.5]得到贴图坐标
+	// 直接从顶点坐标[-0.5,0.5]得到贴图坐标
 	D3DXMATRIXA16 matQUADtoTex;
 	D3DXMatrixIdentity(&matQUADtoTex);
 	matQUADtoTex._22 = -1.f;
 	matQUADtoTex._31 = 0.5f;
 	matQUADtoTex._32 = 0.5f;
+	D3DXMATRIXA16 matTextureSrc1;
+	GenerateMatrix(pSrc1, &matTextureSrc1, mat_Image);
 	D3DXMATRIXA16 matTextureSrc;
-	GenerateMatrix(pSrc1, &matTextureSrc, mat_Image);
-	matTextureSrc = matQUADtoTex * matTextureSrc;
+	matTextureSrc = matQUADtoTex * matTextureSrc1;
 	m_pSony3DBrokenGlassEffect->SetMatrix("g_matWorldViewProj",&matCombined);
 	m_pSony3DBrokenGlassEffect->SetMatrix("g_matWorldNormal",&matWorldForNormal);
 	m_pSony3DBrokenGlassEffect->SetMatrix("g_matTexture",&matTextureSrc);	

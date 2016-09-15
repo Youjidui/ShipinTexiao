@@ -235,7 +235,7 @@ bool CRenderEngine::EffectVideoCopy( CVideoBuffer* pDst, CVideoBuffer* pSrc )
 	//GAutoLock l(&m_D3Dcs);
 	//UINT PSShader,VSShader;
 	//D3DXMATRIX matWorld,matScale;
-	D3DXMATRIX 	matTexture;  
+	D3DXMATRIXA16 	matTexture;  
 	float f_Offsetx;
 	//long nWidth,nHeight;
 	float vBufferSrcOffsetY = 0.0f;
@@ -245,11 +245,12 @@ bool CRenderEngine::EffectVideoCopy( CVideoBuffer* pDst, CVideoBuffer* pSrc )
 	int RTTextureWidth     = destBI.nAllocWidth;
 	int RTTextureHeight    = destBI.nAllocHeight;
 
-	D3DXMATRIX  matWorld, *pMatView = NULL, *pMatProj = NULL;
+	D3DXMATRIXA16  matWorld;
+	D3DXMATRIX *pMatView = NULL, *pMatProj = NULL;
 	D3DXMatrixIdentity(&matWorld);
 	GetResourceManager()->GetOrthoMatrix(&pMatView, &pMatProj);
-	D3DXMATRIX matWVP = matWorld * (*pMatView)* (*pMatProj);
-	D3DXMATRIX matCC = (*pMatView)*(*pMatProj);
+	D3DXMATRIXA16 matWVP = matWorld * (*pMatView)* (*pMatProj);
+	D3DXMATRIXA16 matCC = (*pMatView)*(*pMatProj);
 	HRESULT hr = pDevice->SetRenderState( D3DRS_ALPHABLENDENABLE,FALSE );
 	ASSERT(SUCCEEDED(hr));
 	hr = pDevice->SetRenderState( D3DRS_ALPHATESTENABLE ,FALSE );

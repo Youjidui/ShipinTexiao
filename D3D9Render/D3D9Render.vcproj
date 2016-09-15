@@ -49,7 +49,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories=""
-				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG;_AFXEXT"
+				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG;_AFXEXT;_SHADER_SOURCE_FILE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"

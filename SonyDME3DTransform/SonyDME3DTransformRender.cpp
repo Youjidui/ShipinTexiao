@@ -106,9 +106,9 @@ void CSonyDME3DTransformRender::RenderScene(CVideoBuffer* pDst, CVideoBuffer* pS
 	//	fv -= 0.5f / (float)(biSrc.nAllocHeight);
 
 	CRect rcImage(0, 0, biSrc.nWidth, biSrc.nHeight);
-	int iWidth = rcImage.right- rcImage.left,iHeight = rcImage.bottom-rcImage.top;
-	matSrcImage._11   =  iWidth /((float)biSrc.nAllocWidth);
-	matSrcImage._22   =  iHeight/((float)biSrc.nAllocHeight); 
+	//int iWidth = rcImage.right- rcImage.left,iHeight = rcImage.bottom-rcImage.top;
+	matSrcImage._11   =  biSrc.nWidth /((float)biSrc.nAllocWidth);
+	matSrcImage._22   =  biSrc.nHeight/((float)biSrc.nAllocHeight); 
 	matSrcImage._31 =  fu + rcImage.left/((float)biSrc.nAllocWidth);
 	matSrcImage._32 =  fv + rcImage.top/((float)biSrc.nAllocHeight); 
 
@@ -129,14 +129,16 @@ void CSonyDME3DTransformRender::RenderScene(CVideoBuffer* pDst, CVideoBuffer* pS
 	D3DVIEWPORT9 vPort;
 	hr = pDevice->GetViewport(&vPort);
 	ASSERT(SUCCEEDED(hr));
-	vPort.Width = nEditWidth;
-	vPort.Height = nEditHeight;
-	hr = pDevice->SetViewport(&vPort);
-	ASSERT(SUCCEEDED(hr));
+	//vPort.Width = nEditWidth;
+	//vPort.Height = nEditHeight;
+	//hr = pDevice->SetViewport(&vPort);
+	//ASSERT(SUCCEEDED(hr));
 
 	D3DXMATRIX matScale, matTransition;
-	float fxZoom = biSrc.nWidth * 1.0f  / (float)nEditWidth;
-	float fyZoom = biSrc.nHeight / (float)nEditHeight;
+	//float fxZoom = biSrc.nWidth * 1.0f  / (float)nEditWidth;
+	//float fyZoom = biSrc.nHeight / (float)nEditHeight;
+	float fxZoom = nEditWidth / (float)vPort.Width;
+	float fyZoom = nEditHeight / (float)vPort.Height;
 	D3DXVECTOR2 srcOffset(0, 0);
 	//if ( pSrcDef->IsYUV16Buffer() )
 	//	srcOffset.x /= 2.0f;
@@ -163,70 +165,6 @@ void CSonyDME3DTransformRender::RenderScene(CVideoBuffer* pDst, CVideoBuffer* pS
 	hr = m_pSonyDME3DEffect->SetTexture("g_txColor", pSrc->GetTexture());
 	ASSERT(SUCCEEDED(hr));
 
-
-	/* allways false
-	handle_tpr		hFilterBuffer	= INVALID_RESID;
-	TP_VBufferDef*	pFilterDef		= NULL;
-	//yanwei begin
-
-	if(m_pParam->bFilter && hFilterBuffer != INVALID_RESID)
-	{
-		hFilterBuffer = NewRTBuffer(pSrcDef->OffsetX, pSrcDef->OffsetY, pSrcDef->GetImageWidth(), pSrcDef->GetImageHeight());
-		pFilterDef = m_pResMan->GetBufferDef(hFilterBuffer);
-
-		CBaseTexture* pBaseTexFilter = (CBaseTexture*)m_pResMan->GetResource(m_uResID_8TapTable);
-
-		D3DXMATRIX *_matWorld, *_matView, *_matProj;
-		m_pEngine->GetQuadMatrix(&_matWorld, &_matView, &_matProj);
-		float fScaleX = (sqrt(matWorld._11*matWorld._11 + matWorld._21*matWorld._21) * matView._43 / (matView._43 + matWorld._43));
-		float fScaleY = (sqrt(matWorld._12*matWorld._12 + matWorld._22*matWorld._22) * matView._43 / (matView._43 + matWorld._43));
-		
-		LPDIRECT3DTEXTURE9 pFilterTex = ((CBaseTexture*)pFilterDef->pContainer)->GetTexture();
-		LPDIRECT3DTEXTURE9 p8TapTableTex = pBaseTexFilter->GetTexture();
-
-		const Custom_Profile* pProfile = m_pEngine->GetCurProfile();
-		bool bInterlaced = (pProfile->m_iRate == 1);
-		FillKaiserCoeff_8tap(p8TapTableTex, fScaleX, fScaleY, bInterlaced);
-
-		//这里需要先将整张buffer清空为YUVA的BLACK，否则这里会变成只有视口部分为YUVA_BLACK，其余部分为RGBA_BLACK
-		//在当前采样模式下有半像素偏移，因此逐字下会显示出边缘，日后特技SDK迁移的话可以不考虑这一点
-		pFilterDef->bRenderToFullTarget = true;
-		m_pEngine->SetRenderTarget(0, hFilterBuffer, pFilterDef->COLOR_BLACK());
-		pFilterDef->bRenderToFullTarget = false;
-		m_pEngine->SetRenderTarget(0, hFilterBuffer, pFilterDef->COLOR_BLACK());
-		GenerateMatrix(m_pResMan, pSrcDef->handle, &matSrcImage, mat_Image);
-		D3DXVECTOR2 vBaseCoef;
-		vBaseCoef.x = 1.f / pSrcDef->BaseWidth;
-		vBaseCoef.y = 1.f / pSrcDef->BaseHeight;
-		D3DXMATRIX matDummy;
-		D3DXMATRIX matPixelOffset;
-		D3DXMatrixIdentity(&matDummy);
-		D3DXMatrixTranslation(&matPixelOffset, -vBaseCoef.x, vBaseCoef.y, 0.f);
-		matDummy = (*_matWorld)*(*_matView)*(*_matProj);//*matPixelOffset;
-		_E("fBaseCoef", &vBaseCoef);
-		_E("tableCoef8", &p8TapTableTex);
-		_E("g_matWorldViewProj", &matDummy);
-		_E("g_matTexture", &matSrcImage);
-		_E("Imai8Tap");
-		if ( SUCCEEDED(m_pDevice->BeginScene()))                                   // begin tech 
-		{
-			UINT cPass;
-			m_pEffect->Begin(&cPass,0);
-				m_pEffect->BeginPass(0);
-				m_pQuadMesh->DrawMeshFx();
-				m_pEffect->EndPass();
-			m_pEffect->End();
-			m_pDevice->EndScene();
-		}
-		m_pEngine->SetRenderTarget(0,pDstDef->handle,pDstDef->COLOR_BLACK());		
-		_E("g_txColor", &pFilterTex);
-		_E("g_matWorldViewProj",&matWVP);
-		GenerateMatrix(m_pResMan,hFilterBuffer,&matSrcImage,mat_Image);
-		_E("g_matTexture", &matSrcImage);
-	}
-	//yanwei end
-	*/
-
 	D3DXVECTOR3 vNormal(1,0,0),vNewNormal;
 	D3DXVec3TransformCoord(&vNewNormal,&vNormal,&matWorld);
 	D3DXVec3Normalize(&vNewNormal,&vNewNormal);
@@ -250,14 +188,6 @@ void CSonyDME3DTransformRender::RenderScene(CVideoBuffer* pDst, CVideoBuffer* pS
 		D3DXMATRIXA16 matCombine = m_matView * m_matProj;
 		hr = m_pSonyDME3DEffect->SetMatrix("g_matWorldViewProj",&matCombine);
 		ASSERT(SUCCEEDED(hr));
-
-
-		//add by szm. 旋转变模糊
-		//D3DXMATRIX matTex = matSrcImage;
-		//if(pFilterDef)
-		//	GenerateMatrix(m_pResMan, pFilterDef->handle, &matTex, mat_Image);
-		//m_pSonyDME3DEffect->SetTexture("g_matTexture", &matTex);
-		//end by szm. 旋转变模糊
 
 		hr = m_pSonyDME3DEffect->SetTechnique("DME");
 		ASSERT(SUCCEEDED(hr));

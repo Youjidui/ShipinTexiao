@@ -53,8 +53,10 @@ bool CSonySlideRender::Render(CVideoBuffer* pDst, CVideoBuffer* pSrc1,  CVideoBu
 
 		D3DXMATRIX matScale, matTransition;
 		const VideoBufferInfo& biSrc1 = pSrc1->GetVideoBufferInfo();
-		float fxZoom = biSrc1.nWidth / (float)vPort.Width;
-		float fyZoom = biSrc1.nHeight / (float)vPort.Height;
+		//float fxZoom = biSrc1.nWidth / (float)vPort.Width;
+		//float fyZoom = biSrc1.nHeight / (float)vPort.Height;
+		float fxZoom = nEditWidth / (float)vPort.Width;
+		float fyZoom = nEditHeight / (float)vPort.Height;
 
 		float ofx = -0.5f + fxZoom*0.5f + pSrcDef0_OffsetX / nEditWidth;
 		float ofy =  0.5f - fyZoom*0.5f - pSrcDef0_OffsetY / nEditHeight;

@@ -142,8 +142,10 @@ bool CRingsRender::Render( CVideoBuffer* pDst, CVideoBuffer* pSrcA, CVideoBuffer
 	//const Custom_Profile * pProfile = m_pEngine->GetCurProfile();
 	int nEditWidth, nEditHeight;
 	m_pEngine->GetTargetVideoSize(nEditWidth, nEditHeight);
-	matTex._11 = nEditWidth / (float)biSrc.nAllocWidth;
-	matTex._22 = nEditHeight / (float)biSrc.nAllocHeight;
+	//matTex._11 = nEditWidth / (float)biSrc.nAllocWidth;
+	//matTex._22 = nEditHeight / (float)biSrc.nAllocHeight;
+	matTex._11 = biSrc.nWidth / (float)biSrc.nAllocWidth;
+	matTex._22 = biSrc.nHeight / (float)biSrc.nAllocHeight;
 	matTex._31 = 0.5f / biSrc.nAllocWidth;
 	matTex._32 = 0.5f / biSrc.nAllocHeight;
 
