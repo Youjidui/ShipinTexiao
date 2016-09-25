@@ -66,20 +66,20 @@ bool CSonyFilter::Render( CVideoBuffer* pDstDef, CVideoBuffer* pSrcDef, FxParamB
 	int nTaps = pParam->nTaps;
 	RECT * pRcBound = &pParam->rcBound;
 
-	const VideoBufferInfo& biSrc = pSrcDef->GetVideoBufferInfo(); 
-	if(int(biSrc.nWidth * dbSacleX + 0.5f) == 0 || int(biSrc.nHeight * dbSacleY + 0.5f) == 0)
+	int nEditWidth, nEditHeight;
+	m_pEngine->GetTargetVideoSize(nEditWidth, nEditHeight);
+	if(int(nEditWidth * dbSacleX + 0.5f) == 0 || int(nEditHeight * dbSacleY + 0.5f) == 0)
 	{
 		m_pEngine->SetRenderTarget(pDstDef);
 		return TRUE;
 	}
 
+	const VideoBufferInfo& biSrc = pSrcDef->GetVideoBufferInfo();
 	RECT rcImage = {0, 0, biSrc.nWidth, biSrc.nHeight};
 	float pSrcDef_OffsetX = pParam->OffsetX, pSrcDef_OffsetY = pParam->OffsetY;
 	D3DXVECTOR4 vvDst(pParam->vector4[0], pParam->vector4[1], pParam->vector4[2], pParam->vector4[3]);
 	//D3DXVECTOR4& vvDst = pParam->vector4;
 	//srcDef.pAppend = (void*)&vvDst;
-	int nEditWidth, nEditHeight;
-	m_pEngine->GetTargetVideoSize(nEditWidth, nEditHeight);
 	float fPixelAspect = nEditWidth * 1.0f / nEditHeight;	
 
 	RECT rcBorder;
@@ -92,7 +92,8 @@ bool CSonyFilter::Render( CVideoBuffer* pDstDef, CVideoBuffer* pSrcDef, FxParamB
 	pEffect->SetTexture("g_txCoef",m_pSonyFilterCoefTex->GetTexture());
 
 	//RECT rcResult = pSrcDef->rcImage;
-	RECT rcResult = {0, 0, biSrc.nWidth, biSrc.nHeight};
+	//RECT rcResult = {0, 0, biSrc.nWidth, biSrc.nHeight};
+	RECT rcResult = {0, 0, nEditWidth, nEditHeight};
 
 	BOOL bRenderX = int((dbSacleX - 1.0) * 1e4) != 0;
 	BOOL bRenderY = int((dbSacleY - 1.0) * 1e4) != 0;
@@ -111,9 +112,7 @@ bool CSonyFilter::Render( CVideoBuffer* pDstDef, CVideoBuffer* pSrcDef, FxParamB
 		if(bRenderY)
 		{
 			//pYUVATexture = m_pResManager->GetTemp_Video(0,FALSE);
-			CVideoBufferManager* pBufMgr = m_pEngine->GetVideoBufferManager();
-			VideoBufferInfo mediaBI = {D3DFMT_A8R8G8B8, VideoBufferInfo::VIDEO_MEM, VideoBufferInfo::_IN_OUT, nEditWidth, nEditHeight, 0, 0};
-			pYUVATexture = pBufMgr->CreateVideoBuffer(mediaBI);
+			pYUVATexture = m_pEngine->CreateRenderTargetBuffer();
 			ASSERT(pYUVATexture);
 		}
 		else
@@ -149,14 +148,17 @@ bool CSonyFilter::Render( CVideoBuffer* pDstDef, CVideoBuffer* pSrcDef, FxParamB
 			matWorld._11 = (vDst->z - vDst->x) * dbSacleX / (float)vPort.Width;
 
 			if(bRenderY)
-				matWorld._22 = biSrc.nHeight * 1.0f / vPort.Height;
+				//matWorld._22 = biSrc.nHeight * 1.0f / vPort.Height;
+				matWorld._22 = nEditHeight * 1.0f / vPort.Height;
 			else
 				matWorld._22 = (vDst->w - vDst->y) / (float)vPort.Height;
 		}	
 		else
 		{
-			matWorld._11 = biSrc.nWidth * dbSacleX / (float)vPort.Width;
-			matWorld._22 = biSrc.nHeight / (float)vPort.Height;
+			//matWorld._11 = biSrc.nWidth * dbSacleX / (float)vPort.Width;
+			//matWorld._22 = biSrc.nHeight / (float)vPort.Height;
+			matWorld._11 = nEditWidth * dbSacleX / (float)vPort.Width;
+			matWorld._22 = nEditHeight / (float)vPort.Height;
 		}
 
 		if(pParam->emPosDefMode == SonyFilterFxParam::POS_CUSTOM)
@@ -182,7 +184,12 @@ bool CSonyFilter::Render( CVideoBuffer* pDstDef, CVideoBuffer* pSrcDef, FxParamB
 		if(pParam->emPosDefMode == SonyFilterFxParam::POS_SONY_PINP)
 		{
 			//D3DXVECTOR4 * vDst = (D3DXVECTOR4*)pSrcDef->pAppend;
-			D3DXVECTOR4 * vDst = &vvDst;
+			D3DXVECTOR4 vSrc;
+			vSrc.x = 0.f;
+			vSrc.y = 0.f;
+			vSrc.z = biSrc.nWidth;
+			vSrc.w = biSrc.nHeight;
+			D3DXVECTOR4 * vDst = &vSrc;
 			matTex._11 = (vDst->z - vDst->x) / (float)biSrc.nAllocWidth;
 			matTex._31 = vDst->x / (float)biSrc.nAllocWidth;
 			matTex._41 = (0.5f + vDst->x) / biSrc.nAllocWidth;
@@ -408,8 +415,10 @@ bool CSonyFilter::Render( CVideoBuffer* pDstDef, CVideoBuffer* pSrcDef, FxParamB
 
 		D3DXMATRIXA16 matWorld,matCombine;	
 		D3DXMatrixIdentity(&matWorld);
-		matWorld._11 = biSrc.nWidth * dbSacleX / (float)vPort.Width;
-		matWorld._22 = biSrc.nHeight / (float)vPort.Height;
+		//matWorld._11 = biSrc.nWidth * dbSacleX / (float)vPort.Width;
+		//matWorld._22 = biSrc.nHeight / (float)vPort.Height;
+		matWorld._11 = nEditWidth * dbSacleX / (float)vPort.Width;
+		matWorld._22 = nEditHeight / (float)vPort.Height;
 
 		if(pParam->emPosDefMode == SonyFilterFxParam::POS_CUSTOM)
 		{
@@ -457,12 +466,14 @@ bool CSonyFilter::Render( CVideoBuffer* pDstDef, CVideoBuffer* pSrcDef, FxParamB
 
 	if(pYUVATexture != pDstDef)
 	{
+		//D3DXSaveTextureToFile(L"SonyFilter_Media.bmp",D3DXIFF_BMP,pYUVATexture->GetTexture(), NULL);	
+
 		CVideoBufferManager* pBufMgr = m_pEngine->GetVideoBufferManager();
 		pBufMgr->ReleaseVideoBuffer(pYUVATexture);
 		pYUVATexture = NULL;
 	}
 
-	//D3DXSaveTextureToFile(L"C:\\AAbY.bmp",D3DXIFF_BMP,((CBaseTexture*)pDstDef->pContainer)->GetTexture() ,NULL);	
+	//D3DXSaveTextureToFile(L"SonyFilter_Dest.bmp",D3DXIFF_BMP,pDstDef->GetTexture(), NULL);	
 	return TRUE;
 }
 

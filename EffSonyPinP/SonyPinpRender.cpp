@@ -437,7 +437,7 @@ void CSonyPinpRender::_do_render_scene(CVideoBuffer* pSrc, SonyPinPFxParam* pPar
 	float fScaleX = pParam->fScaleX / 100.0f;
 	float fScaleY = pParam->fScaleY / 100.0f;
 	float fBorderScale =  pParam->fBorderWidth;
-	//float fAspect = m_pResMan->GetAspect() * pProfile->nEditWidth / (float) (pProfile->nEditHeight * m_pResMan->GetAspectVerifyCoef()); 
+	//float fAspect = m_pResMan->GetAspect() * pProfile->nEditWidth / (float) (pProfile->nEditHeight * m_pResMan->GetAspectVerifyCoef());
 	int nEditWidth, nEditHeight;
 	m_pEngine->GetTargetVideoSize(nEditWidth, nEditHeight);
 	float	fAspect = nEditWidth*1.0f/nEditHeight;
@@ -449,39 +449,48 @@ void CSonyPinpRender::_do_render_scene(CVideoBuffer* pSrc, SonyPinPFxParam* pPar
 	float fBoundsRight = pParam->fBoundsRight / fAspect;
 
 	const VideoBufferInfo& biSrc = pSrc->GetVideoBufferInfo();
-	RECT rcImage = {0, 0, biSrc.nWidth, biSrc.nHeight};
-	int pSrcDef_GetImageWidth = biSrc.nWidth;
-	int pSrcDef_GetImageHeight = biSrc.nHeight;
+	//RECT rcImage = {0, 0, biSrc.nWidth, biSrc.nHeight};
+	//int pSrcDef_GetImageWidth = biSrc.nWidth;
+	//int pSrcDef_GetImageHeight = biSrc.nHeight;
 	D3DXMATRIXA16 matSrcTex;
 	D3DXMatrixIdentity( &matSrcTex );
 	int left = 0, top = 0;
-	matSrcTex._11   =  max(0,pSrcDef_GetImageWidth * (1.0f - pParam->fBoundsLeft - pParam->fBoundsRight)) / ((float)biSrc.nAllocWidth);
-	matSrcTex._22   =  max(0,pSrcDef_GetImageHeight * (1.0f - pParam->fBoundsTop - pParam->fBoundsBottom)) / ((float)biSrc.nAllocHeight);
-	matSrcTex._31 =  (0.5f + left + pSrcDef_GetImageWidth * pParam->fBoundsLeft)   / (float)(biSrc.nAllocWidth);
-	matSrcTex._32 =  (0.5f + top + pSrcDef_GetImageHeight * pParam->fBoundsTop)  / (float)(biSrc.nAllocHeight);
+	matSrcTex._11   =  max(0,biSrc.nWidth * (1.0f - pParam->fBoundsLeft - pParam->fBoundsRight)) / ((float)biSrc.nAllocWidth);
+	matSrcTex._22   =  max(0,biSrc.nHeight * (1.0f - pParam->fBoundsTop - pParam->fBoundsBottom)) / ((float)biSrc.nAllocHeight);
+	matSrcTex._31 =  (0.5f + left + biSrc.nWidth * pParam->fBoundsLeft)   / (float)(biSrc.nAllocWidth);
+	matSrcTex._32 =  (0.5f + top + biSrc.nHeight * pParam->fBoundsTop)  / (float)(biSrc.nAllocHeight);
 
+	RECT rcImage = {0, 0, nEditWidth, nEditHeight};
 	D3DXMATRIXA16 matTransition,matPrevScale, matPrevTransition,matCombine,matWorld,matClip,matborder;
-	float fxZoom = max(0,pSrcDef_GetImageWidth * (1.0f - pParam->fBoundsLeft - pParam->fBoundsRight) * fScaleX)  / (float)nEditWidth;
-	float fyZoom = max(0,pSrcDef_GetImageHeight * (1.0 - pParam->fBoundsTop - pParam->fBoundsBottom) * fScaleY) / (float)nEditHeight;	
-
+	//float fxZoom = max(0,pSrcDef_GetImageWidth * (1.0f - pParam->fBoundsLeft - pParam->fBoundsRight) * fScaleX)  / (float)nEditWidth;
+	//float fyZoom = max(0,pSrcDef_GetImageHeight * (1.0 - pParam->fBoundsTop - pParam->fBoundsBottom) * fScaleY) / (float)nEditHeight;	
+	//D3DXMatrixScaling(&matPrevScale, fxZoom, fyZoom , 1.0f);
+	float fxZoom = max(0,(1.0f - pParam->fBoundsLeft - pParam->fBoundsRight) * fScaleX);
+	float fyZoom = max(0,(1.0f - pParam->fBoundsTop - pParam->fBoundsBottom) * fScaleY);
 	D3DXMatrixScaling(&matPrevScale, fxZoom, fyZoom , 1.0f);
+
 	D3DXMatrixIdentity(&matborder);
-	matborder._11 = max(0,pSrcDef_GetImageWidth * (1.0f - pParam->fBoundsLeft - pParam->fBoundsRight) * fScaleX + 2 * fBorderX) / (float)nEditWidth;
-	matborder._22 = max(0, pSrcDef_GetImageHeight * (1.0f - pParam->fBoundsTop - pParam->fBoundsBottom) * fScaleY + 2 * fBorderY) / (float)nEditHeight;
+	//matborder._11 = max(0,pSrcDef_GetImageWidth * (1.0f - pParam->fBoundsLeft - pParam->fBoundsRight) * fScaleX + 2 * fBorderX) / (float)nEditWidth;
+	//matborder._22 = max(0, pSrcDef_GetImageHeight * (1.0f - pParam->fBoundsTop - pParam->fBoundsBottom) * fScaleY + 2 * fBorderY) / (float)nEditHeight;
+	matborder._11 = max(0, (1.0f - pParam->fBoundsLeft - pParam->fBoundsRight) * fScaleX + 2 * fBorderX);
+	matborder._22 = max(0, (1.0f - pParam->fBoundsTop - pParam->fBoundsBottom) * fScaleY + 2 * fBorderY);
 
 	D3DXMatrixIdentity(&matPrevTransition);
-	matPrevTransition._41 = (pSrcDef_OffsetX + pSrcDef_GetImageWidth / 2.0f - nEditWidth / 2.0f) / nEditWidth;
-	matPrevTransition._42 = -(pSrcDef_OffsetY + pSrcDef_GetImageHeight / 2.0f - nEditHeight / 2.0f) / nEditHeight;
+	//matPrevTransition._41 = (pSrcDef_OffsetX + pSrcDef_GetImageWidth / 2.0f - nEditWidth / 2.0f) / nEditWidth;
+	//matPrevTransition._42 = -(pSrcDef_OffsetY + pSrcDef_GetImageHeight / 2.0f - nEditHeight / 2.0f) / nEditHeight;
 
 	D3DXMatrixIdentity(&matClip);
-	matClip._41 = (rcImage.left + pSrcDef_GetImageWidth * pParam->fBoundsLeft + rcImage.right - pSrcDef_GetImageWidth  * pParam->fBoundsRight - (rcImage.left + rcImage.right)) / 2.0f / (float)nEditWidth;
-	matClip._42 = -(rcImage.top + pSrcDef_GetImageHeight * pParam->fBoundsTop + rcImage.bottom - pSrcDef_GetImageHeight  * pParam->fBoundsBottom - (rcImage.top + rcImage.bottom)) / 2.0f / (float)nEditHeight;
+	//matClip._41 = (rcImage.left + pSrcDef_GetImageWidth * pParam->fBoundsLeft + rcImage.right - pSrcDef_GetImageWidth  * pParam->fBoundsRight - (rcImage.left + rcImage.right)) / 2.0f / (float)nEditWidth;
+	//matClip._42 = -(rcImage.top + pSrcDef_GetImageHeight * pParam->fBoundsTop + rcImage.bottom - pSrcDef_GetImageHeight  * pParam->fBoundsBottom - (rcImage.top + rcImage.bottom)) / 2.0f / (float)nEditHeight;
+	matClip._41 = (nEditWidth * pParam->fBoundsLeft - nEditWidth * pParam->fBoundsRight) / 2.0f / (float)nEditWidth;
+	matClip._42 = -(nEditHeight * pParam->fBoundsTop - nEditHeight * pParam->fBoundsBottom) / 2.0f / (float)nEditHeight;
 	matClip._41 *= fScaleX;
 	matClip._42 *= fScaleY;
 
-	float fTransX = pParam->fPositionX/2.f * nEditWidth;
-	float fTransY = pParam->fPositionY/2.f * nEditHeight;
-	D3DXMatrixTranslation(&matTransition, fTransX / (float) nEditWidth, fTransY / (float) nEditHeight, 0.0f);
+	//float fTransX = pParam->fPositionX/2.f * nEditWidth;
+	//float fTransY = pParam->fPositionY/2.f * nEditHeight;
+	//D3DXMatrixTranslation(&matTransition, fTransX / (float) nEditWidth, fTransY / (float) nEditHeight, 0.0f);
+	D3DXMatrixTranslation(&matTransition, pParam->fPositionX/2.f, pParam->fPositionY/2.f, 0.0f);
 
 	//m_matPrevScale = matPrevScale;
 	//m_matPrevTransition = matPrevTransition;
@@ -494,10 +503,10 @@ void CSonyPinpRender::_do_render_scene(CVideoBuffer* pSrc, SonyPinPFxParam* pPar
 	D3DVIEWPORT9 vPort;
 	hr = pDevice->GetViewport(&vPort);
 	ASSERT(SUCCEEDED(hr));
-	vPort.Width = nEditWidth;
-	vPort.Height = nEditHeight;
-	hr = pDevice->SetViewport(&vPort);
-	ASSERT(SUCCEEDED(hr));
+	//vPort.Width = nEditWidth;
+	//vPort.Height = nEditHeight;
+	//hr = pDevice->SetViewport(&vPort);
+	//ASSERT(SUCCEEDED(hr));
 
 	if ( SUCCEEDED(pDevice->BeginScene()))
 	{
@@ -524,17 +533,21 @@ void CSonyPinpRender::_do_render_scene(CVideoBuffer* pSrc, SonyPinPFxParam* pPar
 			hr = m_pPinPEffect->SetTexture("g_tex", pSrc->GetTexture());
 			ASSERT(SUCCEEDED(hr));
 			D3DXMATRIX matBGTex;	
-			D3DXMatrixIdentity(&matBGTex);
-			matBGTex._11 = biSrc.nWidth / (float) biSrc.nAllocWidth;
-			matBGTex._22 = biSrc.nHeight / (float) biSrc.nAllocHeight;
-			matBGTex._31 = (0.5f + rcImage.left) / (float) biSrc.nAllocWidth;
-			matBGTex._32 = (0.5f + rcImage.top)/ (float) biSrc.nAllocHeight;
+			//D3DXMatrixIdentity(&matBGTex);
+			//matBGTex._11 = biSrc.nWidth / (float) biSrc.nAllocWidth;
+			//matBGTex._22 = biSrc.nHeight / (float) biSrc.nAllocHeight;
+			//matBGTex._31 = (0.5f + rcImage.left) / (float) biSrc.nAllocWidth;
+			//matBGTex._32 = (0.5f + rcImage.top)/ (float) biSrc.nAllocHeight;
+			GenerateMatrix(pSrc, &matBGTex, mat_Image);
 
 			hr = m_pPinPEffect->SetMatrix("g_matTexture",&matBGTex);
 			ASSERT(SUCCEEDED(hr));
+
 			D3DXMatrixIdentity(&matWorld);
-			matWorld._11 = biSrc.nWidth  / (float)vPort.Width;
-			matWorld._22 = biSrc.nHeight / (float)vPort.Height;
+			//matWorld._11 = biSrc.nWidth  / (float)vPort.Width;
+			//matWorld._22 = biSrc.nHeight / (float)vPort.Height;
+			matWorld._11 = nEditWidth / (float)vPort.Width;
+			matWorld._22 = nEditHeight / (float)vPort.Height;
 			matWorld._41 = -0.5f + matWorld._11 / 2.0f + pSrcDef_OffsetX / (float)vPort.Width;
 			matWorld._42 = 0.5f  - matWorld._22 / 2.0f - pSrcDef_OffsetY / (float)vPort.Height;   
 
@@ -574,9 +587,10 @@ void CSonyPinpRender::_do_render_scene(CVideoBuffer* pSrc, SonyPinPFxParam* pPar
 		LPDIRECT3DSURFACE9 pOldRT = NULL;
 		if(bDecay)
 		{
-			VideoBufferInfo biTemp = {D3DFMT_A8R8G8B8, VideoBufferInfo::VIDEO_MEM, VideoBufferInfo::_IN_OUT, nEditWidth, nEditHeight, 0, 0};
-			CVideoBufferManager* pVM = m_pEngine->GetVideoBufferManager();
-			pTempDef = pVM->CreateVideoBuffer(biTemp);
+			//VideoBufferInfo biTemp = {D3DFMT_A8R8G8B8, VideoBufferInfo::VIDEO_MEM, VideoBufferInfo::_IN_OUT, nEditWidth, nEditHeight, 0, 0};
+			//CVideoBufferManager* pVM = m_pEngine->GetVideoBufferManager();
+			//pTempDef = pVM->CreateVideoBuffer(biTemp);
+			pTempDef = m_pEngine->CreateRenderTargetBuffer();
 			ASSERT(pTempDef);
 			hr = pDevice->GetRenderTarget(0,&pOldRT);
 			ASSERT(SUCCEEDED(hr));
@@ -634,12 +648,13 @@ void CSonyPinpRender::_do_render_scene(CVideoBuffer* pSrc, SonyPinPFxParam* pPar
 
 		if(pParam->bFilter && m_pFilterRender && (fScaleX < 0.9999f || fScaleY < 0.9999f))
 		{
-			//handle_tpr hSonyFiltr = NewRTBuffer(0,0,nEditWidth,nEditHeight);
-			//TP_VBufferDef *pSonyFilterDef = m_pResMan->GetBufferDef(hSonyFiltr);
-			VideoBufferInfo biTemp = {D3DFMT_A8R8G8B8, VideoBufferInfo::VIDEO_MEM, VideoBufferInfo::_IN_OUT, nEditWidth, nEditHeight, 0, 0};
-			CVideoBufferManager* pVM = m_pEngine->GetVideoBufferManager();
-			ASSERT(pVM);
-			CVideoBuffer* pFilterBuf = pVM->CreateVideoBuffer(biTemp);
+			////handle_tpr hSonyFiltr = NewRTBuffer(0,0,nEditWidth,nEditHeight);
+			////TP_VBufferDef *pSonyFilterDef = m_pResMan->GetBufferDef(hSonyFiltr);
+			//VideoBufferInfo biTemp = {D3DFMT_A8R8G8B8, VideoBufferInfo::VIDEO_MEM, VideoBufferInfo::_IN_OUT, nEditWidth, nEditHeight, 0, 0};
+			//CVideoBufferManager* pVM = m_pEngine->GetVideoBufferManager();
+			//ASSERT(pVM);
+			//CVideoBuffer* pFilterBuf = pVM->CreateVideoBuffer(biTemp);
+			CVideoBuffer* pFilterBuf = m_pEngine->CreateRenderTargetBuffer();
 			ASSERT(pFilterBuf);
 
 			{
@@ -657,13 +672,20 @@ void CSonyPinpRender::_do_render_scene(CVideoBuffer* pSrc, SonyPinPFxParam* pPar
 				D3DXVec3TransformCoordArray(vCorner,sizeof(D3DXVECTOR3),vCorner,sizeof(D3DXVECTOR3),&matWorld,2);
 				vDst = D3DXVECTOR4(vCorner[0].x,vCorner[0].y,vCorner[1].x,vCorner[1].y);
 
-				double dbXScale = (vDst.z - vDst.x) / (matSrcTex._11 * biSrc.nAllocWidth / vPort.Width);
-				double dbYScale = -(vDst.w - vDst.y) / (matSrcTex._22 * biSrc.nAllocHeight / vPort.Height);
+				//double dbXScale = (vDst.z - vDst.x) / (matSrcTex._11 * biSrc.nAllocWidth / vPort.Width);
+				//double dbYScale = -(vDst.w - vDst.y) / (matSrcTex._22 * biSrc.nAllocHeight / vPort.Height);
+				double dbXScale = (vDst.z - vDst.x) / (matSrcTex._11 * nEditWidth / vPort.Width);
+				double dbYScale = -(vDst.w - vDst.y) / (matSrcTex._22 * nEditHeight / vPort.Height);
 
-				vSrc.x = biSrc.nAllocWidth * matSrcTex._31 - 0.5;
-				vSrc.y = biSrc.nAllocHeight * matSrcTex._32 - 0.5;
-				vSrc.z = biSrc.nAllocWidth * (matSrcTex._11   + matSrcTex._31) - 0.5;
-				vSrc.w = biSrc.nAllocHeight * (matSrcTex._22   + matSrcTex._32) - 0.5;
+				//vSrc.x = biSrc.nAllocWidth * matSrcTex._31 - 0.5;
+				//vSrc.y = biSrc.nAllocHeight * matSrcTex._32 - 0.5;
+				//vSrc.z = biSrc.nAllocWidth * (matSrcTex._11 + matSrcTex._31) - 0.5;
+				//vSrc.w = biSrc.nAllocHeight * (matSrcTex._22 + matSrcTex._32) - 0.5;
+				const VideoBufferInfo& biFilter = pFilterBuf->GetVideoBufferInfo();
+				vSrc.x = biFilter.nAllocWidth * matSrcTex._31 - 0.5;
+				vSrc.y = biFilter.nAllocHeight * matSrcTex._32 - 0.5;
+				vSrc.z = biFilter.nAllocWidth * (matSrcTex._11 + matSrcTex._31) - 0.5;
+				vSrc.w = biFilter.nAllocHeight * (matSrcTex._22 + matSrcTex._32) - 0.5;
 
 				SonyFilterFxParam param;
 				param.emPosDefMode = SonyFilterFxParam::POS_SONY_PINP;
@@ -696,6 +718,7 @@ void CSonyPinpRender::_do_render_scene(CVideoBuffer* pSrc, SonyPinPFxParam* pPar
 			}
 
 			D3DXMatrixIdentity(&matWorld);
+			const VideoBufferInfo& biTemp = pFilterBuf->GetVideoBufferInfo();
 			matWorld._11 = biTemp.nWidth / (float)nEditWidth;
 			matWorld._22 = biTemp.nHeight / (float)nEditHeight;
 			//matWorld._41 = -(1.0f - matWorld._11) / 2.0f + pSonyFilterDef->OffsetX / nEditWidth;
@@ -876,8 +899,8 @@ void CSonyPinpRender::_do_render_scene(CVideoBuffer* pSrc, SonyPinPFxParam* pPar
 		{
 			bool IsYUV16Buffer = false;
 			SetRect(&rcTemp,CEIL(pSrcDef_OffsetX),CEIL(pSrcDef_OffsetY),
-				CEIL(pSrcDef_OffsetX) + pSrcDef_GetImageWidth * (IsYUV16Buffer?2.0f:1.0f),
-				CEIL(pSrcDef_OffsetY) + pSrcDef_GetImageHeight);
+				CEIL(pSrcDef_OffsetX) + biSrc.nWidth * (IsYUV16Buffer?2.0f:1.0f),
+				CEIL(pSrcDef_OffsetY) + biSrc.nHeight);
 			UnionRect(&rcDestImage,&rcDestImage,&rcTemp);
 		}
 		//m_rcDestImage = rcDestImage;
